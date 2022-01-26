@@ -1,7 +1,47 @@
 {% extends 'base.html' %}
 {% block title %} Dashboard {% endblock %}
 {% block content %}
-<container>
-    <h1>Coming soon...</h1>
-</container>
+<!-- CYCLE MANAGEMENT -->
+<div id="cycles">
+    <container>
+        <h1>My Application Cycles</h1>
+        {% if user.cycles|length > 0 %}
+            {% for cycle in user.cycles %}
+            <li class="list-group-item">
+                {{ cycle.cycle_year }}
+                <button type="button" class="close" onclick="">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </li>
+            {% endfor %}
+        {% else %}
+            <p>You have not added any application cycles.</p>
+        {% endif %}
+        <!-- Add Cycles -->
+        <form method="POST">
+            <table>
+                <tr>
+                    <td>Add a new cycle: </td>
+                    <td>
+                        <select name="add_cycle" id="add_cycle">
+                            {% for cycle_option in cycles %}
+                            <option value="{{ cycle_option }}">{{ cycle_option }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </container>
+
+
+    <!-- School List -->
+    <container>
+        <h1>My School List</h1>
+    </container>
+</div>
+
 {% endblock %}
