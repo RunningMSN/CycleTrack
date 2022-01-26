@@ -15,7 +15,12 @@ def dashboard():
     # Manage all requests for updating information
     if request.method == 'POST':
         add_cycle = request.form.get('add_cycle')
-        db.session.add(Cycle(cycle_year=int(add_cycle), user_id=current_user.id))
-        db.session.commit()
-        flash('Cycle added.', category='success')
-    return render_template('dashboard.html', user=current_user, cycles=site_settings.VALID_CYCLES)
+        # Check if added cycle already exists
+        cycle = Cycle.query.filter_by(cycle_year=int(add_cycle), user_id=current_user.id).first()
+        if cycle:
+            flash('You already have this cycle added.', category='error')
+        else:
+            db.session.add(Cycle(cycle_year=int(add_cycle), user_id=current_user.id))
+            db.session.commit()
+            flash(f'{add_cycle} cycle was succesfully added.', category='success')
+    return render_template('dashboard.html', user=current_user, cycle_options=site_settings.VALID_CYCLES)

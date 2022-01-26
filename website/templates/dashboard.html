@@ -21,27 +21,31 @@
         <form method="POST">
             <table>
                 <tr>
-                    <td>Add a new cycle: </td>
-                    <td>
-                        <select name="add_cycle" id="add_cycle">
-                            {% for cycle_option in cycles %}
+                    <td style="padding: 10px">Add a new cycle: </td>
+                    <td style="padding: 10px">
+                        <select name="add_cycle" id="add_cycle" class="btn-sm">
+                            {% for cycle_option in cycle_options[0:3] %} <!-- Only allow entry in latest 3 cycles -->
                             <option value="{{ cycle_option }}">{{ cycle_option }}</option>
                             {% endfor %}
                         </select>
                     </td>
-                    <td>
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                    <td style="padding: 10px">
+                        <button type="submit" class="btn btn-primary btn-sm">Submit</button>
                     </td>
                 </tr>
             </table>
         </form>
     </container>
+</div>
 
-
-    <!-- School List -->
+<!-- MANAGE SCHOOL LIST -->
+<div id="school_list">
     <container>
         <h1>My School List</h1>
     </container>
 </div>
+
+
+
 
 {% endblock %}
