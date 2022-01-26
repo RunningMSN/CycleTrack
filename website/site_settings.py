@@ -1,0 +1,2 @@
+DB_NAME = ''
+SECRET_KEY = ''
