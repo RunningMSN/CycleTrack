@@ -7,11 +7,29 @@
     {% if user.cycles|length > 0 %}
     {% for cycle in user.cycles %}
     <li class="list-group-item">
-        <strong>{{ cycle.cycle_year }}</strong> | <a href="#"> View School List </a> | <a href="#"> Edit Cycle Profile </a>
+        <table>
+            <tr>
+                <td><strong>{{ cycle.cycle_year }}</strong></td>
+                <td>
+                    <form method="POST" action="{{ url_for('pages.lists') }}">
+                        <input type="hidden" id="view_cycle_id" name="cycle_id" value="{{ cycle.id }}">
+                        <button type="submit" class="btn btn-link">View School List</button>
+                    </form>
+                </td>
+                <td>
+                    <form method="POST" action="{{ url_for('pages.lists') }}">
+                        <input type="hidden" id="edit_cycle_id" name="cycle_id" value="{{ cycle.id }}">
+                        <button type="submit" class="btn btn-link">Edit Cycle Profile</button>
+                    </form>
+                </td>
+                <td>
+                    <button type="button" class="btn-link btn" onclick="deleteCycle({{ cycle.id }})">Delete Cycle</button>
+                </td>
+            </tr>
+        </table>
 
-        <button type="button" class="close" onclick="deleteCycle({{ cycle.id }})">
-            <span aria-hidden="true">&times;</span>
-        </button>
+
+
     </li>
     {% endfor %}
     {% else %}
