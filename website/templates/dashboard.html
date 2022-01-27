@@ -1,51 +1,36 @@
 {% extends 'base.html' %}
-{% block title %} Dashboard {% endblock %}
 {% block content %}
-<!-- CYCLE MANAGEMENT -->
-<div id="cycles" class="container">
-    <container>
-        <h1>My Application Cycles</h1>
-        {% if user.cycles|length > 0 %}
-            {% for cycle in user.cycles %}
-            <li class="list-group-item">
-                {{ cycle.cycle_year }}
-                <button type="button" class="close" onclick="">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </li>
-            {% endfor %}
-        {% else %}
-            <p>You have not added any application cycles.</p>
-        {% endif %}
-        <!-- Add Cycles -->
-        <form method="POST">
-            <table>
-                <tr>
-                    <td style="padding: 10px">Add a new cycle: </td>
-                    <td style="padding: 10px">
-                        <select name="add_cycle" id="add_cycle" class="btn-sm">
-                            {% for cycle_option in cycle_options[0:3] %} <!-- Only allow entry in latest 3 cycles -->
-                            <option value="{{ cycle_option }}">{{ cycle_option }}</option>
-                            {% endfor %}
-                        </select>
-                    </td>
-                    <td style="padding: 10px">
-                        <button type="submit" class="btn btn-primary btn-sm">Submit</button>
-                    </td>
-                </tr>
-            </table>
-        </form>
-    </container>
-</div>
-
-<!-- MANAGE SCHOOL LIST -->
-<div id="school_list" class="container">
-    <container>
-        <h1>My School List</h1>
-    </container>
-</div>
-
-
-
-
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#dashnav"
+                aria-controls="dashnav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="dashnav">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link text-light" aria-current="page" href="#">Cycles</a>
+                </li>
+                {% if user.cycles|length > 0 %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-light" href="#" id="navbarDropdown" role="button"
+                       data-bs-toggle="dropdown" aria-expanded="false">
+                        School Lists
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        {% for cycle in user.cycles %}
+                        <li><a class="dropdown-item" href="#">{{ cycle.cycle_year }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-light" href="#">Visualizations</a>
+                </li>
+              {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+{% block dash_content %}
+{% endblock %}
 {% endblock %}

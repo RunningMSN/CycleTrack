@@ -1,0 +1,40 @@
+{% extends 'dashboard.html' %}
+{% block title %} Dashboard {% endblock %}
+{% block dash_content %}
+<!-- CYCLE MANAGEMENT -->
+<div id="cycles" class="container" style="padding-top:10px">
+    <h1>My Application Cycles</h1>
+    {% if user.cycles|length > 0 %}
+    {% for cycle in user.cycles %}
+    <li class="list-group-item">
+        <strong>{{ cycle.cycle_year }}</strong> | <a href="#"> View School List </a> | <a href="#"> Edit Cycle Profile </a>
+
+        <button type="button" class="close" onclick="deleteCycle({{ cycle.id }})">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </li>
+    {% endfor %}
+    {% else %}
+    <p>You have not added any application cycles.</p>
+    {% endif %}
+    <!-- Add Cycles -->
+    <form method="POST">
+        <table>
+            <tr>
+                <td style="padding: 10px">Add a new cycle:</td>
+                <td style="padding: 10px">
+                    <select name="add_cycle" id="add_cycle" class="btn-sm">
+                        {% for cycle_option in cycle_options[0:3] %}
+                        <!-- Only allow entry in latest 3 cycles -->
+                        <option value="{{ cycle_option }}">{{ cycle_option }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+                <td style="padding: 10px">
+                    <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+{% endblock %}

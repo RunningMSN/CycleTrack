@@ -15,9 +15,8 @@ def login():
         user = User.query.filter_by(email=email).first()
         if user:
             if check_password_hash(user.password, password):
-                flash('Logged in successfully.', category='success')
                 login_user(user, remember=True)
-                return redirect(url_for('pages.dashboard'))
+                return redirect(url_for('pages.cycles'))
             else:
                 flash('Incorrect password, please try again.', category='error')
         else:
@@ -54,7 +53,6 @@ def register():
             db.session.add(new_user)
             db.session.commit()
             login_user(new_user, remember=True)
-            flash('Account created!', category='success')
             return redirect(url_for('pages.index'))
 
     return render_template('register.html', user=current_user)
