@@ -9,7 +9,7 @@
         <div class="collapse navbar-collapse" id="dashnav">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link text-light" aria-current="page" href="#">Cycles</a>
+                    <a class="nav-link text-light" aria-current="page" href="{{ url_for('pages.cycles') }}">Cycles</a>
                 </li>
                 {% if user.cycles|length > 0 %}
                 <li class="nav-item dropdown">
@@ -24,7 +24,7 @@
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-light" href="#">Visualizations</a>
+                    <a class="nav-link text-light" href="{{ url_for('pages.visualizations') }}">Visualizations</a>
                 </li>
               {% endif %}
             </ul>

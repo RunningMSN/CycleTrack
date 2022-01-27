@@ -3,6 +3,58 @@
 {% block dash_content %}
 <!-- SCHOOL LIST MANAGEMENT -->
 <div id="lists" class="container" style="padding-top:10px">
-
+    <h1>My {{ cycle.cycle_year }} School List</h1>
+    {% if cycle.schools|length > 0 %}
+    <table class="table">
+        <tr>
+            <th>School</th>
+            <th>Primary Submitted</th>
+            <th>Secondary Received</th>
+            <th>Application Complete</th>
+            <th>Interview Received</th>
+            <th>Interview Date</th>
+            <th>Rejected</th>
+            <th>Waitlisted</th>
+            <th>Accepted</th>
+            <th>Withdrawn</th>
+        </tr>
+        {% for school in cycle.schools %}
+        <tr>
+            <td>{{ school.name }}</td>
+            <td>{{ school.primary }}</td>
+            <td>{{ school.secondary_received }}</td>
+            <td>{{ school.application_complete }}</td>
+            <td>{{ school.interview_received }}</td>
+            <td>{{ school.interview_date }}</td>
+            <td>{{ school.rejection }}</td>
+            <td>{{ school.waitlist }}</td>
+            <td>{{ school.acceptance }}</td>
+            <td>{{ school.withdrawn }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% else %}
+    <p>You have not added any schools.</p>
+    {% endif %}
+    <!-- Add Schools -->
+    <form method="POST">
+        <input type="hidden" name="cycle_id" id="cycle_id" value="{{ cycle.id }}">
+        <table>
+            <tr>
+                <td style="padding: 10px">Add a new school:</td>
+                <td style="padding: 10px">
+                    <select name="add_school" id="add_school" class="btn-sm">
+                        {% for school in school_list %}
+                        <!-- Only allow entry in latest 3 cycles -->
+                        <option value="{{ school }}">{{ school }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+                <td style="padding: 10px">
+                    <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+                </td>
+            </tr>
+        </table>
+    </form>
 </div>
 {% endblock %}

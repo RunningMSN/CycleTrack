@@ -15,7 +15,7 @@ class Cycle(db.Model):
 
 class School(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    cycle = db.Column(db.Integer, db.ForeignKey('cycle.id'))
+    cycle_id = db.Column(db.Integer, db.ForeignKey('cycle.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     name = db.Column(db.String(150))
     primary = db.Column(db.DateTime(timezone=True), nullable=True)
@@ -26,3 +26,4 @@ class School(db.Model):
     rejection = db.Column(db.DateTime(timezone=True), nullable=True)
     waitlist = db.Column(db.DateTime(timezone=True), nullable=True)
     acceptance = db.Column(db.DateTime(timezone=True), nullable=True)
+    withdrawn = db.Column(db.DateTime(timezone=True), nullable=True)
