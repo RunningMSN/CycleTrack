@@ -5,6 +5,7 @@ a simple system on which applicants can track the progress of their application 
 simoltaneously contributing data that can be used for analytics and assisting future applicants.
 
 ## Current TODO List:
- * Finish manipulation of cycles by adding functional removal button
  * Add school model to database
  * Add ability to manipulate school list with single or multiple cycles
+ * Add option to delete schools and cause
+ * When deleting cycle, delete all schools associated with it
