@@ -53,6 +53,6 @@ def register():
             db.session.add(new_user)
             db.session.commit()
             login_user(new_user, remember=True)
-            return redirect(url_for('pages.index'))
+            return redirect(url_for('pages.cycles'))
 
     return render_template('register.html', user=current_user)
