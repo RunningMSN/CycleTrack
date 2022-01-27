@@ -19,7 +19,17 @@
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                         {% for cycle in user.cycles %}
-                        <li><a class="dropdown-item" href="#">{{ cycle.cycle_year }}</a></li>
+                        <li>
+                            <form method="POST" action="{{ url_for('pages.lists') }}">
+                                <input type="hidden" id="cycle_year" name="cycle_id" value="{{ cycle.id }}">
+
+                                <a class="dropdown-item">
+                                    <button type="submit" class="btn btn-link text-decoration-none text-dark">
+                                        {{ cycle.cycle_year }}
+                                    </button>
+                                </a>
+                            </form>
+                        </li>
                         {% endfor %}
                     </ul>
                 </li>
