@@ -87,7 +87,7 @@
         </div>
 
         <!-- DISPLAY SCHOOLS -->
-        <tr>
+        <tr class="{% if school.acceptance %}table-success{% elif school.waitlist %}table-warning{% elif school.rejection %}table-danger{% elif school.withdrawn %}table-secondary{% endif %}">
             <td>
                 {{ school.name }}
             </td>
