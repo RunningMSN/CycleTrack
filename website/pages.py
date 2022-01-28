@@ -11,8 +11,7 @@ pages = Blueprint('pages', __name__)
 def index():
     user_count = db.session.query(User.id).count()
     app_count = db.session.query(School.id).count()
-    school_count = db.session.query(School).distinct(School.name).count()
-    return render_template('index.html', user=current_user, user_count=user_count, app_count=app_count, school_count=school_count)
+    return render_template('index.html', user=current_user, user_count=user_count, app_count=app_count)
 
 @pages.route('/cycles', methods=['GET', 'POST'])
 @login_required
