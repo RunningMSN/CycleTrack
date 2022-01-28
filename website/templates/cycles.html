@@ -6,6 +6,56 @@
     <h1>My Application Cycles</h1>
     {% if user.cycles|length > 0 %}
     {% for cycle in user.cycles %}
+    <!-- SETUP MODAL FOR EDITING EACH CYCLE -->
+    <div class="modal fade" id="{{ cycle.cycle_year }}-modal_edit" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form method="POST">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Edit {{ cycle.cycle_year }} Cycle Information</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" id="cycle_id_edit" name="cycle_id" value="{{ cycle.id }}">
+                        <div style="padding: 10px;">
+                            Forms for research stuff will go here...
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- SETUP MODAL FOR DELETION WARNING -->
+    <div class="modal fade" id="{{ cycle.cycle_year }}-modal_delete" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Delete {{ cycle.cycle_year }} Cycle</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div style="padding: 10px;">
+                            Are you sure you want to delete this cycle? Deleting the cycle will permanently remove any
+                            school list and information associated with it.
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-danger" onclick="deleteCycle({{ cycle.id }})">Delete Cycle</button>
+                    </div>
+            </div>
+        </div>
+    </div>
+
     <li class="list-group-item">
         <table>
             <tr>
@@ -17,17 +67,17 @@
                     </form>
                 </td>
                 <td>
-                    <form method="POST" action="{{ url_for('pages.lists') }}">
-                        <input type="hidden" id="edit_cycle_id" name="cycle_id" value="{{ cycle.id }}">
-                        <button type="submit" class="btn btn-link">Edit Cycle Profile</button>
-                    </form>
+                    <button type="button" class="btn btn-link" data-toggle="modal" data-target="#{{ cycle.cycle_year }}-modal_edit">
+                        Edit Cycle Profile
+                    </button>
                 </td>
                 <td>
-                    <button type="button" class="btn-link btn" onclick="deleteCycle({{ cycle.id }})">Delete Cycle</button>
+                    <button type="button" class="btn btn-link" data-toggle="modal" data-target="#{{ cycle.cycle_year }}-modal_delete">
+                        Delete Cycle
+                    </button>
                 </td>
             </tr>
         </table>
-
 
 
     </li>
