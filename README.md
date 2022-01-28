@@ -5,6 +5,6 @@ a simple system on which applicants can track the progress of their application 
 simoltaneously contributing data that can be used for analytics and assisting future applicants.
 
 ## Current TODO List:
- * Fix bug w/ removing dates from a school on list without having to delete entire school
+ * Add opt-in data collection for research and analytics
  * When deleting cycle, delete all schools associated with it
  * Build infrastructure for visualizing cycles
