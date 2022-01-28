@@ -36,52 +36,50 @@
                     </div>
                     <div class="modal-body">
                             <input type="hidden" id="cycle_id_modal" name="cycle_id" value="{{ cycle.id }}">
+                            <input type="hidden" id="school_id" name="school_id" value="{{ school.id }}">
                             <input type="hidden" id="id" name="id" value="{{ school.id }}">
                             <div style="padding: 10px;">
                             <label for="primary">Primary Application Submitted/Verified Date</label>
-                            <input type="date" class="form-control" id="primary" name="primary" value="
-                            {% if school.primary %}
-                            {% endif %}
-                            "/>
+                            <input type="date" class="form-control" id="primary" name="primary" value="{% if school.primary %}{{ school.primary.strftime('%Y-%m-%d') }}{% endif %}"/>
                             </div>
                             <div style="padding: 10px;">
                             <label for="primary">Secondary Received Date</label>
-                            <input type="date" class="form-control" id="secondary_received" name="secondary_received " />
+                            <input type="date" class="form-control" id="secondary_received" name="secondary_received" value="{% if school.secondary_received %}{{ school.secondary_received.strftime('%Y-%m-%d') }}{% endif %}" />
                             </div>
                             <div style="padding: 10px;">
                                 <label for="primary">Application Complete Date</label>
-                            <input type="date" class="form-control" id="application_complete" name="application_complete" />
+                            <input type="date" class="form-control" id="application_complete" name="application_complete" value="{% if school.application_complete %}{{ school.application_complete.strftime('%Y-%m-%d') }}{% endif %}" />
                             </div>
                             <div style="padding: 10px;">
                                 <label for="primary">Interview Received Date</label>
-                            <input type="date" class="form-control" id="interview_received" name="interview_received" />
+                            <input type="date" class="form-control" id="interview_received" name="interview_received" value="{% if school.interview_received %}{{ school.interview_received.strftime('%Y-%m-%d') }}{% endif %}" />
                             </div>
                             <div style="padding: 10px;">
                                 <label for="primary">Interview Scheduled Date</label>
-                            <input type="date" class="form-control" id="interview_date" name="interview_date" />
+                            <input type="date" class="form-control" id="interview_date" name="interview_date" value="{% if school.interview_date %}{{ school.interview_date.strftime('%Y-%m-%d') }}{% endif %}" />
                             <small>If your interview is multiple days long, just enter the first day.</small>
                             </div>
                             <div style="padding: 10px;">
                                 <label for="primary">Rejection Date</label>
-                            <input type="date" class="form-control" id="rejection" name="rejection" />
+                            <input type="date" class="form-control" id="rejection" name="rejection" value="{% if school.rejection %}{{ school.rejection.strftime('%Y-%m-%d') }}{% endif %}" />
                             </div>
                             <div style="padding: 10px;">
                                 <label for="primary">Waitlist Date</label>
-                            <input type="date" class="form-control" id="waitlist" name="waitlist" />
+                            <input type="date" class="form-control" id="waitlist" name="waitlist" value="{% if school.waitlist %}{{ school.waitlist.strftime('%Y-%m-%d') }}{% endif %}" />
                             </div>
                             <div style="padding: 10px;">
                                 <label for="primary">Acceptance Date</label>
-                            <input type="date" class="form-control" id="acceptance" name="acceptance" />
+                            <input type="date" class="form-control" id="acceptance" name="acceptance" value="{% if school.acceptance %}{{ school.acceptance.strftime('%Y-%m-%d') }}{% endif %}" />
                             </div>
                             <div style="padding: 10px;">
                                 <label for="primary">Withdrawn Date</label>
-                            <input type="date" class="form-control" id="withdrawn" name="withdrawn" />
+                            <input type="date" class="form-control" id="withdrawn" name="withdrawn" value="{% if school.withdrawn %}{{ school.withdrawn.strftime('%Y-%m-%d') }}{% endif %}" />
                             </div>
-
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                         <button type="submit" class="btn btn-primary">Save Changes</button>
+                        <button type="button" class="btn btn-danger" onclick="deleteSchool({{ school.id }})">Delete School</button>
                     </div>
                     </form>
                 </div>
@@ -95,46 +93,46 @@
             </td>
             <td>
                 {% if school.primary %}
-                {{ school.primary }}
+                {{ school.primary.strftime('%m/%d/%Y') }}
                 {% endif %}
             </td>
             <td>
                 {% if school.secondary_received %}
-                {{ school.secondary_received }}
+                {{ school.secondary_received.strftime('%m/%d/%Y') }}
                 {% endif %}
             </td>
             <td>
                 {% if school.application_complete %}
-                {{ school.application_complete }}
+                {{ school.application_complete.strftime('%m/%d/%Y') }}
                 {% endif %}
             </td>
             <td>
                 {% if school.interview_received %}
-                {{ school.interview_received }}
+                {{ school.interview_received.strftime('%m/%d/%Y') }}
                 {% endif %}
             </td>
             <td>
                 {% if school.interview_date %}
-                {{ school.interview_date }}
+                {{ school.interview_date.strftime('%m/%d/%Y') }}
                 {% endif %}
             </td>
             <td>
                 {% if school.rejection %}
-                {{ school.rejection }}
+                {{ school.rejection.strftime('%m/%d/%Y') }}
                 {% endif %}
             </td>
             <td>
                 {% if school.waitlist %}
-                {{ school.waitlist }}
+                {{ school.waitlist.strftime('%m/%d/%Y') }}
                 {% endif %}
             </td>
             <td>
                 {% if school.acceptance %}
-                {{ school.acceptance }}
+                {{ school.acceptance.strftime('%m/%d/%Y') }}
                 {% endif %}
             <td>
                 {% if school.withdrawn %}
-                {{ school.withdrawn }}
+                {{ school.withdrawn.strftime('%m/%d/%Y') }}
                 {% endif %}
             </td>
             <td>

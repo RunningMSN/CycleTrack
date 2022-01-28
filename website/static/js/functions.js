@@ -6,3 +6,12 @@ function deleteCycle(cycleId) {
     window.location.href = "/cycles";
   });
 }
+
+function deleteSchool(schoolId) {
+  fetch("/delete-school", {
+    method: "POST",
+    body: JSON.stringify({ schoolId: schoolId }),
+  }).then((_res) => {
+    window.location.href = "/cycles"; /*fix later to make go back to school list*/
+  });
+}
