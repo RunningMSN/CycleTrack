@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, flash, jsonify, redirect, url_for
 from flask_login import current_user, login_required
 from . import db, site_settings
-from .models import Cycle, School
+from .models import User,Cycle, School
 import json
 from datetime import datetime
 
@@ -9,7 +9,10 @@ pages = Blueprint('pages', __name__)
 
 @pages.route('/')
 def index():
-    return render_template('index.html', user=current_user)
+    user_count = db.session.query(User.id).count()
+    app_count = db.session.query(School.id).count()
+    school_count = db.session.query(School).distinct(School.name).count()
+    return render_template('index.html', user=current_user, user_count=user_count, app_count=app_count, school_count=school_count)
 
 @pages.route('/cycles', methods=['GET', 'POST'])
 @login_required
