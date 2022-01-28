@@ -37,7 +37,7 @@ def lists():
             flash('Please select a cycle before viewing your school list.', category='error')
             return redirect(url_for('pages.cycles'))
         elif len(current_user.cycles) == 0:
-            flash('Please add a cycle first..', category='error')
+            flash('Please add a cycle first.', category='error')
             return redirect(url_for('pages.cycles'))
         else:
             cycle_id = current_user.cycles[0].id
@@ -52,7 +52,6 @@ def lists():
     add_school_name = request.form.get('add_school')
     if add_school_name:
         school = School.query.filter_by(name=add_school_name, cycle_id=cycle.id, ).first()
-
         if school:
             flash('You cannot add a school twice.', category='error')
         else:
@@ -64,41 +63,52 @@ def lists():
     if school_id:
         school = School.query.filter_by(id=int(school_id)).first()
         primary = request.form.get('primary')
-        secondary_received = request.form.get('secondary_received')
-        application_complete = request.form.get('application_complete')
-        interview_received = request.form.get('interview_received')
-        interview_date = request.form.get('interview_date')
-        rejection = request.form.get('rejection')
-        waitlist = request.form.get('waitlist')
-        acceptance = request.form.get('acceptance')
-        withdrawn =  request.form.get('withdrawn')
         if primary:
             school.primary = datetime.strptime(primary, '%Y-%m-%d')
-            db.session.commit()
+        else:
+            school.primary = None
+        secondary_received = request.form.get('secondary_received')
         if secondary_received:
             school.secondary_received = datetime.strptime(secondary_received, '%Y-%m-%d')
-            db.session.commit()
+        else:
+            school.secondary_received = None
+        application_complete = request.form.get('application_complete')
         if application_complete:
             school.application_complete = datetime.strptime(application_complete, '%Y-%m-%d')
-            db.session.commit()
+        else:
+            school.application_complete = None
+        interview_received = request.form.get('interview_received')
         if interview_received:
             school.interview_received = datetime.strptime(interview_received, '%Y-%m-%d')
-            db.session.commit()
+        else:
+            school.interview_received = None
+        interview_date = request.form.get('interview_date')
         if interview_date:
             school.interview_date = datetime.strptime(interview_date, '%Y-%m-%d')
-            db.session.commit()
+        else:
+            school.interview_date = None
+        rejection = request.form.get('rejection')
         if rejection:
             school.rejection = datetime.strptime(rejection, '%Y-%m-%d')
-            db.session.commit()
+        else:
+            school.rejection = None
+        waitlist = request.form.get('waitlist')
         if waitlist:
             school.waitlist = datetime.strptime(waitlist, '%Y-%m-%d')
-            db.session.commit()
+        else:
+            school.waitlist = None
+        acceptance = request.form.get('acceptance')
         if acceptance:
             school.acceptance = datetime.strptime(acceptance, '%Y-%m-%d')
-            db.session.commit()
+        else:
+            school.acceptance = None
+        withdrawn = request.form.get('withdrawn')
         if withdrawn:
             school.withdrawn = datetime.strptime(withdrawn, '%Y-%m-%d')
-            db.session.commit()
+        else:
+            school.withdrawn = None
+        db.session.commit()
+
     return render_template('lists.html', user=current_user, cycle=cycle, school_list=site_settings.SCHOOL_LIST)
 
 @pages.route('/visualizations')
