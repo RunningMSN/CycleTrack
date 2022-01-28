@@ -123,6 +123,8 @@ def delete_cycle():
     cycle = Cycle.query.get(cycleId)
     if cycle:
         if cycle.user_id == current_user.id:
+            for school in cycle.schools:
+                db.session.delete(school)
             db.session.delete(cycle)
             db.session.commit()
             return jsonify({})
