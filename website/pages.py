@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, flash, jsonify, redirect, url_for
 from flask_login import current_user, login_required
-from . import db, site_settings
+from . import db, form_options
 from .models import User,Cycle, School
 import json
 from datetime import datetime
@@ -28,7 +28,7 @@ def cycles():
             else:
                 db.session.add(Cycle(cycle_year=int(add_cycle), user_id=current_user.id))
                 db.session.commit()
-    return render_template('cycles.html', user=current_user, cycle_options=site_settings.VALID_CYCLES)
+    return render_template('cycles.html', user=current_user, cycle_options=form_options.VALID_CYCLES)
 
 @pages.route('/lists', methods=['GET','POST'])
 @login_required
@@ -111,7 +111,7 @@ def lists():
             school.withdrawn = None
         db.session.commit()
 
-    return render_template('lists.html', user=current_user, cycle=cycle, school_list=site_settings.SCHOOL_LIST)
+    return render_template('lists.html', user=current_user, cycle=cycle, school_list=form_options.SCHOOL_LIST)
 
 @pages.route('/visualizations')
 @login_required
