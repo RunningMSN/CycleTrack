@@ -18,14 +18,16 @@ def index():
 def cycles():
     # Manage all requests for updating information
     if request.method == 'POST':
+        # Adding cycle
         add_cycle = request.form.get('add_cycle')
-        # Check if added cycle already exists
-        cycle = Cycle.query.filter_by(cycle_year=int(add_cycle), user_id=current_user.id).first()
-        if cycle:
-            flash('You already have this cycle added.', category='error')
-        else:
-            db.session.add(Cycle(cycle_year=int(add_cycle), user_id=current_user.id))
-            db.session.commit()
+        if add_cycle:
+            # Check if added cycle already exists
+            cycle = Cycle.query.filter_by(cycle_year=int(add_cycle), user_id=current_user.id).first()
+            if cycle:
+                flash('You already have this cycle added.', category='error')
+            else:
+                db.session.add(Cycle(cycle_year=int(add_cycle), user_id=current_user.id))
+                db.session.commit()
     return render_template('cycles.html', user=current_user, cycle_options=site_settings.VALID_CYCLES)
 
 @pages.route('/lists', methods=['GET','POST'])
