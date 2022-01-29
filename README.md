@@ -5,6 +5,5 @@ a simple system on which applicants can track the progress of their application 
 simoltaneously contributing data that can be used for analytics and assisting future applicants.
 
 ## Current TODO List:
- * Add opt-in data collection for research and analytics
- * When deleting cycle, delete all schools associated with it
+ * Add data collection for research and analytics
  * Build infrastructure for visualizing cycles
