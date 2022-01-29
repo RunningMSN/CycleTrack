@@ -9,6 +9,7 @@
     <table class="table table-striped" style="font-size:0.9rem">
         <thead>
         <tr>
+            <th></th>
             <th>School</th>
             <th>Primary Submitted</th>
             <th>Secondary Received</th>
@@ -19,7 +20,6 @@
             <th>Waitlisted</th>
             <th>Accepted</th>
             <th>Withdrawn</th>
-            <th></th>
         </tr>
         </thead>
         {% for school in cycle.schools %}
@@ -89,6 +89,11 @@
         <!-- DISPLAY SCHOOLS -->
         <tr class="{% if school.acceptance %}table-success{% elif school.waitlist %}table-warning{% elif school.rejection %}table-danger{% elif school.withdrawn %}table-secondary{% endif %}">
             <td>
+                <button type="button" class="btn btn-link" data-toggle="modal" data-target="#{{ school.name }}-modal">
+                    <i class="far fa-edit"></i>
+                </button>
+            </td>
+            <td>
                 {{ school.name }}
             </td>
             <td>
@@ -134,11 +139,6 @@
                 {% if school.withdrawn %}
                 {{ school.withdrawn.strftime('%m/%d/%Y') }}
                 {% endif %}
-            </td>
-            <td>
-                <button type="button" class="btn btn-link" data-toggle="modal" data-target="#{{ school.name }}-modal">
-                    <i class="far fa-edit"></i>
-                </button>
             </td>
         </tr>
         {% endfor %}
