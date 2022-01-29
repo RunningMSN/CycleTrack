@@ -118,6 +118,10 @@ def lists():
 def visualizations():
     return render_template('visualizations.html', user=current_user)
 
+@pages.route('/privacy')
+def privacy():
+    return render_template('privacy.html', user=current_user)
+
 @pages.route('/delete-cycle', methods=['POST'])
 def delete_cycle():
     cycle = json.loads(request.data)
