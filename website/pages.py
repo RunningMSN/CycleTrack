@@ -32,7 +32,10 @@ def cycles():
             else:
                 db.session.add(Cycle(cycle_year=int(add_cycle), user_id=current_user.id))
                 db.session.commit()
-    return render_template('cycles.html', user=current_user, cycle_options=form_options.VALID_CYCLES)
+    return render_template('cycles.html', user=current_user, cycle_options=form_options.VALID_CYCLES,
+                           sex_options=form_options.SEX_OPTIONS, gender_options=form_options.GENDER_OPTIONS,
+                           race_ethnicity_options=form_options.RACE_ETHNICITY_OPTIONS,
+                           state_options=form_options.STATE_OPTIONS)
 
 @pages.route('/lists', methods=['GET','POST'])
 @login_required

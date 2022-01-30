@@ -18,9 +18,100 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <input type="hidden" id="cycle_id_edit" name="cycle_id_edit" value="{{ cycle.id }}">
-                        <div style="padding: 10px;">
-                            Forms for research stuff will go here...
+                        <div style="padding-bottom: 10px">
+                            You may leave any questions blank if you don't feel comfortable sharing.
+                            <a href="{{ url_for('pages.privacy') }}#cycleinfo">Why we collect this information?</a>
+                            </div>
+                        <div>
+                            <form>
+                                <input type="hidden" id="cycle_id_edit" name="cycle_id_edit" value="{{ cycle.id }}">
+                                <div>
+
+                                    <table class="table">
+                                        <tr><td colspan="2"><h5>Demographics</h5></td></tr>
+                                        <tr>
+                                            <td>Gender</td>
+                                            <td>
+                                                <select name="gender" id="gender" class="btn-sm modalinput">
+                                                    <option value=""></option>
+                                                    {% for gender in gender_options %}
+                                                    <option value="{{ gender }}">{{ gender }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Sex</td>
+                                            <td>
+                                                <select name="sex" id="sex" class="btn-sm modalinput">
+                                                    <option value=""></option>
+                                                    {% for sex in sex_options %}
+                                                    <option value="{{ sex }}">{{ sex }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Birth Mon/Yr</td>
+                                            <td><input type="text" name="birth_month_year" id="birth_month_year" class="modalinput" placeholder="MM/YYYY"/></input></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Race/Ethnicity</td>
+                                            <td>
+                                                <select name="race_ethnicity" id="race_ethnicity" class="btn-sm modalinput">
+                                                    <option value=""></option>
+                                                    {% for race_ethnicity in race_ethnicity_options %}
+                                                    <option value="{{ race_ethnicity }}">{{ race_ethnicity }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>Home State</td>
+                                            <td>
+                                                <select name="state" id="state" class="btn-sm modalinput">
+                                                    <option value=""></option>
+                                                    {% for state in state_options %}
+                                                    <option value="{{ state }}">{{ state }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr><td colspan="2"><h5>GPA</h5></td></tr>
+                                        <tr>
+                                            <td>cGPA</td>
+                                            <td><input type="text" name="cGPA" id="cGPA" class="modalinput"/></input></td>
+                                        </tr>
+                                        <tr>
+                                            <td>sGPA</td>
+                                            <td><input type="text" name="sGPA" id="sGPA" class="modalinput"/></input></td>
+                                        </tr>
+                                        <tr><td colspan="2"><h5>MCAT</h5></td></tr>
+                                        <tr>
+                                            <td>MCAT Score</td>
+                                            <td><input type="text" name="MCAT" id="MCAT" class="modalinput"/></input></td>
+                                        </tr>
+                                        <tr>
+                                            <td>C/P Score</td>
+                                            <td><input type="text" name="C/P" id="C/P" class="modalinput"/></input></td>
+                                        </tr>
+                                        <tr>
+                                            <td>CARS Score</td>
+                                            <td><input type="text" name="CARS" id="CARS" class="modalinput"/></input></td>
+                                        </tr>
+                                        <tr>
+                                            <td>B/B Score</td>
+                                            <td><input type="text" name="B/B" id="B/B" class="modalinput"/></input></td>
+                                        </tr>
+                                        <tr>
+                                            <td>P/S Score</td>
+                                            <td><input type="text" name="P/S " id="P/S" class="modalinput"/></input></td>
+                                        </tr>
+                                    </table>
+                                </div>
+
+                            </form>
                         </div>
                     </div>
                     <div class="modal-footer">
