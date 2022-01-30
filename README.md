@@ -7,5 +7,7 @@ a simple system on which applicants can track the progress of their application 
 simoltaneously contributing data that can be used for analytics and assisting future applicants.
 
 ## Current TODO List:
- * Add data collection for research and analytics
+ * Make school list page mobile friendly
  * Build infrastructure for visualizing cycles
+ * Add import from spreadsheet
+ * Add export to spreadsheet
