@@ -43,4 +43,4 @@ STATE_OPTIONS = ["Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colo
                  "New Mexico", "New York", "North Carolina", "North Dakota","Ohio","Oklahoma", "Oregon", "Pennsylvania",
                  "Rhode Island", "South Carolina", "South Dakota", "Tennessee","Texas", "Utah", "Vermont", "Virginia",
                  "Washington", "West Virginia", "Wisconsin", "Wyoming", "Puerto Rico", "Guam", "American Samoa",
-                 "International", "Other"]
+                 "Canada", "International", "Other"]
