@@ -13,6 +13,10 @@ def index():
     app_count = db.session.query(School.id).count()
     return render_template('index.html', user=current_user, user_count=user_count, app_count=app_count)
 
+@pages.route('/explorer')
+def explorer():
+    return render_template('explorer.html', user=current_user)
+
 @pages.route('/cycles', methods=['GET', 'POST'])
 @login_required
 def cycles():
