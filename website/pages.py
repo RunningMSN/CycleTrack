@@ -3,7 +3,8 @@ from flask_login import current_user, login_required
 from . import db, form_options
 from .models import User,Cycle, School
 import json
-from datetime import datetime
+from datetime import datetime, date
+import re
 
 pages = Blueprint('pages', __name__)
 
@@ -32,6 +33,140 @@ def cycles():
             else:
                 db.session.add(Cycle(cycle_year=int(add_cycle), user_id=current_user.id))
                 db.session.commit()
+        # Handle editing cycle profile
+        cycle_id = request.form.get('cycle_id_edit')
+        if cycle_id:
+            cycle = Cycle.query.filter_by(id=int(cycle_id)).first()
+            gender = request.form.get('gender')
+            if len(gender) > 0 and gender in form_options.GENDER_OPTIONS:
+                cycle.gender = gender
+            else:
+                cycle.gender = None
+            sex = request.form.get('sex')
+            if len(sex) > 0 and sex in form_options.SEX_OPTIONS:
+                cycle.sex = sex
+            else:
+                cycle.sex = None
+            birth = request.form.get('birth_month_year')
+            if birth:
+                # Check that formatting is generally right
+                base_format="(?P<month>[0-9]{2})/(?P<year>[0-9]{4})"
+                if re.match(base_format, birth):
+                    month = int(re.search(base_format, birth).group('month'))
+                    year = int(re.search(base_format, birth).group('year'))
+                    # Make sure input is valid
+                    if month >= 1 and month <= 12 and year >= (date.today().year - 60) and year <= date.today().year - 17:
+                        cycle.birth_month = month
+                        cycle.birth_year = year
+                    else:
+                        flash('Please enter a valid birth month and year in the form "MM/YYYY"', category='error')
+                else:
+                    flash('Please enter a valid birth month and year in the form "MM/YYYY"', category='error')
+            else:
+                cycle.birth_month = None
+                cycle.birth_year = None
+            race_ethnicity = request.form.get('race_ethnicity')
+            if len(race_ethnicity) > 0 and race_ethnicity in form_options.RACE_ETHNICITY_OPTIONS:
+                cycle.race_ethnicity = race_ethnicity
+            else:
+                cycle.race_ethnicity = None
+            home_state = request.form.get('home_state')
+            if len(home_state) > 0 and home_state in form_options.STATE_OPTIONS:
+                cycle.home_state = home_state
+            else:
+                cycle.home_state = None
+            cgpa = request.form.get('cgpa')
+            if cgpa:
+                if float(cgpa) > 0 and float(cgpa) <= 4:
+                    cycle.cgpa = float(cgpa)
+                else:
+                    flash('Please make sure you enter a cGPA between 0 and 4.', category='error')
+            else:
+                cycle.cgpa = None
+            sgpa = request.form.get('sgpa')
+            if sgpa:
+                if float(sgpa) > 0 and float(sgpa) <= 4:
+                    cycle.sgpa = float(sgpa)
+                else:
+                    flash('Please make sure you enter a sGPA between 0 and 4.', category='error')
+            else:
+                cycle.sgpa = None
+            mcat_total = request.form.get('mcat_total')
+            if mcat_total:
+                try:
+                    if int(mcat_total) >= 472 and int(mcat_total) <= 528:
+                        cycle.mcat_total = int(mcat_total)
+                    else:
+                        flash('Please make sure you enter a total MCAT score between 472 and 528.', category='error')
+                except Exception as e:
+                    flash('Please make sure you enter a total MCAT score between 472 and 528.', category='error')
+            else:
+                cycle.mcat_total = None
+            mcat_cp = request.form.get('mcat_cp')
+            if mcat_cp:
+                try:
+                    if int(mcat_cp) >= 118 and int(mcat_cp) <= 132:
+                        cycle.mcat_cp = int(mcat_cp)
+                    else:
+                        flash('Please make sure you enter a Chemistry/Physics MCAT score between 118 and 132.', category='error')
+                except Exception as e:
+                    flash('Please make sure you enter a Chemistry/Physics MCAT score between 118 and 132.', category='error')
+            else:
+                cycle.mcat_cp = None
+            mcat_cars = request.form.get('mcat_cars')
+            if mcat_cars:
+                try:
+                    if int(mcat_cars) >= 118 and int(mcat_cars) <= 132:
+                        cycle.mcat_cars = int(mcat_cars)
+                    else:
+                        flash('Please make sure you enter a CARS MCAT score between 118 and 132.',
+                              category='error')
+                except Exception as e:
+                    flash('Please make sure you enter a CARS MCAT score between 118 and 132.',
+                          category='error')
+            else:
+                cycle.mcat_cars = None
+            mcat_bb = request.form.get('mcat_bb')
+            if mcat_bb:
+                try:
+                    if int(mcat_bb) >= 118 and int(mcat_bb) <= 132:
+                        cycle.mcat_bb = int(mcat_bb)
+                    else:
+                        flash('Please make sure you enter a Biology/Biochemistry MCAT score between 118 and 132.',
+                              category='error')
+                except Exception as e:
+                    flash('Please make sure you enter a Biology/Biochemistry MCAT score between 118 and 132.',
+                          category='error')
+            else:
+                cycle.mcat_bb = None
+            mcat_ps = request.form.get('mcat_ps')
+            if mcat_ps:
+                try:
+                    if int(mcat_ps) >= 118 and int(mcat_ps) <= 132:
+                        cycle.mcat_ps = int(mcat_ps)
+                    else:
+                        flash('Please make sure you enter a Psychology/Sociology MCAT score between 118 and 132.',
+                              category='error')
+                except Exception as e:
+                    flash('Please make sure you enter a Psychology/Sociology MCAT score between 118 and 132.',
+                          category='error')
+            else:
+                cycle.mcat_ps = None
+            db.session.commit()
+
+        # gender = db.Column(db.String(150), nullable=True)
+        # sex = db.Column(db.String(150), nullable=True)
+        # birth_month = db.Column(db.Integer, nullable=True)
+        # birth_year = db.Column(db.Integer, nullable=True)
+        # race_ethnicity = db.Column(db.String(150), nullable=True)
+        # home_state = db.Column(db.String(150), nullable=True)
+        # cgpa = db.Column(db.Float, nullable=True)
+        # sgpa = db.Column(db.Float, nullable=True)
+        # mcat_total = db.Column(db.Integer, nullable=True)
+        # mcat_cp = db.Column(db.Integer, nullable=True)
+        # mcat_cars = db.Column(db.Integer, nullable=True)
+        # mcat_bb = db.Column(db.Integer, nullable=True)
+        # mcat_ps = db.Column(db.Integer, nullable=True)
     return render_template('cycles.html', user=current_user, cycle_options=form_options.VALID_CYCLES,
                            sex_options=form_options.SEX_OPTIONS, gender_options=form_options.GENDER_OPTIONS,
                            race_ethnicity_options=form_options.RACE_ETHNICITY_OPTIONS,

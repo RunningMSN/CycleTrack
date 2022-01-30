@@ -23,7 +23,6 @@
                             <a href="{{ url_for('pages.privacy') }}#cycleinfo">Why we collect this information?</a>
                             </div>
                         <div>
-                            <form>
                                 <input type="hidden" id="cycle_id_edit" name="cycle_id_edit" value="{{ cycle.id }}">
                                 <div>
 
@@ -35,7 +34,11 @@
                                                 <select name="gender" id="gender" class="btn-sm modalinput">
                                                     <option value=""></option>
                                                     {% for gender in gender_options %}
+                                                    {% if gender == cycle.gender %}
+                                                    <option selected="{{ cycle.gender }}">{{ cycle.gender }}</option>
+                                                    {% else %}
                                                     <option value="{{ gender }}">{{ gender }}</option>
+                                                    {% endif %}
                                                     {% endfor %}
                                                 </select>
                                             </td>
@@ -46,14 +49,18 @@
                                                 <select name="sex" id="sex" class="btn-sm modalinput">
                                                     <option value=""></option>
                                                     {% for sex in sex_options %}
+                                                    {% if sex == cycle.sex %}
+                                                    <option selected="{{ cycle.sex }}">{{ cycle.sex }}</option>
+                                                    {% else %}
                                                     <option value="{{ sex }}">{{ sex }}</option>
+                                                    {% endif %}
                                                     {% endfor %}
                                                 </select>
                                             </td>
                                         </tr>
                                         <tr>
                                             <td>Birth Mon/Yr</td>
-                                            <td><input type="text" name="birth_month_year" id="birth_month_year" class="modalinput" placeholder="MM/YYYY"/></input></td>
+                                            <td><input type="text" name="birth_month_year" id="birth_month_year" class="modalinput" placeholder="MM/YYYY" {% if cycle.birth_month %}value="{{ cycle.birth_month }}/{{ cycle.birth_year }}"{% endif %}/></input></td>
                                         </tr>
                                         <tr>
                                             <td>Race/Ethnicity</td>
@@ -61,7 +68,11 @@
                                                 <select name="race_ethnicity" id="race_ethnicity" class="btn-sm modalinput">
                                                     <option value=""></option>
                                                     {% for race_ethnicity in race_ethnicity_options %}
+                                                    {% if race_ethnicity == cycle.race_ethnicity %}
+                                                    <option selected="{{ cycle.race_ethnicity }}">{{ cycle.race_ethnicity }}</option>
+                                                    {% else %}
                                                     <option value="{{ race_ethnicity }}">{{ race_ethnicity }}</option>
+                                                    {% endif %}
                                                     {% endfor %}
                                                 </select>
                                             </td>
@@ -70,10 +81,14 @@
                                         <tr>
                                             <td>Home State</td>
                                             <td>
-                                                <select name="state" id="state" class="btn-sm modalinput">
+                                                <select name="home_state" id="home_state" class="btn-sm modalinput">
                                                     <option value=""></option>
                                                     {% for state in state_options %}
+                                                    {% if state == cycle.home_state %}
+                                                    <option selected="{{ cycle.home_state }}">{{ cycle.home_state }}</option>
+                                                    {% else %}
                                                     <option value="{{ state }}">{{ state }}</option>
+                                                    {% endif %}
                                                     {% endfor %}
                                                 </select>
                                             </td>
@@ -81,37 +96,35 @@
                                         <tr><td colspan="2"><h5>GPA</h5></td></tr>
                                         <tr>
                                             <td>cGPA</td>
-                                            <td><input type="text" name="cGPA" id="cGPA" class="modalinput"/></input></td>
+                                            <td><input type="text" name="cgpa" id="cgpa" class="modalinput" {% if cycle.cgpa %}value="{{ cycle.cgpa }}"{% endif %}/></input></td>
                                         </tr>
                                         <tr>
                                             <td>sGPA</td>
-                                            <td><input type="text" name="sGPA" id="sGPA" class="modalinput"/></input></td>
+                                            <td><input type="text" name="sgpa" id="sgpa" class="modalinput" {% if cycle.sgpa %}value="{{ cycle.sgpa }}"{% endif %}/></input></td>
                                         </tr>
                                         <tr><td colspan="2"><h5>MCAT</h5></td></tr>
                                         <tr>
                                             <td>MCAT Score</td>
-                                            <td><input type="text" name="MCAT" id="MCAT" class="modalinput"/></input></td>
+                                            <td><input type="text" name="mcat_total" id="mcat_total" class="modalinput" {% if cycle.mcat_total %}value="{{ cycle.mcat_total }}"{% endif %}/></input></td>
                                         </tr>
                                         <tr>
                                             <td>C/P Score</td>
-                                            <td><input type="text" name="C/P" id="C/P" class="modalinput"/></input></td>
+                                            <td><input type="text" name="mcat_cp" id="mcat_cp" class="modalinput" {% if cycle.mcat_cp %}value="{{ cycle.mcat_cp }}"{% endif %}/></input></td>
                                         </tr>
                                         <tr>
                                             <td>CARS Score</td>
-                                            <td><input type="text" name="CARS" id="CARS" class="modalinput"/></input></td>
+                                            <td><input type="text" name="mcat_cars" id="mcat_cars" class="modalinput" {% if cycle.mcat_cars %}value="{{ cycle.mcat_cars }}"{% endif %}/></input></td>
                                         </tr>
                                         <tr>
                                             <td>B/B Score</td>
-                                            <td><input type="text" name="B/B" id="B/B" class="modalinput"/></input></td>
+                                            <td><input type="text" name="mcat_bb" id="mcat_bb" class="modalinput" {% if cycle.mcat_bb %}value="{{ cycle.mcat_bb }}"{% endif %}/></input></td>
                                         </tr>
                                         <tr>
                                             <td>P/S Score</td>
-                                            <td><input type="text" name="P/S " id="P/S" class="modalinput"/></input></td>
+                                            <td><input type="text" name="mcat_ps" id="mcat_ps" class="modalinput" {% if cycle.mcat_ps %}value="{{ cycle.mcat_ps }}"{% endif %}/></input></td>
                                         </tr>
                                     </table>
                                 </div>
-
-                            </form>
                         </div>
                     </div>
                     <div class="modal-footer">
