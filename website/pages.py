@@ -153,20 +153,6 @@ def cycles():
             else:
                 cycle.mcat_ps = None
             db.session.commit()
-
-        # gender = db.Column(db.String(150), nullable=True)
-        # sex = db.Column(db.String(150), nullable=True)
-        # birth_month = db.Column(db.Integer, nullable=True)
-        # birth_year = db.Column(db.Integer, nullable=True)
-        # race_ethnicity = db.Column(db.String(150), nullable=True)
-        # home_state = db.Column(db.String(150), nullable=True)
-        # cgpa = db.Column(db.Float, nullable=True)
-        # sgpa = db.Column(db.Float, nullable=True)
-        # mcat_total = db.Column(db.Integer, nullable=True)
-        # mcat_cp = db.Column(db.Integer, nullable=True)
-        # mcat_cars = db.Column(db.Integer, nullable=True)
-        # mcat_bb = db.Column(db.Integer, nullable=True)
-        # mcat_ps = db.Column(db.Integer, nullable=True)
     return render_template('cycles.html', user=current_user, cycle_options=form_options.VALID_CYCLES,
                            sex_options=form_options.SEX_OPTIONS, gender_options=form_options.GENDER_OPTIONS,
                            race_ethnicity_options=form_options.RACE_ETHNICITY_OPTIONS,
@@ -255,10 +241,10 @@ def lists():
 
     return render_template('lists.html', user=current_user, cycle=cycle, school_list=form_options.SCHOOL_LIST)
 
-@pages.route('/visualizations')
+@pages.route('/visualizations', methods=['GET', 'POST'])
 @login_required
 def visualizations():
-    return render_template('visualizations.html', user=current_user)
+    return render_template('visualizations.html', user=current_user, vis_types=form_options.VIS_TYPES)
 
 @pages.route('/privacy')
 def privacy():

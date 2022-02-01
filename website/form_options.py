@@ -44,3 +44,5 @@ STATE_OPTIONS = ["Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colo
                  "Rhode Island", "South Carolina", "South Dakota", "Tennessee","Texas", "Utah", "Vermont", "Virginia",
                  "Washington", "West Virginia", "Wisconsin", "Wyoming", "Puerto Rico", "Guam", "American Samoa",
                  "Canada", "International", "Other"]
+
+VIS_TYPES = ["Line", "Bar", "Dot"]
