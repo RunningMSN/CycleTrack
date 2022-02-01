@@ -12,8 +12,8 @@ function deleteSchool(schoolId, cycleId) {
     method: "POST",
     body: JSON.stringify({ schoolId: schoolId }),
   }).then((_res) => {
-    var form = '<form method="POST" action = "/lists"><input type="hidden" name="cycle_id" id="cycle_id" value=' + cycleId + '></form>';
-    var formElement = $(form);
+    let form = '<form method="POST" action = "/lists"><input type="hidden" name="cycle_id" id="cycle_id" value=' + cycleId + '></form>';
+    let formElement = $(form);
     $('body').append(formElement);
     $(formElement).submit()
   });
