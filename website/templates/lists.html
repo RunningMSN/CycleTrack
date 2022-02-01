@@ -79,7 +79,7 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                         <button type="submit" class="btn btn-primary">Save Changes</button>
-                        <button type="button" class="btn btn-danger" onclick="deleteSchool({{ school.id }})">Delete School</button>
+                        <button type="button" class="btn btn-danger" onclick="deleteSchool({{ school.id }}, {{ cycle.id }})">Delete School</button>
                     </div>
                     </form>
                 </div>
@@ -155,7 +155,6 @@
                 <td style="padding: 10px">
                     <select name="add_school" id="add_school" class="btn-sm">
                         {% for school in school_list %}
-                        <!-- Only allow entry in latest 3 cycles -->
                         <option value="{{ school }}">{{ school }}</option>
                         {% endfor %}
                     </select>

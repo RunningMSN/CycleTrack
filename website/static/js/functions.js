@@ -7,11 +7,14 @@ function deleteCycle(cycleId) {
   });
 }
 
-function deleteSchool(schoolId) {
+function deleteSchool(schoolId, cycleId) {
   fetch("/delete-school", {
     method: "POST",
     body: JSON.stringify({ schoolId: schoolId }),
   }).then((_res) => {
-    window.location.href = "/cycles"; /*fix later to make go back to school list*/
+    var form = '<form method="POST" action = "/lists"><input type="hidden" name="cycle_id" id="cycle_id" value=' + cycleId + '></form>';
+    var formElement = $(form);
+    $('body').append(formElement);
+    $(formElement).submit()
   });
 }
