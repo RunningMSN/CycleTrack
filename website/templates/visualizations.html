@@ -5,16 +5,12 @@
     <form method="POST">
         <h2 style="padding-top: 10px">Visualizations</h2>
         <div class="form-group">
-            {% if user.cycles|length > 1 %}
             <label for="cycle">Choose a Cycle: </label>
-            <select name="cycle" id="cycle_manual">
+            <select name="cycle_id" id="cycle_manual">
                 {% for cycle in user.cycles %}
                 <option value="{{ cycle.id }}">{{ cycle.cycle_year }}</option>
                 {% endfor %}
             </select>
-            {% else %}
-            <input type="hidden" name="cycle" id="cycle_auto" value="{{ user.cycles[0] }}" />
-            {% endif %}
         </div>
 
         <div class="form-group">
@@ -28,4 +24,12 @@
         <button type="submit" class="btn btn-primary">Generate</button>
     </form>
 </div>
+{% if graphJSON %}
+<div id="chart" class="chart container"></div>
+
+<script>
+	var graphs = {{ graphJSON | safe }};
+    Plotly.newPlot('chart',graphs,{});
+</script>
+{% endif %}
 {% endblock %}

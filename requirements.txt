@@ -1,3 +1,5 @@
 flask
 flask-login
 flask-sqlalchemy
+plotly
+plotly-express

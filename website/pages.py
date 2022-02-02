@@ -5,6 +5,8 @@ from .models import User,Cycle, School
 import json
 from datetime import datetime, date
 import re
+from .visualizations import dot
+import pandas as pd
 
 pages = Blueprint('pages', __name__)
 
@@ -244,7 +246,18 @@ def lists():
 @pages.route('/visualizations', methods=['GET', 'POST'])
 @login_required
 def visualizations():
-    return render_template('visualizations.html', user=current_user, vis_types=form_options.VIS_TYPES)
+    vis_type = request.form.get('vis_type')
+    if vis_type:
+        cycle_id = int(request.form.get('cycle_id'))
+        cycle = Cycle.query.filter_by(id=cycle_id).first()
+        cycle_data = pd.read_sql(School.query.filter_by(cycle_id=cycle.id).statement, db.session.bind).drop(['id','cycle_id', 'user_id'], axis=1)
+        if vis_type.lower() == 'dot':
+            graphJSON = dot.generate(cycle_data)
+        else:
+            graphJSON = None
+    else:
+        graphJSON = None
+    return render_template('visualizations.html', user=current_user, vis_types=form_options.VIS_TYPES, graphJSON=graphJSON)
 
 @pages.route('/privacy')
 def privacy():
