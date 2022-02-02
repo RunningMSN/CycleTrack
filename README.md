@@ -8,6 +8,7 @@ simoltaneously contributing data that can be used for analytics and assisting fu
 
 ## Current TODO List:
  * Make school list page mobile friendly
- * Build infrastructure for visualizing cycles
+ * Add functional line and bar graphs to visualization
+ * Figure out what to do with visualizations on mobile devices, probably just make message that not available
  * Add import from spreadsheet
  * Add export to spreadsheet
