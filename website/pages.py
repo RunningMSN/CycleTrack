@@ -5,7 +5,7 @@ from .models import User,Cycle, School
 import json
 from datetime import datetime, date
 import re
-from .visualizations import dot
+from .visualizations import dot, line
 import pandas as pd
 
 pages = Blueprint('pages', __name__)
@@ -253,6 +253,8 @@ def visualizations():
         cycle_data = pd.read_sql(School.query.filter_by(cycle_id=cycle.id).statement, db.session.bind).drop(['id','cycle_id', 'user_id'], axis=1)
         if vis_type.lower() == 'dot':
             graphJSON = dot.generate(cycle_data)
+        elif vis_type.lower() == 'line':
+            graphJSON = line.generate(cycle_data)
         else:
             graphJSON = None
     else:
