@@ -13,6 +13,11 @@ def generate(cycle_data):
         if not (cleaned_data[column] == 0).all():
             # Add trace for action
             fig.add_trace(go.Scatter(x=cleaned_data.index, y=cleaned_data[column], mode='lines',name=column))
+    fig.update_layout(
+        title="Application Cycle",
+        yaxis_title="Count",
+        legend_title="Actions"
+    )
     # Convert to JSON and return it for plotting
     graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
     return graphJSON
