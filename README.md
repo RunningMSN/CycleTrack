@@ -12,3 +12,4 @@ simoltaneously contributing data that can be used for analytics and assisting fu
  * Figure out what to do with visualizations on mobile devices, probably just make message that not available
  * Add import from spreadsheet
  * Add export to spreadsheet
+ * Fix bug caused by generating graphs without any data

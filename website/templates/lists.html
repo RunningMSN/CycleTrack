@@ -94,7 +94,7 @@
                 </button>
             </td>
             <td>
-                {{ school.name }}
+                {{ school.name }} ({% if school.school_type == "MD" %}MD{% else %}DO{% endif %}{% if school.phd %}-PhD{% endif %})
             </td>
             <td>
                 {% if school.primary %}
@@ -146,24 +146,85 @@
     {% else %}
     <p>You have not added any schools.</p>
     {% endif %}
-    <!-- Add Schools -->
-    <form method="POST">
-        <input type="hidden" name="cycle_id" id="cycle_id" value="{{ cycle.id }}">
-        <table>
-            <tr>
-                <td style="padding: 10px">Add a new school:</td>
-                <td style="padding: 10px">
-                    <select name="add_school" id="add_school" class="btn-sm">
-                        {% for school in school_list %}
-                        <option value="{{ school }}">{{ school }}</option>
-                        {% endfor %}
-                    </select>
-                </td>
-                <td style="padding: 10px">
-                    <button type="submit" class="btn btn-primary btn-sm">Submit</button>
-                </td>
-            </tr>
-        </table>
-    </form>
+
+    <!-- BUTTONS FOR ADDING SCHOOLS -->
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-md-modal">
+        Add MD School
+    </button>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-do-modal">
+        Add DO School
+    </button>
+
+    <!-- MD SCHOOL MENU -->
+    <div class="modal fade" id="add-md-modal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <form method="POST">
+                    <div class="modal-header">
+                        <h5 class="modal-title">New MD School</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="add_school">Choose a School</label>
+                            <select name="add_school" id="add_md_school" class="btn-sm form-control">
+                                {% for school in md_school_list %}
+                                <option value="{{ school }}">{{ school }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <input type="checkbox" id="md_phd_check" name="phd" value="true">
+                            <label for="md_phd_check"> I am applying MD-PhD</label><br>
+                        </div>
+                        <input type="hidden" name="cycle_id" id="cycle_id_md" value="{{ cycle.id }}">
+                        <input type="hidden" name="school_type" id="school_type_md" value="MD">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Add School</button>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- DO SCHOOL MENU -->
+        <div class="modal fade" id="add-do-modal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <form method="POST">
+                    <div class="modal-header">
+                        <h5 class="modal-title">New DO School</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="add_school">Choose a School</label>
+                            <select name="add_school" id="add_do_school" class="btn-sm form-control" >
+                                {% for school in do_school_list %}
+                                <option value="{{ school }}">{{ school }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <input type="checkbox" id="do_phd_check" name="phd" value="true">
+                            <label for="md_phd_check"> I am applying DO-PhD</label><br>
+                        </div>
+                        <input type="hidden" name="cycle_id" id="cycle_id_do" value="{{ cycle.id }}">
+                        <input type="hidden" name="school_type" id="school_type_do" value="DO">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Add School</button>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
 </div>
 {% endblock %}

@@ -31,6 +31,8 @@ class School(db.Model):
     cycle_id = db.Column(db.Integer, db.ForeignKey('cycle.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     name = db.Column(db.String(150))
+    school_type = db.Column(db.String(150)) # MD/DO
+    phd = db.Column(db.Boolean) # Dual degree w/ PhD or not
     primary = db.Column(db.DateTime(timezone=True), nullable=True)
     secondary_received = db.Column(db.DateTime(timezone=True), nullable=True)
     application_complete = db.Column(db.DateTime(timezone=True), nullable=True)

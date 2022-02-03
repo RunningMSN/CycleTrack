@@ -183,11 +183,18 @@ def lists():
     # Handle adding school
     add_school_name = request.form.get('add_school')
     if add_school_name:
-        school = School.query.filter_by(name=add_school_name, cycle_id=cycle.id, ).first()
-        if school:
-            flash('You cannot add a school twice.', category='error')
+        if request.form.get('phd'):
+            dual_degree_phd = True
         else:
-            db.session.add(School(name=add_school_name, cycle_id=cycle.id, user_id=current_user.id))
+            dual_degree_phd = False
+
+        school_type = request.form.get('school_type')
+        # Check if school already exists
+        school = School.query.filter_by(name=add_school_name, cycle_id=cycle.id, phd=dual_degree_phd).first()
+        if school:
+            flash('You cannot add the same program twice.', category='error')
+        else:
+            db.session.add(School(name=add_school_name, cycle_id=cycle.id, user_id=current_user.id, phd=dual_degree_phd, school_type=school_type))
             db.session.commit()
 
     # Handle editing schools
@@ -241,7 +248,7 @@ def lists():
             school.withdrawn = None
         db.session.commit()
 
-    return render_template('lists.html', user=current_user, cycle=cycle, school_list=form_options.SCHOOL_LIST)
+    return render_template('lists.html', user=current_user, cycle=cycle, md_school_list=form_options.MD_SCHOOL_LIST, do_school_list=form_options.DO_SCHOOL_LIST)
 
 @pages.route('/visualizations', methods=['GET', 'POST'])
 @login_required
@@ -250,11 +257,14 @@ def visualizations():
     if vis_type:
         cycle_id = int(request.form.get('cycle_id'))
         cycle = Cycle.query.filter_by(id=cycle_id).first()
-        cycle_data = pd.read_sql(School.query.filter_by(cycle_id=cycle.id).statement, db.session.bind).drop(['id','cycle_id', 'user_id'], axis=1)
+        cycle_data = pd.read_sql(School.query.filter_by(cycle_id=cycle.id).statement, db.session.bind).drop(['id','cycle_id','user_id','school_type','phd'], axis=1)
         if vis_type.lower() == 'dot':
             graphJSON = dot.generate(cycle_data)
         elif vis_type.lower() == 'line':
             graphJSON = line.generate(cycle_data)
+        elif vis_type.lower() == 'bar':
+            # TODO: implement this
+            graphJSON = None
         else:
             graphJSON = None
     else:
