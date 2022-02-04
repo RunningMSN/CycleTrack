@@ -4,3 +4,4 @@ flask-sqlalchemy
 plotly
 plotly-express
 pandas
+openpyxl
