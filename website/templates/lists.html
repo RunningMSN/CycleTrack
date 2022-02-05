@@ -147,12 +147,20 @@
     {% endif %}
 
     <!-- BUTTONS FOR ADDING SCHOOLS -->
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-md-modal">
-        Add MD School
-    </button>
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-do-modal">
-        Add DO School
-    </button>
+
+    <form method="POST" action="{{ url_for('pages.import_list') }}">
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-md-modal">
+            Add MD School
+        </button>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-do-modal">
+            Add DO School
+        </button>
+        <input type="hidden" id="import_cycle_id" name="cycle_id" value="{{ cycle.id }}" />
+        <button type="submit" class="btn btn-primary" data-toggle="modal" data-target="#add-do-modal">
+            Import From Spreadsheet
+        </button>
+    </form>
+
 
     <!-- MD SCHOOL MENU -->
     <div class="modal fade" id="add-md-modal" tabindex="-1" role="dialog" aria-hidden="true">
