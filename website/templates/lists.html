@@ -145,19 +145,41 @@
     {% endif %}
 
     <!-- BUTTONS FOR ADDING SCHOOLS -->
+    <table>
+        <tr>
+            <td>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-md-modal">
+                    Add MD School
+                </button>
+            </td>
+            <td>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-do-modal">
+                    Add DO School
+                </button>
+            </td>
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <td>
+                <form method="POST" action="{{ url_for('pages.import_list') }}">
+                    <input type="hidden" id="import_cycle_id" name="cycle_id" value="{{ cycle.id }}"/>
+                    <button type="submit" class="btn btn-primary">
+                        Import From Spreadsheet
+                    </button>
+                </form>
+            </td>
+            <td>
+                <form method="POST" action="{{ url_for('pages.export_list') }}">
+                    <input type="hidden" id="export_cycle_id" name="cycle_id" value="{{ cycle.id }}"/>
+                    <button type="submit" class="btn btn-primary">
+                        Export to Spreadsheet
+                    </button>
+                </form>
+            </td>
+        </tr>
+    </table>
 
-    <form method="POST" action="{{ url_for('pages.import_list') }}">
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-md-modal">
-            Add MD School
-        </button>
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-do-modal">
-            Add DO School
-        </button>
-        <input type="hidden" id="import_cycle_id" name="cycle_id" value="{{ cycle.id }}" />
-        <button type="submit" class="btn btn-primary" data-toggle="modal" data-target="#add-do-modal">
-            Import From Spreadsheet
-        </button>
-    </form>
 
 
     <!-- MD SCHOOL MENU -->

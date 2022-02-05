@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, flash, jsonify, redirect, url_for
+from flask import Blueprint, render_template, request, flash, jsonify, redirect, url_for, Response
 from flask_login import current_user, login_required
 from . import db, form_options
 from .models import User,Cycle, School
@@ -435,6 +435,18 @@ def import_list():
             else:
                 return redirect(url_for('pages.lists'))
     return render_template('import-list.html', user=current_user, cycle=cycle)
+
+@pages.route('/export-list', methods=["POST"])
+@login_required
+def export_list():
+    cycle_id = int(request.form.get('cycle_id'))
+    cycle = Cycle.query.filter_by(id=cycle_id).first()
+    cycle_data = pd.read_sql(School.query.filter_by(cycle_id=cycle.id).statement, db.session.bind).drop(
+        ['id', 'cycle_id', 'user_id'], axis=1)
+    csv = cycle_data.to_csv(index=False, encoding='utf-8')
+    response = Response(csv, mimetype='text/csv')
+    response.headers.set("Content-Disposition", "attachment", filename=f'{cycle.cycle_year}_school_list.csv')
+    return response
 
 @pages.route('/privacy')
 def privacy():
