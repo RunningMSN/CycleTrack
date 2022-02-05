@@ -4,6 +4,13 @@
 <div id="visualizations" class="container" style="padding-top:10px">
     <form method="POST">
         <h2>Visualizations</h2>
+        <div class="d-md-none" style="padding-bottom:10px">
+            <div class="bg-warning container rounded" style="padding: 10px">
+            Visualizations may be difficult to
+            view on smaller screens. You may want to return to this page on a device with a larger screen!
+            </div>
+        </div>
+        <div style="">
         <div class="form-group">
             <label for="cycle">Choose a Cycle: </label>
             <select name="cycle_id" id="cycle_manual">
@@ -23,6 +30,7 @@
         </div>
         <button type="submit" class="btn btn-primary">Generate</button>
     </form>
+    </div>
 </div>
 {% if graphJSON %}
 <div id="chart" class="chart container"></div>
