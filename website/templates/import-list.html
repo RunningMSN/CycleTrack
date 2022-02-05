@@ -1,0 +1,120 @@
+{% extends 'dashboard.html' %}
+{% block title %} Import School List {% endblock %}
+{% block dash_content %}
+<!-- SCHOOL LIST MANAGEMENT -->
+<div id="lists" class="container" style="padding-top:10px">
+    <!-- UPLOAD A FILE IF NONE PROVIDED YET -->
+    {% if not tableJSON %}
+    <h2 style="padding-bottom:10px">Import School List</h2>
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="excel-tab" data-bs-toggle="tab" data-bs-target="#excel" type="button"
+                    role="tab" aria-controls="home" aria-selected="true">Excel
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="google-sheets-tab" data-bs-toggle="tab" data-bs-target="#google-sheets" type="button"
+                    role="tab" aria-controls="profile" aria-selected="false">Google Sheets
+            </button>
+        </li>
+    </ul>
+    <div class="tab-content" id="myTabContent">
+        <!-- UPLOAD EXCEL SHEET -->
+        <div class="tab-pane fade show active" id="excel" role="tabpanel" aria-labelledby="excel-tab" style="padding-top:10px">
+            <form method="POST" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label for="upload_table" class="form-label">Upload a Table</label>
+                    <input class="form-control" type="file" id="upload_table" name="table" accept=".xlsx" {% if
+                           curr_file %}value="{{ curr_file }}{% endif %}">
+                </div>
+                <input type="hidden" id="excel_cycle_id" name="cycle_id" value="{{ cycle.id }}" />
+                <button type="submit" class="btn btn-primary">Upload</button>
+            </form>
+        </div>
+        <!-- UPLOAD GOOGLE SHEETS -->
+        <div class="tab-pane fade" id="google-sheets" role="tabpanel" aria-labelledby="google-sheets-tab" style="padding-top:10px">
+            Google Sheets input will go here
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- LABEL COLUMNS -->
+    {% if colnames|length > 0 %} <!-- This is a unique variable to this section -->
+    <h2>Thanks. I need some help labeling your columns.</h2>
+    <p>Please assign an action type to each of your columns.</p>
+    <form method="POST">
+        <table class="table">
+            <thead>
+                <th>Your Column</th>
+                <th>Label</th>
+            </thead>
+            {% for column in colnames %}
+            <tr>
+                <td>{{ column }}</td>
+                <td>
+                    <select name="column->{{ column }}" id="column->{{ column }}" class="btn-sm form-control">
+                        <option value=""></option>
+                        {% for column_type in column_types %}
+                        <option value="{{ column_type }}">{{ column_type }}</option>
+                        {% endfor %}
+                    </select></td>
+            </tr>
+            {% endfor %}
+        </table>
+        <input type="hidden" name="labeled-columns" id="labeled-columns" value="true" />
+        <input type="hidden" id="tableJSON" name="tableJSON" value="{{ tableJSON }}">
+        <input type="hidden" id="labels_cycle_id" name="cycle_id" value="{{ cycle.id }}">
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    {% endif %}
+
+    <!-- NAME SCHOOLS AND GET MD/DO-PhD -->
+    {% if md_school_list %} <!-- This is a unique variable to this section -->
+    <h2>One last thing... Please help me label your schools.</h2>
+    <form method="POST">
+        <table class="table">
+            <thead>
+            <th>Your Listed Name</th>
+            <th>Labeled School Name</th>
+            <th>MD/DO-PhD?</th>
+            </thead>
+            {% for school in school_names %}
+            <tr>
+                <td>{{ school }}</td>
+                <td>
+                    <select name="corrected_name->{{ school }}" id="school_name" class="btn-sm">
+                        <option value="" disabled>-- MD Schools --</option>
+                        {% if school in md_school_list %}
+                        <option selected="{{ school }}">{{ school }}</option>
+                        {% endif %}
+                        {% for school_option in md_school_list %}
+                        {% if school != school_option %}
+                        <option value="{{ school_option }}">{{ school_option }}</option>
+                        {% endif %}
+                        {% endfor %}
+                        <option value="" disabled>-- DO Schools --</option>
+                        {% if school in do_school_list %}
+                        <option selected="{{ school }}">{{ school }}</option>
+                        {% endif %}
+                        {% for school_option in do_school_list %}
+                        {% if school != school_option %}
+                        <option value="{{ school_option }}">{{ school_option }}</option>
+                        {% endif %}
+                        {% endfor %}
+                    </select>
+                </td>
+                <td>
+                    <input type="checkbox" id="md_phd_check" name="phd->{{ school }}" value="true">
+                    <label for="md_phd_check">Yes</label>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    <input type="hidden" name="named-schools" id="named-schools" value="true" />
+    <input type="hidden" id="names_tableJSON" name="tableJSON" value="{{ tableJSON }}">
+    <input type="hidden" id="names_cycle_id" name="cycle_id" value="{{ cycle.id }}">
+    <button type="submit" class="btn btn-primary">Finalize Import</button>
+    </form>
+    {% endif %}
+</div>
+{% endblock %}
