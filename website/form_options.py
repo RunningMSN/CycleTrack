@@ -28,7 +28,49 @@ MD_SCHOOL_LIST = sorted(
      "UT Medical Branch", "UT Rio Grande Valley", "UT San Antonio-Long", "UT Southwestern", "Utah", "Eastern Virginia",
      "Virginia", "Virginia Commonwealth", "Virginia Tech Carilion", "Vermont-Larner", "U Washington",
      "Washington State-Floyd", "MC Wisconsin", "Wisconsin", "Marshall-Edwards", "West Virginia"])
-DO_SCHOOL_LIST = sorted(["DO School 1", "DO School 2"]) #TODO: fill in school list
+DO_SCHOOL_LIST = sorted(['Alabama College of Osteopathic Medicine',
+                         'Arizona College of Osteopathic Medicine of Midwestern University',
+                         'Arkansas College of Osteopathic Medicine',
+                         'A.T. Still University-Kirksville College of Osteopathic Medicine',
+                         'A.T. Still University-School of Osteopathic Medicine in Arizona',
+                         'Burrell College of Osteopathic Medicine at New Mexico State University',
+                         'California Health Sciences University College of Osteopathic Medicine',
+                         'Campbell University Jerry M. Wallace School of Osteopathic Medicine',
+                         'Chicago College of Osteopathic Medicine of Midwestern University',
+                         'Des Moines University College of Osteopathic Medicine',
+                         'Idaho College of Osteopathic Medicine',
+                         'Kansas City University College of Osteopathic Medicine',
+                         'Kansas Health Science Center - Kansas College of Osteopathic Medicine',
+                         'Lake Erie College of Osteopathic Medicine',
+                         'Liberty University College of Osteopathic Medicine',
+                         'Lincoln Memorial University - DeBusk College of Osteopathic Medicine',
+                         'Marian University College of Osteopathic Medicine',
+                         'Michigan State University College of Osteopathic Medicine',
+                         'New York Institute of Technology College of Osteopathic Medicine',
+                         'Noorda College of Osteopathic Medicine',
+                         'Nova Southeastern University Dr. Kiran C. Patel College of Osteopathic Medicine',
+                         'Ohio University Heritage College of Osteopathic Medicine',
+                         'Oklahoma State University Center for Health Sciences College of Osteopathic Medicine',
+                         'Pacific Northwest University of Health Sciences College of Osteopathic Medicine',
+                         'Philadelphia College of Osteopathic Medicine',
+                         'Philadelphia College of Osteopathic Medicine Georgia Campus',
+                         'Rocky Vista University College of Osteopathic Medicine',
+                         'Rowan University School of Osteopathic Medicine',
+                         'Sam Houston State University College of Osteopathic Medicine',
+                         'Touro College of Osteopathic Medicine - New York',
+                         'Touro University College of Osteopathic Medicine - California',
+                         'Touro University Nevada College of Osteopathic Medicine',
+                         'University of the Incarnate Word School of Osteopathic Medicine',
+                         'University of New England College of Osteopathic Medicine',
+                         'University of North Texas Health Science Center at Fort Worth - Texas College of Osteopathic Medicine',
+                         'University of Pikeville - Kentucky College of Osteopathic Medicine',
+                         'Edward Via College of Osteopathic Medicine - Auburn Campus',
+                         'Edward Via College of Osteopathic Medicine - Carolinas Campus',
+                         'Edward Via College of Osteopathic Medicine - Louisiana Campus',
+                         'Edward Via College of Osteopathic Medicine - Virginia Campus',
+                         'West Virginia School of Osteopathic Medicine',
+                         'Western University of Health Sciences College of Osteopathic Medicine of the Pacific',
+                         'William Carey University College of Osteopathic Medicine'])
 
 # Options for cycle profile page
 SEX_OPTIONS = ["Male", "Female", "Other"]
@@ -46,3 +88,8 @@ STATE_OPTIONS = ["Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colo
 
 # Settings for visualizations page
 VIS_TYPES = ["Line", "Bar", "Dot"]
+
+# School list import column types
+COLUMN_TYPES = ["School Name", "Primary Submitted/Verified", "Secondary Received",
+                "Application Complete", "Interview Received", "Interview Date", "Rejected", "Waitlisted", "Accepted",
+                "Withdrawn"]
