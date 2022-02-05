@@ -93,3 +93,9 @@ VIS_TYPES = ["Line", "Bar", "Dot"]
 COLUMN_TYPES = ["School Name", "Primary Submitted/Verified", "Secondary Received",
                 "Application Complete", "Interview Received", "Interview Date", "Rejected", "Waitlisted", "Accepted",
                 "Withdrawn"]
+COLUMN_LABEL_CONVERT_SQL = {"School Name": "name", "Primary Submitted/Verified": "primary",
+                            "Secondary Received": "secondary_received",
+                            "Application Complete": "application_complete", "Interview Received": "interview_received",
+                            "Interview Date": "interview_date", "Rejected": "rejection", "Waitlisted": "waitlist",
+                            "Accepted": "acceptance",
+                            "Withdrawn": "withdrawn"}
