@@ -439,11 +439,14 @@ def import_list():
 @pages.route('/export-list', methods=["POST"])
 @login_required
 def export_list():
+    # Get cycle
     cycle_id = int(request.form.get('cycle_id'))
     cycle = Cycle.query.filter_by(id=cycle_id).first()
-    cycle_data = pd.read_sql(School.query.filter_by(cycle_id=cycle.id).statement, db.session.bind).drop(
+    # Create dataframe of schools for that cycle and convert to CSV
+    cycle_data = pd.read_sql(School.query.filter_by(cycle_id=cycle_id).statement, db.session.bind).drop(
         ['id', 'cycle_id', 'user_id'], axis=1)
     csv = cycle_data.to_csv(index=False, encoding='utf-8')
+    # Generate response/download
     response = Response(csv, mimetype='text/csv')
     response.headers.set("Content-Disposition", "attachment", filename=f'{cycle.cycle_year}_school_list.csv')
     return response
