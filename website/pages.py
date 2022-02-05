@@ -290,163 +290,172 @@ def import_list():
             cycle = Cycle.query.filter_by(id=cycle_id).first()
     # Process POST request
     else:
-        cycle_id = request.form.get('cycle_id')
-        cycle = Cycle.query.filter_by(id=cycle_id).first()
-        if not cycle:
-            flash("Please select a school list before importing.", category='error')
-            return redirect(url_for('pages.cycles'))
-        # Receiving an excel table
-        if request.files:
-            table = request.files.get('table')
-            if table.filename.endswith('xlsx'):
-                cycle_data = pd.read_excel(table, engine='openpyxl')
-            # Break out of processing and send user back to page.
-            else:
-                flash('Please upload a valid excel or CSV file.', category='error')
-                return render_template('import-list.html', user=current_user, cycle=cycle)
-            # Drop any unused columns
-            cycle_data = cycle_data.dropna(axis=1, how='all')
-            cycle_data = import_list_funcs.convert_columns_date(cycle_data)
-            colnames = cycle_data.columns
-            tableJSON = cycle_data.to_json()
-            return render_template('import-list.html', user=current_user, cycle=cycle, tableJSON=tableJSON,
-                                   colnames=colnames, column_types=form_options.COLUMN_TYPES)
-        # Process google
-        elif request.form.get('upload_google_link'):
-            link = request.form.get('upload_google_link')
-            cycle_data = import_list_funcs.read_google(link)
-            cycle_data = cycle_data.dropna(axis=1, how='all')
-            colnames = cycle_data.columns
-            tableJSON = cycle_data.to_json()
-            return render_template('import-list.html', user=current_user, cycle=cycle, tableJSON=tableJSON,
-                                   colnames=colnames, column_types=form_options.COLUMN_TYPES)
-        # Process assigned labels
-        if request.form.get('labeled-columns'):
-            # Reconstruct pandas table
-            cycle_data = pd.read_json(request.form.get('tableJSON'))
-            new_labels = []
-            drop_columns = []
-            for item in request.form:
-                if item.startswith('column->'):
-                    original_column_label = item.split('->')[1]
-                    label_assigned = request.form.get(item)
-                    if len(label_assigned) > 0:
-                        new_labels.append(form_options.COLUMN_LABEL_CONVERT_SQL[label_assigned])
+        # Wrap entire section to catch any errors during the process
+        try:
+            cycle_id = request.form.get('cycle_id')
+            cycle = Cycle.query.filter_by(id=cycle_id).first()
+            if not cycle:
+                flash("Please select a school list before importing.", category='error')
+                return redirect(url_for('pages.cycles'))
+            # Receiving an excel table
+            if request.files:
+                table = request.files.get('table')
+                if table.filename.endswith('xlsx'):
+                    cycle_data = pd.read_excel(table, engine='openpyxl')
+                elif table.filename.endswith('csv'):
+                    cycle_data = pd.read_csv(table)
+                # Break out of processing and send user back to page.
+                else:
+                    flash('Please upload a valid excel or CSV file.', category='error')
+                    return render_template('import-list.html', user=current_user, cycle=cycle)
+                # Drop any unused columns
+                cycle_data = cycle_data.dropna(axis=1, how='all')
+                cycle_data = import_list_funcs.convert_columns_date(cycle_data)
+                colnames = cycle_data.columns
+                tableJSON = cycle_data.to_json()
+                return render_template('import-list.html', user=current_user, cycle=cycle, tableJSON=tableJSON,
+                                       colnames=colnames, column_types=form_options.COLUMN_TYPES)
+            # Process google
+            elif request.form.get('upload_google_link'):
+                link = request.form.get('upload_google_link')
+                cycle_data = import_list_funcs.read_google(link)
+                cycle_data = cycle_data.dropna(axis=1, how='all')
+                colnames = cycle_data.columns
+                tableJSON = cycle_data.to_json()
+                return render_template('import-list.html', user=current_user, cycle=cycle, tableJSON=tableJSON,
+                                       colnames=colnames, column_types=form_options.COLUMN_TYPES)
+            # Process assigned labels
+            if request.form.get('labeled-columns'):
+                # Reconstruct pandas table
+                cycle_data = pd.read_json(request.form.get('tableJSON'))
+                new_labels = []
+                drop_columns = []
+                for item in request.form:
+                    if item.startswith('column->'):
+                        original_column_label = item.split('->')[1]
+                        label_assigned = request.form.get(item)
+                        if len(label_assigned) > 0:
+                            new_labels.append(form_options.COLUMN_LABEL_CONVERT_SQL[label_assigned])
+                        else:
+                            drop_columns.append(original_column_label)
+                cycle_data = cycle_data.drop(columns=drop_columns)
+                cycle_data.columns = new_labels
+                tableJSON = cycle_data.to_json()
+                # Require to have a names column
+                if not 'name' in cycle_data.columns:
+                    flash('Your spreadsheet must have a column with school names. Please try again.', category='error')
+                    return redirect(url_for('pages.cycles'))
+                return render_template('import-list.html', user=current_user, cycle=cycle, tableJSON=tableJSON,
+                                       school_names=cycle_data['name'], md_school_list=form_options.MD_SCHOOL_LIST,
+                                       do_school_list=form_options.DO_SCHOOL_LIST)
+            # Final processing step
+            if request.form.get('named-schools'):
+                # Hold corrected names and schools with dual degree phd
+                correct_names = {}
+                phds = []
+                for item in request.form:
+                    if item.startswith('corrected_name->'):
+                        correct_names[item.split('->')[1]] = request.form.get(item)
+                    elif item.startswith('phd->'):
+                        phds.append(item.split('->')[1])
+                # Reconstruct table
+                cycle_data = pd.read_json(request.form.get('tableJSON'))
+                print(cycle_data)
+                # Convert from timestamps
+                for column in cycle_data.columns:
+                    if column != 'name':
+                        cycle_data[column] = pd.to_datetime(cycle_data[column], unit='ms')
+                for index, row in cycle_data.iterrows():
+                    school_name = correct_names[row['name']]
+                    # Check input for PhD
+                    if row['name'] in phds:
+                        dual_degree_phd = True
                     else:
-                        drop_columns.append(original_column_label)
-            cycle_data = cycle_data.drop(columns=drop_columns)
-            cycle_data.columns = new_labels
-            tableJSON = cycle_data.to_json()
-            # Require to have a names column
-            if not 'name' in cycle_data.columns:
-                flash('Your spreadsheet must have a column with school names. Please try again.', category='error')
-                return redirect(url_for('pages.cycles'))
-            return render_template('import-list.html', user=current_user, cycle=cycle, tableJSON=tableJSON,
-                                   school_names=cycle_data['name'], md_school_list=form_options.MD_SCHOOL_LIST,
-                                   do_school_list=form_options.DO_SCHOOL_LIST)
-        # Final processing step
-        if request.form.get('named-schools'):
-            # Hold corrected names and schools with dual degree phd
-            correct_names = {}
-            phds = []
-            for item in request.form:
-                if item.startswith('corrected_name->'):
-                    correct_names[item.split('->')[1]] = request.form.get(item)
-                elif item.startswith('phd->'):
-                    phds.append(item.split('->')[1])
-            # Reconstruct table
-            cycle_data = pd.read_json(request.form.get('tableJSON'))
-            print(cycle_data)
-            # Convert from timestamps
-            for column in cycle_data.columns:
-                if column != 'name':
-                    cycle_data[column] = pd.to_datetime(cycle_data[column], unit='ms')
-            for index, row in cycle_data.iterrows():
-                school_name = correct_names[row['name']]
-                # Check input for PhD
-                if row['name'] in phds:
-                    dual_degree_phd = True
-                else:
-                    dual_degree_phd = False
-                # Get program type
-                if school_name in form_options.MD_SCHOOL_LIST:
-                    school_type='MD'
-                elif school_name in form_options.DO_SCHOOL_LIST:
-                    school_type='DO'
+                        dual_degree_phd = False
+                    # Get program type
+                    if school_name in form_options.MD_SCHOOL_LIST:
+                        school_type='MD'
+                    elif school_name in form_options.DO_SCHOOL_LIST:
+                        school_type='DO'
 
-                # Obtain all other dates
-                try:
-                    primary = row['primary']
-                    if pd.isnull(primary): primary= None
-                except Exception:
-                    primary = None
-                try:
-                    secondary_received = row['secondary_received']
-                    if pd.isnull(secondary_received): secondary_received= None
-                except Exception:
-                    secondary_received = None
-                try:
-                    application_complete = row['application_complete']
-                    if pd.isnull(application_complete): application_complete= None
-                except Exception:
-                    application_complete = None
-                try:
-                    interview_received = row['interview_received']
-                    if pd.isnull(interview_received): interview_received= None
-                except Exception:
-                    interview_received = None
-                try:
-                    interview_date = row['interview_date']
-                    if pd.isnull(interview_date): interview_date= None
-                except Exception:
-                    interview_date = None
-                try:
-                    rejection = row['rejection']
-                    if pd.isnull(rejection): rejection= None
-                except Exception:
-                    rejection = None
-                try:
-                    waitlist = row['waitlist']
-                    if pd.isnull(waitlist): waitlist= None
-                except Exception:
-                    waitlist = None
-                try:
-                    acceptance = row['acceptance']
-                    if pd.isnull(acceptance): acceptance= None
-                except Exception:
-                    acceptance = None
-                try:
-                    withdrawn = row['withdrawn']
-                    if pd.isnull(withdrawn): withdrawn= None
-                except Exception:
-                    withdrawn = None
-                # Try to find if school is already in the list
-                school = School.query.filter_by(name=school_name,phd=dual_degree_phd).first()
-                if school:
-                    if primary: school.primary = primary
-                    if secondary_received: school.secondary_received = secondary_received
-                    if application_complete: school.application_complete = application_complete
-                    if interview_received: school.interview_received = interview_received
-                    if interview_date: school.interview_date = interview_date
-                    if rejection: school.rejection = rejection
-                    if waitlist: school.waitlist = waitlist
-                    if acceptance: school.acceptance = acceptance
-                    if withdrawn: school.withdrawn = withdrawn
-                    db.session.commit()
+                    # Obtain all other dates
+                    try:
+                        primary = row['primary']
+                        if pd.isnull(primary): primary= None
+                    except Exception:
+                        primary = None
+                    try:
+                        secondary_received = row['secondary_received']
+                        if pd.isnull(secondary_received): secondary_received= None
+                    except Exception:
+                        secondary_received = None
+                    try:
+                        application_complete = row['application_complete']
+                        if pd.isnull(application_complete): application_complete= None
+                    except Exception:
+                        application_complete = None
+                    try:
+                        interview_received = row['interview_received']
+                        if pd.isnull(interview_received): interview_received= None
+                    except Exception:
+                        interview_received = None
+                    try:
+                        interview_date = row['interview_date']
+                        if pd.isnull(interview_date): interview_date= None
+                    except Exception:
+                        interview_date = None
+                    try:
+                        rejection = row['rejection']
+                        if pd.isnull(rejection): rejection= None
+                    except Exception:
+                        rejection = None
+                    try:
+                        waitlist = row['waitlist']
+                        if pd.isnull(waitlist): waitlist= None
+                    except Exception:
+                        waitlist = None
+                    try:
+                        acceptance = row['acceptance']
+                        if pd.isnull(acceptance): acceptance= None
+                    except Exception:
+                        acceptance = None
+                    try:
+                        withdrawn = row['withdrawn']
+                        if pd.isnull(withdrawn): withdrawn= None
+                    except Exception:
+                        withdrawn = None
+                    # Try to find if school is already in the list
+                    school = School.query.filter_by(name=school_name,phd=dual_degree_phd).first()
+                    if school:
+                        if primary: school.primary = primary
+                        if secondary_received: school.secondary_received = secondary_received
+                        if application_complete: school.application_complete = application_complete
+                        if interview_received: school.interview_received = interview_received
+                        if interview_date: school.interview_date = interview_date
+                        if rejection: school.rejection = rejection
+                        if waitlist: school.waitlist = waitlist
+                        if acceptance: school.acceptance = acceptance
+                        if withdrawn: school.withdrawn = withdrawn
+                        db.session.commit()
+                    else:
+                        db.session.add(School(name=school_name, user_id=current_user.id, cycle_id=cycle.id,
+                                              school_type=school_type, phd=dual_degree_phd, primary=primary,
+                                              secondary_received=secondary_received, application_complete=application_complete,
+                                              interview_received=interview_received, interview_date=interview_date,
+                                              rejection=rejection, waitlist=waitlist, acceptance=acceptance,
+                                              withdrawn=withdrawn))
+                        db.session.commit()
+                # Success message and redirect
+                flash('Successfully imported your school list.', category='success')
+                if len(current_user.cycles) > 1:
+                    return redirect(url_for('pages.cycles'))
                 else:
-                    db.session.add(School(name=school_name, user_id=current_user.id, cycle_id=cycle.id,
-                                          school_type=school_type, phd=dual_degree_phd, primary=primary,
-                                          secondary_received=secondary_received, application_complete=application_complete,
-                                          interview_received=interview_received, interview_date=interview_date,
-                                          rejection=rejection, waitlist=waitlist, acceptance=acceptance,
-                                          withdrawn=withdrawn))
-                    db.session.commit()
-            # Success message and redirect
-            flash('Successfully imported your school list.', category='success')
-            if len(current_user.cycles) > 1:
-                return redirect(url_for('pages.cycles'))
-            else:
-                return redirect(url_for('pages.lists'))
+                    return redirect(url_for('pages.lists'))
+        except Exception as e:
+            flash('We encountered an error while trying to import your school list. Please make sure to follow the'
+                  'instructions with respect to formatting your spreadsheet to make sure that it is imported correctly.',
+                  category='error')
+            return redirect(url_for('pages.cycles'))
     return render_template('import-list.html', user=current_user, cycle=cycle)
 
 @pages.route('/export-list', methods=["POST"])
@@ -457,7 +466,7 @@ def export_list():
     cycle = Cycle.query.filter_by(id=cycle_id).first()
     # Create dataframe of schools for that cycle and convert to CSV
     cycle_data = pd.read_sql(School.query.filter_by(cycle_id=cycle_id).statement, db.session.bind).drop(
-        ['id', 'cycle_id', 'user_id'], axis=1)
+        ['id', 'cycle_id', 'user_id', 'school_type', 'phd'], axis=1)
     csv = cycle_data.to_csv(index=False, encoding='utf-8')
     # Generate response/download
     response = Response(csv, mimetype='text/csv')

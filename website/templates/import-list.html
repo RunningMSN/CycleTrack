@@ -24,7 +24,7 @@
             <form method="POST" enctype="multipart/form-data">
                 <div class="mb-3">
                     <label for="upload_table" class="form-label">Upload a Table</label>
-                    <input class="form-control" type="file" id="upload_table" name="table" accept=".xlsx" {% if
+                    <input class="form-control" type="file" id="upload_table" name="table" accept=".xlsx,.csv" {% if
                            curr_file %}value="{{ curr_file }}{% endif %}">
                 </div>
                 <input type="hidden" id="excel_cycle_id" name="cycle_id" value="{{ cycle.id }}" />
