@@ -1,10 +1,11 @@
 {% extends 'base.html' %}
 {% block title %}Home{% endblock %}
 {% block content %}
-    <div class="jumbotron jumbotron-fluid">
+<div class="p-5 mb-4" style="background: #ebebeb">
+    <div class="container-fluid py-5">
         <div class="container">
             <h1 class="display-4">Tracking applications for <strong>{{ user_count }}</strong> future doctors.</h1>
-            <p class="lead">{{ app_count }} applications and counting!</p>
-        </div>
+            <p class="lead">{{ app_count }} applications and counting!</p></div>
     </div>
+</div>
 {% endblock %}
