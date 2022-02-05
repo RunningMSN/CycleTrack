@@ -298,7 +298,7 @@ def import_list():
         if request.files:
             table = request.files.get('table')
             if table.filename.endswith('xlsx'):
-                cycle_data = pd.read_excel(table)
+                cycle_data = pd.read_excel(table, engine='openpyxl')
             # Break out of processing and send user back to page.
             else:
                 flash('Please upload a valid excel or CSV file.', category='error')
