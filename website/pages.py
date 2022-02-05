@@ -7,6 +7,7 @@ from datetime import datetime, date
 import re
 from .visualizations import dot, line
 import pandas as pd
+from .helpers import import_list_funcs
 
 pages = Blueprint('pages', __name__)
 
@@ -294,7 +295,7 @@ def import_list():
         if not cycle:
             flash("Please select a school list before importing.", category='error')
             return redirect(url_for('pages.cycles'))
-        # Receiving a table
+        # Receiving an excel table
         if request.files:
             table = request.files.get('table')
             if table.filename.endswith('xlsx'):
@@ -305,9 +306,20 @@ def import_list():
                 return render_template('import-list.html', user=current_user, cycle=cycle)
             # Drop any unused columns
             cycle_data = cycle_data.dropna(axis=1, how='all')
+            cycle_data = import_list_funcs.convert_columns_date(cycle_data)
             colnames = cycle_data.columns
             tableJSON = cycle_data.to_json()
-            return render_template('import-list.html', user=current_user, cycle=cycle, tableJSON=tableJSON, colnames=colnames, column_types=form_options.COLUMN_TYPES)
+            return render_template('import-list.html', user=current_user, cycle=cycle, tableJSON=tableJSON,
+                                   colnames=colnames, column_types=form_options.COLUMN_TYPES)
+        # Process google
+        elif request.form.get('upload_google_link'):
+            link = request.form.get('upload_google_link')
+            cycle_data = import_list_funcs.read_google(link)
+            cycle_data = cycle_data.dropna(axis=1, how='all')
+            colnames = cycle_data.columns
+            tableJSON = cycle_data.to_json()
+            return render_template('import-list.html', user=current_user, cycle=cycle, tableJSON=tableJSON,
+                                   colnames=colnames, column_types=form_options.COLUMN_TYPES)
         # Process assigned labels
         if request.form.get('labeled-columns'):
             # Reconstruct pandas table
@@ -344,7 +356,8 @@ def import_list():
                     phds.append(item.split('->')[1])
             # Reconstruct table
             cycle_data = pd.read_json(request.form.get('tableJSON'))
-            # Convert to timestamps
+            print(cycle_data)
+            # Convert from timestamps
             for column in cycle_data.columns:
                 if column != 'name':
                     cycle_data[column] = pd.to_datetime(cycle_data[column], unit='ms')

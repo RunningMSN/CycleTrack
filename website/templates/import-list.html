@@ -33,7 +33,15 @@
         </div>
         <!-- UPLOAD GOOGLE SHEETS -->
         <div class="tab-pane fade" id="google-sheets" role="tabpanel" aria-labelledby="google-sheets-tab" style="padding-top:10px">
-            Google Sheets input will go here
+            <form method="POST">
+                <div class="form-group mb-3">
+                    <label for="upload_google_link" class="form-label">Upload a Google Sheet</label>
+                    <input type="text" class="form-control" id="upload_google_link" name="upload_google_link"
+                           placeholder="Published Google sheets link" />
+                </div>
+                <input type="hidden" id="google_cycle_id" name="cycle_id" value="{{ cycle.id }}" />
+                <button type="submit" class="btn btn-primary">Upload</button>
+            </form>
         </div>
     </div>
     {% endif %}
