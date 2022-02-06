@@ -255,21 +255,23 @@ def lists():
 @login_required
 def visualizations():
     vis_type = request.form.get('vis_type')
+    graphJSON = None
     if vis_type:
         cycle_id = int(request.form.get('cycle_id'))
         cycle = Cycle.query.filter_by(id=cycle_id).first()
         cycle_data = pd.read_sql(School.query.filter_by(cycle_id=cycle.id).statement, db.session.bind).drop(['id','cycle_id','user_id','school_type','phd'], axis=1)
-        if vis_type.lower() == 'dot':
-            graphJSON = dot.generate(cycle_data)
-        elif vis_type.lower() == 'line':
-            graphJSON = line.generate(cycle_data)
-        elif vis_type.lower() == 'bar':
-            # TODO: implement this
-            graphJSON = None
+        # Drop empty columns
+        cycle_data = cycle_data.dropna(axis=1, how='all')
+        if len(cycle_data.columns) > 1:
+            if vis_type.lower() == 'dot':
+                graphJSON = dot.generate(cycle_data)
+            elif vis_type.lower() == 'line':
+                graphJSON = line.generate(cycle_data)
+            elif vis_type.lower() == 'bar':
+                # TODO: implement this
+                graphJSON = None
         else:
-            graphJSON = None
-    else:
-        graphJSON = None
+            flash(f'Your school list for the {cycle.cycle_year} does not have any dates yet!', category='error')
     return render_template('visualizations.html', user=current_user, vis_types=form_options.VIS_TYPES, graphJSON=graphJSON)
 
 @pages.route('/import-list', methods=["GET", "POST"])

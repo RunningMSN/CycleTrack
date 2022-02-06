@@ -7,5 +7,5 @@ a simple system on which applicants can track the progress of their application 
 simultaneously contributing data that can be used for analytics and assisting future applicants.
 
 ## Current TODO List:
- * Add functional line and bar graphs to visualization
- * Fix bug caused by generating graphs without any data
+ * Add functional bar graphs to visualization
+ * Add more customization to graphs
