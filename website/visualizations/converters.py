@@ -38,3 +38,38 @@ def convert_sums(data):
     cleaned_data = cleaned_data.ffill()
     cleaned_data = cleaned_data.loc[:, ~cleaned_data.columns.str.contains("Unnamed")]
     return cleaned_data
+
+def convert_bar_df(data):
+    # Obtain a range of all dates
+    start_dates = pd.to_datetime('1/1/2100',format='%m/%d/%Y')
+    end_dates = pd.to_datetime('1/1/1901',format='%m/%d/%Y')
+    for column in data.columns[1:]:
+        column_dates = data[column].dropna()
+        if min(column_dates) < start_dates:
+            start_dates = min(column_dates)
+        if max(column_dates) > end_dates:
+            end_dates = max(column_dates)
+    all_dates = pd.date_range(start=start_dates, end=end_dates)
+
+    # Order the statuses by priority with higher status having a smaller value
+    status_order = {'withdrawn' : 0, 'acceptance' : 1, 'rejection' : 2, 'waitlist' : 3, 'interview_date' : 4,
+                    'interview_received' : 5, 'application_complete' : 6, 'secondary_received' : 7, 'primary' : 8}
+
+    # Assign schools the highest status for each date
+    output = []
+    # Iterate through possible dates
+    for date in all_dates:
+        # Iterate through the schools
+        for index, row in data.iterrows():
+            # Go through the statuses in order of priority
+            for key, value in status_order.items():
+                # Checks that user has this type of status
+                if key in data.columns:
+                    # Stops at first status
+                    if not pd.isnull(row[key]) and date >= row[key]:
+                        output.append([date, key])
+                        break
+    output_df = pd.DataFrame(output, columns=['Date', 'Best Outcome'])
+
+    # Create dataframe with counts per status per date
+    return output_df.groupby(['Date', 'Best Outcome']).size().reset_index(name='Count')
