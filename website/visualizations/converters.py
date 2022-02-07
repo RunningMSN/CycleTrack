@@ -1,5 +1,6 @@
 import pandas as pd
 import datetime as dt
+import numpy as np
 
 def convert_sums(data):
     # Store numbers of each action on each date
@@ -41,35 +42,26 @@ def convert_sums(data):
 
 def convert_bar_df(data):
     # Obtain a range of all dates
-    start_dates = pd.to_datetime('1/1/2100',format='%m/%d/%Y')
-    end_dates = pd.to_datetime('1/1/1901',format='%m/%d/%Y')
-    for column in data.columns[1:]:
-        column_dates = data[column].dropna()
-        if min(column_dates) < start_dates:
-            start_dates = min(column_dates)
-        if max(column_dates) > end_dates:
-            end_dates = max(column_dates)
+    melted = data.melt(id_vars=data.columns[0], value_vars=data.columns[1:], var_name='actions', value_name='date')
+    start_dates = min(melted['date'].dropna())
+    end_dates = max(melted['date'].dropna())
     all_dates = pd.date_range(start=start_dates, end=end_dates)
 
-    # Order the statuses by priority with higher status having a smaller value
-    status_order = {'withdrawn' : 0, 'acceptance' : 1, 'rejection' : 2, 'waitlist' : 3, 'interview_date' : 4,
-                    'interview_received' : 5, 'application_complete' : 6, 'secondary_received' : 7, 'primary' : 8}
+    # Remove names
+    names_removed = data.drop('name', axis=1)
 
-    # Assign schools the highest status for each date
-    output = []
-    # Iterate through possible dates
-    for date in all_dates:
-        # Iterate through the schools
-        for index, row in data.iterrows():
-            # Go through the statuses in order of priority
-            for key, value in status_order.items():
-                # Checks that user has this type of status
-                if key in data.columns:
-                    # Stops at first status
-                    if not pd.isnull(row[key]) and date >= row[key]:
-                        output.append([date, key])
-                        break
-    output_df = pd.DataFrame(output, columns=['Date', 'Best Outcome'])
+    # Generate initial dataframe to add to
+    output = pd.DataFrame()
+    output['Best Outcome'] = names_removed[names_removed <= all_dates[0]].dropna(axis=0, how='all').idxmax(axis=1)
+    output['Date'] = all_dates[0]
+    # Continue adding for all dates
+    for date in all_dates[1:]:
+        df = pd.DataFrame()
+        df['Best Outcome'] = names_removed[names_removed <= date].dropna(axis=0, how='all').idxmax(axis=1)
+        df['Date'] = date
+        output = pd.concat([output,df])
 
-    # Create dataframe with counts per status per date
-    return output_df.groupby(['Date', 'Best Outcome']).size().reset_index(name='Count')
+    # Get counts for all dates
+    output = output.groupby(['Date', 'Best Outcome']).size().reset_index(name='Count')
+
+    return output
