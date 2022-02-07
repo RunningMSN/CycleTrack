@@ -8,12 +8,6 @@ def convert_sums(data):
     # Collect the dates and numbers of actions
     for column in data.columns:
         if column != data.columns[0]:
-            # Convert to date time
-            try:
-                data[column] = pd.to_datetime(data[column])
-            except:
-                print(f"Error: some of your dates are not formatted correctly in {column}")
-
             # Gather number of actions at each date for every type of action
             temp_dict = {}
             for date in data[column]:
