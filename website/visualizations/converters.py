@@ -1,6 +1,13 @@
 import pandas as pd
 import datetime as dt
-import numpy as np
+
+fig_colors = {'primary': '#90e0ef', 'secondary_received': '#00b4d8', 'application_complete': '#0077b6',
+                  'interview_received': '#9932CC', 'interview_date': '#8B008B', 'rejection': 'red',
+                  'waitlist': 'orange', 'acceptance': 'green', 'withdrawn': 'gray'}
+
+action_names = {'primary': 'Primary Submitted', 'secondary_received': 'Secondary Received', 'application_complete': 'Application Complete',
+                  'interview_received': 'Interview Received', 'interview_date': 'Interview Complete', 'rejection': 'Rejection',
+                  'waitlist': 'Waitlist', 'acceptance': 'Acceptance', 'withdrawn': 'Withdrawn'}
 
 def convert_sums(data):
     # Store numbers of each action on each date
