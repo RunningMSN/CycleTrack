@@ -315,7 +315,8 @@ def import_list():
                 else:
                     flash('Please upload a valid excel or CSV file.', category='error')
                     return render_template('import-list.html', user=current_user, cycle=cycle)
-                # Drop any unused columns
+                # Drop any unused rows/columns
+                cycle_data = cycle_data.dropna(axis=0, how='all')
                 cycle_data = cycle_data.dropna(axis=1, how='all')
                 cycle_data = import_list_funcs.convert_columns_date(cycle_data)
                 colnames = cycle_data.columns
@@ -326,6 +327,8 @@ def import_list():
             elif request.form.get('upload_google_link'):
                 link = request.form.get('upload_google_link')
                 cycle_data = import_list_funcs.read_google(link)
+                # Drop any unused rows/columns
+                cycle_data = cycle_data.dropna(axis=0, how='all')
                 cycle_data = cycle_data.dropna(axis=1, how='all')
                 colnames = cycle_data.columns
                 tableJSON = cycle_data.to_json()
