@@ -41,7 +41,8 @@
 <div id="chart" class="chart"></div>
 <script>
 	var graphs = {{ graphJSON | safe }};
-    Plotly.newPlot('chart',graphs,{});
+	graphs.config = {'responsive': true, 'displaylogo': false}
+    Plotly.newPlot('chart', graphs);
 </script></div>
 {% endif %}
 {% endblock %}
