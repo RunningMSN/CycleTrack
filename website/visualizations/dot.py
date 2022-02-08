@@ -14,7 +14,8 @@ def generate(cycle_data):
                          'name':''
                      },
                      title="Application Cycle",
-                     height=len(melted['name'].unique())*20) # Adjust height based on number of schools
+                     height=len(melted['name'].unique())*20, # Adjust height based on number of schools
+                     color_discrete_map=converters.fig_colors)
     # Update names of traces to make more readable
     fig.for_each_trace(lambda t: t.update(name=converters.action_names[t.name],
                                           legendgroup=converters.action_names[t.name],
