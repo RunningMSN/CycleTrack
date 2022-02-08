@@ -3,13 +3,13 @@ import plotly.express as px
 import json
 from . import converters
 
-def generate(cycle_data):
+def generate(cycle_data, title):
     # Generate dataframe for plotly
     cycle_data = converters.convert_bar_df(cycle_data)
     fig = px.bar(cycle_data,
                  x='Date',
                  y='Count',
-                 title='Application Cycle',
+                 title=title,
                  color='Best Outcome',
                  color_discrete_map=converters.fig_colors)
     # Remove outlines

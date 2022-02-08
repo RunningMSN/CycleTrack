@@ -249,26 +249,32 @@ def lists():
             school.withdrawn = None
         db.session.commit()
 
-    return render_template('lists.html', user=current_user, cycle=cycle, md_school_list=form_options.MD_SCHOOL_LIST, do_school_list=form_options.DO_SCHOOL_LIST)
+    return render_template('lists.html', user=current_user, cycle=cycle, md_school_list=form_options.MD_SCHOOL_LIST,
+                           do_school_list=form_options.DO_SCHOOL_LIST)
 
 @pages.route('/visualizations', methods=['GET', 'POST'])
 @login_required
 def visualizations():
     vis_type = request.form.get('vis_type')
+    # Default to no graph
     graphJSON = None
     if vis_type:
         cycle_id = int(request.form.get('cycle_id'))
+        if request.form.get('plot_title'):
+            plot_title = request.form.get('plot_title')
+        else:
+            plot_title = "Application Cycle"
         cycle = Cycle.query.filter_by(id=cycle_id).first()
         cycle_data = pd.read_sql(School.query.filter_by(cycle_id=cycle.id).statement, db.session.bind).drop(['id','cycle_id','user_id','school_type','phd'], axis=1)
         # Drop empty columns
         cycle_data = cycle_data.dropna(axis=1, how='all')
         if len(cycle_data.columns) > 1:
             if vis_type.lower() == 'dot':
-                graphJSON = dot.generate(cycle_data)
+                graphJSON = dot.generate(cycle_data, plot_title)
             elif vis_type.lower() == 'line':
-                graphJSON = line.generate(cycle_data)
+                graphJSON = line.generate(cycle_data, plot_title)
             elif vis_type.lower() == 'bar':
-                graphJSON = bar.generate(cycle_data)
+                graphJSON = bar.generate(cycle_data, plot_title)
         else:
             flash(f'Your school list for the {cycle.cycle_year} does not have any dates yet!', category='error')
     return render_template('visualizations.html', user=current_user, vis_types=form_options.VIS_TYPES, graphJSON=graphJSON)

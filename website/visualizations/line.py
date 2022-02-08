@@ -3,7 +3,7 @@ import plotly.graph_objects as go
 import json
 from . import converters
 
-def generate(cycle_data):
+def generate(cycle_data, title):
     '''Returns JSON for plotly line graph of the application cycle.'''
     cleaned_data = converters.convert_sums(cycle_data)
     fig = go.Figure()
@@ -17,7 +17,7 @@ def generate(cycle_data):
                                      name=converters.action_names[column],
                                      marker=dict(color=converters.fig_colors[column])))
     fig.update_layout(
-        title="Application Cycle",
+        title=title,
         yaxis_title="Count",
         legend_title="Actions",
         margin=dict(l=20, r=20, t=40, b=20)

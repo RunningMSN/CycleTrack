@@ -11,7 +11,7 @@
             </div>
         </div>
         <div style="">
-        <div class="form-group">
+        <div class="form-group" style="padding-top: 5px; padding-bottom:5px;">
             <label for="cycle">Choose a Cycle: </label>
             <select name="cycle_id" id="cycle_manual">
                 {% for cycle in user.cycles %}
@@ -19,14 +19,17 @@
                 {% endfor %}
             </select>
         </div>
-
-        <div class="form-group">
+        <div class="form-group" style="padding-top: 5px; padding-bottom:5px;">
             <label for="vis_type">Choose a Visualization:</label>
             <select name="vis_type" id="vis_type">
                 {% for vis_type in vis_types %}
                 <option value="{{ vis_type }}">{{ vis_type }}</option>
                 {% endfor %}
             </select>
+        </div>
+        <div class="form-group" style="padding-top: 5px; padding-bottom:5px;">
+            <label for="plot_title">Title:</label>
+            <input type="text" id="plot_title" name = "plot_title" value="Application Cycle"></input>
         </div>
         <button type="submit" class="btn btn-primary">Generate</button>
     </form>
