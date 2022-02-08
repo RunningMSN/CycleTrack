@@ -6,8 +6,10 @@ from . import converters
 def generate(cycle_data):
     # Generate dataframe for plotly
     cycle_data = converters.convert_bar_df(cycle_data)
-    fig = px.bar(cycle_data, x='Date',
+    fig = px.bar(cycle_data,
+                 x='Date',
                  y='Count',
+                 title='Application Cycle',
                  color='Best Outcome',
                  color_discrete_map=converters.fig_colors)
     # Remove outlines
@@ -19,7 +21,7 @@ def generate(cycle_data):
                                           )
                        )
     # Remove gaps between bars
-    fig.update_layout(bargap=0)
+    fig.update_layout(bargap=0, margin=dict(l=20, r=20, t=40, b=20))
     # Convert to JSON for plotting
     graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
     return graphJSON

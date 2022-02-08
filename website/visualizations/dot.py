@@ -21,6 +21,7 @@ def generate(cycle_data):
                                           hovertemplate=t.hovertemplate.replace(t.name, converters.action_names[t.name])
                                           )
                        )
+    fig.update_layout(margin=dict(l=20, r=20, t=40, b=20))
     # Generate JSON for plotting
     graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
     return graphJSON

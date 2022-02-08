@@ -19,7 +19,8 @@ def generate(cycle_data):
     fig.update_layout(
         title="Application Cycle",
         yaxis_title="Count",
-        legend_title="Actions"
+        legend_title="Actions",
+        margin=dict(l=20, r=20, t=40, b=20)
     )
     # Convert to JSON and return it for plotting
     graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
