@@ -1,7 +1,5 @@
 import plotly
-import plotly.graph_objects as go
 import json
-import pandas as pd
 from . import converters
 
 def generate(cycle_data, title):
