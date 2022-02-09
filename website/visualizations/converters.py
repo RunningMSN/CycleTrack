@@ -2,8 +2,8 @@ import pandas as pd
 import datetime as dt
 
 fig_colors = {'primary': '#90e0ef', 'secondary_received': '#00b4d8', 'application_complete': '#0077b6',
-                  'interview_received': '#9932CC', 'interview_date': '#8B008B', 'rejection': 'red',
-                  'waitlist': 'orange', 'acceptance': 'green', 'withdrawn': 'gray'}
+                  'interview_received': '#9932CC', 'interview_date': '#8B008B', 'rejection': '#FF0000',
+                  'waitlist': '#FFA500', 'acceptance': '#008000', 'withdrawn': '#808080'}
 
 action_names = {'primary': 'Primary Submitted', 'secondary_received': 'Secondary Received', 'application_complete': 'Application Complete',
                   'interview_received': 'Interview Received', 'interview_date': 'Interview Complete', 'rejection': 'Rejection',
