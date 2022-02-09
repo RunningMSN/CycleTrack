@@ -87,7 +87,7 @@ STATE_OPTIONS = ["Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colo
                  "Canada", "International", "Other"]
 
 # Settings for visualizations page
-VIS_TYPES = ["Line", "Bar", "Dot"]
+VIS_TYPES = ["Line", "Bar", "Dot", "Sankey"]
 
 # School list import column types
 COLUMN_TYPES = ["School Name", "Primary Submitted/Verified", "Secondary Received",

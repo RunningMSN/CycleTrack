@@ -66,3 +66,31 @@ def convert_bar_df(data):
     output = output.groupby(['Date', 'Best Outcome']).size().reset_index(name='Count')
 
     return output
+
+def sankey_build_frames(cycle_data):
+    df_nodes = {'label': cycle_data.columns}
+    df_nodes = pd.DataFrame(df_nodes)
+    ids = {}
+    for i in range(0, len(df_nodes['label'])):
+        ids[df_nodes['label'][i]] = i
+    df_nodes['color'] = df_nodes.apply(lambda row: fig_colors[row.label], axis=1)
+    df_nodes['label'] = df_nodes.apply(lambda row: action_names[row.label], axis=1)
+    out = {'Source': [], 'Target': [], 'Link Color': []}
+    for index, row in cycle_data.iterrows():
+        row_sorted = row.dropna().sort_values()
+        for i in range(0, len(row_sorted)):
+            if i == len(row_sorted) - 1:
+                break
+            else:
+                out['Source'].append(ids[row_sorted.index[i]])
+                out['Target'].append(ids[row_sorted.index[i + 1]])
+                h = fig_colors[row_sorted.index[i + 1]].lstrip('#')
+                col = tuple(int(h[i:i + 2], 16) for i in (0, 2, 4))
+                col = list(col)
+                col.append(0.5)
+                col = tuple(col)
+                out['Link Color'].append(f'rgba{col}')
+    df_links = pd.DataFrame(out)
+    df_links = df_links.groupby(df_links.columns.tolist(), as_index=False).size()
+
+    return df_nodes, df_links

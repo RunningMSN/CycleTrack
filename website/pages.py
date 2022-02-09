@@ -5,7 +5,7 @@ from .models import User,Cycle, School
 import json
 from datetime import datetime, date
 import re
-from .visualizations import dot, line, bar
+from .visualizations import dot, line, bar, sankey
 import pandas as pd
 from .helpers import import_list_funcs
 
@@ -275,6 +275,8 @@ def visualizations():
                 graphJSON = line.generate(cycle_data, plot_title)
             elif vis_type.lower() == 'bar':
                 graphJSON = bar.generate(cycle_data, plot_title)
+            elif vis_type.lower() == 'sankey':
+                graphJSON = sankey.generate(cycle_data, plot_title)
         else:
             flash(f'Your school list for the {cycle.cycle_year} does not have any dates yet!', category='error')
     return render_template('visualizations.html', user=current_user, vis_types=form_options.VIS_TYPES, graphJSON=graphJSON)
@@ -370,7 +372,6 @@ def import_list():
                         phds.append(item.split('->')[1])
                 # Reconstruct table
                 cycle_data = pd.read_json(request.form.get('tableJSON'))
-                print(cycle_data)
                 # Convert from timestamps
                 for column in cycle_data.columns:
                     if column != 'name':
