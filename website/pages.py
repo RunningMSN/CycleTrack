@@ -362,13 +362,19 @@ def import_list():
                 cycle_data = cycle_data.drop(columns=drop_columns)
                 cycle_data.columns = new_labels
                 tableJSON = cycle_data.to_json()
+
+                # Grab list of best matches
+                best_matches = {}
+                for school in cycle_data['name']:
+                    best_matches[school] = import_list_funcs.school_nicknames_dict[import_list_funcs.best_match(school, import_list_funcs.school_nicknames_dict.keys(), 0.7)]
+
                 # Require to have a names column
                 if not 'name' in cycle_data.columns:
                     flash('Your spreadsheet must have a column with school names. Please try again.', category='error')
                     return redirect(url_for('pages.cycles'))
                 return render_template('import-list.html', user=current_user, cycle=cycle, tableJSON=tableJSON,
                                        school_names=cycle_data['name'], md_school_list=form_options.MD_SCHOOL_LIST,
-                                       do_school_list=form_options.DO_SCHOOL_LIST)
+                                       do_school_list=form_options.DO_SCHOOL_LIST, best_matches=best_matches)
             # Final processing step
             if request.form.get('named-schools'):
                 # Hold corrected names and schools with dual degree phd

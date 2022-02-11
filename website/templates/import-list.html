@@ -92,8 +92,8 @@
                 <td>
                     <select name="corrected_name->{{ school }}" id="school_name" class="btn-sm">
                         <option value="" disabled>-- MD Schools --</option>
-                        {% if school in md_school_list %}
-                        <option selected="{{ school }}">{{ school }}</option>
+                        {% if best_matches[school] %}
+                        <option selected="{{ best_matches[school] }}">{{ best_matches[school] }}</option>
                         {% endif %}
                         {% for school_option in md_school_list %}
                         {% if school != school_option %}

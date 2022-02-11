@@ -3,7 +3,9 @@ import requests
 import pandas as pd
 from flask import flash
 import dateutil.parser
-import datetime
+import jellyfish
+
+school_nicknames_dict = pd.read_csv('./website/static/csv/school_names_nicknames.csv').set_index('Key').to_dict()['Value']
 
 def read_google(link):
     '''Converts a google sheets link to a pandas dataframe.'''
@@ -40,3 +42,23 @@ def convert_columns_date(df):
                     row[item] = None
         df.loc[index] = row
     return df
+
+
+def best_match(input_string, match_list, cutoff):
+    '''Returns the closest match to the input string from the match list. If no matches above cutoff, returns none.'''
+    # Check if already in the list
+    if input_string in match_list:
+        return input_string
+    # Store best match
+    best_score = 0
+    best_match = ""
+    for value in match_list:
+        score = jellyfish.jaro_distance(input_string, value)
+        if score > best_score:
+            best_match = value
+            best_score = score
+
+    if best_score >= cutoff:
+        return best_match
+    else:
+        return None
