@@ -15,10 +15,13 @@ pages = Blueprint('pages', __name__)
 def index():
     user_count = db.session.query(User.id).count()
     app_count = db.session.query(School.id).count()
-    data = pd.read_sql(School.query.statement, db.session.bind).drop(['id','cycle_id','user_id','school_type','phd'], axis=1)
+    map_data = pd.read_sql(School.query.statement, db.session.bind).drop(['id','cycle_id','user_id','school_type','phd'], axis=1)
     # Drop empty columns
-    data = data.dropna(axis=1, how='all')
-    graphJSON = agg_map.generate(data,"Map of All Locations")
+    map_data = map_data.dropna(axis=1, how='all')
+    if len(map_data) > 0:
+        graphJSON = agg_map.generate(map_data,"Map of All Locations")
+    else:
+        graphJSON = None
     return render_template('index.html', user=current_user, user_count=user_count, app_count=app_count,graphJSON=graphJSON)
 
 @pages.route('/explorer')
