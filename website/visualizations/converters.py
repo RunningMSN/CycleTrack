@@ -94,3 +94,13 @@ def sankey_build_frames(cycle_data):
     df_links = df_links.groupby(df_links.columns.tolist(), as_index=False).size()
 
     return df_nodes, df_links
+
+#I name this dataframe a little differently in the form_options script. may want to unify
+locations = pd.read_csv("./website/static/csv/SchoolProfiles.csv")
+
+def convert_map(data):
+    #get school names
+    school_df = data[["name"]]
+    school_df = school_df.rename(columns={"name":"School"})
+    loc_df = school_df.merge(locations,how="left",on="School")
+    return loc_df

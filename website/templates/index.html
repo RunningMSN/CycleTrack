@@ -8,4 +8,16 @@
             <p class="lead">{{ app_count }} applications and counting!</p></div>
     </div>
 </div>
+
+
+{% if graphJSON %}
+<div class="container" style="padding-top:20px">
+<div id="chart" class="chart"></div>
+<script>
+	var graphs = {{ graphJSON | safe }};
+	graphs.config = {'responsive': true, 'displaylogo': false}
+    Plotly.newPlot('chart', graphs);
+</script></div>
+{% endif %}
+
 {% endblock %}
