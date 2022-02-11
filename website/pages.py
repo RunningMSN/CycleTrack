@@ -8,6 +8,7 @@ import re
 from .visualizations import dot, line, bar, sankey, map, agg_map
 import pandas as pd
 from .helpers import import_list_funcs
+import traceback
 
 pages = Blueprint('pages', __name__)
 
@@ -366,7 +367,11 @@ def import_list():
                 # Grab list of best matches
                 best_matches = {}
                 for school in cycle_data['name']:
-                    best_matches[school] = import_list_funcs.school_nicknames_dict[import_list_funcs.best_match(school, import_list_funcs.school_nicknames_dict.keys(), 0.7)]
+                    best_match = import_list_funcs.best_match(school, import_list_funcs.school_nicknames_dict.keys(), 0.7)
+                    if best_match:
+                        best_matches[school] = import_list_funcs.school_nicknames_dict[best_match]
+                    else:
+                        best_matches[school] = None
 
                 # Require to have a names column
                 if not 'name' in cycle_data.columns:
@@ -477,10 +482,11 @@ def import_list():
                     return redirect(url_for('pages.cycles'))
                 else:
                     return redirect(url_for('pages.lists'))
-        except Exception as e:
-            flash('We encountered an error while trying to import your school list. Please make sure to follow the'
+        except Exception:
+            flash('We encountered an error while trying to import your school list. Please make sure to follow the '
                   'instructions with respect to formatting your spreadsheet to make sure that it is imported correctly.',
                   category='error')
+            print(traceback.format_exc())
             return redirect(url_for('pages.cycles'))
     return render_template('import-list.html', user=current_user, cycle=cycle)
 
