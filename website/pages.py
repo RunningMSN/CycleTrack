@@ -5,7 +5,7 @@ from .models import User,Cycle, School
 import json
 from datetime import datetime, date
 import re
-from .visualizations import dot, line, bar, sankey
+from .visualizations import dot, line, bar, sankey, map, agg_map
 import pandas as pd
 from .helpers import import_list_funcs
 
@@ -15,7 +15,11 @@ pages = Blueprint('pages', __name__)
 def index():
     user_count = db.session.query(User.id).count()
     app_count = db.session.query(School.id).count()
-    return render_template('index.html', user=current_user, user_count=user_count, app_count=app_count)
+    data = pd.read_sql(School.query.statement, db.session.bind).drop(['id','cycle_id','user_id','school_type','phd'], axis=1)
+    # Drop empty columns
+    data = data.dropna(axis=1, how='all')
+    graphJSON = agg_map.generate(data,"Map of All Locations")
+    return render_template('index.html', user=current_user, user_count=user_count, app_count=app_count,graphJSON=graphJSON)
 
 @pages.route('/explorer')
 def explorer():
@@ -277,6 +281,8 @@ def visualizations():
                 graphJSON = bar.generate(cycle_data, plot_title)
             elif vis_type.lower() == 'sankey':
                 graphJSON = sankey.generate(cycle_data, plot_title)
+            elif vis_type.lower() == 'map':
+                graphJSON = map.generate(cycle_data,plot_title)
         else:
             flash(f'Your school list for the {cycle.cycle_year} does not have any dates yet!', category='error')
     return render_template('visualizations.html', user=current_user, vis_types=form_options.VIS_TYPES, graphJSON=graphJSON)
