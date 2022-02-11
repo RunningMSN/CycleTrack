@@ -11,12 +11,14 @@ def generate(cycle_data,title):
             lon=loc_df["Long"],
             lat = loc_df["Lat"],
             text = loc_df["School"],
-            mode = "markers"
+            hoverinfo="text",
+            marker = dict(size = 10)
         )
     )
     fig.update_layout(
         title=title,
-        geo_scope = 'usa'
+        geo_scope = 'usa',
+        height = 800
     )
     graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
     return graphJSON
