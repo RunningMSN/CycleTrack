@@ -18,9 +18,22 @@ def generate(cycle_data,title):
     )
     fig.update_layout(
         title=title,
-        geo_scope = 'usa',
-        height = 500,
-        margin = dict(l=25,r=25,t=25,b=25)
+        title_x = 0.5,
+        geo_scope = 'usa', width = 800,height =500,
+        margin = dict(l = 0, r = 0,b = 0, t = 30,pad = 0),
+        images=[dict(
+        source="./static/images/Docs2Be.png",
+        xref="paper", yref="paper",
+        x=0, y=0,
+        sizex=0.08, sizey=0.08,
+        xanchor="left", yanchor="bottom"
+      )]
     )
+
+    fig.add_annotation(
+        text="Created with CycleTrack",
+        xref="paper", yref="paper",
+        x=0.5, y=1.03, 
+        showarrow=False)
     graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
     return graphJSON
