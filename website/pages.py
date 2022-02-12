@@ -455,8 +455,9 @@ def import_list():
                         if pd.isnull(withdrawn): withdrawn= None
                     except Exception:
                         withdrawn = None
+
                     # Try to find if school is already in the list
-                    school = School.query.filter_by(name=school_name,phd=dual_degree_phd).first()
+                    school = School.query.filter_by(name=school_name, phd=dual_degree_phd, cycle_id=cycle_id).first()
                     if school:
                         if primary: school.primary = primary
                         if secondary_received: school.secondary_received = secondary_received
