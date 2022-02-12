@@ -98,9 +98,20 @@ def sankey_build_frames(cycle_data):
 #I name this dataframe a little differently in the form_options script. may want to unify
 locations = pd.read_csv("./website/static/csv/SchoolProfiles.csv")
 
-def convert_map(data):
-    #get school names
-    school_df = data[["name"]]
+def convert_map(data,aggregate=False):
+    #merge schools so that duplicates (aka MD + MD/PhD don't get put in twice)
+    data = data.groupby("name",as_index=False).first()
+    if aggregate:
+        school_df = data[["name"]]
+    else:
+        #get best outcome: column with greatest date in each row
+        nameless = data[data.columns.difference(["name"])]
+        data["Best Outcome"] = nameless.idxmax(axis=1)
+        data["color"] = data["Best Outcome"].map(fig_colors)
+        #merge with school locations
+        school_df = data[["name","Best Outcome","color"]]
+
     school_df = school_df.rename(columns={"name":"School"})
     loc_df = school_df.merge(locations,how="left",on="School")
+
     return loc_df

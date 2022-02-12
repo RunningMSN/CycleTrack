@@ -5,7 +5,7 @@ import json
 from . import converters
 
 def generate(data):
-    df = converters.convert_map(data)
+    df = converters.convert_map(data,aggregate=True)
     loc_df = df.groupby(["School","Long","Lat"]).size().reset_index()
     loc_df = loc_df.rename(columns={0:"Count"})
     max_num = loc_df["Count"].max()
@@ -24,7 +24,8 @@ def generate(data):
     fig.add_trace(data)
     fig.update_layout(
         geo_scope = 'usa',
-        height = 800
+        height = 500,
+        margin = dict(l=25,r=25,t=25,b=25)
     )
     graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
     return graphJSON

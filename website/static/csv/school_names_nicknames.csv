@@ -1,4 +1,4 @@
-﻿Key,Value
+Key,Value
 Alabama,Alabama
 Albany,Albany
 Arizona - Tucson,Arizona - Tucson
@@ -19,6 +19,7 @@ Case Western,Case Western
 Cleveland Clinic Lerner,Cleveland Clinic Lerner
 Central Michigan,Central Michigan
 Rosalind Franklin,Rosalind Franklin
+Franklin,Rosalind Franklin
 Chicago,Chicago
 Cincinnati,Cincinnati
 Colorado,Colorado
@@ -130,12 +131,12 @@ Temple,Temple
 Tennessee,Tennessee
 Texas A&M,Texas A&M
 A and M,Texas A&M
+TAMU,Texas A&M
 Texas Tech - Lubbock,Texas Tech - Lubbock
 Texas Tech - Foster,Texas Tech - Foster
 Toledo,Toledo
 Tufts,Tufts
 Tulane,Tulane
-Washington,Washington
 University of California Davis,University of California Davis
 University of California Irvine,University of California Irvine
 University of California Riverside,University of California Riverside
@@ -161,6 +162,7 @@ Virginia Tech,Virginia Tech
 Wake Forest,Wake Forest
 Washington State,Washington State
 WSU,Washington State
+Washington Floyd,Washington State
 Washington University Saint Louis,Washington University Saint Louis
 Wayne State,Wayne State
 West Virginia,West Virginia
@@ -216,12 +218,16 @@ UT Southwestern,University of Texas - Southwestern
 UTSA,University of Texas - San Antonio
 UTSW,University of Texas - Southwestern
 UW,Washington
+Washington,Washington
+U Washington,Washington
 UMass,Massachussetts
 VCU,Virginia Commonwealth
 Vandy,Vanderbilt
 WUSTL,Washington University Saint Louis
 WashU,Washington University Saint Louis
 Weill,Cornell
+CU Anschutz,Colorado
+UW Madison,Wisconsin
 A.T. Still - Kirksville,A.T. Still - Kirksville
 A.T. Still - Arizona,A.T. Still - Arizona
 Alabama COM,Alabama COM
@@ -250,6 +256,7 @@ Nova Southeastern COM,Nova Southeastern COM
 Ohio University,Ohio University
 Oklahoma State,Oklahoma State
 Pacific Northwest,Pacific Northwest
+PNWU,Pacific Northwest
 Philadelphia COM - Georgia,Philadelphia COM - Georgia
 Philadelphia COM - Georgia,Philadelphia COM - Georgia
 Rocky Vista,Rocky Vista
