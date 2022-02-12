@@ -7,5 +7,4 @@ pandas
 openpyxl
 beautifulsoup4
 requests
-fuzzywuzzy
 jellyfish
