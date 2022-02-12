@@ -112,7 +112,7 @@
                     </select>
                 </td>
                 <td>
-                    <input type="checkbox" id="md_phd_check" name="phd->{{ school }}" value="true" {% if 'mstp' in school|lower OR 'phd' in school|lower %}checked{% endif %}>
+                    <input type="checkbox" id="md_phd_check" name="phd->{{ school }}" value="true" {% if 'mstp' in school|lower or 'phd' in school|lower %}checked{% endif %}>
                     <label for="md_phd_check">Yes</label>
                 </td>
             </tr>
