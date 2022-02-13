@@ -2,8 +2,17 @@
 {% block title %} School Explorer {% endblock %}
 {% block content %}
 <!-- SCHOOL LIST MANAGEMENT -->
-<div id="lists" class="container" style="padding-top:10px">
+<div class="container" style="padding-top:10px">
     <h2>School Explorer</h2>
-    <p>As more applicants enter data, we intend to show data about applications here.</p>
+    <p>The school explorer presents data about schools that is collected via our platform.</p>
+</div>
+<div class="container" style="padding-top:10px">
+    {% for key,value in schools.iterrows() %}
+    <li class="list-group-item">
+        <strong>{{ value['name'] }}</strong><br/>
+        {{ value['type'] }} Applicants: {{ value['reg_apps'] }} |
+        {{ value['type'] }}-PhD Applicants: {{ value['phd_apps'] }}
+    </li>
+    {% endfor %}
 </div>
 {% endblock %}

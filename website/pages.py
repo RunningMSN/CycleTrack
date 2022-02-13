@@ -27,7 +27,31 @@ def index():
 
 @pages.route('/explorer')
 def explorer():
-    return render_template('explorer.html', user=current_user)
+    # Get list of schools
+    schools = db.session.query(School.name.distinct())
+    # Dict to convert into dataframe
+    build_df = {'name': [], 'type': [], 'reg_apps': [], 'reg_med_mcat': [], 'reg_med_gpa': [],
+                'phd_apps': [], 'phd_med_mcat': [], 'phd_med_gpa': []}
+    # Fill data
+    for school in schools:
+        build_df['name'].append(school[0])
+        if school[0] in form_options.MD_SCHOOL_LIST:
+            build_df['type'].append('MD')
+        else:
+            build_df['type'].append('DO')
+        # MD/DO Data
+        build_df['reg_apps'].append(School.query.filter_by(name=school[0], phd=False).count())
+        build_df['reg_med_mcat'].append(None)
+        build_df['reg_med_gpa'].append(None)
+        # MD-PhD/DO-PhD data
+        build_df['phd_apps'].append(School.query.filter_by(name=school[0], phd=True).count())
+        build_df['phd_med_mcat'].append(None)
+        build_df['phd_med_gpa'].append(None)
+    # Generate dataframe
+    df = pd.DataFrame(build_df).sort_values('name')
+    print(df)
+    # Render page
+    return render_template('explorer.html', user=current_user, schools=df)
 
 @pages.route('/cycles', methods=['GET', 'POST'])
 @login_required
