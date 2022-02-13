@@ -1,4 +1,3 @@
-from itertools import cycle
 import plotly
 import plotly.graph_objects as go
 import json
@@ -6,34 +5,37 @@ from . import converters
 
 def generate(cycle_data,title):
     loc_df = converters.convert_map(cycle_data,aggregate=False)
-    fig = go.Figure(
-        data = go.Scattergeo(
-            lon=loc_df["Long"],
-            lat = loc_df["Lat"],
-            text = loc_df["School"]+"<br>Best Outcome: "+loc_df["Best Outcome"].str.replace("_"," ").str.title(),
+    fig = go.Figure()
+
+    outcomes = list(loc_df["Best Outcome"].unique())
+    for outcome in outcomes:
+        outcome_df = loc_df.loc[loc_df["Best Outcome"] == outcome]
+        fig.add_trace(go.Scattergeo(
+            lon=outcome_df["Long"],
+            lat = outcome_df["Lat"],
+            text = outcome_df["School"]+"<br>Best Outcome: "+converters.action_names[outcome],
             hoverinfo="text",
             marker = dict(size = 10),
-            marker_color=loc_df["color"]
-        )
-    )
+            marker_color=outcome_df["color"],
+            name = converters.action_names[outcome]
+        ))
+
     fig.update_layout(
         title=title,
-        title_x = 0.5,
-        geo_scope = 'usa', width = 800,height =500,
-        margin = dict(l = 0, r = 0,b = 0, t = 30,pad = 0),
-        images=[dict(
-        source="./static/images/Docs2Be.png",
-        xref="paper", yref="paper",
-        x=0, y=0,
-        sizex=0.08, sizey=0.08,
-        xanchor="left", yanchor="bottom"
-      )]
+        #title_x = 0.5,
+        geo_scope = 'usa', width = 850,height = 400,
+        margin=dict(l=20, r=20, t=40, b=20)
     )
 
-    fig.add_annotation(
-        text="Created with CycleTrack",
-        xref="paper", yref="paper",
-        x=0.5, y=1.03, 
-        showarrow=False)
+    fig.add_layout_image(
+        dict(
+        source="./static/images/CycleTrack-Watermark3.png",
+        xref="x domain",
+        yref="y domain",
+        x=1, y=1,
+        sizex=0.2, sizey=0.2,
+        xanchor="right", yanchor="bottom")
+    )
+
     graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
     return graphJSON

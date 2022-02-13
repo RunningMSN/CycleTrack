@@ -1,4 +1,3 @@
-from itertools import cycle
 import plotly
 import plotly.graph_objects as go
 import json

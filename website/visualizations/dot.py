@@ -23,6 +23,14 @@ def generate(cycle_data, title):
                                           )
                        )
     fig.update_layout(margin=dict(l=20, r=20, t=40, b=20))
+    fig.add_layout_image(
+        dict(
+        source="./static/images/CycleTrack-Watermark3.png",
+        xref="x domain",
+        yref="y domain",
+        x=1, y=1,
+        sizex=0.2, sizey=0.2,
+        xanchor="right", yanchor="bottom"))
     # Generate JSON for plotting
     graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
     return graphJSON

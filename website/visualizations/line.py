@@ -22,6 +22,15 @@ def generate(cycle_data, title):
         legend_title="Actions",
         margin=dict(l=20, r=20, t=40, b=20)
     )
+    fig.add_layout_image(
+        dict(
+        source="./static/images/CycleTrack-Watermark3.png",
+        xref="x domain",
+        yref="y domain",
+        x=1, y=1,
+        sizex=0.15, sizey=0.15,
+        xanchor="right", yanchor="bottom")
+    )
     # Convert to JSON and return it for plotting
     graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
     return graphJSON
