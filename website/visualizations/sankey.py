@@ -34,18 +34,16 @@ def generate(cycle_data, title):
     )
 
     layout = dict(title=title,
-    images = [dict(
-        source="./static/images/CycleTrack-Watermark3.png",
-        xref="x domain",
-        yref="y domain",
-        x=1, y=1.15,
-        sizex=0.15, sizey=0.15,
-        xanchor="right", yanchor="bottom")])
+                  images=[dict(
+                      source="./static/images/CycleTrack-Watermark3.png",
+                      xref="x domain",
+                      yref="y domain",
+                      x=1, y=1.15,
+                      sizex=0.15, sizey=0.15,
+                      xanchor="right", yanchor="bottom")])
 
     fig = dict(data=[data_trace], layout=layout)
-
 
     # Convert to JSON and return it for plotting
     graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
     return graphJSON
-    # return None

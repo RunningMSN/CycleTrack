@@ -93,6 +93,13 @@ def sankey_build_frames(cycle_data):
     df_links = pd.DataFrame(out)
     df_links = df_links.groupby(df_links.columns.tolist(), as_index=False).size()
 
+    full_labels = []
+    for key, value in ids.items():
+        if key == cycle_data.columns[0]:
+            full_labels.append(f'{action_names[key]}: {str(sum(df_links[df_links["Source"] == value]["size"]))}')
+        else:
+            full_labels.append(f'{action_names[key]}: {str(sum(df_links[df_links["Target"] == value]["size"]))}')
+    df_nodes['label'] = full_labels
     return df_nodes, df_links
 
 #I name this dataframe a little differently in the form_options script. may want to unify
