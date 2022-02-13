@@ -13,7 +13,7 @@ def generate(cycle_data,title):
         fig.add_trace(go.Scattergeo(
             lon=outcome_df["Long"],
             lat = outcome_df["Lat"],
-            text = outcome_df["School"]+"<br>Best Outcome: "+converters.action_names[outcome],
+            text = outcome_df["School"]+"<br>Status: " + converters.action_names[outcome],
             hoverinfo="text",
             marker = dict(size = 10),
             marker_color=outcome_df["color"],

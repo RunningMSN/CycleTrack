@@ -16,7 +16,7 @@ def generate(data):
     data = go.Scattergeo(
             lon=loc_df["Long"],
             lat = loc_df["Lat"],
-            text = loc_df["School"] + ": "+ (loc_df["Count"]).astype(str),
+            text = loc_df["School"] + "<br>Applications: " + (loc_df["Count"]).astype(str),
             hoverinfo="text",
             marker = dict(size = (loc_df["Count"]/marker_scale)*25)
         )
