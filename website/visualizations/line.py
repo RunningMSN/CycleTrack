@@ -24,7 +24,7 @@ def generate(cycle_data, title):
     )
     fig.add_layout_image(
         dict(
-        source="./static/images/CycleTrack-Watermark3.png",
+        source="./static/images/CycleTrack_Plot_Watermark.png",
         xref="x domain",
         yref="y domain",
         x=1, y=1,

@@ -35,7 +35,7 @@ def generate(cycle_data, title):
 
     layout = dict(title=title,
                   images=[dict(
-                      source="./static/images/CycleTrack-Watermark3.png",
+                      source="./static/images/CycleTrack_Plot_Watermark.png",
                       xref="x domain",
                       yref="y domain",
                       x=1, y=1.15,
