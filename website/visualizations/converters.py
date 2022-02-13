@@ -106,11 +106,11 @@ def sankey_build_frames(cycle_data):
 locations = pd.read_csv("./website/static/csv/SchoolProfiles.csv")
 
 def convert_map(data,aggregate=False):
-    #merge schools so that duplicates (aka MD + MD/PhD don't get put in twice)
-    data = data.groupby("name",as_index=False).first()
     if aggregate:
         school_df = data[["name"]]
     else:
+        #merge schools so that duplicates (aka MD + MD/PhD don't get put in twice)
+        data = data.groupby("name",as_index=False).first()
         #get best outcome: column with greatest date in each row
         nameless = data[data.columns.difference(["name"])]
         data["Best Outcome"] = nameless.idxmax(axis=1)
