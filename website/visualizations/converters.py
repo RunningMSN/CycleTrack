@@ -102,8 +102,6 @@ def sankey_build_frames(cycle_data):
     df_nodes['label'] = full_labels
     return df_nodes, df_links
 
-#I name this dataframe a little differently in the form_options script. may want to unify
-locations = pd.read_csv("./website/static/csv/SchoolProfiles.csv")
 
 def convert_map(data,aggregate=False):
     if aggregate:
@@ -119,6 +117,7 @@ def convert_map(data,aggregate=False):
         school_df = data[["name","Best Outcome","color"]]
 
     school_df = school_df.rename(columns={"name":"School"})
-    loc_df = school_df.merge(locations,how="left",on="School")
+    profiles = pd.read_csv("./website/static/csv/SchoolProfiles.csv")
+    loc_df = school_df.merge(profiles, how="left", on="School")
 
     return loc_df
