@@ -569,7 +569,7 @@ def delete_school():
 
 @pages.route('/explorer/<school_name>')
 def explore_school(school_name):
-    school_name = school_name.replace('_', ' ')
+    school_name = school_name.replace('%20', ' ')
     print(school_name in form_options.MD_SCHOOL_LIST)
     if school_name not in form_options.MD_SCHOOL_LIST and school_name not in form_options.DO_SCHOOL_LIST:
         flash(f'Could not find {school_name}. Please navigate to your school using the explorer.', category='error')
