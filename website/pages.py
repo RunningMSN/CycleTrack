@@ -566,3 +566,12 @@ def delete_school():
             db.session.delete(school)
             db.session.commit()
             return jsonify({})
+
+@pages.route('/explorer/<school_name>')
+def explore_school(school_name):
+    school_name = school_name.replace('_', ' ')
+    print(school_name in form_options.MD_SCHOOL_LIST)
+    if school_name not in form_options.MD_SCHOOL_LIST and school_name not in form_options.DO_SCHOOL_LIST:
+        flash(f'Could not find {school_name}. Please navigate to your school using the explorer.', category='error')
+        return redirect(url_for('pages.explorer'))
+    return render_template('school_template.html', user=current_user, school_name=school_name)
