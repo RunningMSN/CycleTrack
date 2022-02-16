@@ -1,200 +1,200 @@
-School,Lat,Long,MD_or_DO,Logo_File_Name
-Alabama,33.50553654,-86.80299731,MD,uab.png
-Albany,42.65266528,-73.77778223,MD,albany.png
-Arizona - Tucson,32.24086229,-110.9457405,MD,arizonatucson.png
-Arizona - Phoenix,33.45361114,-112.0664016,MD,arizonaphoenix.png
-Arkansas,34.74914777,-92.32181198,MD,arkansas.png
-Baylor,29.71075295,-95.39658487,MD,baylor.png
-Boston,42.33645662,-71.07259613,MD,bu.png
-Brown,41.81899882,-71.40846424,MD,brown.png
-Buffalo,42.89967105,-78.86945831,MD,buffalo.png
-City University of New York,40.82111637,-73.95007972,MD,cuny.jpeg
-California University of Science and Medicine,34.07733162,-117.350936,MD,calsci.png
-California Northstate,38.40582439,-121.4812295,MD,calnorthstate.jpeg
-Caribe,18.36616016,-66.15386695,MD,caribe.png
-Carle Illinois,40.10800864,-88.22921037,MD,carle.png
-Case Western,41.50495729,-81.62028392,MD,case.png
-Cleveland Clinic Lerner,41.50446575,-81.62047147,MD,case.png
-Central Michigan,43.59061,-84.77054358,MD,centralmichigan.png
-Rosalind Franklin,42.29997706,-87.85941417,MD,rosalind.png
-Chicago,41.79171123,-87.60270689,MD,chicago.png
-Cincinnati,39.13858326,-84.50378566,MD,ucincinnati.png
-Colorado,39.74512393,-104.8375507,MD,colorado.png
-Columbia,40.84167233,-73.94139234,MD,columbia.jpeg
-Connecticut,41.72990002,-72.79123694,MD,uconn.png
-Cooper Rowan,39.94057278,-75.11969324,MD,cooperrowan.png
-Cornell,40.76645577,-73.95551274,MD,cornell.png
-Creighton,41.23926791,-96.03049904,MD,creighton.png
-Dartmouth,43.70885205,-72.28506562,MD,dartmouth.png
-Drexel,40.01968836,-75.17990075,MD,drexel.jpeg
-Duke,36.00545401,-78.93823492,MD,duke.png
-East Carolina,35.60987134,-77.40285074,MD,eastcarolina.png
-East Tennessee,36.30937269,-82.37905467,MD,easttennessee.png
-Eastern Virginia,36.86055329,-76.30357084,MD,easternvirginia.png
-Albert Einstein,40.85049577,-73.84598807,MD,einstein.png
-Emory,33.79200866,-84.32213671,MD,emory.png
-Florida International,25.75820109,-80.37125923,MD,fiu.png
-Florida,29.63994491,-82.34350916,MD,uflorida.png
-Florida Atlantic,26.37344288,-80.10057159,MD,fau.png
-Florida State,30.4459751,-84.30561064,MD,floridastate.png
-Geisinger Commonwealth,41.41341651,-75.65543557,MD,geisinger.jpeg
-George Washington,38.90014437,-77.05124954,MD,gw.png
-Georgetown,38.91195166,-77.07694461,MD,georgetown.png
-Hackensack Meridian,40.83382472,-74.15497891,MD,hackensackmeridian.jpeg
-Harvard,42.33569831,-71.10417864,MD,harvard.png
-Hawaii,21.29670471,-157.8633615,MD,uhi.png
-Houston,29.71748685,-95.33975812,MD,uhouston.png
-Howard,38.91911982,-77.02001682,MD,howard.png
-Illinois,41.87134332,-87.67347924,MD,uic.png
-Indiana,39.77558726,-86.17844781,MD,indiana.png
-Iowa,41.66285063,-91.54537108,MD,iowa.jpeg
-Jefferson,39.94885427,-75.15787824,MD,jefferson.jpeg
-Johns Hopkins,39.29924898,-76.59325119,MD,jhu.png
-Kaiser Permanente,34.14437838,-118.1408794,MD,kaiser.jpeg
-Kansas,39.05636666,-94.6113987,MD,ukansas.png
-Kentucky,38.03126939,-84.50743926,MD,kentucky.png
-LSU - New Orleans,29.95663334,-90.08364354,MD,lsunola.png
-LSU - Shreveport,32.48086153,-93.76082135,MD,lsushreveport.png
-Loma Linda,34.05056712,-117.2641768,MD,lomalinda.png
-Louisville,38.25001659,-85.74776272,MD,louisville.png
-Loyola,41.85829799,-87.83598422,MD,loyola.png
-Medical College of Georgia,33.47073079,-81.98991494,MD,mcgeorgia.png
-Medical College of Wisconsin,43.04372929,-88.02129388,MD,mcw.png
-Medical University of South Carolina,32.78492291,-79.94842047,MD,musc.jpeg
-Marshall,38.4094357,-82.42633224,MD,marshall.png
-Maryland,39.2890265,-76.62580087,MD,umd.jpeg
-Massachussetts,42.27835412,-71.76278217,MD,umass.png
-Mayo,44.02244028,-92.46689147,MD,mayo.png
-Meharry,36.16708245,-86.80774576,MD,meharry.jpeg
-Mercer,32.82786148,-83.64777247,MD,mercer.png
-Miami,25.79044478,-80.21203576,MD,miami.jpeg
-Michigan,42.28407348,-83.73258873,MD,umich.png
-Michigan State,42.97096977,-85.66834287,MD,msu.png
-Minnesota,44.97266361,-93.23347644,MD,minnesota.png
-Mississippi,32.3311145,-90.17116725,MD,mississippi.jpeg
-Missouri - Columbia,38.93826613,-92.32842202,MD,missouricolumbia.jpeg
-Missouri - Kansas City,39.08322024,-94.57517113,MD,missourikansascity.png
-Morehouse,33.74281888,-84.41200106,MD,morehouse.png
-Mount Sinai,40.78873715,-73.95261715,MD,mtsinai.png
-New York University - Long Island,40.7416533,-73.64049143,MD,nyugrossman.jpeg
-New York University - Grossman,40.74229524,-73.97406572,MD,nyulongisland.png
-Nebraska,41.25434389,-95.97572239,MD,unebraska.png
-Nevada Reno,39.54906375,-119.8140505,MD,unr.png
-New Mexico,35.08997587,-106.6198533,MD,unm.png
-New York Medical College,41.08482177,-73.80916041,MD,nymc.png
-North Carolina,35.90625532,-79.05231483,MD,unc.png
-North Dakota,47.92471998,-97.06743065,MD,und.png
-Northeast Ohio,41.10403948,-81.24396032,MD,neohio.png
-Northwestern,41.89662317,-87.61971027,MD,northwestern.png
-Nova Southeastern,26.08176466,-80.24978124,MD,novasoutheastern.jpeg
-Oakland,42.67455327,-83.21533935,MD,oakland.png
-Ohio State,39.994247,-83.01686715,MD,osu.jpeg
-Oklahoma,35.47986587,-97.49549623,MD,uoklahoma.jpeg
-Oregon Health and Science,45.49983013,-122.6875087,MD,ohsu.png
-Penn State,40.8204406,-77.84527752,MD,pennstate.png
-Pennsylvania,39.94772627,-75.19264095,MD,upenn.png
-Pittsburgh,40.44325901,-79.96123831,MD,upitt.png
-Ponce Health Sciences,17.99365997,-66.61969395,MD,ponce.png
-University of Puerto Rico,18.39650882,-66.07444562,MD,upr.png
-Quinnipiac,41.41380565,-72.83864441,MD,quinnipiac.png
-Stony Brook,40.90858354,-73.11494071,MD,sbu.png
-Rochester,43.12320658,-77.62698325,MD,rochester.png
-Rush,41.87366518,-87.66957445,MD,rush.png
-Rutgers - New Jersey,40.7401451,-74.18965604,MD,rutgers.png
-Rutgers - Robert Wood Johnson,40.49477185,-74.44918811,MD,rutgertsrwj.jpeg
-SUNY Downstate,40.65508518,-73.94662784,MD,sunydownstate.jpeg
-SUNY Upstate,43.04232893,-76.13959794,MD,sunyupstate.png
-Saint Louis,38.62252163,-90.23783766,MD,slu.png
-San Juan Bautista,18.21996552,-66.05118878,MD,sanjuanbatista.png
-South Alabama,30.69913235,-88.17713087,MD,southalabama.png
-South Carolina - Columbia,33.97861045,-80.96284421,MD,southcarolinacolumba.png
-South Carolina - Greenville,34.82151566,-82.41142014,MD,southcarolinagreenville.jpeg
-South Dakota,42.78235415,-96.92846412,MD,southdakota.png
-University of Southern California,34.06124435,-118.2057365,MD,usc.jpeg
-Southern Illinois,39.81022974,-89.65755182,MD,siu.jpeg
-Stanford,37.43191211,-122.1758439,MD,stanford.png
-Texas Christian University,32.74980618,-97.36939131,MD,tcu.jpeg
-Temple,40.00695649,-75.15220857,MD,temple.png
-Tennessee,35.14066616,-90.03060505,MD,utennessee.png
-Texas A&M,30.59836433,-96.39434651,MD,tamu.png
-Texas Tech - Lubbock,33.59011545,-101.8909685,MD,texastechlubbock.png
-Texas Tech - Foster,31.77199725,-106.4309553,MD,texastechelpaso.png
-Toledo,41.61954627,-83.61711367,MD,toledo.png
-Tufts,42.3506081,-71.06293624,MD,tufts.png
-Tulane,29.95493669,-90.07690683,MD,tulane.png
-Washington,47.65064361,-122.3094118,MD,uwash.png
-University of California Davis,38.55314798,-121.4525906,MD,ucdavis.jpeg
-University of California Irvine,33.64439917,-117.8518234,MD,ucirvine.png
-University of California Riverside,33.97361854,-117.3240748,MD,ucriverside.png
-University of California San Diego,32.8746033,-117.2360668,MD,ucsd.png
-University of California San Francisco,37.76283333,-122.4597295,MD,ucsf.png
-Univesity of Central Florida,28.36748977,-81.28014913,MD,ucf.png
-University of California Los Angeles,34.06438924,-118.4424421,MD,ucla.png
-University of Nevada Las Vegas,36.15959703,-115.1694228,MD,unlv.jpeg
-University of South Florida,28.06411907,-82.42292105,MD,usf.png
-University of Texas - Austin,30.27560931,-97.73347454,MD,utdell.jpeg
-University of Texas - Houston,29.71321923,-95.39770944,MD,uthmcgovern.png
-University of Texas - Medical Branch,29.31082729,-94.7770078,MD,utmb.png
-University of Texas - Rio Grande,26.30768214,-98.17452146,MD,utriogrande.jpeg
-University of Texas - San Antonio,29.51048532,-98.57544234,MD,uthscsa.jpeg
-University of Texas - Southwestern,32.81218854,-96.84026575,MD,utsw.png
-Uniformed Services,39.00197605,-77.08674104,MD,uniformedservices.jpeg
-Utah,40.76999751,-111.8357056,MD,uu.png
-Vanderbilt,36.1423894,-86.80252724,MD,vanderbilt.jpeg
-Vermont,44.47841734,-73.19367833,MD,uvm.png
-Virginia,38.03180185,-78.5009733,MD,uva.png
-Virginia Commonwealth,37.53994337,-77.43029819,MD,vcu.png
-Virginia Tech,37.2578443,-79.94266287,MD,vtech.jpeg
-Wake Forest,36.10036292,-80.23984684,MD,wake.png
-Washington State,47.6615214,-117.4058027,MD,wsu.png
-Washington University Saint Louis,38.637805,-90.26330844,MD,wustl.png
-Wayne State,42.35456606,-83.05557467,MD,wayne.jpeg
-West Virginia,39.65501132,-79.9581012,MD,wvu.png
-Western Michigan,42.29025249,-85.57937098,MD,wmich.png
-Wisconsin,43.07773828,-89.43023392,MD,wisconsin.png
-Wright State,39.78038044,-84.06156414,MD,wright.png
-Yale,41.30335088,-72.93391272,MD,yale.png
-Hofstra,40.7177697,-73.5979512,MD,hofstra.png
-A.T. Still - Kirksville,40.19325745,-92.58912864,DO,atsu-kirks.png
-A.T. Still - Arizona,33.3828239,-111.7048746,DO,atsu-az.png
-Alabama COM,31.2060762,-85.34099391,DO,acom.jpeg
-Midwestern - Arizona,33.66375185,-112.1825484,DO,azcom.jpeg
-Arkansas COM,35.31723317,-94.31916117,DO,arkansascom.jpeg
-Burrell COM,32.27796356,-106.7377562,DO,burrellcom.png
-California Health Sciences,36.8441121,-119.6675491,DO,chsu.png
-Campbell,35.40588611,-78.75545268,DO,campbell.jpeg
-Midwestern - Chicago,41.82801827,-87.99946897,DO,midwestern.jpeg
-Des Moines,41.58343887,-93.66286074,DO,dmu.jpeg
-Edward Via - Auburn,32.58946981,-85.49121516,DO,vcom-auburn.png
-Edward Via - Carolinas,34.95460446,-81.94023273,DO,vcom-carolinas.png
-Edward Via - Louisiana,32.52834414,-92.06667727,DO,vcom-la.png
-Edward Via - Virginia,37.19979499,-80.40588224,DO,vcom-va.png
-Idaho COM,43.59467591,-116.3767157,DO,icom.jpeg
-Kansas City University COM,39.10741508,-94.56097594,DO,kcu-com.png
-Kansas COM,37.684441,-97.33458023,DO,kansascom.png
-Lake Erie,42.08021452,-80.10543462,DO,lecom.png
-Liberty,37.33732494,-79.17964694,DO,lucom.jpeg
-Lincoln Memorial,36.57590407,-83.66011621,DO,lmu-dcom.jpeg
-Marian,39.81097907,-86.20288087,DO,marian.jpeg
-Michigan State COM,42.72233662,-84.46409837,DO,msucom.png
-New York Institute of Technology,40.8095165,-73.60552735,DO,nyitcom.png
-Noorda,40.21163916,-111.6539733,DO,noorda.png
-Nova Southeastern COM,26.08181983,-80.24970013,DO,nsu.png
-Ohio University,39.32923397,-82.10878921,DO,ou-hcom.jpeg
-Oklahoma State,36.1382576,-96.00553444,DO,osu-com.jpeg
-Pacific Northwest,46.60292761,-120.4558997,DO,pnwu-com.png
-Philadelphia COM,40.00538069,-75.21640861,DO,pcom.png
-Philadelphia COM - Georgia,34.01020481,-84.0609436,DO,pcom-ga.png
-Rocky Vista,39.56345284,-104.8150721,DO,rvucom.jpeg
-Rowan,39.83066054,-75.00679057,DO,rowan.png
-Sam Houston,30.26715287,-95.45885167,DO,shsu-com.png
-Tuoro - New York,40.80906462,-73.95000935,DO,tuoro-ny.png
-Tuoro - California,38.08546368,-122.263922,DO,tuoro-ca.png
-Tuoro - Nevada,36.04333978,-115.0240654,DO,tuoro-nv.png
-New England,43.45798852,-70.38694865,DO,une-com.png
-North Texas,32.74980618,-97.36956297,DO,unthsc-tcom.jpeg
-Kentucky COM,37.47920485,-82.52037974,DO,kycom.jpeg
-Incarnate Word,29.34983381,-98.45380106,DO,uiwsom.png
-West Virginia SOM,37.80410899,-80.43816216,DO,wvsom.jpeg
-Western University,34.0582521,-117.7474604,DO,western.jpeg
-William Carey,31.3060013,-89.29302833,DO,wcu-com.png
+School,City,State,Envt_Type,Private_Public,Lat,Long,MD_or_DO,Logo_File_Name
+Alabama,Birmingham,AL,Urban,Public,33.50553654,-86.80299731,MD,uab.png
+Albany,Albany,NY,Urban,Private,42.65266528,-73.77778223,MD,albany.png
+Arizona - Tucson,Tuscon,AZ,Suburban,Public,32.24086229,-110.9457405,MD,arizonatucson.png
+Arizona - Phoenix,Phoenix,AZ,Urban,Public,33.45361114,-112.0664016,MD,arizonaphoenix.png
+Arkansas,Little Rock,AR,Urban,Public,34.74914777,-92.32181198,MD,arkansas.png
+Baylor,Houston,TX,Urban,Private,29.71075295,-95.39658487,MD,baylor.png
+Boston,Boston,MA,Urban,Private,42.33645662,-71.07259613,MD,bu.png
+Brown,Providence,RI,Urban,Private,41.81899882,-71.40846424,MD,brown.png
+Buffalo,Buffalo,NY,Urban,Public,42.89967105,-78.86945831,MD,buffalo.png
+City University of New York,New York,NY,Urban,Public,40.82111637,-73.95007972,MD,cuny.jpeg
+California University of Science and Medicine,Colton,CA,Suburban,Private,34.07733162,-117.350936,MD,calsci.png
+California Northstate,Elk Grove,CA,Suburban,Private,38.40582439,-121.4812295,MD,calnorthstate.jpeg
+Caribe,Bayamon,PR,Urban,Private,18.36616016,-66.15386695,MD,caribe.png
+Carle Illinois,Urbana,IL,Urban,Public,40.10800864,-88.22921037,MD,carle.png
+Case Western,Cleveland,OH,Urban,Private,41.50495729,-81.62028392,MD,case.png
+Cleveland Clinic Lerner,Cleveland,OH,Urban,Private,41.50446575,-81.62047147,MD,case.png
+Central Michigan,Mt Pleasant,MI,Rural,Public,43.59061,-84.77054358,MD,centralmichigan.png
+Rosalind Franklin,North Chicago,IL,Suburban,Private,42.29997706,-87.85941417,MD,rosalind.png
+Chicago,Chicago,IL,Urban,Private,41.79171123,-87.60270689,MD,chicago.png
+Cincinnati,Cincinnati,OH,Urban,Public,39.13858326,-84.50378566,MD,ucincinnati.png
+Colorado,Aurora,CO,Urban,Public,39.74512393,-104.8375507,MD,colorado.png
+Columbia,New York,NY,Urban,Private,40.84167233,-73.94139234,MD,columbia.jpeg
+Connecticut,Farmington,CT,Suburban,Public,41.72990002,-72.79123694,MD,uconn.png
+Cooper Rowan,Camden,NJ,Urban,Public,39.94057278,-75.11969324,MD,cooperrowan.png
+Cornell,New York,NY,Urban,Private,40.76645577,-73.95551274,MD,cornell.png
+Creighton,Omaha,NE,Urban,Private,41.23926791,-96.03049904,MD,creighton.png
+Dartmouth,Hanover,NH,Rural,Private,43.70885205,-72.28506562,MD,dartmouth.png
+Drexel,Philadelphia,PA,Urban,Private,40.01968836,-75.17990075,MD,drexel.jpeg
+Duke,Durham,NC,Urban,Private,36.00545401,-78.93823492,MD,duke.png
+East Carolina,Greenville,NC,Urban,Public,35.60987134,-77.40285074,MD,eastcarolina.png
+East Tennessee,Johnson City,TN,Urban,Public,36.30937269,-82.37905467,MD,easttennessee.png
+Eastern Virginia,Norfolk,VA,Urban,Public,36.86055329,-76.30357084,MD,easternvirginia.png
+Albert Einstein,Bronx,NY,Urban,Private,40.85049577,-73.84598807,MD,einstein.png
+Emory,Atlanta,GA,Suburban,Private,33.79200866,-84.32213671,MD,emory.png
+Florida International,Miami,FL,Urban,Public,25.75820109,-80.37125923,MD,fiu.png
+Florida,Gainesville,FL,Suburban,Public,29.63994491,-82.34350916,MD,uflorida.png
+Florida Atlantic,Boca Raton,FL,Urban,Public,26.37344288,-80.10057159,MD,fau.png
+Florida State,Tallahassee,FL,Urban,Public,30.4459751,-84.30561064,MD,floridastate.png
+Geisinger Commonwealth,Scranton,PA,Urban,Private,41.41341651,-75.65543557,MD,geisinger.jpeg
+George Washington,Washington,DC,Urban,Private,38.90014437,-77.05124954,MD,gw.png
+Georgetown,Washington,DC,Urban,Private,38.91195166,-77.07694461,MD,georgetown.png
+Hackensack Meridian,Nutley,NJ,Suburban,Private,40.83382472,-74.15497891,MD,hackensackmeridian.jpeg
+Harvard,Boston,MA,Urban,Private,42.33569831,-71.10417864,MD,harvard.png
+Hawaii,Honolulu,HI,Urban,Public,21.29670471,-157.8633615,MD,uhi.png
+Houston,Houston,TX,Urban,Public,29.71748685,-95.33975812,MD,uhouston.png
+Howard,Washington,DC,Urban,Private,38.91911982,-77.02001682,MD,howard.png
+Illinois,Chicago,IL,Urban,Public,41.87134332,-87.67347924,MD,uic.png
+Indiana,Indianapolis,IN,Urban,Public,39.77558726,-86.17844781,MD,indiana.png
+Iowa,Iowa City,IA,Suburban,Public,41.66285063,-91.54537108,MD,iowa.jpeg
+Jefferson,Philadelphia,PA,Urban,Private,39.94885427,-75.15787824,MD,jefferson.jpeg
+Johns Hopkins,Balitmore,MD,Urban,Private,39.29924898,-76.59325119,MD,jhu.png
+Kaiser Permanente,Pasadena,CA,Urban,Private,34.14437838,-118.1408794,MD,kaiser.jpeg
+Kansas,Kansas City,KS,Urban,Public,39.05636666,-94.6113987,MD,ukansas.png
+Kentucky,Lexington,KY,Urban,Public,38.03126939,-84.50743926,MD,kentucky.png
+LSU - New Orleans,New Orleans,LA,Urban,Public,29.95663334,-90.08364354,MD,lsunola.png
+LSU - Shreveport,Shreveport,LA,Urban,Public,32.48086153,-93.76082135,MD,lsushreveport.png
+Loma Linda,Loma Linda,CA,Suburban,Private,34.05056712,-117.2641768,MD,lomalinda.png
+Louisville,Louisville,KY,Urban,Public,38.25001659,-85.74776272,MD,louisville.png
+Loyola,Maywood,IL,Urban,Private,41.85829799,-87.83598422,MD,loyola.png
+Medical College of Georgia,Augusta,GA,Urban,Public,33.47073079,-81.98991494,MD,mcgeorgia.png
+Medical College of Wisconsin,Milwaukee,WI,Suburban,Private,43.04372929,-88.02129388,MD,mcw.png
+Medical University of South Carolina,Charleston,SC,Urban,Public,32.78492291,-79.94842047,MD,musc.jpeg
+Marshall,Huntington,WV,Rural,Public,38.4094357,-82.42633224,MD,marshall.png
+Maryland,Baltimore,MD,Urban,Public,39.2890265,-76.62580087,MD,umd.jpeg
+Massachussetts,Worcester,MA,Urban,Public,42.27835412,-71.76278217,MD,umass.png
+Mayo,Rochester,MN,Urban,Private,44.02244028,-92.46689147,MD,mayo.png
+Meharry,Nashville,TN,Urban,Private,36.16708245,-86.80774576,MD,meharry.jpeg
+Mercer,Macon,GA,Urban,Private,32.82786148,-83.64777247,MD,mercer.png
+Miami,Miami,FL,Urban,Private,25.79044478,-80.21203576,MD,miami.jpeg
+Michigan,Ann Arbor,MI,Urban,Public,42.28407348,-83.73258873,MD,umich.png
+Michigan State,East Lansing,MI,Urban,Public,42.97096977,-85.66834287,MD,msu.png
+Minnesota,Minneapolis,MN,Urban,Public,44.97266361,-93.23347644,MD,minnesota.png
+Mississippi,Jackson,MS,Suburban,Public,32.3311145,-90.17116725,MD,mississippi.jpeg
+Missouri - Columbia,Columbia,MO,Suburban,Public,38.93826613,-92.32842202,MD,missouricolumbia.jpeg
+Missouri - Kansas City,Kansas City,MO,Urban,Public,39.08322024,-94.57517113,MD,missourikansascity.png
+Morehouse,Atlanta,GA,Urban,Private,33.74281888,-84.41200106,MD,morehouse.png
+Mount Sinai,New York,NY,Urban,Private,40.78873715,-73.95261715,MD,mtsinai.png
+New York University - Long Island,Mineola,NY,Suburban,Private,40.7416533,-73.64049143,MD,nyugrossman.jpeg
+New York University - Grossman,New York,NY,Urban,Private,40.74229524,-73.97406572,MD,nyulongisland.png
+Nebraska,Omaha,NE,Urban,Public,41.25434389,-95.97572239,MD,unebraska.png
+Nevada Reno,Reno,NV,Urban,Public,39.54906375,-119.8140505,MD,unr.png
+New Mexico,Albuquerque,NM,Urban,Public,35.08997587,-106.6198533,MD,unm.png
+New York Medical College,Valhalla,NY,Suburban,Private,41.08482177,-73.80916041,MD,nymc.png
+North Carolina,Chapel Hill,NC,Suburban,Public,35.90625532,-79.05231483,MD,unc.png
+North Dakota,Grand Forks,ND,Urban,Public,47.92471998,-97.06743065,MD,und.png
+Northeast Ohio,Rootstown,OH,Rural,Public,41.10403948,-81.24396032,MD,neohio.png
+Northwestern,Chicago,IL,Urban,Private,41.89662317,-87.61971027,MD,northwestern.png
+Nova Southeastern,Davie,FL,Urban,Private,26.08176466,-80.24978124,MD,novasoutheastern.jpeg
+Oakland,Rochester,MI,Suburban,Public,42.67455327,-83.21533935,MD,oakland.png
+Ohio State,Columbus,OH,Urban,Public,39.994247,-83.01686715,MD,osu.jpeg
+Oklahoma,Oklahoma City,OK,Urban,Public,35.47986587,-97.49549623,MD,uoklahoma.jpeg
+Oregon Health and Science,Portland,OR,Urban,Public,45.49983013,-122.6875087,MD,ohsu.png
+Penn State,Hershey,PA,Suburban,Public,40.8204406,-77.84527752,MD,pennstate.png
+Pennsylvania,Philadelphia,PA,Urban,Private,39.94772627,-75.19264095,MD,upenn.png
+Pittsburgh,Pittsburgh,PA,Urban,Private,40.44325901,-79.96123831,MD,upitt.png
+Ponce Health Sciences,Ponce,PR,Urban,Private,17.99365997,-66.61969395,MD,ponce.png
+University of Puerto Rico,San Juan,PR,Urban,Public,18.39650882,-66.07444562,MD,upr.png
+Quinnipiac,Hamden,CT,Suburban,Private,41.41380565,-72.83864441,MD,quinnipiac.png
+Stony Brook,Stony Brook,NY,Suburban,Public,40.90858354,-73.11494071,MD,sbu.png
+Rochester,Rochester,NY,Suburban,Private,43.12320658,-77.62698325,MD,rochester.png
+Rush,Chicago,IL,Urban,Private,41.87366518,-87.66957445,MD,rush.png
+Rutgers - New Jersey,Newark,NJ,Urban,Public,40.7401451,-74.18965604,MD,rutgers.png
+Rutgers - Robert Wood Johnson,Piscataway,NJ,Suburban,Public,40.49477185,-74.44918811,MD,rutgertsrwj.jpeg
+SUNY Downstate,Brooklyn,NY,Urban,Public,40.65508518,-73.94662784,MD,sunydownstate.jpeg
+SUNY Upstate,Syracus,NY,Urban,Public,43.04232893,-76.13959794,MD,sunyupstate.png
+Saint Louis,Saint Louis,MO,Urban,Private,38.62252163,-90.23783766,MD,slu.png
+San Juan Bautista,Caguas,PR,Rural,Private,18.21996552,-66.05118878,MD,sanjuanbatista.png
+South Alabama,Mobile,AL,Suburban,Public,30.69913235,-88.17713087,MD,southalabama.png
+South Carolina - Columbia,Columbia,SC,Urban,Public,33.97861045,-80.96284421,MD,southcarolinacolumba.png
+South Carolina - Greenville,Greenville,SC,Urban,Public,34.82151566,-82.41142014,MD,southcarolinagreenville.jpeg
+South Dakota,Sioux Falls,SD,Rural,Public,42.78235415,-96.92846412,MD,southdakota.png
+University of Southern California,Los Angeles,CA,Urban,Private,34.06124435,-118.2057365,MD,usc.jpeg
+Southern Illinois,Springfield,IL,Urban,Public,39.81022974,-89.65755182,MD,siu.jpeg
+Stanford,Stanford,CA,Suburban,Private,37.43191211,-122.1758439,MD,stanford.png
+Texas Christian University,Fort Worth,TX,Urban,Private,32.74980618,-97.36939131,MD,tcu.jpeg
+Temple,Philadelphia,PA,Urban,Private,40.00695649,-75.15220857,MD,temple.png
+Tennessee,Memphis,TN,Urban,Public,35.14066616,-90.03060505,MD,utennessee.png
+Texas A&M,Bryan,TX,Rural,Public,30.59836433,-96.39434651,MD,tamu.png
+Texas Tech - Lubbock,Lubbock,TX,Urban,Public,33.59011545,-101.8909685,MD,texastechlubbock.png
+Texas Tech - Foster,El Paso,TX,Urban,Public,31.77199725,-106.4309553,MD,texastechelpaso.png
+Toledo,Toledo,OH,Urban,Public,41.61954627,-83.61711367,MD,toledo.png
+Tufts,Boston,MA,Urban,Private,42.3506081,-71.06293624,MD,tufts.png
+Tulane,New Orleans,LA,Urban,Private,29.95493669,-90.07690683,MD,tulane.png
+Washington,Seattle,WA,Urban,Public,47.65064361,-122.3094118,MD,uwash.png
+University of California Davis,Sacramento,CA,Urban,Public,38.55314798,-121.4525906,MD,ucdavis.jpeg
+University of California Irvine,Irvine,CA,Urban,Public,33.64439917,-117.8518234,MD,ucirvine.png
+University of California Riverside,Riverside,CA,Suburban,Public,33.97361854,-117.3240748,MD,ucriverside.png
+University of California San Diego,Lo Jolla,CA,Suburban,Public,32.8746033,-117.2360668,MD,ucsd.png
+University of California San Francisco,San Francisco,CA,Urban,Public,37.76283333,-122.4597295,MD,ucsf.png
+Univesity of Central Florida,Orlando,FL,Suburban,Public,28.36748977,-81.28014913,MD,ucf.png
+University of California Los Angeles,Los Angeles,CA,Urban,Public,34.06438924,-118.4424421,MD,ucla.png
+University of Nevada Las Vegas,Las Vegas,NV,Urban,Public,36.15959703,-115.1694228,MD,unlv.jpeg
+University of South Florida,Tampa,FL,Urban,Public,28.06411907,-82.42292105,MD,usf.png
+University of Texas - Austin,Austin,TX,Urban,Public,30.27560931,-97.73347454,MD,utdell.jpeg
+University of Texas - Houston,Houston,TX,Urban,Public,29.71321923,-95.39770944,MD,uthmcgovern.png
+University of Texas - Medical Branch,Galveston,TX,Suburban,Public,29.31082729,-94.7770078,MD,utmb.png
+University of Texas - Rio Grande,Edinburg,TX,Suburban,Public,26.30768214,-98.17452146,MD,utriogrande.jpeg
+University of Texas - San Antonio,San Antonio,TX,Urban,Public,29.51048532,-98.57544234,MD,uthscsa.jpeg
+University of Texas - Southwestern,Dallas,TX,Urban,Public,32.81218854,-96.84026575,MD,utsw.png
+Uniformed Services,Bethesda,MD,Suburban,Public,39.00197605,-77.08674104,MD,uniformedservices.jpeg
+Utah,Salt Lake City,UT,Urban,Public,40.76999751,-111.8357056,MD,uu.png
+Vanderbilt,Nashville,TN,Urban,Private,36.1423894,-86.80252724,MD,vanderbilt.jpeg
+Vermont,Burlington,VT,Suburban,Public,44.47841734,-73.19367833,MD,uvm.png
+Virginia,Charlottesville,VA,Suburban,Public,38.03180185,-78.5009733,MD,uva.png
+Virginia Commonwealth,Richmond,VA,Urban,Public,37.53994337,-77.43029819,MD,vcu.png
+Virginia Tech,Roanoke,VA,Urban,Public,37.2578443,-79.94266287,MD,vtech.jpeg
+Wake Forest,Winstom Salem,NC,Urban,Private,36.10036292,-80.23984684,MD,wake.png
+Washington State,Spokane,WA,Urban,Public,47.6615214,-117.4058027,MD,wsu.png
+Washington University Saint Louis,St. Louis,MO,Urban,Private,38.637805,-90.26330844,MD,wustl.png
+Wayne State,Detroit,MI,Urban,Public,42.35456606,-83.05557467,MD,wayne.jpeg
+West Virginia,Morgantown,WV,Rural,Public,39.65501132,-79.9581012,MD,wvu.png
+Western Michigan,Kalamazoo,MI,Suburban,Public,42.29025249,-85.57937098,MD,wmich.png
+Wisconsin,Madison,WI,Urban,Public,43.07773828,-89.43023392,MD,wisconsin.png
+Wright State,Dayton,OH,Suburban,Public,39.78038044,-84.06156414,MD,wright.png
+Yale,New Haven,CT,Urban,Private,41.30335088,-72.93391272,MD,yale.png
+Hofstra,Hempstead,NY,Suburban,Private,40.7177697,-73.5979512,MD,hofstra.png
+A.T. Still - Kirksville,Kirksville,MO,Rural,Private,40.19325745,-92.58912864,DO,atsu-kirks.png
+A.T. Still - Arizona,Mesa,AZ,Suburban,Private,33.3828239,-111.7048746,DO,atsu-az.png
+Alabama COM,Dothan,AL,Suburban,Private,31.2060762,-85.34099391,DO,acom.jpeg
+Midwestern - Arizona,Glendale,AZ,Suburban,Private,33.66375185,-112.1825484,DO,azcom.jpeg
+Arkansas COM,Fort Smith,AR,Rural,Private,35.31723317,-94.31916117,DO,arkansascom.jpeg
+Burrell COM,Las Cruces,NM,Suburban,Private,32.27796356,-106.7377562,DO,burrellcom.png
+California Health Sciences,Clovis,CA,Suburban,Private,36.8441121,-119.6675491,DO,chsu.png
+Campbell,Lillington,NC,Rural,Private,35.40588611,-78.75545268,DO,campbell.jpeg
+Midwestern - Chicago,Downers Grove,IL,Suburban,Private,41.82801827,-87.99946897,DO,midwestern.jpeg
+Des Moines,Des Moines,IA,Urban,Private,41.58343887,-93.66286074,DO,dmu.jpeg
+Edward Via - Auburn,Auburn,AL,Suburban,Private,32.58946981,-85.49121516,DO,vcom-auburn.png
+Edward Via - Carolinas,Spartansburg,SC,Suburban,Private,34.95460446,-81.94023273,DO,vcom-carolinas.png
+Edward Via - Louisiana,Monroe,LA,Rural,Private,32.52834414,-92.06667727,DO,vcom-la.png
+Edward Via - Virginia,Blacksburg,VA,Suburban,Private,37.19979499,-80.40588224,DO,vcom-va.png
+Idaho COM,Meridian,ID,Urban,Private,43.59467591,-116.3767157,DO,icom.jpeg
+Kansas City University COM,Kansas City,MO,Urban,Private,39.10741508,-94.56097594,DO,kcu-com.png
+Kansas COM,Wichita,KS,Urban,Private,37.684441,-97.33458023,DO,kansascom.png
+Lake Erie,Erie,PA,Suburban,Private,42.08021452,-80.10543462,DO,lecom.png
+Liberty,Lynchburg,VA,Rural,Private,37.33732494,-79.17964694,DO,lucom.jpeg
+Lincoln Memorial,Harrogate,TN,Rural,Private,36.57590407,-83.66011621,DO,lmu-dcom.jpeg
+Marian,Indianapolis,IN,Urban,Private,39.81097907,-86.20288087,DO,marian.jpeg
+Michigan State COM,East Lansing,MI,Urban,Public,42.72233662,-84.46409837,DO,msucom.png
+New York Institute of Technology,Old Westbury,NY,Urban,Private,40.8095165,-73.60552735,DO,nyitcom.png
+Noorda,Provo,UT,Suburban,Private,40.21163916,-111.6539733,DO,noorda.png
+Nova Southeastern COM,For Lauderdale,FL,Suburban,Private,26.08181983,-80.24970013,DO,nsu.png
+Ohio University,Athens,OH,Urban,Public,39.32923397,-82.10878921,DO,ou-hcom.jpeg
+Oklahoma State,Tulsa,OK,Urban,Public,36.1382576,-96.00553444,DO,osu-com.jpeg
+Pacific Northwest,Yakima,WA,Suburban,Private,46.60292761,-120.4558997,DO,pnwu-com.png
+Philadelphia COM,Philadelphia,PA,Urban,Private,40.00538069,-75.21640861,DO,pcom.png
+Philadelphia COM - Georgia,Suwanee,GA,Suburban,Private,34.01020481,-84.0609436,DO,pcom-ga.png
+Rocky Vista,Parker,CO,Suburban,Private,39.56345284,-104.8150721,DO,rvucom.jpeg
+Rowan,Stratford,NJ,Suburban,Private,39.83066054,-75.00679057,DO,rowan.png
+Sam Houston,Conroe,TX,Suburban,Public,30.26715287,-95.45885167,DO,shsu-com.png
+Tuoro - New York,New York,NY,Urban,Private,40.80906462,-73.95000935,DO,tuoro-ny.png
+Tuoro - California,Vallejo,CA,Suburban,Private,38.08546368,-122.263922,DO,tuoro-ca.png
+Tuoro - Nevada,Henderson,NV,Suburban,Private,36.04333978,-115.0240654,DO,tuoro-nv.png
+New England,Biddeford,ME,Rural,Private,43.45798852,-70.38694865,DO,une-com.png
+North Texas,Fort Worth,TX,Suburban,Public,32.74980618,-97.36956297,DO,unthsc-tcom.jpeg
+Kentucky COM,Pikeville,KY,Suburban,Private,37.47920485,-82.52037974,DO,kycom.jpeg
+Incarnate Word,San Antonio,TX,Urban,Private,29.34983381,-98.45380106,DO,uiwsom.png
+West Virginia SOM,Lewisburg,WV,Rural,Public,37.80410899,-80.43816216,DO,wvsom.jpeg
+Western University,Pomona,CA,Urban,Private,34.0582521,-117.7474604,DO,western.jpeg
+William Carey,Hattiesburg,MS,Rural,Private,31.3060013,-89.29302833,DO,wcu-com.png

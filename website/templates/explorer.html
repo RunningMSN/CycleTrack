@@ -11,23 +11,50 @@
         affiliated with any medical schools.
     </p>
 </div>
-<div class="container" style="padding-top:10px">
-    {% for key,value in schools.iterrows() %}
-    <li class="list-group-item">
-        <div class="row">
-            <div class="col-2">
-                <center>
-                    <img src="{{ url_for('static', filename='images/school_logos/' + value['logo_link']) }}" style="max-width:100px; max-height:100px;" width="100%" height="auto">
-                </center>
-            </div>
-            <div class="col-10">
-                <strong>{{ value['name'] }}</strong><br/>
-                {{ value['type'] }} Applicants: {{ value['reg_apps'] }}
-                {% if value['phd_apps'] > 0 %} | {{ value['type'] }}-PhD Applicants: {{ value['phd_apps'] }} {% endif %}
+<div class="container" style="padding:20px;background:#ebebeb">
+    <div class="row">
+        {% for key,value in schools.iterrows() %}
+        <div class="col" style="padding:10px; min-width: 350px;">
+            <div class="container" style="background:white; padding:10px">
+                    <div class="col d-flex align-items-center justify-content-center" style="height: 100px;">
+                        <img src="{{ url_for('static', filename='images/school_logos/' + value['logo_link']) }}" style="max-width:100px;max-height:100px" width="100%" height="auto">
+                    </div>
+                    <div>
+                        <center>
+                            <strong>{{ value['name'] }} ({{ value['type'] }})</strong>
+                            <br>
+                            {{ value['city'] }}, {{ value['state'] }} | {{ value['envt'] }} | {{ value['pub_pri'] }} Insitution
+                            <br>
+                            {{ value['reg_apps'] + value['phd_apps'] }} Applications Tracked {% if value['phd_apps'] > 0 %}({{ value['phd_apps'] }} {{ value['type'] }}-PhD){% endif %}
+                            <hr style="margin: 3px; width:70%">
+                            <strong>Median cGPA Accepted:</strong> {{ value['reg_med_gpa'] }}
+                            <br>
+                            <strong>Median MCAT Accepted:</strong> {{ value['reg_med_mcat'] }}
+                        </center>
+                    </div>
             </div>
         </div>
-
-    </li>
-    {% endfor %}
+        {% endfor %}
+    </div>
 </div>
+
+<!--<div class="container" style="padding-top:10px">-->
+<!--    {% for key,value in schools.iterrows() %}-->
+<!--    <li class="list-group-item">-->
+<!--        <div class="row">-->
+<!--            <div class="col-2">-->
+<!--                <center>-->
+<!--                    <img src="{{ url_for('static', filename='images/school_logos/' + value['logo_link']) }}" style="max-width:100px; max-height:100px;" width="100%" height="auto">-->
+<!--                </center>-->
+<!--            </div>-->
+<!--            <div class="col-10">-->
+<!--                <strong>{{ value['name'] }}</strong><br/>-->
+<!--                {{ value['type'] }} Applicants: {{ value['reg_apps'] }}-->
+<!--                {% if value['phd_apps'] > 0 %} | {{ value['type'] }}-PhD Applicants: {{ value['phd_apps'] }} {% endif %}-->
+<!--            </div>-->
+<!--        </div>-->
+
+<!--    </li>-->
+<!--    {% endfor %}-->
+<!--</div>-->
 {% endblock %}

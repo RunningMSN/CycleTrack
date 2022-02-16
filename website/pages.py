@@ -31,7 +31,7 @@ def explorer():
     schools = db.session.query(School.name.distinct())
     # Dict to convert into dataframe
     build_df = {'name': [], 'type': [], 'reg_apps': [], 'reg_med_mcat': [], 'reg_med_gpa': [],
-                'phd_apps': [], 'phd_med_mcat': [], 'phd_med_gpa': [], 'logo_link' : []}
+                'phd_apps': [], 'logo_link' : [], 'city' : [], 'state' : [], 'envt' : [], 'pub_pri' : []}
     # Fill data
     for school in schools:
         # Add school name
@@ -45,19 +45,20 @@ def explorer():
         # Build lookup for school info
         school_profiles = pd.read_csv('website/static/csv/SchoolProfiles.csv')
         school_info = school_profiles[school_profiles['School'] == school_name].reset_index()
-        # Grab logo
+        # Grab logo and school info
         build_df['logo_link'].append(school_info['Logo_File_Name'][0])
+        build_df['city'].append(school_info['City'][0])
+        build_df['state'].append(school_info['State'][0])
+        build_df['envt'].append(school_info['Envt_Type'][0])
+        build_df['pub_pri'].append(school_info['Private_Public'][0])
         # MD/DO Data
         build_df['reg_apps'].append(School.query.filter_by(name=school_name, phd=False).count())
-        build_df['reg_med_mcat'].append(None)
-        build_df['reg_med_gpa'].append(None)
+        build_df['reg_med_mcat'].append('XXX')
+        build_df['reg_med_gpa'].append('X.XX')
         # MD-PhD/DO-PhD data
         build_df['phd_apps'].append(School.query.filter_by(name=school_name, phd=True).count())
-        build_df['phd_med_mcat'].append(None)
-        build_df['phd_med_gpa'].append(None)
     # Generate dataframe
     df = pd.DataFrame(build_df).sort_values('name')
-    print(df)
     # Render page
     return render_template('explorer.html', user=current_user, schools=df)
 
