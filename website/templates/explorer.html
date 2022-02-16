@@ -45,24 +45,4 @@
         {% endfor %}
     </div>
 </div>
-
-<!--<div class="container" style="padding-top:10px">-->
-<!--    {% for key,value in schools.iterrows() %}-->
-<!--    <li class="list-group-item">-->
-<!--        <div class="row">-->
-<!--            <div class="col-2">-->
-<!--                <center>-->
-<!--                    <img src="{{ url_for('static', filename='images/school_logos/' + value['logo_link']) }}" style="max-width:100px; max-height:100px;" width="100%" height="auto">-->
-<!--                </center>-->
-<!--            </div>-->
-<!--            <div class="col-10">-->
-<!--                <strong>{{ value['name'] }}</strong><br/>-->
-<!--                {{ value['type'] }} Applicants: {{ value['reg_apps'] }}-->
-<!--                {% if value['phd_apps'] > 0 %} | {{ value['type'] }}-PhD Applicants: {{ value['phd_apps'] }} {% endif %}-->
-<!--            </div>-->
-<!--        </div>-->
-
-<!--    </li>-->
-<!--    {% endfor %}-->
-<!--</div>-->
 {% endblock %}
