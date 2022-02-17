@@ -66,7 +66,7 @@ def explorer():
         if request.form.get('school_type') != "All":
             df = df[df['type'] == request.form.get('school_type')]
         if request.form.get('state') != "All":
-            if request.form.get('state') != "Canada":
+            if request.form.get('state') != "Canada": # Will need to change this on implementing canadian schools
                 df = df[df['state'] == form_options.STATE_ABBREV[request.form.get('state')]]
 
     if len(df) == 0: df = None
