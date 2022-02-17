@@ -25,7 +25,7 @@ def index():
         graphJSON = None
     return render_template('index.html', user=current_user, user_count=user_count, app_count=app_count,graphJSON=graphJSON)
 
-@pages.route('/explorer')
+@pages.route('/explorer', methods=['GET', 'POST'])
 def explorer():
     # Get list of schools
     schools = db.session.query(School.name.distinct())
@@ -59,8 +59,18 @@ def explorer():
         build_df['phd_apps'].append(School.query.filter_by(name=school_name, phd=True).count())
     # Generate dataframe
     df = pd.DataFrame(build_df).sort_values('name')
+
+    # Perform filtering
+    if request.method == 'POST':
+        # Filter type
+        if request.form.get('school_type') != "All":
+            df = df[df['type'] == request.form.get('school_type')]
+        if request.form.get('state') != "All":
+            df = df[df['state'] == form_options.STATE_ABBREV[request.form.get('state')]]
+
+    if len(df) == 0: df = None
     # Render page
-    return render_template('explorer.html', user=current_user, schools=df)
+    return render_template('explorer.html', user=current_user, state_options=form_options.STATES_WITH_SCHOOLS, schools=df)
 
 @pages.route('/cycles', methods=['GET', 'POST'])
 @login_required
