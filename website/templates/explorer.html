@@ -80,10 +80,20 @@
                             {{ value['city'] }}, {{ value['state'] }} | {{ value['envt'] }} | {{ value['pub_pri'] }} Institution
                             <br>
                             {{ value['reg_apps'] + value['phd_apps'] }} Applications Tracked {% if value['phd_apps'] > 0 %}({{ value['phd_apps'] }} {{ value['type'] }}-PhD){% endif %}
-                            <!--<hr style="margin: 3px; width:70%">
-                            <strong>Median cGPA Accepted:</strong> {{ value['reg_med_gpa'] }}
+                            <hr style="margin: 3px; width:70%">
+                            <strong>Median cGPA Accepted: </strong>
+                            {% if value['reg_med_gpa'] == "X.XX" %}
+                                <a href="#" data-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">{{ value['reg_med_gpa'] }}</a>
+                            {% else %}
+                                {{ value['reg_med_gpa'] }}
+                            {% endif %}
                             <br>
-                            <strong>Median MCAT Accepted:</strong> {{ value['reg_med_mcat'] }}-->
+                            <strong>Median MCAT Accepted: </strong>
+                            {% if value['reg_med_mcat'] == "XXX" %}
+                                <a href="#" data-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">{{ value['reg_med_mcat'] }}</a>
+                            {% else %}
+                                {{ value['reg_med_mcat'] }}
+                            {% endif %}
                         </center>
                     </div>
             </div>

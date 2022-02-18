@@ -9,6 +9,7 @@ from .visualizations import dot, line, bar, sankey, map, agg_map
 import pandas as pd
 from .helpers import import_list_funcs
 import traceback
+import statistics
 
 pages = Blueprint('pages', __name__)
 
@@ -27,24 +28,18 @@ def index():
 
 @pages.route('/explorer', methods=['GET', 'POST'])
 def explorer():
-    # Get list of schools
-    schools = db.session.query(School.name.distinct())
-    # Dict to convert into dataframe
+    # Query database for schools
+    schools = db.session.query(School).group_by(School.name).all()
+    # Dataframe with info about schools
+    school_profiles = pd.read_csv('website/static/csv/SchoolProfiles.csv')
+    # Dict to convert into dataframe with final results
     build_df = {'name': [], 'type': [], 'reg_apps': [], 'reg_med_mcat': [], 'reg_med_gpa': [],
                 'phd_apps': [], 'logo_link' : [], 'city' : [], 'state' : [], 'envt' : [], 'pub_pri' : []}
-    # Fill data
     for school in schools:
-        # Add school name
-        school_name = school[0]
-        build_df['name'].append(school_name)
-        # School type
-        if school[0] in form_options.MD_SCHOOL_LIST:
-            build_df['type'].append('MD')
-        else:
-            build_df['type'].append('DO')
+        build_df['name'].append(school.name)
+        build_df['type'].append(school.school_type)
         # Build lookup for school info
-        school_profiles = pd.read_csv('website/static/csv/SchoolProfiles.csv')
-        school_info = school_profiles[school_profiles['School'] == school_name].reset_index()
+        school_info = school_profiles[school_profiles['School'] == school.name].reset_index()
         # Grab logo and school info
         build_df['logo_link'].append(school_info['Logo_File_Name'][0])
         build_df['city'].append(school_info['City'][0])
@@ -52,11 +47,27 @@ def explorer():
         build_df['envt'].append(school_info['Envt_Type'][0])
         build_df['pub_pri'].append(school_info['Private_Public'][0])
         # MD/DO Data
-        build_df['reg_apps'].append(School.query.filter_by(name=school_name, phd=False).count())
-        build_df['reg_med_mcat'].append('XXX')
-        build_df['reg_med_gpa'].append('X.XX')
+        query_school_reg = School.query.filter_by(name=school.name, phd=False)
+        build_df['reg_apps'].append(query_school_reg.count())
+        # Store MCATs and cGPAs for the school
+        mcats = []; cgpas = []
+        # Grab MCATs and cGPAs
+        for entry in query_school_reg:
+            cycle = Cycle.query.filter_by(id=entry.cycle_id).first()
+            if cycle.mcat_total: mcats.append(cycle.mcat_total)
+            if cycle.cgpa: cgpas.append(cycle.cgpa)
+        if len(mcats) >= 5:
+            build_df['reg_med_mcat'].append(str(statistics.median(mcats)))
+        else:
+            build_df['reg_med_mcat'].append('XXX')
+        if len(cgpas) >= 5:
+            build_df['reg_med_gpa'].append(str(statistics.median(cgpas)))
+        else:
+            build_df['reg_med_gpa'].append('X.XX')
         # MD-PhD/DO-PhD data
-        build_df['phd_apps'].append(School.query.filter_by(name=school_name, phd=True).count())
+        query_school_phd = School.query.filter_by(name=school.name, phd=True)
+        build_df['phd_apps'].append(query_school_phd.count())
+
     # Generate dataframe
     df = pd.DataFrame(build_df).sort_values('name')
 
