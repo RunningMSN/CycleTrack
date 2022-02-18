@@ -25,7 +25,9 @@
                     </button>
                 </td>
                 <td>
+                    <a href="{{ url_for('pages.explorer') }}/{{ school.name }}" style="color:black;text-decoration: none">
                     {{ school.name }} ({% if school.school_type == "MD" %}MD{% else %}DO{% endif %}{% if school.phd %}-PhD{% endif %})
+                    </a>
                 </td>
                 <td>
                     {% if school.application_complete %}
@@ -65,7 +67,9 @@
                     </button>
                 </td>
                 <td>
+                    <a href="{{ url_for('pages.explorer') }}/{{ school.name }}" style="color:black;text-decoration: none">
                     {{ school.name }} ({% if school.school_type == "MD" %}MD{% else %}DO{% endif %}{% if school.phd %}-PhD{% endif %})
+                    </a>
                 </td>
                 <td>
                     {% if school.secondary_received %}
@@ -128,7 +132,9 @@
                     </button>
                 </td>
                 <td>
+                    <a href="{{ url_for('pages.explorer') }}/{{ school.name }}" style="color:black;text-decoration: none">
                     {{ school.name }} ({% if school.school_type == "MD" %}MD{% else %}DO{% endif %}{% if school.phd %}-PhD{% endif %})
+                    </a>
                 </td>
                 <td>
                     {% if school.primary %}

@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
-{% block title %} {{ school_name }} {% endblock %}
+{% block title %} {{ school_info['School'][0] }} {% endblock %}
 {% block content %}
 <!-- SCHOOL LIST MANAGEMENT -->
 <div class="container" style="padding-top:10px">
-    <div class="row" id="information">
+    <div class="row" id="information" style="padding: 10px">
         <div class="col-2 d-flex align-items-center justify-content-center">
             <center>
                 <img src="{{ url_for('static', filename='images/school_logos/' + school_info['Logo_File_Name'][0]) }}" style="max-width:150px;max-height:150px" width="100%" height="auto">
