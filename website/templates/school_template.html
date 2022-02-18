@@ -3,7 +3,29 @@
 {% block content %}
 <!-- SCHOOL LIST MANAGEMENT -->
 <div class="container" style="padding-top:10px">
-    <h2>{{ school_name }}</h2>
-    This feature requires more data. Invite other future doctors to track their cycles using CycleTrack to expedite development!
+    <div class="row" id="information">
+        <div class="col-2 d-flex align-items-center justify-content-center">
+            <center>
+                <img src="{{ url_for('static', filename='images/school_logos/' + school_info['Logo_File_Name'][0]) }}" style="max-width:150px;max-height:150px" width="100%" height="auto">
+            </center>
+            </div>
+        <div class="col-10">
+            <h2>{{ school_info['School'][0] }}</h2>
+            <strong>Location: </strong> <a href="https://www.google.com/maps/search/?api=1&query={{ school_info['Lat'][0] }},{{ school_info['Long'][0] }}">{{ school_info['City'][0] }}, {{ school_info['State'][0] }}</a>
+            <br />
+            <strong>Campus Environment: </strong> {{ school_info['Envt_Type'][0] }} Campus
+            <br />
+            <strong>School Type: </strong> {{ school_info['Private_Public'][0] }} Institution
+            <br />
+            <strong>Program Type: </strong> {{ school_info['MD_or_DO'][0] }}
+            <br />
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="bg-warning container">
+            This feature requires more data. Invite other future doctors to track their cycles using CycleTrack to expedite development!
+        </div>
+    </div>
 </div>
 {% endblock %}
