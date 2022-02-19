@@ -1,4 +1,5 @@
 from website import create_app
+from flask_mail import Mail
 
 app = create_app()
 

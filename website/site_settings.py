@@ -1,2 +1,7 @@
-DB_NAME = 'database.db'
-SECRET_KEY = 'my_$s3cr3t_k3y'
+DB_NAME = ''
+SECRET_KEY = ''
+MAIL_SERVER = ''
+MAIL_USERNAME = ''
+MAIL_PASSWORD = ''
+MAIL_PORT = 465
+MAIL_USE_SSL = True

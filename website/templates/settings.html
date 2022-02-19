@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %}Settings{% endblock %}
+{% block content %}
+<div class="container">
+    <form method="POST">
+        <h2 style="padding-top: 10px">Account Settings</h2>
+        <p>You may change any account settings on this page. Skip any fields you do not wish to change.</p>
+        <table>
+            <tr>
+                <td>Change Email: </td>
+                <td><input type="email" class="form-control" id="email" name="email" value="{{ user.email }}" /></td>
+            </tr>
+            <tr><td style="height:20px"></td></tr>
+            <tr>
+                <td>Change Password: </td>
+                <td><input type="password" class="form-control" name="new_password" id="new_password" /></td>
+            </tr>
+            <tr>
+                <td>Confirm New Password: </td>
+                <td><input type="password" class="form-control" name="new_password_confirm" id="new_password_confirm" /></td>
+            </tr>
+            <tr><td style="height:20px"></td></tr>
+            <tr>
+                <td>Current Password: </td>
+                <td><input type="password" class="form-control" name="current_password" id="current_password" /></td>
+            </tr>
+        </table>
+        <small>You must enter your password to confirm any changes.</small><br />
+        <button type="submit" class="btn btn-primary">Submit Changes</button>
+    </form>
+</div>
+{% endblock %}

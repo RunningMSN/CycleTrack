@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, flash, jsonify, redirect, url_for, Response
 from flask_login import current_user, login_required
 from . import db, form_options
-from .models import User,Cycle, School
+from .models import User, Cycle, School
 import json
 from datetime import datetime, date
 import re

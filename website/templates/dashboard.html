@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
+{% if user.email_verified %}
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#dashnav"
@@ -43,4 +44,13 @@
 </nav>
 {% block dash_content %}
 {% endblock %}
+{% else %}
+<div class="container" style="padding-top: 10px">
+    <h2>Hi! We're so glad you're here!</h2>
+    <p>Before you can begin tracking your applications, please activate your account by clicking the link sent to {{ user.email }}. If you are having trouble finding the link, check your junk mail and/or
+        <a href="{{ url_for('authentication.resend_email', email=user.email) }}">resend validation.</a></p>
+    <p>If you made a mistake while entering your email, no problem. You can change your email on file by visiting the
+    account settings page.</p>
+</div>
+{% endif %}
 {% endblock %}
