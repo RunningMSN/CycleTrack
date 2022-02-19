@@ -19,12 +19,27 @@
             <br />
             <strong>Program Type: </strong> {{ school_info['MD_or_DO'][0] }}
             <br />
-            <strong>AAMC Data</strong>
+            <strong>AAMC Data: </strong>
             <br />
-            MD
-            {{table_md | safe}}
-            MD/PhD
-            {{table_mdphd | safe}}
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item">
+                  <a class="nav-link active" id="md-tab" data-toggle="tab" href="#md" role="tab" aria-controls="md" aria-selected="true">MD</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" id="mdphd-tab" data-toggle="tab" href="#mdphd" role="tab" aria-controls="mdphd" aria-selected="false">MD/PhD</a>
+                </li>
+
+              </ul>
+              <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active" id="md" role="tabpanel" aria-labelledby="md-tab">
+                    {{table_md | safe}}
+                </div>
+                <div class="tab-pane fade" id="mdphd" role="tabpanel" aria-labelledby="mdphd-tab">                    
+                    {{table_mdphd | safe}}
+                </div>
+
+              </div>
+
 
         </div>
     </div>
