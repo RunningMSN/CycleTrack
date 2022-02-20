@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 {% block title %} {{ school_info['School'][0] }} {% endblock %}
 {% block content %}
-<!-- SCHOOL LIST MANAGEMENT -->
 <div class="container" style="padding-top:10px">
     <div class="row" id="information" style="padding: 10px">
         <div class="col-2 d-flex align-items-center justify-content-center">
@@ -18,34 +17,60 @@
             <strong>School Type: </strong> {{ school_info['Private_Public'][0] }} Institution
             <br />
             <strong>Program Type: </strong> {{ school_info['MD_or_DO'][0] }}
-            <br />
-            <strong>AAMC Data: </strong>
-            <br />
-            <ul class="nav nav-tabs" id="myTab" role="tablist">
-                <li class="nav-item">
-                    <a class="nav-link active" id="md-tab" data-toggle="tab" href="#md" role="tab" aria-controls="md"
-                       aria-selected="true">MD</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="mdphd-tab" data-toggle="tab" href="#mdphd" role="tab" aria-controls="mdphd"
-                       aria-selected="false">MD/PhD</a>
-                </li>
-            </ul>
-            <div class="tab-content" id="myTabContent">
-                <div class="tab-pane fade show active" id="md" role="tabpanel" aria-labelledby="md-tab">
-                    {{table_md | safe}}
-                </div>
-                <div class="tab-pane fade" id="mdphd" role="tabpanel" aria-labelledby="mdphd-tab">
-                    {{table_mdphd | safe}}
-                </div>
-
-            </div>
         </div>
     </div>
     <div class="row">
-        <div class="bg-warning container">
-            This feature requires more data. Invite other future doctors to track their cycles using CycleTrack to expedite development!
+        <div class="bg-warning container" style="margin-top:10px; margin-bottom:10px">
+            This feature is a work in progress and requires more data. Invite other future doctors to track their cycles using CycleTrack to expedite development!
         </div>
     </div>
+    <div class="row">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="md-tab" data-toggle="tab" href="#md" role="tab" aria-controls="md"
+                       aria-selected="true"><h6>{{ school_info['MD_or_DO'][0] }}</h6></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="mdphd-tab" data-toggle="tab" href="#mdphd" role="tab" aria-controls="mdphd"
+                       aria-selected="false"><h6>{{ school_info['MD_or_DO'][0] }}/PhD</h6></a>
+                </li>
+            </ul>
+            <div class="tab-content" id="myTabContent" style="padding:10px; border-style: none solid solid; border-color:#dee2e6; border-width:1px">
+                <div class="tab-pane fade show active" id="md" role="tabpanel" aria-labelledby="md-tab">
+                    {% if cycle_status_reg_json %}
+                    <div id="reg_status"></div>
+                    {% endif %}
+
+                    <strong>AAMC Data: </strong><br />
+                    {{table_md | safe}}
+                </div>
+                <div class="tab-pane fade" id="mdphd" role="tabpanel" aria-labelledby="mdphd-tab">
+                    {% if cycle_status_phd_json %}
+                    <div id="phd_status"></div>
+                    {% endif %}
+
+                    <strong>AAMC Data: </strong><br />
+                    {{table_mdphd | safe}}
+                </div>
+            </div>
+    </div>
 </div>
+
+<!-- PREPARE GRAPHS -->
+{% if cycle_status_reg_json %}
+    <script>
+    var reg_graph = {{ cycle_status_reg_json | safe }};
+    reg_graph.config = {'responsive': true, 'displaylogo': false}
+    Plotly.newPlot('reg_status', reg_graph);
+    </script>
+{% endif %}
+{% if cycle_status_phd_json %}
+    <script>
+    var phd_graph = {{ cycle_status_phd_json | safe }};
+    phd_graph.config = {'responsive': true, 'displaylogo': false}
+    Plotly.newPlot('phd_status', phd_graph);
+    </script>
+{% endif %}
+
 {% endblock %}
+

@@ -5,7 +5,7 @@ from .models import User, Cycle, School
 import json
 from datetime import datetime, date
 import re
-from .visualizations import dot, line, bar, sankey, map, agg_map, school_table
+from .visualizations import dot, line, bar, sankey, map, agg_map, school_table, school_graphs
 import pandas as pd
 from .helpers import import_list_funcs
 import traceback
@@ -599,5 +599,11 @@ def explore_school(school_name):
     school_profiles = pd.read_csv('website/static/csv/SchoolProfiles.csv')
     school_info = school_profiles[school_profiles['School'] == school_name].reset_index()
     table1, table2 = school_table.generate(school_name)
+
+    # Get current cycle status graph
+    cycle_status_reg_json = school_graphs.cycle_progress(school_name, 2022, False)
+    cycle_status_phd_json = school_graphs.cycle_progress(school_name, 2022, True)
+
     return render_template('school_template.html', user=current_user, school_info=school_info, table_md=table1,
-                           table_mdphd=table2)
+                           table_mdphd=table2, cycle_status_reg_json=cycle_status_reg_json,
+                           cycle_status_phd_json=cycle_status_phd_json)
