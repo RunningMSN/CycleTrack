@@ -18,6 +18,11 @@ def cycle_progress(name, year, phd):
                 dates["Interview Received"].append(school.interview_received)
             if school.acceptance:
                 dates["Acceptance Received"].append(school.acceptance)
+
+    # No data to display
+    if len(dates["Secondary Received"]) == 0 and len(dates["Interview Received"]) == 0 and len(dates["Acceptance Received"]) == 0:
+        return None
+
     # Build traces
     fig = go.Figure()
     fig.add_trace(go.Histogram(x=dates["Secondary Received"],
@@ -40,7 +45,7 @@ def cycle_progress(name, year, phd):
                                opacity=0.75))
 
     # Overlay both histograms
-    fig.update_layout(barmode='overlay', bargap=0, margin=dict(l=0, r=0, t=0, b=0), height=200)
+    fig.update_layout(barmode='overlay', bargap=0, margin=dict(l=0, r=0, t=0, b=0), height=200, autosize=True)
 
     graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
     return graphJSON
