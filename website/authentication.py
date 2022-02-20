@@ -126,7 +126,7 @@ def send_verification(email):
     if '%40' in email:
         email = email.replace('%40', '@')
     token = s.dumps(email, salt='email-confirmation')
-    verification_email = Message('Confirm CycleTrack Email', sender='CycleTrack@docs2be.org', recipients=[email])
+    verification_email = Message('Confirm CycleTrack Email', sender=('CycleTrack', 'CycleTrack@docs2be.org'), recipients=[email])
     link = url_for('authentication.confirm_email', token=token, _external=True)
-    verification_email.body = f'You are receiving this email because you recently registered or changed your email address on CycleTrack. Please click the following verification link to confirm your email address.\n\nYour verification link is: {link}\n\nIf you did not request this email, you may simply ignore it.'
+    verification_email.body = f'Hi! You are receiving this email because you recently registered or changed your email address on CycleTrack. Please click the following verification link to confirm your email address.\n\nYour verification link is: {link}\n\nIf you did not request this email, you may ignore it.'
     mail.send(verification_email)
