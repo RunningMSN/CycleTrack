@@ -2,9 +2,87 @@
 {% block title %}About CycleTrack{% endblock %}
 {% block content %}
 <div class="container">
-    <h2 style="padding-top: 10px" id="about">What is CycleTrack?</h2>
-    <p>
-        Coming soon.
-    </p>
+    <h1 style="padding-top: 10px">CycleTrack does a lot of stuff.</h1>
+    <h4>1. Application Tracking</h4>
+    <p>For each application cycle you apply, you can create a list of schools. You can generate your school list inside
+        of CycleTrack or import an existing one from a spreadsheet. Throughout the cycle, keep track of your
+        applications by entering dates into the application tracker.</p>
+    <h4>2. Cycle Visualizing</h4>
+    <p>Creating beautiful visualizations of your cycle progress has never been easier. All of our graphs are interactive
+        to help you explore your application cycle. Click the buttons to check out some examples.</p>
+    <div style="padding-bottom:10px">
+        <a class="btn btn-primary" data-toggle="collapse" href="#line" role="button" aria-expanded="true"
+           aria-controls="line" style="margin:1px">
+           Line
+        </a>
+        <div class="collapse" id="line">
+            <div class="card container" style="margin-top:10px; margin-bottom:10px">
+                <center><div id="line_graph"></div></center>
+            </div>
+        </div>
+        <a class="btn btn-primary" data-toggle="collapse" href="#bar" role="button" aria-expanded="false"
+           aria-controls="bar" style="margin:1px">
+           Bar
+        </a>
+        <div class="collapse" id="bar">
+            <div class="card container" style="margin-top:10px; margin-bottom:10px">
+                <center><div id="bar_graph"></div></center>
+            </div>
+        </div>
+        <a class="btn btn-primary" data-toggle="collapse" href="#sankey" role="button" aria-expanded="false"
+           aria-controls="sankey" style="margin:1px">
+           Sankey
+        </a>
+        <div class="collapse" id="sankey">
+            <div class="card container" style="margin-top:10px; margin-bottom:10px">
+                <center><div id="sankey_graph"></div></center>
+            </div>
+        </div>
+        <a class="btn btn-primary" data-toggle="collapse" href="#map" role="button" aria-expanded="false"
+           aria-controls="map" style="margin:1px">
+           Map
+        </a>
+        <div class="collapse" id="map">
+            <div class="card container" style="margin-top:10px; margin-bottom:10px">
+                <center><div id="map_plot"></div></center>
+            </div>
+        </div>
+    </div>
+
+    <h4>3. Data Crowdsourcing</h4>
+    <p>Data entered into CycleTrack is used to help make the application cycle more transparent. We have created the
+    <a href="{{ url_for('pages.explorer') }}">school explorer</a> which presents aggregated data about the admissions
+    process for individual medical schools. Applicant anonymity is always maintained!</p>
 </div>
+
+<script>
+    fetch('{{ url_for('static', filename='sample_graphs/line.JSON') }}')
+        .then(response => response.json())
+        .then(data => {
+            data.config = {'responsive': true, 'displaylogo': false};
+            Plotly.newPlot('line_graph', data);
+        })
+        .catch(error => console.log(error));
+    fetch('{{ url_for('static', filename='sample_graphs/bar.JSON') }}')
+        .then(response => response.json())
+        .then(data => {
+            data.config = {'responsive': true, 'displaylogo': false};
+            Plotly.newPlot('bar_graph', data);
+        })
+        .catch(error => console.log(error));
+    fetch('{{ url_for('static', filename='sample_graphs/sankey.JSON') }}')
+        .then(response => response.json())
+        .then(data => {
+            data.config = {'responsive': true, 'displaylogo': false};
+            Plotly.newPlot('sankey_graph', data);
+        })
+        .catch(error => console.log(error));
+    fetch('{{ url_for('static', filename='sample_graphs/map.JSON') }}')
+        .then(response => response.json())
+        .then(data => {
+            data.config = {'responsive': true, 'displaylogo': false};
+            Plotly.newPlot('map_plot', data);
+        })
+        .catch(error => console.log(error));
+</script>
 {% endblock %}
