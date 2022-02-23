@@ -53,6 +53,45 @@
                         applicants to track their cycles for this graph to appear.</p>
                         {% endif %}
                     </div>
+                    <div style="padding:10px">
+                        <h5>Historic Information</h5>
+                        <p>The information in this section contains data collected by CycleTrack over the past 3
+                        application cycles (including current cycle). If you think there is additional useful
+                        information we can display on this page, please contact us!</p>
+                        <!-- INTERNAL TABS W/ INTERVIEW + ACCEPTANCE INFO -->
+                        <ul class="nav nav-tabs" id="reg_tabs" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="reg_interviews_tab" data-toggle="tab" href="#reg_interviews" role="tab" aria-controls="reg_interviews"
+                                   aria-selected="true">Interviews</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="reg_acceptances_tab" data-toggle="tab" href="#reg_acceptances" role="tab" aria-controls="reg_acceptances"
+                                   aria-selected="false">Acceptances</a>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content" id="reg_tabs_content" style="padding:10px; border-style: none solid solid; border-color:#dee2e6; border-width:1px">
+                            <div class="tab-pane fade show active" id="reg_interviews" role="tabpanel" aria-labelledby="reg_interviews">
+                                <strong>Interviews Tracked: </strong>XXX<br />
+                                <strong>Percent Applicants Interviewed: </strong>XXX<br />
+                                <strong>Median cGPA (Range): </strong>XXX<br />
+                                <strong>Median sGPA (Range): </strong>XXX<br />
+                                <strong>Median MCAT (Range): </strong>XXX<br />
+                                [graph of interview offers over time per cycle goes here]
+
+                            </div>
+                            <div class="tab-pane fade" id="reg_acceptances" role="tabpanel" aria-labelledby="reg_acceptances">
+                                <strong>Acceptances Tracked: </strong>XXX<br />
+                                <strong>Percent Accepted Post-Interview: </strong>XXX<br />
+                                <strong>Percent Accepted From Waitlist: </strong>XXX<br />
+                                <strong>Median cGPA (Range): </strong>XXX<br />
+                                <strong>Median sGPA (Range): </strong>XXX<br />
+                                <strong>Median MCAT (Range): </strong>XXX<br />
+                                [graph of acceptance offers over time per cycle goes here]
+                            </div>
+                        </div>
+                    </div>
+
 
                     {% if school_info['MD_or_DO'][0] == "MD" %}
                     <div style="padding:10px;">
