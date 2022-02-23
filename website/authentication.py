@@ -12,6 +12,10 @@ s = URLSafeTimedSerializer(site_settings.SECRET_KEY)
 
 @authentication.route('/login', methods=['GET', 'POST'])
 def login():
+    # If user already logged in, redirect
+    if current_user.is_authenticated:
+        return redirect(url_for('pages.cycles'))
+
     if request.method == 'POST':
         email = request.form.get('email')
         password = request.form.get('password')
@@ -36,6 +40,10 @@ def logout():
 
 @authentication.route('/register', methods=['GET', 'POST'])
 def register():
+    # If user already logged in, redirect
+    if current_user.is_authenticated:
+        return redirect(url_for('pages.cycles'))
+
     if request.method == 'POST':
         email = request.form.get('email')
         password1 = request.form.get('password1')
