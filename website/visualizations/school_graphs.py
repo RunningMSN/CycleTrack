@@ -3,41 +3,33 @@ import plotly.graph_objects as go
 import json
 from ..models import Cycle, School
 from . import converters
+import pandas as pd
 
 
-def cycle_progress(name, year, phd):
-    schools = School.query.filter_by(name=name, phd=phd).all()
-    dates = {"Secondary Received" : [], "Interview Received" : [], "Acceptance Received" : []}
-    # Filter schools by criteria
-    for school in schools:
-        cycle = Cycle.query.filter_by(id=school.cycle_id).first()
-        if cycle.cycle_year == year:
-            if school.secondary_received:
-                dates["Secondary Received"].append(school.secondary_received)
-            if school.interview_received:
-                dates["Interview Received"].append(school.interview_received)
-            if school.acceptance:
-                dates["Acceptance Received"].append(school.acceptance)
+def cycle_progress(data):
+    # Select relevant columns and drop any empty rows
+    data = data[['secondary_received', 'interview_received', 'acceptance']]
+    data = data.dropna(axis=0, how='all')
 
     # No data to display
-    if len(dates["Secondary Received"]) == 0 and len(dates["Interview Received"]) == 0 and len(dates["Acceptance Received"]) == 0:
+    if len(data) == 0:
         return None
 
     # Build traces
     fig = go.Figure()
-    fig.add_trace(go.Histogram(x=dates["Secondary Received"],
+    fig.add_trace(go.Histogram(x=data.secondary_received,
                                name='Secondary Received',
                                xbins=dict(size=86400000),
                                autobinx=False,
                                marker_color = converters.fig_colors["secondary_received"],
                                opacity=0.75))
-    fig.add_trace(go.Histogram(x=dates["Interview Received"],
+    fig.add_trace(go.Histogram(x=data.interview_received,
                                name='Interview Received',
                                xbins=dict(size=86400000),
                                autobinx=False,
                                marker_color = converters.fig_colors["interview_received"],
                                opacity=0.75))
-    fig.add_trace(go.Histogram(x=dates["Acceptance Received"],
+    fig.add_trace(go.Histogram(x=data.acceptance,
                                name='Acceptance Received',
                                xbins=dict(size=86400000),
                                autobinx=False,

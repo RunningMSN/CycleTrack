@@ -597,19 +597,29 @@ def delete_school():
 
 @pages.route('/explorer/<school_name>')
 def explore_school(school_name):
+    # Find school
     school_name = school_name.replace('%20', ' ')
     if school_name not in form_options.MD_SCHOOL_LIST and school_name not in form_options.DO_SCHOOL_LIST:
         flash(f'Could not find {school_name}. Please navigate to your school using the explorer.', category='error')
         return redirect(url_for('pages.explorer'))
 
+    # Build AAMC tables
     school_profiles = pd.read_csv('website/static/csv/SchoolProfiles.csv')
     school_info = school_profiles[school_profiles['School'] == school_name].reset_index()
-    table1, table2 = school_table.generate(school_name)
+    table_md, table_mdphd = school_table.generate(school_name)
+
+    # Query info about the school
+    query = db.session.query(School, Cycle).filter(School.name == school_name).join(Cycle, School.cycle_id == Cycle.id)
+    reg_data = pd.read_sql(query.filter(School.phd == False).statement, db.session.bind)
+    phd_data = pd.read_sql(query.filter(School.phd == True).statement, db.session.bind)
+
+    # Dictionaries with all information about the school
+    reg_info = {'cycle_status_json' : school_graphs.cycle_progress(reg_data)}
+    phd_info = {'cycle_status_json' : school_graphs.cycle_progress(phd_data)}
 
     # Get current cycle status graph
-    cycle_status_reg_json = school_graphs.cycle_progress(school_name, 2022, False)
-    cycle_status_phd_json = school_graphs.cycle_progress(school_name, 2022, True)
+    cycle_status_reg_json = school_graphs.cycle_progress(reg_data)
+    cycle_status_phd_json = school_graphs.cycle_progress(phd_data)
 
-    return render_template('school_template.html', user=current_user, school_info=school_info, table_md=table1,
-                           table_mdphd=table2, cycle_status_reg_json=cycle_status_reg_json,
-                           cycle_status_phd_json=cycle_status_phd_json)
+    return render_template('school_template.html', user=current_user, school_info=school_info, table_md=table_md,
+                           table_mdphd=table_mdphd, reg_info=reg_info, phd_info=phd_info)
