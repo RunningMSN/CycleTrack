@@ -112,13 +112,14 @@ def reset_password(token):
                 db.session.commit()
                 login_user(user, remember=True)
                 return redirect(url_for('pages.cycles'))
-            except BadTimeSignature:
+            except Exception as e:
                 flash('We encountered an error resetting your password. Please try again.', category='error')
                 return redirect(url_for('authentication.forgot_password'))
 
     try:
+        email = s.loads(token, salt='reset-password')
         return render_template('change_password.html', user=current_user)
-    except BadTimeSignature:
+    except Exception as e:
         flash('We encountered an error resetting your password. Please try again.', category='error')
         return redirect(url_for('authentication.forgot_password'))
 
