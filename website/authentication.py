@@ -47,10 +47,8 @@ def register():
             flash('Email already in use.', category='error')
         elif len(email) < 4:
             flash('Email must be greater than 3 characters.', category='error')
-        elif password1 != password2:
-            flash('Passwords don\'t match.', category='error')
-        elif len(password1) < 7:
-            flash('Password must be at least 7 characters.', category='error')
+        elif not password_meets_criteria(password1, password2):
+            pass
         else:
             # add user to database
             new_user = User(email=email, password=generate_password_hash(password1, method='sha256'))
@@ -79,10 +77,50 @@ def confirm_email(token):
         flash('This email has already been verified!', category='error')
         return redirect(url_for('pages.index'))
 
-@authentication.route('resend_email/<email>')
+@authentication.route('/resend_email/<email>')
 def resend_email(email):
     send_verification(email)
     return redirect(url_for('pages.cycles'))
+
+@authentication.route('/forgot_password', methods=['GET', 'POST'])
+def forgot_password():
+    if request.method == "POST":
+        flash('If your email is registered, you will receive an email from us shortly.', category='success')
+        email = request.form.get('email')
+        if User.query.filter_by(email=email).first():
+            if '%40' in email:
+                email = email.replace('%40', '@')
+            token = s.dumps(email, salt='reset-password')
+            verification_email = Message('Reset CycleTrack Password', sender=('CycleTrack', 'CycleTrack@docs2be.org'),
+                                         recipients=[email])
+            link = url_for('authentication.reset_password', token=token, _external=True)
+            verification_email.body = f'You are receiving this email because you requested to reset your password on CycleTrack. Please click the following link to reset your password.\n\nReset Password: {link}\n\nIf you did not request this email, please ignore it.'
+            mail.send(verification_email)
+    return render_template('forgot_password.html', user=current_user)
+
+@authentication.route('/reset_password/<token>', methods=['GET', 'POST'])
+def reset_password(token):
+    if request.method == "POST":
+        password = request.form.get('password')
+        confirm_password = request.form.get('confirm_password')
+
+        if password_meets_criteria(password, confirm_password):
+            try:
+                email = s.loads(token, salt='reset-password')
+                user = User.query.filter_by(email=email).first()
+                user.password = generate_password_hash(password, method='sha256')
+                db.session.commit()
+                login_user(user, remember=True)
+                return redirect(url_for('pages.cycles'))
+            except BadTimeSignature:
+                flash('We encountered an error resetting your password. Please try again.', category='error')
+                return redirect(url_for('authentication.forgot_password'))
+
+    try:
+        return render_template('change_password.html', user=current_user)
+    except BadTimeSignature:
+        flash('We encountered an error resetting your password. Please try again.', category='error')
+        return redirect(url_for('authentication.forgot_password'))
 
 @authentication.route('settings', methods=['GET', 'POST'])
 @login_required
@@ -130,3 +168,12 @@ def send_verification(email):
     link = url_for('authentication.confirm_email', token=token, _external=True)
     verification_email.body = f'Hi! You are receiving this email because you recently registered or changed your email address on CycleTrack. Please click the following verification link to confirm your email address.\n\nYour verification link is: {link}\n\nIf you did not request this email, you may ignore it.'
     mail.send(verification_email)
+
+def password_meets_criteria(password, confirm_password):
+    if password != confirm_password:
+        flash("Passwords did not match.", category='error')
+        return False
+    elif len(password) < 7:
+        flash("Password must be at least 7 characters.", category='error')
+        return False
+    return True
