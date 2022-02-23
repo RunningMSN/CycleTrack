@@ -17,6 +17,7 @@ pages = Blueprint('pages', __name__)
 def index():
     user_count = db.session.query(User.id).count()
     app_count = db.session.query(School.id).count()
+    school_count = db.session.query(School).group_by(School.name).count()
     map_data = pd.read_sql(School.query.statement, db.session.bind).drop(['id','cycle_id','user_id','school_type','phd'], axis=1)
     # Drop empty columns
     map_data = map_data.dropna(axis=1, how='all')
@@ -24,7 +25,12 @@ def index():
         graphJSON = agg_map.generate(map_data)
     else:
         graphJSON = None
-    return render_template('index.html', user=current_user, user_count=user_count, app_count=app_count,graphJSON=graphJSON)
+    return render_template('index.html', user=current_user, user_count=user_count, school_count=school_count,
+                           app_count=app_count, graphJSON=graphJSON)
+
+@pages.route('/about')
+def about():
+    return render_template('about.html', user=current_user)
 
 @pages.route('/explorer', methods=['GET', 'POST'])
 def explorer():
