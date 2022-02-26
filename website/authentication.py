@@ -1,3 +1,4 @@
+import itsdangerous
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from .models import User
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -102,7 +103,7 @@ def forgot_password():
             verification_email = Message('Reset CycleTrack Password', sender=('CycleTrack', 'CycleTrack@docs2be.org'),
                                          recipients=[email])
             link = url_for('authentication.reset_password', token=token, _external=True)
-            verification_email.body = f'You are receiving this email because you requested to reset your password on CycleTrack. Please click the following link to reset your password.\n\nReset Password: {link}\n\nIf you did not request this email, please ignore it.'
+            verification_email.body = f'You are receiving this email because you requested to reset your password on CycleTrack. Please click the following link to reset your password. This will expire in 15 minutes.\n\nReset Password: {link}\n\nIf you did not request this email, please ignore it.'
             mail.send(verification_email)
     return render_template('forgot_password.html', user=current_user)
 
@@ -114,19 +115,25 @@ def reset_password(token):
 
         if password_meets_criteria(password, confirm_password):
             try:
-                email = s.loads(token, salt='reset-password')
+                email = s.loads(token, salt='reset-password', max_age=900)
                 user = User.query.filter_by(email=email).first()
                 user.password = generate_password_hash(password, method='sha256')
                 db.session.commit()
                 login_user(user, remember=True)
                 return redirect(url_for('pages.cycles'))
+            except itsdangerous.SignatureExpired:
+                flash('Your password reset request has expired. Please request another link.', category='error')
+                return redirect(url_for('authentication.forgot_password'))
             except Exception as e:
                 flash('We encountered an error resetting your password. Please try again.', category='error')
                 return redirect(url_for('authentication.forgot_password'))
 
     try:
-        email = s.loads(token, salt='reset-password')
+        email = s.loads(token, salt='reset-password', max_age=900)
         return render_template('change_password.html', user=current_user)
+    except itsdangerous.SignatureExpired:
+        flash('Your password reset request has expired. Please request another link.', category='error')
+        return redirect(url_for('authentication.forgot_password'))
     except Exception as e:
         flash('We encountered an error resetting your password. Please try again.', category='error')
         return redirect(url_for('authentication.forgot_password'))
