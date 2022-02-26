@@ -7,7 +7,7 @@ from datetime import datetime, date
 import re
 from .visualizations import dot, line, bar, sankey, map, agg_map, school_table, school_graphs
 import pandas as pd
-from .helpers import import_list_funcs
+from .helpers import import_list_funcs, school_info_calcs
 import traceback
 import statistics
 
@@ -548,7 +548,6 @@ def import_list():
             flash('We encountered an error while trying to import your school list. Please make sure to follow the '
                   'instructions with respect to formatting your spreadsheet to make sure that it is imported correctly.',
                   category='error')
-            print(traceback.format_exc())
             return redirect(url_for('pages.cycles'))
     return render_template('import-list.html', user=current_user, cycle=cycle)
 
@@ -614,12 +613,24 @@ def explore_school(school_name):
     phd_data = pd.read_sql(query.filter(School.phd == True).statement, db.session.bind)
 
     # Dictionaries with all information about the school
-    reg_info = {'cycle_status_json' : school_graphs.cycle_progress(reg_data)}
-    phd_info = {'cycle_status_json' : school_graphs.cycle_progress(phd_data)}
+    reg_info = {'aamc_table': table_md, 'cycle_status_json': school_graphs.cycle_progress(reg_data),
+                'interview_graph': school_graphs.interview_acceptance_histogram(reg_data, 'interview_received'),
+                'acceptance_graph': school_graphs.interview_acceptance_histogram(reg_data, 'acceptance')}
+    phd_info = {'aamc_table': table_mdphd, 'cycle_status_json': school_graphs.cycle_progress(phd_data),
+                'interview_graph': school_graphs.interview_acceptance_histogram(phd_data, 'interview_received'),
+                'acceptance_graph': school_graphs.interview_acceptance_histogram(phd_data, 'acceptance')}
 
     # Get current cycle status graph
     cycle_status_reg_json = school_graphs.cycle_progress(reg_data)
     cycle_status_phd_json = school_graphs.cycle_progress(phd_data)
+
+    # Calculate interview information
+    school_info_calcs.interview_calculations(reg_data, reg_info)
+    school_info_calcs.interview_calculations(phd_data, phd_info)
+
+    # Calculate acceptance information
+    school_info_calcs.acceptance_calculations(reg_data, reg_info)
+    school_info_calcs.acceptance_calculations(phd_data, phd_info)
 
     return render_template('school_template.html', user=current_user, school_info=school_info, table_md=table_md,
                            table_mdphd=table_mdphd, reg_info=reg_info, phd_info=phd_info)

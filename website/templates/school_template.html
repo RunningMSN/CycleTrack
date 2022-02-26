@@ -47,7 +47,7 @@
                     <div style="padding:10px;">
                         <h5>Current Cycle Status</h5>
                         {% if reg_info['cycle_status_json'] %}
-                        <div id="reg_status"></div>
+                        <center><div id="reg_status"></div></center>
                         {% else %}
                         <p>We currently do not have enough data points to display the current cycle status. Please invite other
                         applicants to track their cycles for this graph to appear.</p>
@@ -72,22 +72,85 @@
 
                         <div class="tab-content" id="reg_tabs_content" style="padding:10px; border-style: none solid solid; border-color:#dee2e6; border-width:1px">
                             <div class="tab-pane fade show active" id="reg_interviews" role="tabpanel" aria-labelledby="reg_interviews">
-                                <strong>Total Interviews Tracked: </strong>XXX<br />
-                                <strong>Percent Applicants Interviewed: </strong>XXX<br />
-                                <strong>Median cGPA (Range): </strong>XXX<br />
-                                <strong>Median sGPA (Range): </strong>XXX<br />
-                                <strong>Median MCAT (Range): </strong>XXX<br />
-                                [graph of interview offers over time per cycle goes here]
-
+                                <strong>Total Interviews Tracked: </strong>{{ reg_info['interview_count'] }}<br />
+                                <strong>Percent Applicants Interviewed: </strong>
+                                {% if reg_info['n_percent_interviewed'] > 4 %}
+                                {{ reg_info['percent_interviewed'] }}, (n={{ reg_info['n_percent_interviewed'] }})
+                                {% else %}
+                                <a href="#" data-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">XX.XX</a>
+                                {% endif %}
+                                <br />
+                                <strong>Median cGPA (Range): </strong>
+                                {% if reg_info['n_interviewed_cgpa'] > 4 %}
+                                {{ reg_info['interviewed_cgpa'] }}, (n={{ reg_info['n_interviewed_cgpa'] }})
+                                {% else %}
+                                <a href="#" data-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">X.XX</a>
+                                {% endif %}
+                                <br />
+                                <strong>Median sGPA (Range): </strong>
+                                {% if reg_info['n_interviewed_sgpa'] > 4 %}
+                                {{ reg_info['interviewed_sgpa'] }}, (n={{ reg_info['n_interviewed_sgpa'] }})
+                                {% else %}
+                                <a href="#" data-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">X.XX</a>
+                                {% endif %}
+                                <br />
+                                <strong>Median MCAT (Range): </strong>
+                                {% if reg_info['n_interviewed_mcat'] > 4 %}
+                                {{ reg_info['interviewed_mcat'] }}, (n={{ reg_info['n_interviewed_mcat'] }})
+                                {% else %}
+                                <a href="#" data-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">XXX.X</a>
+                                {% endif %}
+                                <br />
+                                <strong>Interview Invites Over Time: </strong><br />
+                                {% if reg_info['interview_graph'] %}
+                                <center><div id="reg_interviews_graph"></div></center>
+                                {% else %}
+                                <p>We currently do not have enough data points to display a graph of interview invites over time.</p>
+                                {% endif %}
                             </div>
                             <div class="tab-pane fade" id="reg_acceptances" role="tabpanel" aria-labelledby="reg_acceptances">
-                                <strong>Total Acceptances Tracked: </strong>XXX<br />
-                                <strong>Percent Accepted Post-Interview: </strong>XXX<br />
-                                <strong>Percent Accepted From Waitlist: </strong>XXX<br />
-                                <strong>Median cGPA (Range): </strong>XXX<br />
-                                <strong>Median sGPA (Range): </strong>XXX<br />
-                                <strong>Median MCAT (Range): </strong>XXX<br />
-                                [graph of acceptance offers over time per cycle goes here]
+                                <strong>Total Acceptances Tracked: </strong>{{ reg_info['acceptance_count'] }}<br />
+                                <strong>Percent Accepted Post-Interview: </strong>
+                                {% if reg_info['n_percent_interview_accepted'] > 4 %}
+                                {{ reg_info['percent_interview_accepted'] }}, (n={{ reg_info['n_percent_interview_accepted'] }})
+                                {% else %}
+                                <a href="#" data-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">XX.XX</a>
+                                {% endif %}
+                                <br />
+                                <strong>Percent Accepted From Waitlist: </strong>
+                                {% if reg_info['n_percent_waitlist_accepted'] > 4 %}
+                                {{ reg_info['percent_waitlist_accepted'] }}, (n={{ reg_info['n_percent_waitlist_accepted'] }})
+                                {% else %}
+                                <a href="#" data-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">XX.XX</a>
+                                {% endif %}
+                                <br />
+                                <strong>Median cGPA (Range): </strong>
+                                {% if reg_info['n_accepted_cgpa'] > 4 %}
+                                {{ reg_info['accepted_cgpa'] }}, (n={{ reg_info['n_accepted_cgpa'] }})
+                                {% else %}
+                                <a href="#" data-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">X.XX</a>
+                                {% endif %}
+                                <br />
+                                <strong>Median sGPA (Range): </strong>
+                                {% if reg_info['n_accepted_sgpa'] > 4 %}
+                                {{ reg_info['accepted_sgpa'] }}, (n={{ reg_info['n_accepted_sgpa'] }})
+                                {% else %}
+                                <a href="#" data-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">X.XX</a>
+                                {% endif %}
+                                <br />
+                                <strong>Median MCAT (Range): </strong>
+                                {% if reg_info['n_accepted_mcat'] > 4 %}
+                                {{ reg_info['accepted_mcat'] }}, (n={{ reg_info['n_accepted_mcat'] }})
+                                {% else %}
+                                <a href="#" data-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">XXX.X</a>
+                                {% endif %}
+                                <br />
+                                <strong>Acceptance Offers Over Time: </strong><br />
+                                {% if reg_info['acceptance_graph'] %}
+                                <center><div id="reg_acceptance_graph"></div></center>
+                                {% else %}
+                                <p>We currently do not have enough data points to display a graph of acceptance offers over time.</p>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
@@ -96,7 +159,7 @@
                     {% if school_info['MD_or_DO'][0] == "MD" %}
                     <div style="padding:10px;">
                         <h5>AAMC Data</h5>
-                        {{table_md | safe}}
+                        {{ reg_info['aamc_table'] | safe }}
                     </div>
                     {% endif %}
                 </div>
@@ -106,7 +169,7 @@
                     <div style="padding:10px;">
                         <h5>Current Cycle Status</h5>
                         {% if phd_info['cycle_status_json'] %}
-                        <div id="phd_status"></div>
+                        <center><div id="phd_status"></div></center>
                         {% else %}
                         <p>We currently do not have enough data points to display the current cycle status. Please invite other
                         applicants to track their cycles for this graph to appear.</p>
@@ -132,22 +195,86 @@
 
                         <div class="tab-content" id="phd_tabs_content" style="padding:10px; border-style: none solid solid; border-color:#dee2e6; border-width:1px">
                             <div class="tab-pane fade show active" id="phd_interviews" role="tabpanel" aria-labelledby="phd_interviews">
-                                <strong>Total Interviews Tracked: </strong>XXX<br />
-                                <strong>Percent Applicants Interviewed: </strong>XXX<br />
-                                <strong>Median cGPA (Range): </strong>XXX<br />
-                                <strong>Median sGPA (Range): </strong>XXX<br />
-                                <strong>Median MCAT (Range): </strong>XXX<br />
-                                [graph of interview offers over time per cycle goes here]
+                                <strong>Total Interviews Tracked: </strong>{{ phd_info['interview_count'] }}<br />
+                                <strong>Percent Applicants Interviewed: </strong>
+                                {% if phd_info['n_percent_interviewed'] > 4 %}
+                                {{ phd_info['percent_interviewed'] }}, (n={{ phd_info['n_percent_interviewed'] }})
+                                {% else %}
+                                <a href="#" data-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">XX.XX</a>
+                                {% endif %}
+                                <br />
+                                <strong>Median cGPA (Range): </strong>
+                                {% if phd_info['n_interviewed_cgpa'] > 4 %}
+                                {{ phd_info['interviewed_cgpa'] }}, (n={{ phd_info['n_interviewed_cgpa'] }})
+                                {% else %}
+                                <a href="#" data-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">X.XX</a>
+                                {% endif %}
+                                <br />
+                                <strong>Median sGPA (Range): </strong>
+                                {% if phd_info['n_interviewed_sgpa'] > 4 %}
+                                {{ phd_info['interviewed_sgpa'] }}, (n={{ phd_info['n_interviewed_sgpa'] }})
+                                {% else %}
+                                <a href="#" data-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">X.XX</a>
+                                {% endif %}
+                                <br />
+                                <strong>Median MCAT (Range): </strong>
+                                {% if phd_info['n_interviewed_mcat'] > 4 %}
+                                {{ phd_info['interviewed_mcat'] }}, (n={{ phd_info['n_interviewed_mcat'] }})
+                                {% else %}
+                                <a href="#" data-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">XXX.X</a>
+                                {% endif %}
+                                <br />
+                                <strong>Interview Invites Over Time: </strong><br />
+                                {% if phd_info['interview_graph'] %}
+                                <center><div id="phd_interviews_graph"></div></center>
+                                {% else %}
+                                <p>We currently do not have enough data points to display a graph of interview invites over time.</p>
+                                {% endif %}
 
                             </div>
                             <div class="tab-pane fade" id="phd_acceptances" role="tabpanel" aria-labelledby="phd_acceptances">
-                                <strong>Total Acceptances Tracked: </strong>XXX<br />
-                                <strong>Percent Accepted Post-Interview: </strong>XXX<br />
-                                <strong>Percent Accepted From Waitlist: </strong>XXX<br />
-                                <strong>Median cGPA (Range): </strong>XXX<br />
-                                <strong>Median sGPA (Range): </strong>XXX<br />
-                                <strong>Median MCAT (Range): </strong>XXX<br />
-                                [graph of acceptance offers over time per cycle goes here]
+                                <strong>Total Acceptances Tracked: </strong>{{ phd_info['acceptance_count'] }}<br />
+                                <strong>Percent Accepted Post-Interview: </strong>
+                                {% if phd_info['n_percent_interview_accepted'] > 4 %}
+                                {{ phd_info['percent_interview_accepted'] }}, (n={{ phd_info['n_percent_interview_accepted'] }})
+                                {% else %}
+                                <a href="#" data-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">XX.XX</a>
+                                {% endif %}
+                                <br />
+                                <strong>Percent Accepted From Waitlist: </strong>
+                                {% if phd_info['n_percent_waitlist_accepted'] > 4 %}
+                                {{ phd_info['percent_waitlist_accepted'] }}, (n={{ phd_info['n_percent_waitlist_accepted'] }})
+                                {% else %}
+                                <a href="#" data-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">XX.XX</a>
+                                {% endif %}
+                                <br />
+                                <strong>Median cGPA (Range): </strong>
+                                {% if phd_info['n_accepted_cgpa'] > 4 %}
+                                {{ phd_info['accepted_cgpa'] }}, (n={{ phd_info['n_accepted_cgpa'] }})
+                                {% else %}
+                                <a href="#" data-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">X.XX</a>
+                                {% endif %}
+                                <br />
+                                <strong>Median sGPA (Range): </strong>
+                                {% if phd_info['n_accepted_sgpa'] > 4 %}
+                                {{ phd_info['accepted_sgpa'] }}, (n={{ phd_info['n_accepted_sgpa'] }})
+                                {% else %}
+                                <a href="#" data-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">X.XX</a>
+                                {% endif %}
+                                <br />
+                                <strong>Median MCAT (Range): </strong>
+                                {% if phd_info['n_accepted_mcat'] > 4 %}
+                                {{ phd_info['accepted_mcat'] }}, (n={{ phd_info['n_accepted_mcat'] }})
+                                {% else %}
+                                <a href="#" data-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">XXX.X</a>
+                                {% endif %}
+                                <br />
+                                <strong>Acceptance Offers Over Time: </strong><br />
+                                {% if phd_info['acceptance_graph'] %}
+                                <center><div id="phd_acceptance_graph"></div></center>
+                                {% else %}
+                                <p>We currently do not have enough data points to display a graph of acceptance offers over time.</p>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
@@ -155,7 +282,7 @@
                     {% if school_info['MD_or_DO'][0] == "MD" %}
                     <div style="padding:10px;">
                         <h5>AAMC Data</h5>
-                        {{table_mdphd | safe}}
+                        {{ phd_info['aamc_table'] | safe }}
                     </div>
                     {% endif %}
                 </div>
@@ -184,6 +311,34 @@
     var phd_graph = {{ phd_info['cycle_status_json'] | safe }};
     phd_graph.config = {'responsive': true, 'displaylogo': false}
     Plotly.newPlot('phd_status', phd_graph);
+    </script>
+{% endif %}
+{% if reg_info['interview_graph'] %}
+    <script>
+    var reg_interviews_graph = {{ reg_info['interview_graph'] | safe }};
+    reg_interviews_graph.config = {'responsive': true, 'displaylogo': false}
+    Plotly.newPlot('reg_interviews_graph', reg_interviews_graph);
+    </script>
+{% endif %}
+{% if reg_info['acceptance'] %}
+    <script>
+    var reg_acceptance_graph = {{ reg_info['acceptance_graph'] | safe }};
+    reg_acceptance_graph.config = {'responsive': true, 'displaylogo': false}
+    Plotly.newPlot('reg_acceptance_graph', reg_acceptance_graph);
+    </script>
+{% endif %}
+{% if phd_info['interview_graph'] %}
+    <script>
+    var phd_interviews_graph = {{ phd_info['interview_graph'] | safe }};
+    phd_interviews_graph.config = {'responsive': true, 'displaylogo': false}
+    Plotly.newPlot('phd_interviews_graph', phd_interviews_graph);
+    </script>
+{% endif %}
+{% if phd_info['acceptance_graph'] %}
+    <script>
+    var phd_acceptance_graph = {{ phd_info['acceptance_graph'] | safe }};
+    phd_acceptance_graph.config = {'responsive': true, 'displaylogo': false}
+    Plotly.newPlot('phd_acceptance_graph', phd_acceptance_graph);
     </script>
 {% endif %}
 
