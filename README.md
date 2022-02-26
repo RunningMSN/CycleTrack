@@ -25,8 +25,11 @@ CycleTrack contains a number of options for visualizing application cycles that 
 Visualizations are generated from data inserted into the school list. Current visualization options include:
 <details>
     <summary>Line Graph: The line graph displays the running total of each admission action over time.</summary>
-    ![](/github_assets/images/sample_line_graph.png)
+    
 </details>
+
+![](/github_assets/images/sample_line_graph.png)
+
 <details>
     <summary>Bar Graph: The bar graph also displays running totals of admission actions over time, but makes it easier
     to visualize what proportion of all actions each action makes up.</summary>
