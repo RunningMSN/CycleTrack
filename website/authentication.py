@@ -142,6 +142,23 @@ def reset_password(token):
 @login_required
 def settings():
     if request.method == "POST":
+        # Start with any account deletion
+        if request.form.get('del_password'):
+            # Check for correct password
+            if not check_password_hash(current_user.password, request.form.get('del_password')):
+                flash('You did not enter your current password correctly. Please try again.', category='error')
+                return redirect(url_for('authentication.settings'))
+            else:
+                # Delete all user info
+                for cycle in current_user.cycles:
+                    for school in cycle.schools:
+                        db.session.delete(school)
+                    db.session.delete(cycle)
+                db.session.delete(current_user)
+                db.session.commit()
+                logout_user()
+                flash('Your account was successfully deleted.', category='success')
+                return redirect(url_for('pages.index'))
         # Grab form input
         new_email = request.form.get('email')
         new_password = request.form.get('new_password')

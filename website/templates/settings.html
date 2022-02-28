@@ -28,5 +28,35 @@
         <small>You must enter your password to confirm any changes.</small><br />
         <button type="submit" class="btn btn-primary">Submit Changes</button>
     </form>
+
+    <button class="btn btn-danger" style="margin-top: 20px" data-toggle="modal" data-target="#delete-account">Delete Your Account</button>
 </div>
+
+<!-- MODAL FOR ACCOUNT DELETION -->
+<div class="modal fade" id="delete-account" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form method="POST">
+                <div class="modal-header">
+                    <h5 class="modal-title">Delete Your Account</h5>
+                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        Please note that deleting your account is <u>permanent</u>. All information entered into CycleTrack
+                        will be deleted from our system and cannot be recovered. If you wish to use CycleTrack
+                        following account deletion, you will need to create a new account.
+                    </p>
+                    <label for="del_password">Enter your password to confirm account deletion:</label>
+                    <input type="password" name="del_password" id="del_password" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-danger">Delete Account</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 {% endblock %}
