@@ -577,6 +577,10 @@ def export_list():
 def privacy():
     return render_template('privacy.html', user=current_user)
 
+@pages.route('/terms')
+def terms():
+    return render_template('terms.html', user=current_user)
+
 @pages.route('/delete-cycle', methods=['POST'])
 def delete_cycle():
     cycle = json.loads(request.data)
