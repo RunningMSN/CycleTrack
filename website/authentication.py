@@ -29,7 +29,7 @@ def login():
             else:
                 flash('Incorrect password, please try again.', category='error')
         else:
-            flash('Email does not exist.', category='error')
+            flash('No accounts with this email were found.', category='error')
 
     return render_template('login.html', user=current_user)
 
