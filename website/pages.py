@@ -225,10 +225,17 @@ def cycles():
             else:
                 cycle.mcat_ps = None
             db.session.commit()
+
+    # Check if have stats filled out using cGPA as representative info
+    empty_cycles = []
+    for cycle in current_user.cycles:
+        if not cycle.cgpa:
+            empty_cycles.append(str(cycle.cycle_year))
+
     return render_template('cycles.html', user=current_user, cycle_options=form_options.VALID_CYCLES,
                            sex_options=form_options.SEX_OPTIONS, gender_options=form_options.GENDER_OPTIONS,
                            race_ethnicity_options=form_options.RACE_ETHNICITY_OPTIONS,
-                           state_options=form_options.STATE_OPTIONS)
+                           state_options=form_options.STATE_OPTIONS, empty_cycles=", ".join(empty_cycles))
 
 @pages.route('/lists', methods=['GET','POST'])
 @login_required

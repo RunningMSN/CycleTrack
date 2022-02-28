@@ -4,6 +4,16 @@
 <!-- CYCLE MANAGEMENT -->
 <div id="cycles" class="container" style="padding-top:10px">
     <h2>My Application Cycles</h2>
+
+    <!-- WARNING MESSAGE IF NO CYCLE INFO FILLED IN -->
+    {% if empty_cycles|length > 0 %}
+    <div class="bg-warning container" style="padding: 10px; margin-top: 10px; margin-bottom:10px">
+        You have not filled in the cycle profile section for the following cycle(s): {{ empty_cycles }}. This
+        information is very helpful for increasing application cycle transparency and would greatly benefit other
+        applicants. However, if you don't feel comfortable sharing, please feel free to ignore this message!
+    </div>
+    {% endif %}
+
     {% if user.cycles|length > 0 %}
     {% for cycle in user.cycles %}
     <!-- SETUP MODAL FOR EDITING EACH CYCLE -->
