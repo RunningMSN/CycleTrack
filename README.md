@@ -26,31 +26,31 @@ Visualizations are generated from data inserted into the school list. Current vi
 <details>
 <summary>Line Graph: The line graph displays the running total of each admission action over time.</summary>
 
-![](/github_assets/images/sample_line_graph.png)
+![](/github_assets/sample_line_graph.png)
 </details>
 
 <details>
 <summary>Bar Graph: The bar graph also displays running totals of admission actions over time, but makes it easier to
 visualize what proportion of all actions each action makes up.</summary>
 
-![](/github_assets/images/sample_bar_graph.png)
+![](/github_assets/sample_bar_graph.png)
 </details>
 <details>
 <summary>Map: The map shows the current admission status of each school along with the location of each school on a map
 of the United States.</summary>
 
-![](/github_assets/images/sample_map.png)
+![](/github_assets/sample_map.png)
 </details>
 <details>
 <summary>Dot Plot: The dot plot shows what admission actions have occurred for each school over time.</summary>
 
-![](/github_assets/images/sample_dot_plot.png)
+![](/github_assets/sample_dot_plot.png)
 </details>
 <details>
 <summary>Sankey Diagram: The sankey diagram shows the flow of admissions actions from one status to the other at the
 current time point in the application cycle.</summary>
 
-![](/github_assets/images/sample_sankey_diagram.png)
+![](/github_assets/sample_sankey_diagram.png)
 </details>
 
 ## Data Crowdsourcing
