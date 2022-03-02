@@ -325,8 +325,14 @@ def lists():
             school.withdrawn = None
         db.session.commit()
 
+    # Check if PhD applicant for message about MD/DO-only consideration
+    if School.query.filter_by(cycle_id=cycle.id, phd=True).first():
+        phd_applicant = True
+    else:
+        phd_applicant = False
+
     return render_template('lists.html', user=current_user, cycle=cycle, md_school_list=form_options.MD_SCHOOL_LIST,
-                           do_school_list=form_options.DO_SCHOOL_LIST)
+                           do_school_list=form_options.DO_SCHOOL_LIST, phd_applicant=phd_applicant)
 
 @pages.route('/visualizations', methods=['GET', 'POST'])
 @login_required

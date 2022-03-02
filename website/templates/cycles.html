@@ -193,13 +193,14 @@
     </li>
     {% endfor %}
     {% else %}
-    <p>You have not added any application cycles.</p>
+    <p>You have not added any application cycles. Get started by adding a cycle using the menu below.</p>
     {% endif %}
     <!-- Add Cycles -->
     <form method="POST">
         <table>
             <tr>
-                <td style="padding: 10px">Add a new cycle:</td>
+                <td style="padding: 10px"><a href="#" data-toggle="tooltip" title="Year that you would matriculate"
+                                             style="text-decoration-style:dotted;color:black">Add a new cycle:</a></td>
                 <td style="padding: 10px">
                     <select name="add_cycle" id="add_cycle" class="btn-sm">
                         {% for cycle_option in cycle_options[0:3] %}

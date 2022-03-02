@@ -5,6 +5,17 @@
 <div id="lists" class="container" style="padding-top:10px">
     <h2>My {{ cycle.cycle_year }} School List</h2>
     {% if cycle.schools|length > 0 %}
+    <!-- MESSAGE FOR DUAL DEGREE APPLICANTS -->
+    {% if phd_applicant %}
+    <p>
+        <a href="#" data-toggle="tooltip" title="If you are being considered for MD/DO-only as well, please add an MD/DO-only second entry. If this consideration
+        is after you have been rejected from the MD/DO-PhD program, please use your rejection date as the new application
+                complete date." style="color:black;text-decoration-style:dotted">
+            <span style="color:blue"><i class="fas fa-info-circle"></i></span>
+            Note for Dual Degree Applicants
+        </a>
+    </p>
+    {% endif %}
     <!-- SMALLEST SCREEN SIZE -->
     <div class="d-md-none">
         <table class="table" style="font-size:0.9rem">
@@ -186,7 +197,8 @@
         </table>
     </div>
     {% else %}
-    <p>You have not added any schools.</p>
+    <p>You have not added any schools. Get started by adding schools manually or importing an existing list from a
+    spreadsheet.</p>
     {% endif %}
 
     <!-- BUTTONS FOR ADDING SCHOOLS -->

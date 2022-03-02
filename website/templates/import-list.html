@@ -21,6 +21,46 @@
     <div class="tab-content" id="myTabContent" style="padding:10px;border-style: none solid solid; border-color:#dee2e6; border-width:1px">
         <!-- UPLOAD EXCEL SHEET -->
         <div class="tab-pane fade show active" id="excel" role="tabpanel" aria-labelledby="excel-tab" style="padding-top:10px">
+            <!-- INSTRUCTIONS -->
+            <div style="padding-bottom:10px">
+                <details>
+                    <summary><strong>Click Here For Instructions</strong></summary>
+                    <ol type="1">
+                        <li>Create a new excel spreadsheet or use our provided
+                            <a href="{{ url_for('static', filename='/Sample_Excel_Import.xlsx') }}"> template</a>.</li>
+                        <li>
+                            The first column of your spreadsheet must contain the names of schools. <br />
+                            <span style="font-style:italic">MD/DO-PhD Applicants: </span> Add the keywords MSTP
+                            or PhD to the names of your schools to automatically detect dual degree applications to save
+                            time later on. If you are also under MD/DO only consideration, create 2 entries in your sheet,
+                            one for MD/DO-PhD and one MD/DO only. For the MD/DO-only, the application complete date is
+                            date you began consideration (e.g. date of rejection from the MD/DO-PhD).
+                        </li>
+                        <li>Create columns to store dates of application actions you have tracked. These can include the
+                            following information (you can skip any columns you have not tracked):
+                            <ul>
+                                <li>Primary Application Submitted Date</li>
+                                <li>Secondary Application Received Date</li>
+                                <li>Application Complete Date</li>
+                                <li>Interview Received Date</li>
+                                <li>Interview Scheduled-for Date</li>
+                                <li>Rejection Date</li>
+                                <li>Waitlist Date</li>
+                                <li>Acceptance Received Date</li>
+                                <li>Application Withdrawn Date</li>
+                            </ul>
+                        </li>
+                        <li><strong><u>Important:</u></strong> All dates entered must be formatted as dates (e.g. MM/DD/YYYY),
+                        otherwise you will receive an error when importing.</li>
+                        <li>Save your file and make sure it is in either '.xlsx' or '.csv' format.</li>
+                        <div style="margin-top:5px;margin-bottom:5px;">Example Spreadsheet:
+                        <img src="{{ url_for('static', filename='/images/sample_import_excel.png') }}" style='height: 100%; width: 100%; object-fit: contain' />
+                        </div>
+                        <li>Upload your spreadsheet by pressing the 'Choose File' button below.</li>
+                    </ol>
+                </details>
+            </div>
+
             <form method="POST" enctype="multipart/form-data">
                 <div class="mb-3">
                     <label for="upload_table" class="form-label">Upload a Table</label>
@@ -33,6 +73,54 @@
         </div>
         <!-- UPLOAD GOOGLE SHEETS -->
         <div class="tab-pane fade" id="google-sheets" role="tabpanel" aria-labelledby="google-sheets-tab" style="padding-top:10px">
+            <!-- INSTRUCTIONS -->
+            <div style="padding-bottom:10px">
+                <details>
+                    <summary><strong>Click Here For Instructions</strong></summary>
+                    <strong>Formatting Your Sheet</strong>
+                    <ol type="1">
+                        <li>Create a new Google sheet or use our provided
+                            <a href="https://docs.google.com/spreadsheets/d/1O4H45unuCyJK8BDv7J8nA8nKdAeNpscRjSvXSIDoGZo/edit?usp=sharing"> template</a>.</li>
+                        <li>
+                            The first column of your spreadsheet must contain the names of schools. <br />
+                            <span style="font-style:italic">MD/DO-PhD Applicants: </span> Add the keywords MSTP
+                            or PhD to the names of your schools to automatically detect dual degree applications to save
+                            time later on. If you are also under MD/DO only consideration, create 2 entries in your sheet,
+                            one for MD/DO-PhD and one MD/DO only. For the MD/DO-only, the application complete date is
+                            date you began consideration (e.g. date of rejection from the MD/DO-PhD).
+                        </li>
+                        <li>Create columns to store dates of application actions you have tracked. These can include the
+                            following information (you can skip any columns you have not tracked):
+                            <ul>
+                                <li>Primary Application Submitted Date</li>
+                                <li>Secondary Application Received Date</li>
+                                <li>Application Complete Date</li>
+                                <li>Interview Received Date</li>
+                                <li>Interview Scheduled-for Date</li>
+                                <li>Rejection Date</li>
+                                <li>Waitlist Date</li>
+                                <li>Acceptance Received Date</li>
+                                <li>Application Withdrawn Date</li>
+                            </ul>
+                        </li>
+                        <li><strong><u>Important:</u></strong> All dates entered must be formatted as dates (e.g. MM/DD/YYYY),
+                        otherwise you will receive an error when importing.</li>
+                        <div style="margin-top:5px;margin-bottom:5px;">Example Spreadsheet:
+                        <img src="{{ url_for('static', filename='/images/sample_import_google.png') }}" style='height: 100%; width: 100%; object-fit: contain' />
+                        </div>
+                    </ol>
+                    <br />
+                    <strong>Uploading Your Sheet</strong>
+                    <ol type="1">
+                        <li>In the Google Sheets menu, click "File."</li>
+                        <li>Click "Share", then click "Publish to web."</li>
+                        <li>In the pop-up, click "Publish."</li>
+                        <li>Copy the provided link, paste it into the textbox below these instructions, and click
+                            "Upload."</li>
+                    </ol>
+                </details>
+            </div>
+
             <form method="POST">
                 <div class="form-group mb-3">
                     <label for="upload_google_link" class="form-label">Upload a Google Sheet</label>
@@ -49,7 +137,10 @@
     <!-- LABEL COLUMNS -->
     {% if colnames|length > 0 %} <!-- This is a unique variable to this section -->
     <h2>Thanks. I need some help labeling your columns.</h2>
-    <p>Please assign an action type to each of your columns.</p>
+    <p>
+        For each column in your spreadsheet, please select one action type from the drop-down list. For any extra
+        columns that do not have a corresponding option, leave them blank.
+    </p>
     <form method="POST">
         <table class="table">
             <thead>
@@ -79,6 +170,11 @@
     <!-- NAME SCHOOLS AND GET MD/DO-PhD -->
     {% if md_school_list %} <!-- This is a unique variable to this section -->
     <h2>One last thing... Please help me label your schools.</h2>
+    <p>
+        For each of your schools, please check that the correct school name was assigned by our system. If the match was
+        not correct, use the drop-down menu to select the correct school. Additionally, label any MD/DO-PhD applications
+        using the checkbox.
+    </p>
     <form method="POST">
         <table class="table">
             <thead>
