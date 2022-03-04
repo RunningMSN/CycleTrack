@@ -347,26 +347,9 @@ def visualizations():
         else:
             plot_title = "Application Cycle"
         cycle = Cycle.query.filter_by(id=cycle_id).first()
-        cycle_data = pd.read_sql(School.query.filter_by(cycle_id=cycle.id).statement, db.session.bind)
-
-        # Grab filter
-        filter = request.form.get('filter')
-        # Filter dual degree
-        if filter == 'reg' or filter == 'md' or filter == 'do':
-            cycle_data = cycle_data[cycle_data['phd'] == False]
-        elif filter == 'phd'or filter == 'md-phd' or filter == 'do-phd':
-            cycle_data = cycle_data[cycle_data['phd'] == True]
-        # Filter program type
-        if filter == 'md' or filter == 'md-phd':
-            cycle_data = cycle_data[cycle_data['school_type'] == 'MD']
-        elif filter == 'do' or filter == 'do-phd':
-            cycle_data = cycle_data[cycle_data['school_type'] == 'DO']
-
-        cycle_data = cycle_data.drop(['id','cycle_id','user_id','school_type','phd'], axis=1)
-
+        cycle_data = pd.read_sql(School.query.filter_by(cycle_id=cycle.id).statement, db.session.bind).drop(['id','cycle_id','user_id','school_type','phd'], axis=1)
         # Drop empty columns
         cycle_data = cycle_data.dropna(axis=1, how='all')
-
         if len(cycle_data.columns) > 1:
             if vis_type.lower() == 'dot':
                 graphJSON = dot.generate(cycle_data, plot_title)
@@ -379,7 +362,7 @@ def visualizations():
             elif vis_type.lower() == 'map':
                 graphJSON = map.generate(cycle_data,plot_title)
         else:
-            flash(f'Your selected school list for {cycle.cycle_year} does not have any dates yet!', category='error')
+            flash(f'Your school list for the {cycle.cycle_year} does not have any dates yet!', category='error')
     return render_template('visualizations.html', user=current_user, vis_types=form_options.VIS_TYPES, graphJSON=graphJSON)
 
 @pages.route('/import-list', methods=["GET", "POST"])
