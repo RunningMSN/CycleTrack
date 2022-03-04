@@ -20,6 +20,18 @@
             </select>
         </div>
         <div class="form-group" style="padding-top: 5px; padding-bottom:5px;">
+            <label for="filter">Filter: </label>
+            <select name="filter" id="filter">
+                <option value="all">All Applications</option>
+                <option value="reg">MD/DO</option>
+                <option value="phd">MD/DO-PhD</option>
+                <option value="md">MD</option>
+                <option value="md-phd">MD-PhD</option>
+                <option value="do">DO</option>
+                <option value="do-phd">DO-PhD</option>
+            </select>
+        </div>
+        <div class="form-group" style="padding-top: 5px; padding-bottom:5px;">
             <label for="vis_type">Choose a Visualization:</label>
             <select name="vis_type" id="vis_type">
                 {% for vis_type in vis_types %}
