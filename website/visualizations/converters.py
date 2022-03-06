@@ -50,6 +50,8 @@ def convert_bar_df(data):
 
     # Remove names
     names_removed = data.drop('name', axis=1)
+    # Reverse order of columns for cases of 2 equal dates
+    names_removed = names_removed[names_removed.columns[::-1]]
 
     # Generate initial dataframe to add to
     output = pd.DataFrame()
@@ -111,6 +113,8 @@ def convert_map(data,aggregate=False):
         data = data.groupby("name",as_index=False).first()
         #get best outcome: column with greatest date in each row
         nameless = data[data.columns.difference(["name"])]
+        #reverse order to account for same dates
+        nameless = nameless[nameless.columns[::-1]]
         data["Best Outcome"] = nameless.idxmax(axis=1)
         data["color"] = data["Best Outcome"].map(fig_colors)
         #merge with school locations
