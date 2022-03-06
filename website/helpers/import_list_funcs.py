@@ -4,6 +4,7 @@ import pandas as pd
 from flask import flash
 import dateutil.parser
 import jellyfish
+import re
 
 school_nicknames_dict = pd.read_csv('./website/static/csv/school_names_nicknames.csv').set_index('Key').to_dict()['Value']
 
@@ -46,9 +47,18 @@ def convert_columns_date(df):
 
 def best_match(input_string, match_list, cutoff):
     '''Returns the closest match to the input string from the match list. If no matches above cutoff, returns none.'''
-    # Check if already in the list
+    # For matching purpose, remove PhD labels
+    phd_labels = ['mstp', 'md-phd', 'md/phd', 'mdphd', 'do-phd', 'do/phd', 'dophd']
+    for label in phd_labels:
+        if label in input_string.lower():
+            pattern = re.compile(label, re.IGNORECASE)
+            input_string = pattern.sub("", input_string).strip()
+            break
+
+    # Check if native input already in the list
     if input_string in match_list:
         return input_string
+
     # Store best match
     best_score = 0
     best_match = ""
