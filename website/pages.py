@@ -52,27 +52,24 @@ def explorer():
         build_df['state'].append(school_info['State'][0])
         build_df['envt'].append(school_info['Envt_Type'][0])
         build_df['pub_pri'].append(school_info['Private_Public'][0])
-        # MD/DO Data
-        query_school_reg = School.query.filter_by(name=school.name, phd=False)
-        build_df['reg_apps'].append(query_school_reg.count())
-        # Store MCATs and cGPAs for the school
-        mcats = []; cgpas = []
-        # Grab MCATs and cGPAs
-        for entry in query_school_reg:
-            cycle = Cycle.query.filter_by(id=entry.cycle_id).first()
-            if cycle.mcat_total: mcats.append(cycle.mcat_total)
-            if cycle.cgpa: cgpas.append(cycle.cgpa)
-        if len(mcats) >= 5:
-            build_df['reg_med_mcat'].append(str(statistics.median(mcats)))
-        else:
-            build_df['reg_med_mcat'].append('XXX')
-        if len(cgpas) >= 5:
-            build_df['reg_med_gpa'].append(str(statistics.median(cgpas)))
+
+        # Grab stats data
+        query = db.session.query(School, Cycle).filter(School.name == school.name).join(Cycle, School.cycle_id == Cycle.id)
+        reg_data = pd.read_sql(query.filter(School.phd == False).statement, db.session.bind)
+        # Get number of applications
+        build_df['reg_apps'].append(len(reg_data))
+        build_df['phd_apps'].append(query.filter(School.phd == True).count())
+
+        # Grab median cGPA and MCAT accepted for reg applications
+        accepted = reg_data[pd.notna(reg_data['acceptance'])]
+        if len(accepted['cgpa'].dropna(axis=0)) > 0:
+            build_df['reg_med_gpa'].append('{:.2f}'.format(statistics.median(accepted['cgpa'].dropna(axis=0))))
         else:
             build_df['reg_med_gpa'].append('X.XX')
-        # MD-PhD/DO-PhD data
-        query_school_phd = School.query.filter_by(name=school.name, phd=True)
-        build_df['phd_apps'].append(query_school_phd.count())
+        if len(accepted['mcat_total'].dropna(axis=0)) > 0:
+            build_df['reg_med_mcat'].append('{:.1f}'.format(statistics.median(accepted['mcat_total'].dropna(axis=0))))
+        else:
+            build_df['reg_med_mcat'].append('XXX')
 
     # Generate dataframe
     df = pd.DataFrame(build_df).sort_values('name')
