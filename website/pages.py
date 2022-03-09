@@ -62,11 +62,11 @@ def explorer():
 
         # Grab median cGPA and MCAT accepted for reg applications
         accepted = reg_data[pd.notna(reg_data['acceptance'])]
-        if len(accepted['cgpa'].dropna(axis=0)) > 0:
+        if len(accepted['cgpa'].dropna(axis=0)) > 4:
             build_df['reg_med_gpa'].append('{:.2f}'.format(statistics.median(accepted['cgpa'].dropna(axis=0))))
         else:
             build_df['reg_med_gpa'].append('X.XX')
-        if len(accepted['mcat_total'].dropna(axis=0)) > 0:
+        if len(accepted['mcat_total'].dropna(axis=0)) > 4:
             build_df['reg_med_mcat'].append('{:.1f}'.format(statistics.median(accepted['mcat_total'].dropna(axis=0))))
         else:
             build_df['reg_med_mcat'].append('XXX')
