@@ -106,7 +106,6 @@ def sankey_build_frames(cycle_data):
 
 
 def convert_map(data,aggregate=False):
-    print(data)
     if aggregate:
         school_df = data[["name"]]
     else:
