@@ -106,11 +106,14 @@ def sankey_build_frames(cycle_data):
 
 
 def convert_map(data,aggregate=False):
+    print(data)
     if aggregate:
         school_df = data[["name"]]
     else:
-        #merge schools so that duplicates (aka MD + MD/PhD don't get put in twice)
-        data = data.groupby("name",as_index=False).first()
+        #merge schools so that the most recent decision for a school counts
+        #(aka MD + MD/PhD don't get put in twice)
+        cols = (data.columns[::-1]).tolist()
+        data = data.sort_values(by=cols).groupby("name",as_index=False).last()
         #get best outcome: column with greatest date in each row
         nameless = data[data.columns.difference(["name"])]
         #reverse order to account for same dates

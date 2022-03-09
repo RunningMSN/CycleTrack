@@ -1,2 +1,3 @@
 website/database.db
 website/site_settings.py
+__pycache__/
