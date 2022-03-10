@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, flash, jsonify, redirect, url_for, Response
 from flask_login import current_user, login_required
-from . import db, form_options
+from . import db, form_options, mail
 from .models import User, Cycle, School
 import json
 from datetime import datetime, date
@@ -8,7 +8,7 @@ import re
 from .visualizations import dot, line, bar, sankey, map, agg_map, school_table, school_graphs
 import pandas as pd
 from .helpers import import_list_funcs, school_info_calcs
-import traceback
+from flask_mail import Message
 import statistics
 
 pages = Blueprint('pages', __name__)
@@ -665,3 +665,34 @@ def explore_school(school_name):
 
     return render_template('school_template.html', user=current_user, school_info=school_info, table_md=table_md,
                            table_mdphd=table_mdphd, reg_info=reg_info, phd_info=phd_info)
+
+@pages.route('/suggestions', methods=['GET', 'POST'])
+@login_required
+def suggestions():
+    if request.method == 'POST':
+        form_type = request.form.get('type')
+        contact = request.form.get('contact')
+        content = request.form.get('content')
+        spam_protect = request.form.get('spam_protect')
+        if form_type and contact and content and spam_protect:
+            if spam_protect.lower() == 'mcat':
+                # Send email to us with suggestion
+                email = Message(f'{form_type} on {date.today().strftime("%B %d, %Y")}', sender=(f'CycleTrack {form_type}',
+                                                                       f'admin@docs2be.org'),
+                                                                       recipients=['admin@docs2be.org'])
+                email.body = f'Form Type: {form_type}\n\nAllow Contact: {contact}\n\nEmail: {current_user.email}' \
+                             f'\n\nMessage:\n{content}'
+                mail.send(email)
+
+                if contact == 'yes':
+                    flash(f'Your {form_type.lower()} has been received. We may contact you if we have further questions.',
+                          category='success')
+                else:
+                    flash(f'Your {form_type.lower()} has been received.', category='success')
+                return redirect(url_for('pages.cycles'))
+            else:
+                flash('You did not answer our security question correctly.', category='error')
+        else:
+            flash(f'Please make sure to fill out all request fields.', category='error')
+
+    return render_template('suggestions.html', user=current_user)
