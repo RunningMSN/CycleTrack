@@ -3,7 +3,7 @@ import plotly.express as px
 import json
 from . import converters
 
-def generate(cycle_data, title):
+def generate(cycle_data, title,color="default"):
     # Generate dataframe for plotly
     cycle_data = converters.convert_bar_df(cycle_data)
     fig = px.bar(cycle_data,
@@ -11,7 +11,7 @@ def generate(cycle_data, title):
                  y='Count',
                  title=title,
                  color='Best Outcome',
-                 color_discrete_map=converters.fig_colors)
+                 color_discrete_map=converters.palette[color])
     # Remove outlines
     fig.update_traces(marker=dict(line=dict(width=0)))
     # Label using more readable action names

@@ -40,6 +40,14 @@
             </select>
         </div>
         <div class="form-group" style="padding-top: 5px; padding-bottom:5px;">
+            <label for="color_type">Choose a Color Palette:</label>
+            <select name="color_type" id="color_type">
+                {% for color_type in color_types %}
+                <option value="{{ color_type }}">{{ color_type }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group" style="padding-top: 5px; padding-bottom:5px;">
             <label for="plot_title">Title:</label>
             <input type="text" id="plot_title" name = "plot_title" value="Application Cycle"></input>
         </div>

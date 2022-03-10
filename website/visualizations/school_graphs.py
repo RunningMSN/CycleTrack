@@ -21,19 +21,19 @@ def cycle_progress(data):
                                name='Secondary Received',
                                xbins=dict(size=86400000),
                                autobinx=False,
-                               marker_color = converters.fig_colors["secondary_received"],
+                               marker_color = converters.palette["default"]["secondary_received"],
                                opacity=0.75))
     fig.add_trace(go.Histogram(x=data.interview_received,
                                name='Interview Received',
                                xbins=dict(size=86400000),
                                autobinx=False,
-                               marker_color = converters.fig_colors["interview_received"],
+                               marker_color = converters.palette["default"]["interview_received"],
                                opacity=0.75))
     fig.add_trace(go.Histogram(x=data.acceptance,
                                name='Acceptance Received',
                                xbins=dict(size=86400000),
                                autobinx=False,
-                               marker_color = converters.fig_colors["acceptance"],
+                               marker_color = converters.palette["default"]["acceptance"],
                                opacity=0.75))
 
     # Overlay both histograms

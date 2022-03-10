@@ -2,14 +2,14 @@ import plotly
 import json
 from . import converters
 
-def generate(cycle_data, title):
+def generate(cycle_data, title,color="default"):
     '''Returns JSON for plotly line graph of the application cycle.'''
     # Drop names and interview days
     cycle_data = cycle_data.drop('name', axis=1)
     if 'interview_date' in cycle_data.columns:
         cycle_data = cycle_data.drop('interview_date', axis=1)
 
-    df_nodes, df_links = converters.sankey_build_frames(cycle_data)
+    df_nodes, df_links = converters.sankey_build_frames(cycle_data,color)
 
     # Sankey plot setup
     data_trace = dict(

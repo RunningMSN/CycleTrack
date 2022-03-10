@@ -343,6 +343,7 @@ def visualizations():
             plot_title = request.form.get('plot_title')
         else:
             plot_title = "Application Cycle"
+        color_type = request.form.get("color_type")
         cycle = Cycle.query.filter_by(id=cycle_id).first()
         cycle_data = pd.read_sql(School.query.filter_by(cycle_id=cycle.id).statement, db.session.bind)
 
@@ -366,18 +367,18 @@ def visualizations():
 
         if len(cycle_data.columns) > 1:
             if vis_type.lower() == 'dot':
-                graphJSON = dot.generate(cycle_data, plot_title)
+                graphJSON = dot.generate(cycle_data, plot_title,color=color_type.lower())
             elif vis_type.lower() == 'line':
-                graphJSON = line.generate(cycle_data, plot_title)
+                graphJSON = line.generate(cycle_data, plot_title,color=color_type.lower())
             elif vis_type.lower() == 'bar':
-                graphJSON = bar.generate(cycle_data, plot_title)
+                graphJSON = bar.generate(cycle_data, plot_title,color=color_type.lower())
             elif vis_type.lower() == 'sankey':
-                graphJSON = sankey.generate(cycle_data, plot_title)
+                graphJSON = sankey.generate(cycle_data, plot_title,color=color_type.lower())
             elif vis_type.lower() == 'map':
-                graphJSON = map.generate(cycle_data,plot_title)
+                graphJSON = map.generate(cycle_data,plot_title,color=color_type.lower())
         else:
             flash(f'Your selected school list for {cycle.cycle_year} does not have any dates yet!', category='error')
-    return render_template('visualizations.html', user=current_user, vis_types=form_options.VIS_TYPES, graphJSON=graphJSON)
+    return render_template('visualizations.html', user=current_user, vis_types=form_options.VIS_TYPES, color_types = form_options.COLOR_TYPES, graphJSON=graphJSON)
 
 @pages.route('/import-list', methods=["GET", "POST"])
 @login_required

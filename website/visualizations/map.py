@@ -3,8 +3,8 @@ import plotly.graph_objects as go
 import json
 from . import converters
 
-def generate(cycle_data,title):
-    loc_df = converters.convert_map(cycle_data,aggregate=False)
+def generate(cycle_data,title,color="default"):
+    loc_df = converters.convert_map(cycle_data,aggregate=False,color=color)
     fig = go.Figure()
 
     outcomes = list(loc_df["Best Outcome"].unique())

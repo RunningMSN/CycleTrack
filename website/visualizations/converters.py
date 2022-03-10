@@ -1,9 +1,18 @@
 import pandas as pd
 import datetime as dt
 
-fig_colors = {'primary': '#90e0ef', 'secondary_received': '#00b4d8', 'application_complete': '#0077b6',
+palette = {
+    "default" : {'primary': '#90e0ef', 'secondary_received': '#00b4d8', 'application_complete': '#0077b6',
                   'interview_received': '#9932CC', 'interview_date': '#8B008B', 'rejection': '#FF0000',
-                  'waitlist': '#FFA500', 'acceptance': '#008000', 'withdrawn': '#808080'}
+                  'waitlist': '#FFA500', 'acceptance': '#008000', 'withdrawn': '#808080'},
+    "okabe-ito" : {'primary': '#F0E442', 'secondary_received': '#56B4E9', 'application_complete': '#0072B2',
+                  'interview_received': '#E69F00', 'interview_date': '#CC79A7', 'rejection': '#7a7a7a',
+                  'waitlist': '#de91ff', 'acceptance': '#009E73', 'withdrawn': '#000000'},
+    "tol" : {"primary":"#ddcc77","secondary_received":"#88ccee","application_complete":"#331888",
+                "interview_received":"#882255","interview_date":"#117733","rejection":"#aa4499",
+                "waitlist":"#cc6677","acceptance":"#44aa99","withdrawn":"#b5b5b5"}
+}
+
 
 action_names = {'primary': 'Primary Submitted', 'secondary_received': 'Secondary Received', 'application_complete': 'Application Complete',
                   'interview_received': 'Interview Received', 'interview_date': 'Interview Complete', 'rejection': 'Rejection',
@@ -69,10 +78,11 @@ def convert_bar_df(data):
 
     return output
 
-def sankey_build_frames(cycle_data):
+def sankey_build_frames(cycle_data,color="default"):
     df_nodes = {'label': cycle_data.columns}
     df_nodes = pd.DataFrame(df_nodes)
     ids = {}
+    fig_colors = palette[color]
     for i in range(0, len(df_nodes['label'])):
         ids[df_nodes['label'][i]] = i
     df_nodes['color'] = df_nodes.apply(lambda row: fig_colors[row.label], axis=1)
@@ -105,7 +115,8 @@ def sankey_build_frames(cycle_data):
     return df_nodes, df_links
 
 
-def convert_map(data,aggregate=False):
+def convert_map(data,aggregate=False,color="default"):
+    fig_colors = palette[color]
     if aggregate:
         school_df = data[["name"]]
     else:

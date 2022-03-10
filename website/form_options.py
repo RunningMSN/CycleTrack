@@ -24,6 +24,9 @@ STATE_OPTIONS = ["Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colo
 # Settings for visualizations page
 VIS_TYPES = ["Line", "Bar", "Dot", "Sankey","Map"]
 
+# Settings for color palettes
+COLOR_TYPES = ["Default","Okabe-Ito","Tol"]
+
 # School list import column types
 COLUMN_TYPES = ["School Name", "Primary Submitted/Verified", "Secondary Received",
                 "Application Complete", "Interview Received", "Interview Date", "Rejected", "Waitlisted", "Accepted",

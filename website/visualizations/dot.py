@@ -3,7 +3,7 @@ import plotly.express as px
 import json
 from . import converters
 
-def generate(cycle_data, title):
+def generate(cycle_data, title,color="default"):
     '''Returns JSON for plotly dot graph of the application cycle.'''
     # Melt data
     melted = cycle_data.melt(id_vars=cycle_data.columns[0], value_vars=cycle_data.columns[1:], var_name='Actions', value_name='date')
@@ -15,7 +15,7 @@ def generate(cycle_data, title):
                      },
                      title=title,
                      height=len(melted['name'].unique())*20, # Adjust height based on number of schools
-                     color_discrete_map=converters.fig_colors)
+                     color_discrete_map=converters.palette[color])
     # Update names of traces to make more readable
     fig.for_each_trace(lambda t: t.update(name=converters.action_names[t.name],
                                           legendgroup=converters.action_names[t.name],
