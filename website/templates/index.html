@@ -21,6 +21,18 @@
 	graphs.config = {'responsive': true, 'displaylogo': false, 'scrollZoom': false}
     Plotly.newPlot('chart', graphs);
 </script></div>
+
+<script type="text/javascript">
+    var plot_element = document.getElementById('chart');
+    plot_element.on('plotly_click', function(data){
+
+        var point = data.points[0];
+        if (point) {
+            console.log(point.customdata);
+            window.open(point.customdata);
+        }
+    })
+</script>
 {% endif %}
 
 {% endblock %}
