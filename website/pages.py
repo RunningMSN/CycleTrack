@@ -697,3 +697,7 @@ def suggestions():
             flash(f'Please make sure to fill out all request fields.', category='error')
 
     return render_template('suggestions.html', user=current_user)
+
+@pages.route('/changelog')
+def changelog():
+    return render_template('changelog.html', user=current_user)
