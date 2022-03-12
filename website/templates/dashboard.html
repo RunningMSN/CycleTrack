@@ -10,7 +10,7 @@
         <div class="collapse navbar-collapse" id="dashnav">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link text-light" aria-current="page" href="{{ url_for('pages.cycles') }}">Cycles</a>
+                    <a class="nav-link text-light" aria-current="page" href="{{ url_for('dashboard.cycles') }}">Cycles</a>
                 </li>
                 {% if user.cycles|length > 0 %}
                 <li class="nav-item dropdown">
@@ -21,7 +21,7 @@
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                         {% for cycle in user.cycles %}
                         <li>
-                            <form method="POST" action="{{ url_for('pages.lists') }}">
+                            <form method="POST" action="{{ url_for('dashboard.lists') }}">
                                 <input type="hidden" id="cycle_year" name="cycle_id" value="{{ cycle.id }}">
 
                                 <a class="dropdown-item">
@@ -35,11 +35,11 @@
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-light" href="{{ url_for('pages.visualizations') }}">Visualizations</a>
+                    <a class="nav-link text-light" href="{{ url_for('dashboard.visualizations') }}">Visualizations</a>
                 </li>
               {% endif %}
                 <li class="nav-item">
-                    <a class="nav-link text-light" href="{{ url_for('pages.suggestions') }}">Suggestion/Bug Report</a>
+                    <a class="nav-link text-light" href="{{ url_for('dashboard.suggestions') }}">Suggestion/Bug Report</a>
                 </li>
             </ul>
         </div>

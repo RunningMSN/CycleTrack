@@ -15,7 +15,7 @@ s = URLSafeTimedSerializer(site_settings.SECRET_KEY)
 def login():
     # If user already logged in, redirect
     if current_user.is_authenticated:
-        return redirect(url_for('pages.cycles'))
+        return redirect(url_for('dashboard.cycles'))
 
     if request.method == 'POST':
         email = request.form.get('email')
@@ -25,7 +25,7 @@ def login():
         if user:
             if check_password_hash(user.password, password):
                 login_user(user, remember=True)
-                return redirect(url_for('pages.cycles'))
+                return redirect(url_for('dashboard.cycles'))
             else:
                 flash('Incorrect password, please try again.', category='error')
         else:
@@ -43,7 +43,7 @@ def logout():
 def register():
     # If user already logged in, redirect
     if current_user.is_authenticated:
-        return redirect(url_for('pages.cycles'))
+        return redirect(url_for('dashboard.cycles'))
 
     if request.method == 'POST':
         email = request.form.get('email')
@@ -69,7 +69,7 @@ def register():
 
             # login and go to dashboard
             login_user(new_user, remember=True)
-            return redirect(url_for('pages.cycles'))
+            return redirect(url_for('dashboard.cycles'))
 
     return render_template('register.html', user=current_user)
 
@@ -81,7 +81,7 @@ def confirm_email(token):
         user.email_verified = True
         db.session.commit()
         flash('Your email was successfully verified!', category='success')
-        return redirect(url_for('pages.cycles'))
+        return redirect(url_for('dashboard.cycles'))
     except BadTimeSignature:
         flash('This email has already been verified!', category='error')
         return redirect(url_for('pages.index'))
@@ -89,7 +89,7 @@ def confirm_email(token):
 @authentication.route('/resend_email/<email>')
 def resend_email(email):
     send_verification(email)
-    return redirect(url_for('pages.cycles'))
+    return redirect(url_for('dashboard.cycles'))
 
 @authentication.route('/forgot_password', methods=['GET', 'POST'])
 def forgot_password():
@@ -120,7 +120,7 @@ def reset_password(token):
                 user.password = generate_password_hash(password, method='sha256')
                 db.session.commit()
                 login_user(user, remember=True)
-                return redirect(url_for('pages.cycles'))
+                return redirect(url_for('dashboard.cycles'))
             except itsdangerous.SignatureExpired:
                 flash('Your password reset request has expired. Please request another link.', category='error')
                 return redirect(url_for('authentication.forgot_password'))

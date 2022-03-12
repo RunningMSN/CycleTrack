@@ -171,7 +171,7 @@
             <tr>
                 <td><strong>{{ cycle.cycle_year }}</strong></td>
                 <td>
-                    <form method="POST" action="{{ url_for('pages.lists') }}">
+                    <form method="POST" action="{{ url_for('dashboard.lists') }}">
                         <input type="hidden" id="view_cycle_id" name="cycle_id" value="{{ cycle.id }}">
                         <button type="submit" class="btn btn-link">View School List</button>
                     </form>
