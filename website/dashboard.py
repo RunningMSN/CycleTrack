@@ -12,6 +12,7 @@ from flask_mail import Message
 
 dashboard = Blueprint('dashboard', __name__)
 
+
 @dashboard.route('/cycles', methods=['GET', 'POST'])
 @login_required
 def cycles():
@@ -44,12 +45,13 @@ def cycles():
             birth = request.form.get('birth_month_year')
             if birth:
                 # Check that formatting is generally right
-                base_format="(?P<month>[0-9]{2})/(?P<year>[0-9]{4})"
+                base_format = "(?P<month>[0-9]{2})/(?P<year>[0-9]{4})"
                 if re.match(base_format, birth):
                     month = int(re.search(base_format, birth).group('month'))
                     year = int(re.search(base_format, birth).group('year'))
                     # Make sure input is valid
-                    if month >= 1 and month <= 12 and year >= (date.today().year - 60) and year <= date.today().year - 17:
+                    if month >= 1 and month <= 12 and year >= (
+                            date.today().year - 60) and year <= date.today().year - 17:
                         cycle.birth_month = month
                         cycle.birth_year = year
                     else:
@@ -102,9 +104,11 @@ def cycles():
                     if int(mcat_cp) >= 118 and int(mcat_cp) <= 132:
                         cycle.mcat_cp = int(mcat_cp)
                     else:
-                        flash('Please make sure you enter a Chemistry/Physics MCAT score between 118 and 132.', category='error')
+                        flash('Please make sure you enter a Chemistry/Physics MCAT score between 118 and 132.',
+                              category='error')
                 except Exception as e:
-                    flash('Please make sure you enter a Chemistry/Physics MCAT score between 118 and 132.', category='error')
+                    flash('Please make sure you enter a Chemistry/Physics MCAT score between 118 and 132.',
+                          category='error')
             else:
                 cycle.mcat_cp = None
             mcat_cars = request.form.get('mcat_cars')
@@ -159,7 +163,8 @@ def cycles():
                            race_ethnicity_options=form_options.RACE_ETHNICITY_OPTIONS,
                            state_options=form_options.STATE_OPTIONS, empty_cycles=", ".join(empty_cycles))
 
-@dashboard.route('/lists', methods=['GET','POST'])
+
+@dashboard.route('/lists', methods=['GET', 'POST'])
 @login_required
 def lists():
     # If GET request then did not provide a school
@@ -193,7 +198,8 @@ def lists():
         if school:
             flash('You cannot add the same program twice.', category='error')
         else:
-            db.session.add(School(name=add_school_name, cycle_id=cycle.id, user_id=current_user.id, phd=dual_degree_phd, school_type=school_type))
+            db.session.add(School(name=add_school_name, cycle_id=cycle.id, user_id=current_user.id, phd=dual_degree_phd,
+                                  school_type=school_type))
             db.session.commit()
 
     # Handle editing schools
@@ -256,54 +262,6 @@ def lists():
     return render_template('lists.html', user=current_user, cycle=cycle, md_school_list=form_options.MD_SCHOOL_LIST,
                            do_school_list=form_options.DO_SCHOOL_LIST, phd_applicant=phd_applicant)
 
-@dashboard.route('/visualizations', methods=['GET', 'POST'])
-@login_required
-def visualizations():
-    vis_type = request.form.get('vis_type')
-    # Default to no graph
-    graphJSON = None
-    if vis_type:
-        cycle_id = int(request.form.get('cycle_id'))
-        if request.form.get('plot_title'):
-            plot_title = request.form.get('plot_title')
-        else:
-            plot_title = "Application Cycle"
-        color_type = request.form.get("color_type")
-        cycle = Cycle.query.filter_by(id=cycle_id).first()
-        cycle_data = pd.read_sql(School.query.filter_by(cycle_id=cycle.id).statement, db.session.bind)
-
-        # Grab filter
-        filter = request.form.get('filter')
-        # Filter dual degree
-        if filter == 'reg' or filter == 'md' or filter == 'do':
-            cycle_data = cycle_data[cycle_data['phd'] == False]
-        elif filter == 'phd'or filter == 'md-phd' or filter == 'do-phd':
-            cycle_data = cycle_data[cycle_data['phd'] == True]
-        # Filter program type
-        if filter == 'md' or filter == 'md-phd':
-            cycle_data = cycle_data[cycle_data['school_type'] == 'MD']
-        elif filter == 'do' or filter == 'do-phd':
-            cycle_data = cycle_data[cycle_data['school_type'] == 'DO']
-
-        cycle_data = cycle_data.drop(['id','cycle_id','user_id','school_type','phd'], axis=1)
-
-        # Drop empty columns
-        cycle_data = cycle_data.dropna(axis=1, how='all')
-
-        if len(cycle_data.columns) > 1:
-            if vis_type.lower() == 'dot':
-                graphJSON = dot.generate(cycle_data, plot_title,color=color_type.lower())
-            elif vis_type.lower() == 'line':
-                graphJSON = line.generate(cycle_data, plot_title,color=color_type.lower())
-            elif vis_type.lower() == 'bar':
-                graphJSON = bar.generate(cycle_data, plot_title,color=color_type.lower())
-            elif vis_type.lower() == 'sankey':
-                graphJSON = sankey.generate(cycle_data, plot_title,color=color_type.lower())
-            elif vis_type.lower() == 'map':
-                graphJSON = map.generate(cycle_data,plot_title,color=color_type.lower())
-        else:
-            flash(f'Your selected school list for {cycle.cycle_year} does not have any dates yet!', category='error')
-    return render_template('visualizations.html', user=current_user, vis_types=form_options.VIS_TYPES, color_types = form_options.COLOR_TYPES, graphJSON=graphJSON)
 
 @dashboard.route('/import-list', methods=["GET", "POST"])
 @login_required
@@ -381,7 +339,8 @@ def import_list():
                 # Grab list of best matches
                 best_matches = {}
                 for school in cycle_data['name']:
-                    best_match = import_list_funcs.best_match(school, import_list_funcs.school_nicknames_dict.keys(), 0.7)
+                    best_match = import_list_funcs.best_match(school, import_list_funcs.school_nicknames_dict.keys(),
+                                                              0.7)
                     if best_match:
                         best_matches[school] = import_list_funcs.school_nicknames_dict[best_match]
                     else:
@@ -419,54 +378,54 @@ def import_list():
                         dual_degree_phd = False
                     # Get program type
                     if school_name in form_options.MD_SCHOOL_LIST:
-                        school_type='MD'
+                        school_type = 'MD'
                     elif school_name in form_options.DO_SCHOOL_LIST:
-                        school_type='DO'
+                        school_type = 'DO'
 
                     # Obtain all other dates
                     try:
                         primary = row['primary']
-                        if pd.isnull(primary): primary= None
+                        if pd.isnull(primary): primary = None
                     except Exception:
                         primary = None
                     try:
                         secondary_received = row['secondary_received']
-                        if pd.isnull(secondary_received): secondary_received= None
+                        if pd.isnull(secondary_received): secondary_received = None
                     except Exception:
                         secondary_received = None
                     try:
                         application_complete = row['application_complete']
-                        if pd.isnull(application_complete): application_complete= None
+                        if pd.isnull(application_complete): application_complete = None
                     except Exception:
                         application_complete = None
                     try:
                         interview_received = row['interview_received']
-                        if pd.isnull(interview_received): interview_received= None
+                        if pd.isnull(interview_received): interview_received = None
                     except Exception:
                         interview_received = None
                     try:
                         interview_date = row['interview_date']
-                        if pd.isnull(interview_date): interview_date= None
+                        if pd.isnull(interview_date): interview_date = None
                     except Exception:
                         interview_date = None
                     try:
                         rejection = row['rejection']
-                        if pd.isnull(rejection): rejection= None
+                        if pd.isnull(rejection): rejection = None
                     except Exception:
                         rejection = None
                     try:
                         waitlist = row['waitlist']
-                        if pd.isnull(waitlist): waitlist= None
+                        if pd.isnull(waitlist): waitlist = None
                     except Exception:
                         waitlist = None
                     try:
                         acceptance = row['acceptance']
-                        if pd.isnull(acceptance): acceptance= None
+                        if pd.isnull(acceptance): acceptance = None
                     except Exception:
                         acceptance = None
                     try:
                         withdrawn = row['withdrawn']
-                        if pd.isnull(withdrawn): withdrawn= None
+                        if pd.isnull(withdrawn): withdrawn = None
                     except Exception:
                         withdrawn = None
 
@@ -486,7 +445,8 @@ def import_list():
                     else:
                         db.session.add(School(name=school_name, user_id=current_user.id, cycle_id=cycle.id,
                                               school_type=school_type, phd=dual_degree_phd, primary=primary,
-                                              secondary_received=secondary_received, application_complete=application_complete,
+                                              secondary_received=secondary_received,
+                                              application_complete=application_complete,
                                               interview_received=interview_received, interview_date=interview_date,
                                               rejection=rejection, waitlist=waitlist, acceptance=acceptance,
                                               withdrawn=withdrawn))
@@ -504,6 +464,7 @@ def import_list():
             return redirect(url_for('dashboard.cycles'))
     return render_template('import-list.html', user=current_user, cycle=cycle)
 
+
 @dashboard.route('/export-list', methods=["POST"])
 @login_required
 def export_list():
@@ -519,6 +480,7 @@ def export_list():
     response.headers.set("Content-Disposition", "attachment", filename=f'{cycle.cycle_year}_school_list.csv')
     return response
 
+
 @dashboard.route('/suggestions', methods=['GET', 'POST'])
 @login_required
 def suggestions():
@@ -530,16 +492,18 @@ def suggestions():
         if form_type and contact and content and spam_protect:
             if spam_protect.lower() == 'mcat':
                 # Send email to us with suggestion
-                email = Message(f'{form_type} on {date.today().strftime("%B %d, %Y")}', sender=(f'CycleTrack {form_type}',
-                                                                       f'admin@docs2be.org'),
-                                                                       recipients=['admin@docs2be.org'])
+                email = Message(f'{form_type} on {date.today().strftime("%B %d, %Y")}',
+                                sender=(f'CycleTrack {form_type}',
+                                        f'admin@docs2be.org'),
+                                recipients=['admin@docs2be.org'])
                 email.body = f'Form Type: {form_type}\n\nAllow Contact: {contact}\n\nEmail: {current_user.email}' \
                              f'\n\nMessage:\n{content}'
                 mail.send(email)
 
                 if contact == 'yes':
-                    flash(f'Your {form_type.lower()} has been received. We may contact you if we have further questions.',
-                          category='success')
+                    flash(
+                        f'Your {form_type.lower()} has been received. We may contact you if we have further questions.',
+                        category='success')
                 else:
                     flash(f'Your {form_type.lower()} has been received.', category='success')
                 return redirect(url_for('dashboard.cycles'))
@@ -549,6 +513,7 @@ def suggestions():
             flash(f'Please make sure to fill out all request fields.', category='error')
 
     return render_template('suggestions.html', user=current_user)
+
 
 @dashboard.route('/delete-cycle', methods=['POST'])
 def delete_cycle():
@@ -563,6 +528,7 @@ def delete_cycle():
             db.session.commit()
             return jsonify({})
 
+
 @dashboard.route('/delete-school', methods=['POST'])
 def delete_school():
     school = json.loads(request.data)
@@ -573,3 +539,90 @@ def delete_school():
             db.session.delete(school)
             db.session.commit()
             return jsonify({})
+
+
+@dashboard.route('/visualizations', methods=['GET', 'POST'])
+@login_required
+def visualizations():
+    # If GET request then did not provide a school
+    if request.method == 'GET':
+        if len(current_user.cycles) > 1:
+            flash('Please select a cycle before creating visualizations.', category='error')
+            return redirect(url_for('dashboard.cycles'))
+        elif len(current_user.cycles) == 0:
+            flash('Please add a cycle first.', category='error')
+            return redirect(url_for('dashboard.cycles'))
+        else:
+            cycle_id = current_user.cycles[0].id
+    # If POST then grab cycle ID
+    else:
+        cycle_id = request.form.get('cycle_id')
+
+    # Grab cycle and data
+    cycle = Cycle.query.filter_by(id=int(cycle_id)).first()
+    cycle_data = pd.read_sql(School.query.filter_by(cycle_id=cycle.id).statement, db.session.bind)
+    print(cycle_data['phd'])
+    # Get application types
+    # Dual Degree Types
+    if any(cycle_data['phd']):
+        app_types = ['Dual Degree']
+        # If any MD/DO Only
+        if not all(cycle_data['phd']):
+            for type in cycle_data['school_type'].unique():
+                app_types.append(f'{type} Only')
+    # MD/DO Only
+    else:
+        app_types = list(cycle_data['school_type'].unique())
+        if 'MD' in app_types and 'DO' in app_types: app_types.insert(0, 'MD or DO')
+
+    # Vis Generation
+    vis_type = request.form.get('vis_type')
+    # Default to no graph and no settings saved
+    save_settings = {'vis_type': None, 'app_type': None, 'color_type': None, 'plot_title': None}
+    graphJSON = None
+    if vis_type:
+        # Grab Settings
+        if request.form.get('plot_title'):
+            plot_title = request.form.get('plot_title')
+        else:
+            plot_title = "Application Cycle"
+        color_type = request.form.get("color_type")
+        app_type = request.form.get("app_type")
+
+        # Save Settings
+        save_settings = {'vis_type': vis_type, 'app_type': app_type, 'color_type': color_type, 'plot_title': plot_title}
+
+        # Filter by PhD First
+        if app_type == 'Dual Degree':
+            cycle_data = cycle_data[cycle_data['phd'] == True]
+        else:
+            cycle_data = cycle_data[cycle_data['phd'] == False]
+
+        # Filter MD or DO
+        if app_type == 'MD' or app_type == 'MD Only':
+            cycle_data = cycle_data[cycle_data['school_type'] == 'MD']
+        elif app_type == 'DO' or app_type == 'DO Only':
+            cycle_data = cycle_data[cycle_data['school_type'] == 'DO']
+
+        # Drop extra information
+        cycle_data = cycle_data.drop(['id', 'cycle_id', 'user_id', 'school_type', 'phd'], axis=1)
+        # Drop empty columns
+        cycle_data = cycle_data.dropna(axis=1, how='all')
+        # Get visualization JSON
+        if len(cycle_data.columns) > 1:
+            if vis_type.lower() == 'dot':
+                graphJSON = dot.generate(cycle_data, plot_title, color=color_type.lower())
+            elif vis_type.lower() == 'line':
+                graphJSON = line.generate(cycle_data, plot_title, color=color_type.lower())
+            elif vis_type.lower() == 'bar':
+                graphJSON = bar.generate(cycle_data, plot_title, color=color_type.lower())
+            elif vis_type.lower() == 'sankey':
+                graphJSON = sankey.generate(cycle_data, plot_title, color=color_type.lower())
+            elif vis_type.lower() == 'map':
+                graphJSON = map.generate(cycle_data, plot_title, color=color_type.lower())
+        else:
+            flash(f'Your selected school list for {cycle.cycle_year} does not have any dates yet!', category='error')
+
+    return render_template('visualizations.html', user=current_user, cycle=cycle, app_types=app_types,
+                           vis_types=form_options.VIS_TYPES, color_types=form_options.COLOR_TYPES, graphJSON=graphJSON,
+                           save_settings=save_settings)

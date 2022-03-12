@@ -34,8 +34,25 @@
                         {% endfor %}
                     </ul>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link text-light" href="{{ url_for('dashboard.visualizations') }}">Visualizations</a>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-light" href="#" id="visDrop" role="button"
+                       data-bs-toggle="dropdown" aria-expanded="false">
+                        Visualizations
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="visDrop">
+                        {% for cycle in user.cycles %}
+                        <li>
+                            <form method="POST" action="{{ url_for('dashboard.visualizations') }}">
+                                <input type="hidden" id="cycle_year_vis" name="cycle_id" value="{{ cycle.id }}">
+                                <a class="dropdown-item">
+                                    <button type="submit" class="btn btn-link text-decoration-none text-dark">
+                                        {{ cycle.cycle_year }}
+                                    </button>
+                                </a>
+                            </form>
+                        </li>
+                        {% endfor %}
+                    </ul>
                 </li>
               {% endif %}
                 <li class="nav-item">

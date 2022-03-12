@@ -1,69 +1,126 @@
 {% extends 'dashboard.html' %}
 {% block title %} Visualizations {% endblock %}
 {% block dash_content %}
-<div id="visualizations" class="container" style="padding-top:10px">
-    <form method="POST">
-        <h2>Visualizations</h2>
-        <div class="d-md-none" style="padding-bottom:10px">
-            <div class="bg-warning container rounded" style="padding: 10px">
-            Visualizations may be difficult to
-            view on smaller screens. You may want to return to this page on a device with a larger screen!
+<div id="visualizations" class="container" style="padding-top:10px" xmlns="http://www.w3.org/1999/html">
+    <h2>Visualizations for {{ cycle.cycle_year }} Cycle</h2>
+
+    <!-- WARNING FOR SMALL SCREENS -->
+    <div class="d-md-none" style="padding-bottom:10px">
+        <div class="bg-warning container rounded" style="padding: 10px">
+            Visualizations may be difficult to view on smaller screens. You may want to return to this page on a
+            device with a larger screen!
+        </div>
+    </div>
+
+    <div class="container" style="padding:20px;background:#ebebeb">
+        <div class="row-flex">
+            <div class="container" style="background:white; padding:10px">
+                <h4>Settings</h4>
+                <form method="POST">
+                    <input type="hidden" name="cycle_id" id="cycle_id" value="{{ cycle.id }}">
+                    <!-- OPTIONS FOR GRAPHS -->
+                    <div class="row" style="padding-top:5px;padding-bottom:5px">
+                        <!-- VIS TYPE -->
+                        <div class="col">
+                            <table>
+                                <tr>
+                                    <td style="width: 120px"><strong>Visualization: </strong></td>
+                                    <td>
+                                        <select name="vis_type" id="vis_type" class="btn-sm form-control"
+                                                style="width: 100px">
+                                            {% if save_settings['vis_type'] %}
+                                            <option selected="{{ save_settings['vis_type'] }}">{{ save_settings['vis_type'] }}</option>
+                                            {% endif %}
+                                            {% for vis_type in vis_types %}
+                                            {% if vis_type != save_settings['vis_type'] %}
+                                            <option value="{{ vis_type }}">{{ vis_type }}</option>
+                                            {% endif %}
+                                            {% endfor %}
+                                        </select>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <!-- APPLICATION TYPES -->
+                        <div class="col">
+                            <table>
+                                <tr>
+                                    <td style="width: 120px"><strong>Applications: </strong></td>
+                                    <td>
+                                        <select name="app_type" id="app-type" class="btn-sm form-control"
+                                                style="width: 100px">
+                                            {% if save_settings['app_type'] %}
+                                            <option selected="{{ save_settings['app_type'] }}">{{ save_settings['app_type'] }}</option>
+                                            {% endif %}
+                                            {% for app_type in app_types %}
+                                            {% if app_type != save_settings['app_type'] %}
+                                            <option value="{{ app_type }}">{{ app_type }}</option>
+                                            {% endif %}
+                                            {% endfor %}
+                                        </select>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <!-- Color Palette -->
+                        <div class="col">
+                            <table>
+                                <tr>
+                                    <td style="width: 120px"><strong>Colors: </strong></td>
+                                    <td>
+                                        <select name="color_type" id="color_type" class="btn-sm form-control">
+                                            {% if save_settings['color_type'] %}
+                                            <option selected="{{ save_settings['color_type'] }}">{{ save_settings['color_type'] }}</option>
+                                            {% endif %}
+                                            {% for color_type in color_types %}
+                                            {% if color_type != save_settings['color_type'] %}
+                                            <option value="{{ color_type }}">{{ color_type }}</option>
+                                            {% endif %}
+                                            {% endfor %}
+                                        </select>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row-flex">
+                        <!-- GRAPH TITLE -->
+                        <table>
+                            <tr>
+                                <td style="width: 120px"><strong>Title: </strong></td>
+                                <td>
+                                    <input type="text" class="form-control" id="plot_title" name = "plot_title"
+                                           value="{% if save_settings['plot_title'] %}{{ save_settings['plot_title'] }}{% else %}{{ cycle.cycle_year }} Application Cycle{% endif %}"></input>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="row-flex" style="padding-top:5px;padding-bottom:5px">
+                        <div clas="col">
+                            <button class="btn btn-primary" type="submit">Generate</button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
-        <div style="">
-        <div class="form-group" style="padding-top: 5px; padding-bottom:5px;">
-            <label for="cycle">Choose a Cycle: </label>
-            <select name="cycle_id" id="cycle_manual">
-                {% for cycle in user.cycles %}
-                <option value="{{ cycle.id }}">{{ cycle.cycle_year }}</option>
-                {% endfor %}
-            </select>
+        {% if graphJSON %}
+        <div class="row-flex" style="margin-top:15px">
+            <div class="container" style="background:white; padding:10px">
+
+                <div id="chart" class="chart"></div>
+                <script>
+                        var graphs = {{ graphJSON | safe }};
+                        graphs.config = {'responsive': true, 'displaylogo': false,
+                        modeBarButtonsToRemove:["autoScale2d","zoomIn2d","zoomOut2d","toggleSpikelines","select2d","lasso2d"]}
+                        Plotly.newPlot('chart', graphs);
+
+                </script>
+            </div>
         </div>
-        <div class="form-group" style="padding-top: 5px; padding-bottom:5px;">
-            <label for="filter">Filter: </label>
-            <select name="filter" id="filter">
-                <option value="all">All Applications</option>
-                <option value="reg">MD/DO</option>
-                <option value="phd">MD/DO-PhD</option>
-                <option value="md">MD</option>
-                <option value="md-phd">MD-PhD</option>
-                <option value="do">DO</option>
-                <option value="do-phd">DO-PhD</option>
-            </select>
-        </div>
-        <div class="form-group" style="padding-top: 5px; padding-bottom:5px;">
-            <label for="vis_type">Choose a Visualization:</label>
-            <select name="vis_type" id="vis_type">
-                {% for vis_type in vis_types %}
-                <option value="{{ vis_type }}">{{ vis_type }}</option>
-                {% endfor %}
-            </select>
-        </div>
-        <div class="form-group" style="padding-top: 5px; padding-bottom:5px;">
-            <label for="color_type">Choose a Color Palette:</label>
-            <select name="color_type" id="color_type">
-                {% for color_type in color_types %}
-                <option value="{{ color_type }}">{{ color_type }}</option>
-                {% endfor %}
-            </select>
-        </div>
-        <div class="form-group" style="padding-top: 5px; padding-bottom:5px;">
-            <label for="plot_title">Title:</label>
-            <input type="text" id="plot_title" name = "plot_title" value="Application Cycle"></input>
-        </div>
-        <button type="submit" class="btn btn-primary">Generate</button>
-    </form>
+        {% endif %}
     </div>
 </div>
 
-{% if graphJSON %}
-<div class="container" style="padding-top:20px">
-<div id="chart" class="chart"></div>
-<script>
-	var graphs = {{ graphJSON | safe }};
-	graphs.config = {'responsive': true, 'displaylogo': false,
-    modeBarButtonsToRemove:["autoScale2d","zoomIn2d","zoomOut2d","toggleSpikelines","select2d","lasso2d"]}
-    Plotly.newPlot('chart', graphs);
-</script></div>
-{% endif %}
+
 {% endblock %}
