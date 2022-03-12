@@ -10,7 +10,7 @@ palette = {
                   'waitlist': '#de91ff', 'acceptance': '#009E73', 'withdrawn': '#000000'},
     "tol" : {"primary":"#ddcc77","secondary_received":"#88ccee","application_complete":"#331888",
                 "interview_received":"#882255","interview_date":"#117733","rejection":"#aa4499",
-                "waitlist":"#cc6677","acceptance":"#44aa99","withdrawn":"#b5b5b5"}
+                "waitlist":"#cc6677","acceptance":"#44aa99","withdrawn":"#000000"}
 }
 
 
