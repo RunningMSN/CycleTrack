@@ -1,9 +1,11 @@
 {% extends 'dashboard.html' %}
 {% block title %} Dashboard {% endblock %}
 {% block dash_content %}
+
 <!-- SCHOOL LIST MANAGEMENT -->
 <div id="lists" class="container" style="padding-top:10px">
     <h2>My {{ cycle.cycle_year }} School List</h2>
+
     {% if cycle.schools|length > 0 %}
     <!-- MESSAGE FOR DUAL DEGREE APPLICANTS -->
     {% if phd_applicant %}
@@ -16,6 +18,46 @@
         </a>
     </p>
     {% endif %}
+    <!-- BUTTONS FOR BULK EDIT ADDING SCHOOLS-->
+    <table>
+        <tr>
+            <td>
+                <button class="btn btn-primary d-none d-lg-block" type="button" onclick="toggleBulkEdit()">
+                    Bulk edit
+                </button>
+            </td>
+            <td>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-md-modal">
+                    Add MD School
+                </button>
+            </td>
+            <td>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-do-modal">
+                    Add DO School
+                </button>
+            </td>
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <td>
+                <form method="POST" action="{{ url_for('dashboard.import_list') }}">
+                    <input type="hidden" id="import_cycle_id" name="cycle_id" value="{{ cycle.id }}"/>
+                    <button type="submit" class="btn btn-primary">
+                        Import From Spreadsheet
+                    </button>
+                </form>
+            </td>
+            <td>
+                <form method="POST" action="{{ url_for('dashboard.export_list') }}">
+                    <input type="hidden" id="export_cycle_id" name="cycle_id" value="{{ cycle.id }}"/>
+                    <button type="submit" class="btn btn-primary">
+                        Export To Spreadsheet
+                    </button>
+                </form>
+            </td>
+        </tr>
+    </table>
     <!-- SMALLEST SCREEN SIZE -->
     <div class="d-md-none">
         <table class="table" style="font-size:0.9rem">
@@ -117,7 +159,7 @@
         </table>
     </div>
     <!-- FULL TABLE ON LARGE SCREENS -->
-    <div class="d-none d-lg-block">
+     <div class="d-none d-lg-block" id="normal-list">
         <table class="table" style="font-size:0.9rem">
             <thead>
                 <tr>
@@ -196,46 +238,87 @@
             {% endfor %}
         </table>
     </div>
+    <!--BULK EDIT FULL TABLE ON LARGE SCREENS-->
+    <div class="d-none" id="bulkedit-list">
+        <form method="POST" action="./update">
+            <input type="submit" value="Save Changes" class="btn btn-secondary">
+            <input type="hidden" value="{{cycle.id}}" name="cycle_id">
+
+            <table class="table" style="font-size:0.9rem">
+                <thead>
+                    <tr>
+                        <th>Delete</th>
+                        <th>School</th>
+                        <th>Primary Submitted</th>
+                        <th>Secondary Received</th>
+                        <th>Application Complete</th>
+                        <th>Interview Received</th>
+                        <th>Interview Date</th>
+                        <th>Rejected</th>
+                        <th>Waitlisted</th>
+                        <th>Accepted</th>
+                        <th>Withdrawn</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                {% for school in cycle.schools %}
+                <tr class="{% if school.acceptance %}table-success{% elif school.waitlist %}table-warning{% elif school.rejection %}table-danger{% elif school.withdrawn %}table-secondary{% endif %}">
+                    <td>
+                        <input type="checkbox" id="bulkDelete" name="delete-{{school.id}}">
+                    </td>
+                    <td>
+                        <a href="{{ url_for('explorer.explorer_home') }}/{{ school.name }}" style="color:black;text-decoration: none">
+                        {{ school.name }} ({% if school.school_type == "MD" %}MD{% else %}DO{% endif %}{% if school.phd %}-PhD{% endif %})
+                        </a>
+                    </td>
+                    <td>
+                        <input type="hidden" value="{%- if school.primary -%}{{ school.primary.strftime('%Y-%m-%d') }}{%- endif -%}" name="primary0-{{school.id}}">
+                        <input type="date" value="{%- if school.primary -%}{{ school.primary.strftime('%Y-%m-%d') }}{%- endif -%}" name="primary1-{{school.id}}">
+                    </td>
+                    <td>
+                        <input type="hidden" value="{%- if school.secondary_received -%}{{ school.secondary_received.strftime('%Y-%m-%d') }}{%- endif -%}" name="secondary_received0-{{school.id}}">
+                        <input type="date" value="{%- if school.secondary_received -%}{{ school.secondary_received.strftime('%Y-%m-%d') }}{%- endif -%}" name="secondary_received1-{{school.id}}">
+                    </td>
+                    <td>
+                        <input type="hidden" value="{%- if school.application_complete-%}{{ school.application_complete.strftime('%Y-%m-%d') }}{%- endif -%}" name="application_complete0-{{school.id}}">
+                        <input type="date" value="{%- if school.application_complete-%}{{ school.application_complete.strftime('%Y-%m-%d') }}{%- endif -%}" name="application_complete1-{{school.id}}">
+                    </td>
+                    <td>
+                        <input type="hidden" value="{%- if school.interview_received -%}{{ school.interview_received.strftime('%Y-%m-%d') }}{%- endif -%}" name="interview_received0-{{school.id}}">
+                        <input type="date" value="{%- if school.interview_received -%}{{ school.interview_received.strftime('%Y-%m-%d') }}{%- endif -%}" name="interview_received1-{{school.id}}">
+                    </td>
+                    <td>
+                        <input type="hidden" value="{%- if school.interview_date -%}{{ school.interview_date.strftime('%Y-%m-%d') }}{%- endif -%}" name="interview_date0-{{school.id}}">
+                        <input type="date" value="{%- if school.interview_date -%}{{ school.interview_date.strftime('%Y-%m-%d') }}{%- endif -%}" name="interview_date1-{{school.id}}">
+                    </td>
+                    <td>
+                        <input type="hidden" value="{%- if school.rejection -%}{{ school.rejection.strftime('%Y-%m-%d') }}{%- endif -%}" name="rejection0-{{school.id}}">
+                        <input type="date" value="{%- if school.rejection -%}{{ school.rejection.strftime('%Y-%m-%d') }}{%- endif -%}" name="rejection1-{{school.id}}">
+                    </td>
+                    <td>
+                        <input type="hidden" value="{%- if school.waitlist -%}{{ school.waitlist.strftime('%Y-%m-%d') }}{%- endif -%}" name="waitlist0-{{school.id}}">
+                        <input type="date" value="{%- if school.waitlist -%}{{ school.waitlist.strftime('%Y-%m-%d') }}{%- endif -%}" name="waitlist1-{{school.id}}">
+                    </td>
+                    <td>
+                        <input type="hidden" value="{%- if school.acceptance -%}{{ school.acceptance.strftime('%Y-%m-%d') }}{%- endif -%}" name="acceptance0-{{school.id}}">
+                        <input type="date" value="{%- if school.acceptance -%}{{ school.acceptance.strftime('%Y-%m-%d') }}{%- endif -%}" name="acceptance1-{{school.id}}">
+                    </td>
+                    <td>
+                        <input type="hidden" value="{%- if school.withdrawn -%}{{ school.withdrawn.strftime('%Y-%m-%d') }}{%- endif -%}" name="withdrawn0-{{school.id}}">
+                        <input type="date" value="{%- if school.withdrawn -%}{{ school.withdrawn.strftime('%Y-%m-%d') }}{%- endif -%}" name="withdrawn1-{{school.id}}">
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+            
+        </form>
+    </div>
     {% else %}
     <p>You have not added any schools. Get started by adding schools manually or importing an existing list from a
     spreadsheet.</p>
     {% endif %}
 
-    <!-- BUTTONS FOR ADDING SCHOOLS -->
-    <table>
-        <tr>
-            <td>
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-md-modal">
-                    Add MD School
-                </button>
-            </td>
-            <td>
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-do-modal">
-                    Add DO School
-                </button>
-            </td>
-        </tr>
-    </table>
-    <table>
-        <tr>
-            <td>
-                <form method="POST" action="{{ url_for('dashboard.import_list') }}">
-                    <input type="hidden" id="import_cycle_id" name="cycle_id" value="{{ cycle.id }}"/>
-                    <button type="submit" class="btn btn-primary">
-                        Import From Spreadsheet
-                    </button>
-                </form>
-            </td>
-            <td>
-                <form method="POST" action="{{ url_for('dashboard.export_list') }}">
-                    <input type="hidden" id="export_cycle_id" name="cycle_id" value="{{ cycle.id }}"/>
-                    <button type="submit" class="btn btn-primary">
-                        Export To Spreadsheet
-                    </button>
-                </form>
-            </td>
-        </tr>
-    </table>
+
 </div>
 
 <!-- SETUP MODAL FOR EDITING EACH SCHOOL -->

@@ -262,6 +262,111 @@ def lists():
     return render_template('lists.html', user=current_user, cycle=cycle, md_school_list=form_options.MD_SCHOOL_LIST,
                            do_school_list=form_options.DO_SCHOOL_LIST, phd_applicant=phd_applicant)
 
+@dashboard.route("/update",methods=['POST','GET'])
+@login_required
+def update():
+    for key in request.form:
+        school_id = key.partition("-")[-1]
+
+        if key.startswith('primary1'):
+            primary_pre = request.form.get("primary0-"+school_id)
+            primary_post = request.form.get("primary1-"+school_id)
+            if primary_post != primary_pre:
+                if primary_post != "":
+                    primary_update = datetime.strptime(primary_post, '%Y-%m-%d')
+                else:
+                    primary_update = None
+                school = School.query.filter_by(id=int(school_id)).first()
+                school.primary = primary_update
+        elif key.startswith('secondary_received1'):
+            secondary_received_pre = request.form.get("secondary_received0-"+school_id)
+            secondary_received_post = request.form.get("secondary_received1-"+school_id)
+            if secondary_received_post != secondary_received_pre:
+                if secondary_received_post != "":
+                    secondary_received_update = datetime.strptime(secondary_received_post, '%Y-%m-%d')
+                else:
+                    secondary_received_update = None
+                school = School.query.filter_by(id=int(school_id)).first()
+                school.secondary_received = secondary_received_update
+        elif key.startswith('application_complete1'):
+            application_complete_pre = request.form.get("application_complete0-"+school_id)
+            application_complete_post = request.form.get("application_complete1-"+school_id)
+            if application_complete_post != application_complete_pre:
+                if application_complete_post != "":
+                    application_complete_update = datetime.strptime(application_complete_post, '%Y-%m-%d')
+                else:
+                    application_complete_update = None
+                school = School.query.filter_by(id=int(school_id)).first()
+                school.application_complete = application_complete_update
+        elif key.startswith("interview_received1"):
+            interview_received_pre = request.form.get("interview_received0-"+school_id)
+            interview_received_post = request.form.get("interview_received1-"+school_id)
+            if interview_received_post != interview_received_pre:
+                if interview_received_post != "":
+                    interview_received_update = datetime.strptime(interview_received_post, '%Y-%m-%d')
+                else:
+                    interview_received_update = None
+                school = School.query.filter_by(id=int(school_id)).first()
+                school.interview_received = interview_received_update
+        elif key.startswith("interview_date1"):
+            interview_date_pre = request.form.get("interview_date0-"+school_id)
+            interview_date_post = request.form.get("interview_date1-"+school_id)
+            if interview_date_post != interview_date_pre:
+                if interview_date_post != "":
+                    interview_date_update = datetime.strptime(interview_date_post, '%Y-%m-%d')
+                else:
+                    interview_date_update = None
+                school = School.query.filter_by(id=int(school_id)).first()
+                school.interview_date = interview_date_update
+        elif key.startswith("rejection1"):
+            rejection_pre = request.form.get("rejection0-"+school_id)
+            rejection_post = request.form.get("rejection1-"+school_id)
+            if rejection_post != rejection_pre:
+                if rejection_post != "":
+                    rejection_update = datetime.strptime(rejection_post, '%Y-%m-%d')
+                else:
+                    rejection_update = None
+                school = School.query.filter_by(id=int(school_id)).first()
+                school.rejection = rejection_update
+        elif key.startswith("waitlist1"):
+            waitlist_pre = request.form.get("waitlist0-"+school_id)
+            waitlist_post = request.form.get("waitlist1-"+school_id)
+            if waitlist_post != waitlist_pre:
+                if waitlist_post != "":
+                    waitlist_update = datetime.strptime(waitlist_post, '%Y-%m-%d')
+                else:
+                    waitlist_update = None
+                school = School.query.filter_by(id=int(school_id)).first()
+                school.waitlist = waitlist_update
+        elif key.startswith("acceptance"):
+            acceptance_pre = request.form.get("acceptance0-"+school_id)
+            acceptance_post = request.form.get("acceptance1-"+school_id)
+            if acceptance_post != acceptance_pre:
+                if acceptance_post != "":
+                    acceptance_update = datetime.strptime(acceptance_post, '%Y-%m-%d')
+                else:
+                    acceptance_update = None
+                school = School.query.filter_by(id=int(school_id)).first()
+                school.acceptance = acceptance_update
+        elif key.startswith("withdrawn1"):
+            withdrawn_pre = request.form.get("withdrawn0-"+school_id)
+            withdrawn_post = request.form.get("withdrawn1-"+school_id)
+            if withdrawn_post != withdrawn_pre:
+                if withdrawn_post != "":
+                    withdrawn_update = datetime.strptime(withdrawn_post, '%Y-%m-%d')
+                else:
+                    withdrawn_update = None
+                school = School.query.filter_by(id=int(school_id)).first()
+                school.withdrawn = withdrawn_update
+        elif key.startswith("delete"):
+            school = School.query.get(school_id)
+            if school:
+                if school.user_id == current_user.id:
+                    db.session.delete(school)
+        else:
+            continue
+        db.session.commit()
+    return redirect("/lists")
 
 @dashboard.route('/import-list', methods=["GET", "POST"])
 @login_required

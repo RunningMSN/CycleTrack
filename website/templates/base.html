@@ -34,6 +34,22 @@
         })
     </script>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script>
+        function toggleBulkEdit() {
+            var normal = document.getElementById("normal-list");
+            var bulk = document.getElementById("bulkedit-list");
+            if (!normal.classList.contains("d-lg-block")) {
+                if (confirm("Changes have not been saved! Do you want to proceed?")){
+                    normal.classList.add("d-lg-block");
+                    bulk.classList.remove("d-lg-block");
+                }
+                else{}
+            } else {
+                normal.classList.remove("d-lg-block");
+                bulk.classList.add("d-lg-block");
+            }
+        }
+    </script>
 </head>
 
 <body class="d-flex flex-column min-vh-100">
