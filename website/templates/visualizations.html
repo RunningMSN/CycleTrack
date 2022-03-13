@@ -148,8 +148,9 @@
         {% if graphJSON %}
         <div class="row-flex" style="margin-top:15px">
             <div class="container" style="background:white; padding:10px">
-
-                <div id="chart" class="chart"></div>
+                <center>
+                    <div id="chart" class="chart"></div>
+                </center>
                 <script>
                         var graphs = {{ graphJSON | safe }};
                         graphs.config = {'responsive': true, 'displaylogo': false,
