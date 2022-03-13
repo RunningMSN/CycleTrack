@@ -561,7 +561,6 @@ def visualizations():
     # Grab cycle and data
     cycle = Cycle.query.filter_by(id=int(cycle_id)).first()
     cycle_data = pd.read_sql(School.query.filter_by(cycle_id=cycle.id).statement, db.session.bind)
-    print(cycle_data['phd'])
     # Get application types
     # Dual Degree Types
     if any(cycle_data['phd']):
@@ -578,7 +577,7 @@ def visualizations():
     # Vis Generation
     vis_type = request.form.get('vis_type')
     # Default to no graph and no settings saved
-    save_settings = {'vis_type': None, 'app_type': None, 'color_type': None, 'plot_title': None}
+    save_settings = {'vis_type': None, 'app_type': None, 'color_type': None, 'plot_title': None, 'filters': None}
     graphJSON = None
     if vis_type:
         # Grab Settings
@@ -588,11 +587,24 @@ def visualizations():
             plot_title = "Application Cycle"
         color_type = request.form.get("color_type")
         app_type = request.form.get("app_type")
-
         # Save Settings
-        save_settings = {'vis_type': vis_type, 'app_type': app_type, 'color_type': color_type, 'plot_title': plot_title}
+        save_settings = {'vis_type': vis_type, 'app_type': app_type, 'color_type': color_type, 'plot_title': plot_title,
+                         'filters': {}}
 
-        # Filter by PhD First
+        # Grab filters
+        filter_types = {'primary': None, 'secondary_received': None, 'application_complete': None,
+                        'interview_received': None, 'interview_date': None, 'rejection': None, 'waitlist': None,
+                        'acceptance': None, 'withdrawn': None}
+
+        # Apply data filters and save
+        for filter in filter_types.keys():
+            if request.form.get(f'exclude-{filter}'):
+                cycle_data = cycle_data.drop([filter], axis=1)
+                save_settings['filters'][filter] = True
+            else:
+                save_settings['filters'][filter] = False
+
+        # Filter by PhD
         if app_type == 'Dual Degree':
             cycle_data = cycle_data[cycle_data['phd'] == True]
         else:
