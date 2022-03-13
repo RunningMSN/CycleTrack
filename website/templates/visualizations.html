@@ -14,7 +14,7 @@
 
     <div class="container" style="padding:20px;background:#ebebeb">
         <div class="row-flex">
-            <div class="container" style="background:white; padding:10px">
+            <div class="container" style="background:#ebebeb; padding:10px">
                 <h4>Settings</h4>
                 <form method="POST">
                     <input type="hidden" name="cycle_id" id="cycle_id" value="{{ cycle.id }}">
@@ -49,7 +49,7 @@
                                     <td style="width: 120px"><strong>Applications: </strong></td>
                                     <td>
                                         <select name="app_type" id="app-type" class="btn-sm form-control"
-                                                style="width: 100px">
+                                                style="width: 120px">
                                             {% if save_settings['app_type'] %}
                                             <option selected="{{ save_settings['app_type'] }}">{{ save_settings['app_type'] }}</option>
                                             {% endif %}
@@ -67,7 +67,7 @@
                         <div class="col">
                             <table>
                                 <tr>
-                                    <td style="width: 120px"><strong>Colors: </strong></td>
+                                    <td style="width: 75px"><strong>Colors: </strong></td>
                                     <td>
                                         <select name="color_type" id="color_type" class="btn-sm form-control">
                                             {% if save_settings['color_type'] %}

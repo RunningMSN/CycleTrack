@@ -182,6 +182,14 @@
                     </button>
                 </td>
                 <td>
+                    <form method="POST" action="{{ url_for('dashboard.visualizations') }}">
+                        <input type="hidden" id="cycle_year_vis" name="cycle_id" value="{{ cycle.id }}">
+                        <button type="submit" class="btn btn-link">
+                            Visualize
+                        </button>
+                    </form>
+                </td>
+                <td>
                     <button type="button" class="btn btn-link" data-toggle="modal" data-target="#{{ cycle.cycle_year }}-modal_delete">
                         Delete Cycle
                     </button>
