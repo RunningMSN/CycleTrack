@@ -320,7 +320,7 @@
     Plotly.newPlot('reg_interviews_graph', reg_interviews_graph);
     </script>
 {% endif %}
-{% if reg_info['acceptance'] %}
+{% if reg_info['acceptance_graph'] %}
     <script>
     var reg_acceptance_graph = {{ reg_info['acceptance_graph'] | safe }};
     reg_acceptance_graph.config = {'responsive': true, 'displaylogo': false}
