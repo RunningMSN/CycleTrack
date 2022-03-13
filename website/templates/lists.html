@@ -3,7 +3,7 @@
 {% block dash_content %}
 
 <!-- SCHOOL LIST MANAGEMENT -->
-<div id="lists" class="container" style="padding-top:10px">
+<div id="lists" class="container list-page" style="padding-top:10px">
     <h2>My {{ cycle.cycle_year }} School List</h2>
     <!-- MESSAGE FOR DUAL DEGREE APPLICANTS -->
     {% if phd_applicant %}
@@ -242,11 +242,12 @@
     </div>
     <!--BULK EDIT FULL TABLE ON LARGE SCREENS-->
     <div class="d-none" id="bulkedit-list">
+        
         <form method="POST" action="./update">
             <input type="submit" value="Save Changes" class="btn btn-secondary">
             <input type="hidden" value="{{cycle.id}}" name="cycle_id">
 
-            <table class="table table-sm" style="font-size:0.8rem" id="edit-table">
+            <table class="table table-sm" style="font-size:0.9rem" id="edit-table">
                 <thead>
                     <tr>
                         <th>Del</th>
@@ -260,7 +261,6 @@
                         <th>Waitlisted</th>
                         <th>Accepted</th>
                         <th>Withdrawn</th>
-                        <th></th>
                     </tr>
                 </thead>
                 {% for school in cycle.schools %}
@@ -275,39 +275,39 @@
                     </td>
                     <td>
                         <input type="hidden" value="{%- if school.primary -%}{{ school.primary.strftime('%Y-%m-%d') }}{%- endif -%}" name="primary0-{{school.id}}">
-                        <input class="col-sm-12" type="date" value="{%- if school.primary -%}{{ school.primary.strftime('%Y-%m-%d') }}{%- endif -%}" name="primary1-{{school.id}}">
+                        <input class="datepicker" type="text" data-cycle="{{cycle.cycle_year}}" value="{%- if school.primary -%}{{ school.primary.strftime('%Y-%m-%d') }}{%- endif -%}" name="primary1-{{school.id}}">
                     </td>
                     <td>
                         <input type="hidden" value="{%- if school.secondary_received -%}{{ school.secondary_received.strftime('%Y-%m-%d') }}{%- endif -%}" name="secondary_received0-{{school.id}}">
-                        <input class="col-sm-12" type="date" value="{%- if school.secondary_received -%}{{ school.secondary_received.strftime('%Y-%m-%d') }}{%- endif -%}" name="secondary_received1-{{school.id}}">
+                        <input class="datepicker" type="text" data-cycle="{{cycle.cycle_year}}" value="{%- if school.secondary_received -%}{{ school.secondary_received.strftime('%Y-%m-%d') }}{%- endif -%}" name="secondary_received1-{{school.id}}">
                     </td>
                     <td>
                         <input type="hidden" value="{%- if school.application_complete-%}{{ school.application_complete.strftime('%Y-%m-%d') }}{%- endif -%}" name="application_complete0-{{school.id}}">
-                        <input class="col-sm-12"  type="date" value="{%- if school.application_complete-%}{{ school.application_complete.strftime('%Y-%m-%d') }}{%- endif -%}" name="application_complete1-{{school.id}}">
+                        <input class="datepicker" type="text" data-cycle="{{cycle.cycle_year}}" value="{%- if school.application_complete-%}{{ school.application_complete.strftime('%Y-%m-%d') }}{%- endif -%}" name="application_complete1-{{school.id}}">
                     </td>
                     <td>
                         <input type="hidden" value="{%- if school.interview_received -%}{{ school.interview_received.strftime('%Y-%m-%d') }}{%- endif -%}" name="interview_received0-{{school.id}}">
-                        <input class="col-sm-12" type="date" value="{%- if school.interview_received -%}{{ school.interview_received.strftime('%Y-%m-%d') }}{%- endif -%}" name="interview_received1-{{school.id}}">
+                        <input class="datepicker" type="text" data-cycle="{{cycle.cycle_year}}" value="{%- if school.interview_received -%}{{ school.interview_received.strftime('%Y-%m-%d') }}{%- endif -%}" name="interview_received1-{{school.id}}">
                     </td>
                     <td>
                         <input type="hidden" value="{%- if school.interview_date -%}{{ school.interview_date.strftime('%Y-%m-%d') }}{%- endif -%}" name="interview_date0-{{school.id}}">
-                        <input class="col-sm-12" type="date" value="{%- if school.interview_date -%}{{ school.interview_date.strftime('%Y-%m-%d') }}{%- endif -%}" name="interview_date1-{{school.id}}">
+                        <input class="datepicker" type="text" data-cycle="{{cycle.cycle_year}}" value="{%- if school.interview_date -%}{{ school.interview_date.strftime('%Y-%m-%d') }}{%- endif -%}" name="interview_date1-{{school.id}}">
                     </td>
                     <td>
                         <input type="hidden" value="{%- if school.rejection -%}{{ school.rejection.strftime('%Y-%m-%d') }}{%- endif -%}" name="rejection0-{{school.id}}">
-                        <input class="col-sm-12" type="date" value="{%- if school.rejection -%}{{ school.rejection.strftime('%Y-%m-%d') }}{%- endif -%}" name="rejection1-{{school.id}}">
+                        <input class="datepicker" type="text" data-cycle="{{cycle.cycle_year}}" value="{%- if school.rejection -%}{{ school.rejection.strftime('%Y-%m-%d') }}{%- endif -%}" name="rejection1-{{school.id}}">
                     </td>
                     <td>
                         <input type="hidden" value="{%- if school.waitlist -%}{{ school.waitlist.strftime('%Y-%m-%d') }}{%- endif -%}" name="waitlist0-{{school.id}}">
-                        <input class="col-sm-12" type="date" value="{%- if school.waitlist -%}{{ school.waitlist.strftime('%Y-%m-%d') }}{%- endif -%}" name="waitlist1-{{school.id}}">
+                        <input class="datepicker" type="text" data-cycle="{{cycle.cycle_year}}" value="{%- if school.waitlist -%}{{ school.waitlist.strftime('%Y-%m-%d') }}{%- endif -%}" name="waitlist1-{{school.id}}">
                     </td>
                     <td>
                         <input type="hidden" value="{%- if school.acceptance -%}{{ school.acceptance.strftime('%Y-%m-%d') }}{%- endif -%}" name="acceptance0-{{school.id}}">
-                        <input class="col-sm-12" type="date" value="{%- if school.acceptance -%}{{ school.acceptance.strftime('%Y-%m-%d') }}{%- endif -%}" name="acceptance1-{{school.id}}">
+                        <input class="datepicker" type="text" data-cycle="{{cycle.cycle_year}}" value="{%- if school.acceptance -%}{{ school.acceptance.strftime('%Y-%m-%d') }}{%- endif -%}" name="acceptance1-{{school.id}}">
                     </td>
                     <td>
                         <input type="hidden" value="{%- if school.withdrawn -%}{{ school.withdrawn.strftime('%Y-%m-%d') }}{%- endif -%}" name="withdrawn0-{{school.id}}">
-                        <input class="col-sm-12" type="date" value="{%- if school.withdrawn -%}{{ school.withdrawn.strftime('%Y-%m-%d') }}{%- endif -%}" name="withdrawn1-{{school.id}}">
+                        <input class="datepicker" type="text" data-cycle="{{cycle.cycle_year}}" value="{%- if school.withdrawn -%}{{ school.withdrawn.strftime('%Y-%m-%d') }}{%- endif -%}" name="withdrawn1-{{school.id}}">
                     </td>
                 </tr>
                 {% endfor %}

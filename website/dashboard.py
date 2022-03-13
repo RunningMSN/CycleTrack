@@ -265,99 +265,188 @@ def lists():
 @dashboard.route("/update",methods=['POST','GET'])
 @login_required
 def update():
+    # If GET request then did not provide a school
+    if request.method == 'GET':
+        if len(current_user.cycles) > 1:
+            flash('Please select a cycle before viewing your school list.', category='error')
+            return redirect(url_for('dashboard.cycles'))
+        elif len(current_user.cycles) == 0:
+            flash('Please add a cycle first.', category='error')
+            return redirect(url_for('dashboard.cycles'))
+        else:
+            cycle_id = current_user.cycles[0].id
+    # If POST then grab cycle ID
+    else:
+        cycle_id = request.form.get('cycle_id')
+
+    # Require to provide a cycle for obtaining school list for that cycle
+    cycle = Cycle.query.filter_by(id=int(cycle_id)).first()
+
     for key in request.form:
         school_id = key.partition("-")[-1]
-
+        print(school_id)
         if key.startswith('primary1'):
             primary_pre = request.form.get("primary0-"+school_id)
+            if primary_pre == "":
+                primary_pre = ""
+            else:
+                primary_pre = datetime.strptime(request.form.get("primary0-"+school_id),'%Y-%m-%d')
             primary_post = request.form.get("primary1-"+school_id)
+            if primary_post == "":
+                primary_post = ""
+            else:
+                primary_post = datetime.strptime(request.form.get("primary1-"+school_id),'%m/%d/%y')
             if primary_post != primary_pre:
                 if primary_post != "":
-                    primary_update = datetime.strptime(primary_post, '%Y-%m-%d')
+                    primary_update = primary_post
                 else:
                     primary_update = None
                 school = School.query.filter_by(id=int(school_id)).first()
                 school.primary = primary_update
         elif key.startswith('secondary_received1'):
             secondary_received_pre = request.form.get("secondary_received0-"+school_id)
+            if secondary_received_pre == "":
+                secondary_received_pre = ""
+            else:
+                secondary_received_pre = datetime.strptime(request.form.get("secondary_received0-"+school_id),'%Y-%m-%d')
             secondary_received_post = request.form.get("secondary_received1-"+school_id)
+            if secondary_received_post == "":
+                secondary_received_post = ""
+            else:
+                secondary_received_post = datetime.strptime(request.form.get("secondary_received1-"+school_id),'%m/%d/%y')
             if secondary_received_post != secondary_received_pre:
                 if secondary_received_post != "":
-                    secondary_received_update = datetime.strptime(secondary_received_post, '%Y-%m-%d')
+                    secondary_received_update = secondary_received_post
                 else:
                     secondary_received_update = None
                 school = School.query.filter_by(id=int(school_id)).first()
                 school.secondary_received = secondary_received_update
         elif key.startswith('application_complete1'):
             application_complete_pre = request.form.get("application_complete0-"+school_id)
+            if application_complete_pre == "":
+                application_complete_pre = ""
+            else:
+                application_complete_pre = datetime.strptime(request.form.get("application_complete0-"+school_id),'%Y-%m-%d')
             application_complete_post = request.form.get("application_complete1-"+school_id)
+            if application_complete_post == "":
+                application_complete_post = ""
+            else:
+                application_complete_post = datetime.strptime(request.form.get("application_complete1-"+school_id),'%m/%d/%y')
             if application_complete_post != application_complete_pre:
                 if application_complete_post != "":
-                    application_complete_update = datetime.strptime(application_complete_post, '%Y-%m-%d')
+                    application_complete_update = application_complete_post
                 else:
                     application_complete_update = None
                 school = School.query.filter_by(id=int(school_id)).first()
                 school.application_complete = application_complete_update
         elif key.startswith("interview_received1"):
             interview_received_pre = request.form.get("interview_received0-"+school_id)
+            if interview_received_pre == "":
+                interview_received_pre = ""
+            else:
+                interview_received_pre = datetime.strptime(request.form.get("interview_received0-"+school_id),'%Y-%m-%d')
             interview_received_post = request.form.get("interview_received1-"+school_id)
+            if interview_received_post == "":
+                interview_received_post = ""
+            else:
+                interview_received_post = datetime.strptime(request.form.get("interview_received1-"+school_id),'%m/%d/%y')
             if interview_received_post != interview_received_pre:
                 if interview_received_post != "":
-                    interview_received_update = datetime.strptime(interview_received_post, '%Y-%m-%d')
+                    interview_received_update = interview_received_post
                 else:
                     interview_received_update = None
                 school = School.query.filter_by(id=int(school_id)).first()
                 school.interview_received = interview_received_update
         elif key.startswith("interview_date1"):
             interview_date_pre = request.form.get("interview_date0-"+school_id)
+            if interview_date_pre == "":
+                interview_date_pre = ""
+            else:
+                interview_date_pre = datetime.strptime(request.form.get("interview_date0-"+school_id),'%Y-%m-%d')
             interview_date_post = request.form.get("interview_date1-"+school_id)
+            if interview_date_post == "":
+                interview_date_post = ""
+            else:
+                interview_date_post = datetime.strptime(request.form.get("interview_date1-"+school_id),'%m/%d/%y')
             if interview_date_post != interview_date_pre:
                 if interview_date_post != "":
-                    interview_date_update = datetime.strptime(interview_date_post, '%Y-%m-%d')
+                    interview_date_update = interview_date_post
                 else:
                     interview_date_update = None
                 school = School.query.filter_by(id=int(school_id)).first()
                 school.interview_date = interview_date_update
         elif key.startswith("rejection1"):
             rejection_pre = request.form.get("rejection0-"+school_id)
+            if rejection_pre == "":
+                rejection_pre = ""
+            else:
+                rejection_pre = datetime.strptime(request.form.get("rejection0-"+school_id),'%Y-%m-%d')
             rejection_post = request.form.get("rejection1-"+school_id)
+            if rejection_post == "":
+                rejection_post = ""
+            else:
+                rejection_post = datetime.strptime(request.form.get("rejection1-"+school_id),'%m/%d/%y')
             if rejection_post != rejection_pre:
                 if rejection_post != "":
-                    rejection_update = datetime.strptime(rejection_post, '%Y-%m-%d')
+                    rejection_update = rejection_post
                 else:
                     rejection_update = None
                 school = School.query.filter_by(id=int(school_id)).first()
                 school.rejection = rejection_update
         elif key.startswith("waitlist1"):
             waitlist_pre = request.form.get("waitlist0-"+school_id)
+            if waitlist_pre == "":
+                waitlist_pre = ""
+            else:
+                waitlist_pre = datetime.strptime(request.form.get("waitlist0-"+school_id),'%Y-%m-%d')
             waitlist_post = request.form.get("waitlist1-"+school_id)
+            if waitlist_post == "":
+                waitlist_post = ""
+            else:
+                waitlist_post = datetime.strptime(request.form.get("waitlist1-"+school_id),'%m/%d/%y')
             if waitlist_post != waitlist_pre:
                 if waitlist_post != "":
-                    waitlist_update = datetime.strptime(waitlist_post, '%Y-%m-%d')
+                    waitlist_update = waitlist_post
                 else:
                     waitlist_update = None
                 school = School.query.filter_by(id=int(school_id)).first()
                 school.waitlist = waitlist_update
         elif key.startswith("acceptance"):
             acceptance_pre = request.form.get("acceptance0-"+school_id)
+            if acceptance_pre == "":
+                acceptance_pre = ""
+            else:
+                acceptance_pre = datetime.strptime(request.form.get("acceptance0-"+school_id),'%Y-%m-%d')
             acceptance_post = request.form.get("acceptance1-"+school_id)
+            if acceptance_post == "":
+                acceptance_post = ""
+            else:
+                acceptance_post = datetime.strptime(request.form.get("acceptance1-"+school_id),'%m/%d/%y')
             if acceptance_post != acceptance_pre:
                 if acceptance_post != "":
-                    acceptance_update = datetime.strptime(acceptance_post, '%Y-%m-%d')
+                    acceptance_update = acceptance_post
                 else:
                     acceptance_update = None
                 school = School.query.filter_by(id=int(school_id)).first()
                 school.acceptance = acceptance_update
         elif key.startswith("withdrawn1"):
-            withdrawn_pre = request.form.get("withdrawn0-"+school_id)
-            withdrawn_post = request.form.get("withdrawn1-"+school_id)
-            if withdrawn_post != withdrawn_pre:
-                if withdrawn_post != "":
-                    withdrawn_update = datetime.strptime(withdrawn_post, '%Y-%m-%d')
+            waitlist_pre = request.form.get("waitlist0-"+school_id)
+            if waitlist_pre == "":
+                waitlist_pre = ""
+            else:
+                waitlist_pre = datetime.strptime(request.form.get("waitlist0-"+school_id),'%Y-%m-%d')
+            waitlist_post = request.form.get("waitlist1-"+school_id)
+            if waitlist_post == "":
+                waitlist_post = ""
+            else:
+                waitlist_post = datetime.strptime(request.form.get("waitlist1-"+school_id),'%m/%d/%y')
+            if waitlist_post != waitlist_pre:
+                if waitlist_post != "":
+                    waitlist_update = waitlist_post
                 else:
-                    withdrawn_update = None
+                    waitlist_update = None
                 school = School.query.filter_by(id=int(school_id)).first()
-                school.withdrawn = withdrawn_update
+                school.waitlist = waitlist_update
         elif key.startswith("delete"):
             school = School.query.get(school_id)
             if school:
