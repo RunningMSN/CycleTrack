@@ -5,8 +5,6 @@
 <!-- SCHOOL LIST MANAGEMENT -->
 <div id="lists" class="container" style="padding-top:10px">
     <h2>My {{ cycle.cycle_year }} School List</h2>
-
-    {% if cycle.schools|length > 0 %}
     <!-- MESSAGE FOR DUAL DEGREE APPLICANTS -->
     {% if phd_applicant %}
     <p>
@@ -21,11 +19,13 @@
     <!-- BUTTONS FOR BULK EDIT ADDING SCHOOLS-->
     <table>
         <tr>
+            {% if cycle.schools|length > 0 %}
             <td>
                 <button class="btn btn-primary d-none d-lg-block" type="button" onclick="toggleBulkEdit()">
-                    Bulk edit
+                    Bulk Edit
                 </button>
             </td>
+            {% endif %}
             <td>
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-md-modal">
                     Add MD School
@@ -58,6 +58,8 @@
             </td>
         </tr>
     </table>
+
+    {% if cycle.schools|length > 0 %}
     <!-- SMALLEST SCREEN SIZE -->
     <div class="d-md-none">
         <table class="table" style="font-size:0.9rem">
