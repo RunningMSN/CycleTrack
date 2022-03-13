@@ -268,7 +268,7 @@
                     <td>
                         <input type="checkbox" id="bulkDelete" name="delete-{{school.id}}">
                     </td>
-                    <td class="d-flex">
+                    <td>
                         <a href="{{ url_for('explorer.explorer_home') }}/{{ school.name }}" style="color:black;text-decoration: none">
                         {{ school.name }} ({% if school.school_type == "MD" %}MD{% else %}DO{% endif %}{% if school.phd %}-PhD{% endif %})
                         </a>
