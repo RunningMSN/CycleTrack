@@ -14,6 +14,7 @@ def generate(cycle_data, title,color="default"):
     # Sankey plot setup
     data_trace = dict(
         type='sankey',
+        arrangement = 'freeform',
         domain=dict(
             x=[0, 1],
             y=[0, 1]
@@ -23,7 +24,8 @@ def generate(cycle_data, title,color="default"):
                 width=0
             ),
             label=df_nodes['label'],
-            color=df_nodes['color']
+            color=df_nodes['color'],
+            pad = 30
         ),
         link=dict(
             source=df_links['Source'],
@@ -43,6 +45,7 @@ def generate(cycle_data, title,color="default"):
                       xanchor="right", yanchor="bottom")])
 
     fig = dict(data=[data_trace], layout=layout)
+
 
     # Convert to JSON and return it for plotting
     graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
