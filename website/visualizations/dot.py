@@ -72,7 +72,15 @@ def generate(cycle_data, title,color="default"):
             text = df["name"]+"<br>"+ converters.action_names[action],
             hovertemplate = "%{text}"+"<br>%{x}<extra></extra>",
         ))
-    fig.update_layout(height=len(melted['name'].unique())*20,
+    
+    est_height = len(melted['name'].unique())*20
+    print(est_height)
+    if est_height < 200:
+        wanted_height = 200
+    else:
+        wanted_height = est_height
+
+    fig.update_layout(height=wanted_height,
     title=title,
     yaxis_type="category",
     margin=dict(l=20, r=20, t=40, b=20))
