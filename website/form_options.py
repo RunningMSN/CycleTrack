@@ -27,6 +27,9 @@ VIS_TYPES = ["Line", "Bar", "Dot", "Sankey","Map"]
 # Settings for color palettes
 COLOR_TYPES = ["Default","Okabe-Ito","Tol"]
 
+# Settings for map scopes
+MAP_TYPES = ["USA", "North America"]
+
 # School list import column types
 COLUMN_TYPES = ["School Name", "Primary Submitted/Verified", "Secondary Received",
                 "Application Complete", "Interview Received", "Interview Date", "Rejected", "Waitlisted", "Accepted",
@@ -117,7 +120,8 @@ STATE_ABBREV = {
     "Prince Edward Island": "PE",
     "Quebec": "QC",
     "Saskatchewan": "SK",
-    "Yukon": "YT"
+    "Yukon": "YT",
+    "Canada": "CAN"
 }
 
 ABBREV_TO_STATE = dict(map(reversed, STATE_ABBREV.items()))

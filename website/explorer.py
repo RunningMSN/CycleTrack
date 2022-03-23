@@ -17,7 +17,7 @@ def explorer_home():
     school_profiles = pd.read_csv('website/static/csv/SchoolProfiles.csv')
     # Dict to convert into dataframe with final results
     build_df = {'name': [], 'type': [], 'reg_apps': [], 'reg_med_mcat': [], 'reg_med_gpa': [],
-                'phd_apps': [], 'logo_link' : [], 'city' : [], 'state' : [], 'envt' : [], 'pub_pri' : []}
+                'phd_apps': [], 'logo_link' : [], 'city' : [], 'state' : [],'country': [], 'envt' : [], 'pub_pri' : []}
     for school in schools:
         build_df['name'].append(school.name)
         build_df['type'].append(school.school_type)
@@ -27,6 +27,7 @@ def explorer_home():
         build_df['logo_link'].append(school_info['Logo_File_Name'][0])
         build_df['city'].append(school_info['City'][0])
         build_df['state'].append(school_info['State'][0])
+        build_df['country'].append(school_info['Country'][0])
         build_df['envt'].append(school_info['Envt_Type'][0])
         build_df['pub_pri'].append(school_info['Private_Public'][0])
 
@@ -59,6 +60,8 @@ def explorer_home():
         if request.form.get('state') != "All":
             if request.form.get('state') != "Canada": # Will need to change this on implementing canadian schools
                 df = df[df['state'] == form_options.STATE_ABBREV[request.form.get('state')]]
+            elif request.form.get('state') == "Canada": #temporary fix for canadian schools
+                df = df[df['country'] == form_options.STATE_ABBREV[request.form.get('state')]]
 
     if len(df) == 0: df = None
     # Render page

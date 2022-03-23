@@ -771,7 +771,7 @@ def visualizations():
     # Vis Generation
     vis_type = request.form.get('vis_type')
     # Default to no graph and no settings saved
-    save_settings = {'vis_type': None, 'app_type': None, 'color_type': None, 'plot_title': None, 'filters': None}
+    save_settings = {'vis_type': None, 'app_type': None, 'color_type': None, 'plot_title': None, 'filters': None, 'map_type':None}
     graphJSON = None
     if vis_type:
         # Grab Settings
@@ -781,8 +781,9 @@ def visualizations():
             plot_title = "Application Cycle"
         color_type = request.form.get("color_type")
         app_type = request.form.get("app_type")
+        map_type = request.form.get("map_type")
         # Save Settings
-        save_settings = {'vis_type': vis_type, 'app_type': app_type, 'color_type': color_type, 'plot_title': plot_title,
+        save_settings = {'vis_type': vis_type, 'app_type': app_type, 'color_type': color_type, 'plot_title': plot_title, 'map_type': map_type,
                          'filters': {}}
 
         # Grab filters
@@ -825,10 +826,10 @@ def visualizations():
             elif vis_type.lower() == 'sankey':
                 graphJSON = sankey.generate(cycle_data, plot_title, color=color_type.lower())
             elif vis_type.lower() == 'map':
-                graphJSON = map.generate(cycle_data, plot_title, color=color_type.lower())
+                graphJSON = map.generate(cycle_data, plot_title, color=color_type.lower(),map_scope=map_type.lower())
         else:
             flash(f'Your selected school list for {cycle.cycle_year} does not have any dates yet!', category='error')
 
     return render_template('visualizations.html', user=current_user, cycle=cycle, app_types=app_types,
                            vis_types=form_options.VIS_TYPES, color_types=form_options.COLOR_TYPES, graphJSON=graphJSON,
-                           save_settings=save_settings)
+                           save_settings=save_settings,map_types=form_options.MAP_TYPES)

@@ -30,10 +30,11 @@ def generate(data):
         )
     fig.add_trace(data)
     fig.update_layout(
-        geo_scope = 'usa',
-        height = 500,
+        geo_scope = 'north america',
+        height = 700,
         margin = dict(l=25,r=25,t=25,b=25),
         clickmode="event"
     )
+    fig.update_geos(resolution=50,fitbounds="locations")
     graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
     return graphJSON

@@ -3,7 +3,7 @@ import plotly.graph_objects as go
 import json
 from . import converters
 
-def generate(cycle_data,title,color="default"):
+def generate(cycle_data,title,color="default",map_scope="usa"):
     loc_df = converters.convert_map(cycle_data,aggregate=False,color=color)
     fig = go.Figure()
 
@@ -23,9 +23,11 @@ def generate(cycle_data,title,color="default"):
     fig.update_layout(
         title=title,
         #title_x = 0.5,
-        geo_scope = 'usa', width = 850,height = 400,
+        geo_scope = map_scope, width = 850,height = 400,
         margin=dict(l=20, r=20, t=40, b=20)
     )
+    if map_scope == "north america":
+        fig.update_geos(resolution=50,fitbounds="locations")
 
     fig.add_layout_image(
         dict(

@@ -69,13 +69,33 @@
                                 <tr>
                                     <td style="width: 75px"><strong>Colors: </strong></td>
                                     <td>
-                                        <select name="color_type" id="color_type" class="btn-sm form-control">
+                                        <select name="color_type" id="color_type" class="btn-sm form-control" >
                                             {% if save_settings['color_type'] %}
                                             <option selected="{{ save_settings['color_type'] }}">{{ save_settings['color_type'] }}</option>
                                             {% endif %}
                                             {% for color_type in color_types %}
                                             {% if color_type != save_settings['color_type'] %}
                                             <option value="{{ color_type }}">{{ color_type }}</option>
+                                            {% endif %}
+                                            {% endfor %}
+                                        </select>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <!-- Map Scope -->
+                        <div class="col">
+                            <table>
+                                <tr>
+                                    <td><strong>Map: </strong></td>
+                                    <td>
+                                        <select name="map_type" id="map_type" class="btn-sm form-control" style="width: 120px">
+                                            {% if save_settings['map_type'] %}
+                                            <option selected="{{ save_settings['map_type'] }}">{{ save_settings['map_type'] }}</option>
+                                            {% endif %}
+                                            {% for map_type in map_types %}
+                                            {% if map_type!= save_settings['map_type'] %}
+                                            <option value="{{ map_type }}">{{ map_type }}</option>
                                             {% endif %}
                                             {% endfor %}
                                         </select>
