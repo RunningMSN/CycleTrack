@@ -74,9 +74,9 @@ def generate(cycle_data, title,color="default"):
         ))
     
     est_height = len(melted['name'].unique())*20
-    print(est_height)
-    if est_height < 200:
-        wanted_height = 200
+
+    if est_height < 250:
+        wanted_height = 250
     else:
         wanted_height = est_height
 
