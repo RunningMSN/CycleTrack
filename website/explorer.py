@@ -58,10 +58,9 @@ def explorer_home():
         if request.form.get('school_type') != "All":
             df = df[df['type'] == request.form.get('school_type')]
         if request.form.get('state') != "All":
-            if request.form.get('state') != "Canada": # Will need to change this on implementing canadian schools
-                df = df[df['state'] == form_options.STATE_ABBREV[request.form.get('state')]]
-            elif request.form.get('state') == "Canada": #temporary fix for canadian schools
-                df = df[df['country'] == form_options.STATE_ABBREV[request.form.get('state')]]
+            df = df[df['state'] == form_options.STATE_ABBREV[request.form.get('state')]]
+        if request.form.get('country') != "All":
+            df = df[df['country'] == request.form.get('country')]
 
     if len(df) == 0: df = None
     # Render page
