@@ -4,8 +4,8 @@ VALID_CYCLES = [2022, 2021, 2020]
 # List of schools for adding to profile
 import pandas as pd
 profiles = pd.read_csv("./website/static/csv/SchoolProfiles.csv")
-MD_SCHOOL_LIST = list(profiles.loc[profiles["MD_or_DO"]=="MD"]["School"])
-DO_SCHOOL_LIST = list(profiles.loc[profiles["MD_or_DO"]=="DO"]["School"])
+MD_SCHOOL_LIST = sorted(list(profiles.loc[profiles["MD_or_DO"]=="MD"]["School"]))
+DO_SCHOOL_LIST = sorted(list(profiles.loc[profiles["MD_or_DO"]=="DO"]["School"]))
 
 # Options for cycle profile page
 SEX_OPTIONS = ["Male", "Female", "Other"]
