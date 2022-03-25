@@ -3,7 +3,7 @@ import plotly.graph_objects as go
 import json
 from . import converters
 
-def generate(cycle_data,title,color="default",map_scope="usa"):
+def generate(cycle_data,title,stats,color="default",map_scope="usa"):
     loc_df = converters.convert_map(cycle_data,aggregate=False,color=color)
     fig = go.Figure()
 
@@ -38,6 +38,22 @@ def generate(cycle_data,title,color="default",map_scope="usa"):
         sizex=0.2, sizey=0.2,
         xanchor="right", yanchor="bottom")
     )
+
+    if stats:
+        fig.add_annotation(
+            dict(
+            xanchor="left",
+            yanchor="bottom",
+            showarrow=False,
+            xref='paper',
+            yref='paper',
+            x=1.05,
+            y=0.2,
+            text=f'Demographics<br>MCAT: {stats["mcat"]}<br>cGPA: {stats["cgpa"]}<br>sGPA: {stats["sgpa"]}'
+                 f'<br>State: {stats["state"]}',
+            align="left"
+            )
+        )
 
     graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
     return graphJSON

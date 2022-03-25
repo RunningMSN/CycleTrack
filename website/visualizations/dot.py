@@ -17,40 +17,7 @@ symbol_map = {
     'withdrawn': 'star'
     }
 
-'''def generate1(cycle_data, title,color="default"):
-    #Returns JSON for plotly dot graph of the application cycle.
-    # Melt data
-    melted = cycle_data.melt(id_vars=cycle_data.columns[0], value_vars=cycle_data.columns[1:], var_name='Actions', value_name='date')
-    melted["symbols"] = melted["Actions"].map(symbol_map)
-    # Generate scatterplot
-    fig = px.scatter(melted, x='date', y='name', color='Actions', symbol = "symbols",
-                     labels={
-                         'date': 'Date',
-                         'name':''
-                     },
-                     title=title,
-                     height=len(melted['name'].unique())*20, # Adjust height based on number of schools
-                     color_discrete_map=converters.palette[color])
-    # Update names of traces to make more readable
-    fig.for_each_trace(lambda t: t.update(name=converters.action_names[t.name],
-                                          legendgroup=converters.action_names[t.name],
-                                          hovertemplate=t.hovertemplate.replace(t.name, converters.action_names[t.name]),
-                                          )
-                       )
-    fig.update_layout(margin=dict(l=20, r=20, t=40, b=20))
-    fig.add_layout_image(
-        dict(
-        source="./static/images/CycleTrack_Plot_Watermark.png",
-        xref="x domain",
-        yref="y domain",
-        x=1, y=1,
-        sizex=0.2, sizey=0.2,
-        xanchor="right", yanchor="bottom"))
-    # Generate JSON for plotting
-    graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
-    return graphJSON'''
-
-def generate(cycle_data, title,color="default"):
+def generate(cycle_data, title, stats, color="default"):
     melted = cycle_data.melt(id_vars=cycle_data.columns[0], value_vars=cycle_data.columns[1:], var_name='Actions', value_name='date')
     
     actions = melted["Actions"].unique()
@@ -92,6 +59,21 @@ def generate(cycle_data, title,color="default"):
             x=1, y=1,
             sizex=0.2, sizey=0.2,
             xanchor="right", yanchor="bottom"))
+    if stats:
+        fig.add_annotation(
+            dict(
+            xanchor="left",
+            yanchor="bottom",
+            showarrow=False,
+            xref='paper',
+            yref='paper',
+            x=1.05,
+            y=0.25,
+            text=f'Demographics<br>MCAT: {stats["mcat"]}<br>cGPA: {stats["cgpa"]}<br>sGPA: {stats["sgpa"]}'
+                 f'<br>State: {stats["state"]}',
+            align="left"
+            )
+        )
 
     graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
     return graphJSON

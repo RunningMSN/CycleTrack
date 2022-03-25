@@ -3,7 +3,7 @@ import plotly.express as px
 import json
 from . import converters
 
-def generate(cycle_data, title,color="default"):
+def generate(cycle_data, title, stats, color="default"):
     # Generate dataframe for plotly
     cycle_data = converters.convert_bar_df(cycle_data)
     fig = px.bar(cycle_data,
@@ -32,6 +32,23 @@ def generate(cycle_data, title,color="default"):
         sizex=0.15, sizey=0.15,
         xanchor="right", yanchor="bottom")
     )
+
+    if stats:
+        fig.add_annotation(
+            dict(
+            xanchor="left",
+            yanchor="bottom",
+            showarrow=False,
+            xref='paper',
+            yref='paper',
+            x=1.02,
+            y=0.2,
+            text=f'Demographics<br>MCAT: {stats["mcat"]}<br>cGPA: {stats["cgpa"]}<br>sGPA: {stats["sgpa"]}'
+                 f'<br>State: {stats["state"]}',
+            align="left"
+            )
+        )
+
     # Convert to JSON for plotting
     graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
     return graphJSON

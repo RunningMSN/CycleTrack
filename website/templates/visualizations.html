@@ -87,7 +87,7 @@
                         <div class="col">
                             <table>
                                 <tr>
-                                    <td><strong>Map: </strong></td>
+                                    <td style="width: 75px"><strong>Map: </strong></>
                                     <td>
                                         <select name="map_type" id="map_type" class="btn-sm form-control" style="width: 120px">
                                             {% if save_settings['map_type'] %}
@@ -99,6 +99,35 @@
                                             {% endif %}
                                             {% endfor %}
                                         </select>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- ANNOTATE DEMOGRAPHICS -->
+                    <div class="row">
+                        <!-- Annotate -->
+                        <div class="col">
+                            <table>
+                                <tr>
+                                    <td style="width: 120px"><strong>Demographics: </strong></td>
+                                    <td>
+                                        <label style="padding-right:10px">
+                                            <input type="checkbox" name="demographics" value="true" {% if save_settings['demographics'] %} checked {% endif %}> Include
+                                        </label>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <!-- Anonymoze Demographics -->
+                        <div class="col">
+                            <table>
+                                <tr>
+                                    <td style="width: 120px"><strong>Anonymize: </strong></td>
+                                    <td>
+                                        <label style="padding-right:10px">
+                                            <input type="checkbox" name="anonymize_demographics" value="true" {% if save_settings['anonymize_demographics'] %} checked {% endif %}> Yes
+                                        </label>
                                     </td>
                                 </tr>
                             </table>

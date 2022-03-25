@@ -1,8 +1,9 @@
 import plotly
 import json
 from . import converters
+import plotly.graph_objects as go
 
-def generate(cycle_data, title,color="default"):
+def generate(cycle_data, title, stats, color="default"):
     '''Returns JSON for plotly line graph of the application cycle.'''
     # Drop names and interview days
     cycle_data = cycle_data.drop('name', axis=1)
@@ -45,6 +46,24 @@ def generate(cycle_data, title,color="default"):
                       xanchor="right", yanchor="bottom")])
 
     fig = dict(data=[data_trace], layout=layout)
+
+    fig = go.Figure(fig)
+
+    if stats:
+        fig.add_annotation(
+            dict(
+            xanchor="center",
+            yanchor="bottom",
+            showarrow=False,
+            xref='paper',
+            yref='paper',
+            x=0.5,
+            y=-0.1,
+            text=f'Demographics<br>MCAT: {stats["mcat"]} | cGPA: {stats["cgpa"]} | sGPA: {stats["sgpa"]} | '
+                 f'State: {stats["state"]}',
+            align="center"
+            )
+        )
 
 
     # Convert to JSON and return it for plotting
