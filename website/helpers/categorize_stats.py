@@ -13,7 +13,7 @@ def categorize_gpa(gpa):
     else:
         # Truncate to nearest tenth
         gpa = math.trunc(gpa * 10) / 10
-        return f'{gpa}-{gpa+0.1}'
+        return f'{gpa}-{round(gpa+0.1,1)}'
 
 def categorize_mcat(mcat):
     '''Returns a given MCAT score within a binned category.'''

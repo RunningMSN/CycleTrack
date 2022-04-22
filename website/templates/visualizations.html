@@ -83,95 +83,7 @@
                                 </tr>
                             </table>
                         </div>
-                        <!-- Map Scope -->
-                        <div class="col">
-                            <table>
-                                <tr>
-                                    <td style="width: 75px"><strong>Map: </strong></>
-                                    <td>
-                                        <select name="map_type" id="map_type" class="btn-sm form-control" style="width: 120px">
-                                            {% if save_settings['map_type'] %}
-                                            <option selected="{{ save_settings['map_type'] }}">{{ save_settings['map_type'] }}</option>
-                                            {% endif %}
-                                            {% for map_type in map_types %}
-                                            {% if map_type!= save_settings['map_type'] %}
-                                            <option value="{{ map_type }}">{{ map_type }}</option>
-                                            {% endif %}
-                                            {% endfor %}
-                                        </select>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
-                    <!-- ANNOTATE DEMOGRAPHICS -->
-                    <div class="row">
-                        <!-- Annotate -->
-                        <div class="col">
-                            <table>
-                                <tr>
-                                    <td style="width: 120px"><strong>Demographics: </strong></td>
-                                    <td>
-                                        <label style="padding-right:10px">
-                                            <input type="checkbox" name="demographics" value="true" {% if save_settings['demographics'] %} checked {% endif %}> Include
-                                        </label>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-                        <!-- Anonymoze Demographics -->
-                        <div class="col">
-                            <table>
-                                <tr>
-                                    <td style="width: 120px"><strong>Anonymize: </strong></td>
-                                    <td>
-                                        <label style="padding-right:10px">
-                                            <input type="checkbox" name="anonymize_demographics" value="true" {% if save_settings['anonymize_demographics'] %} checked {% endif %}> Yes
-                                        </label>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
-                    <!-- EXCLUDE DATA -->
-                    <div class="row" style="padding-top:5px;padding-bottom:5px">
-                        <div class="col">
-                            <table>
-                                <tr>
-                                    <td style="width: 120px"><strong>Exclude Data: </strong></td>
-                                    <td>
-                                        <label style="padding-right:10px">
-                                            <input type="checkbox" name="exclude-primary" value="true" {% if save_settings['filters']['primary'] %} checked {% endif %}> Primary Submitted
-                                        </label>
-                                        <label style="padding-right:10px">
-                                            <input type="checkbox" name="exclude-secondary_received" value="true" {% if save_settings['filters']['secondary_received'] %} checked {% endif %}> Secondary Received
-                                        </label>
-                                        <label style="padding-right:10px">
-                                            <input type="checkbox" name="exclude-application_complete" value="true" {% if save_settings['filters']['application_complete'] %} checked {% endif %}> Application Complete
-                                        </label>
-                                        <label style="padding-right:10px">
-                                            <input type="checkbox" name="exclude-interview_received" value="true" {% if save_settings['filters']['interview_received'] %} checked {% endif %}> Interview Received
-                                        </label>
-                                        <label style="padding-right:10px">
-                                            <input type="checkbox" name="exclude-interview_date" value="true" {% if save_settings['filters']['interview_date'] %} checked {% endif %}> Interview Complete
-                                        </label>
-                                        <label style="padding-right:10px">
-                                            <input type="checkbox" name="exclude-rejection" value="true" {% if save_settings['filters']['rejection'] %} checked {% endif %}> Rejection
-                                        </label>
-                                        <label style="padding-right:10px">
-                                            <input type="checkbox" name="exclude-waitlist" value="true" {% if save_settings['filters']['waitlist'] %} checked {% endif %}> Waitlist
-                                        </label>
-                                        <label style="padding-right:10px">
-                                            <input type="checkbox" name="exclude-acceptance" value="true" {% if save_settings['filters']['acceptance'] %} checked {% endif %}> Acceptance
-                                        </label>
-                                        <label style="padding-right:10px">
-                                            <input type="checkbox" name="exclude-withdrawn" value="true" {% if save_settings['filters']['withdrawn'] %} checked {% endif %}> Withdrawn
-                                        </label>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
+                       
                     <!-- GRAPH TITLE -->
                     <div class="row" style="padding-top:5px;padding-bottom:5px">
                         <div class="col">
@@ -186,6 +98,108 @@
                             </table>
                         </div>
                     </div>
+
+                    <div class="accordion accordion-flush" id="accordionFlushExample">
+                        <div class="accordion-item">
+                          <h2 class="accordion-header" id="flush-headingOne">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                              Advanced Options
+                            </button>
+                          </h2>
+                          <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                            <div class="accordion-body">
+                                <!-- Map Scope -->
+                                <div class="col">
+                                    <table>
+                                        <tr>
+                                            <td style="width: 75px"><strong>Map: </strong></>
+                                            <td>
+                                                <select name="map_type" id="map_type" class="btn-sm form-control" style="width: 120px">
+                                                    {% if save_settings['map_type'] %}
+                                                    <option selected="{{ save_settings['map_type'] }}">{{ save_settings['map_type'] }}</option>
+                                                    {% endif %}
+                                                    {% for map_type in map_types %}
+                                                    {% if map_type!= save_settings['map_type'] %}
+                                                    <option value="{{ map_type }}">{{ map_type }}</option>
+                                                    {% endif %}
+                                                    {% endfor %}
+                                                </select>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- ANNOTATE DEMOGRAPHICS -->
+                            <div class="row">
+                                <!-- Annotate -->
+                                <div class="col">
+                                    <table>
+                                        <tr>
+                                            <td style="width: 120px"><strong>Demographics: </strong></td>
+                                            <td>
+                                                <label style="padding-right:10px">
+                                                    <input type="checkbox" name="demographics" value="true" {% if save_settings['demographics'] %} checked {% endif %}> Include
+                                                </label>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <!-- Anonymoze Demographics -->
+                                <div class="col">
+                                    <table>
+                                        <tr>
+                                            <td style="width: 120px"><strong>Anonymize: </strong></td>
+                                            <td>
+                                                <label style="padding-right:10px">
+                                                    <input type="checkbox" name="anonymize_demographics" value="true" {% if save_settings['anonymize_demographics'] %} checked {% endif %}> Yes
+                                                </label>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- EXCLUDE DATA -->
+                            <div class="row" style="padding-top:5px;padding-bottom:5px">
+                                <div class="col">
+                                    <table>
+                                        <tr>
+                                            <td style="width: 120px"><strong>Exclude Data: </strong></td>
+                                            <td>
+                                                <label style="padding-right:10px">
+                                                    <input type="checkbox" name="exclude-primary" value="true" {% if save_settings['filters']['primary'] %} checked {% endif %}> Primary Submitted
+                                                </label>
+                                                <label style="padding-right:10px">
+                                                    <input type="checkbox" name="exclude-secondary_received" value="true" {% if save_settings['filters']['secondary_received'] %} checked {% endif %}> Secondary Received
+                                                </label>
+                                                <label style="padding-right:10px">
+                                                    <input type="checkbox" name="exclude-application_complete" value="true" {% if save_settings['filters']['application_complete'] %} checked {% endif %}> Application Complete
+                                                </label>
+                                                <label style="padding-right:10px">
+                                                    <input type="checkbox" name="exclude-interview_received" value="true" {% if save_settings['filters']['interview_received'] %} checked {% endif %}> Interview Received
+                                                </label>
+                                                <label style="padding-right:10px">
+                                                    <input type="checkbox" name="exclude-interview_date" value="true" {% if save_settings['filters']['interview_date'] %} checked {% endif %}> Interview Complete
+                                                </label>
+                                                <label style="padding-right:10px">
+                                                    <input type="checkbox" name="exclude-rejection" value="true" {% if save_settings['filters']['rejection'] %} checked {% endif %}> Rejection
+                                                </label>
+                                                <label style="padding-right:10px">
+                                                    <input type="checkbox" name="exclude-waitlist" value="true" {% if save_settings['filters']['waitlist'] %} checked {% endif %}> Waitlist
+                                                </label>
+                                                <label style="padding-right:10px">
+                                                    <input type="checkbox" name="exclude-acceptance" value="true" {% if save_settings['filters']['acceptance'] %} checked {% endif %}> Acceptance
+                                                </label>
+                                                <label style="padding-right:10px">
+                                                    <input type="checkbox" name="exclude-withdrawn" value="true" {% if save_settings['filters']['withdrawn'] %} checked {% endif %}> Withdrawn
+                                                </label>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            </div>
+                          </div>
+                        </div>
                     <div class="row-flex" style="padding-top:5px;padding-bottom:5px">
                         <div clas="col">
                             <button class="btn btn-primary" type="submit">Generate</button>
