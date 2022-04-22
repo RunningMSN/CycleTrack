@@ -284,7 +284,6 @@ def update():
 
     for key in request.form:
         school_id = key.partition("-")[-1]
-        print(school_id)
         if key.startswith('primary1'):
             primary_pre = request.form.get("primary0-"+school_id)
             if primary_pre == "":
@@ -411,7 +410,7 @@ def update():
                     waitlist_update = None
                 school = School.query.filter_by(id=int(school_id)).first()
                 school.waitlist = waitlist_update
-        elif key.startswith("acceptance"):
+        elif key.startswith("acceptance1"):
             acceptance_pre = request.form.get("acceptance0-"+school_id)
             if acceptance_pre == "":
                 acceptance_pre = ""
@@ -430,23 +429,23 @@ def update():
                 school = School.query.filter_by(id=int(school_id)).first()
                 school.acceptance = acceptance_update
         elif key.startswith("withdrawn1"):
-            waitlist_pre = request.form.get("waitlist0-"+school_id)
-            if waitlist_pre == "":
-                waitlist_pre = ""
+            withdrawn_pre = request.form.get("withdrawn0-"+school_id)
+            if withdrawn_pre == "":
+                withdrawn_pre = ""
             else:
-                waitlist_pre = datetime.strptime(request.form.get("waitlist0-"+school_id),'%Y-%m-%d')
-            waitlist_post = request.form.get("waitlist1-"+school_id)
-            if waitlist_post == "":
-                waitlist_post = ""
+                withdrawn_pre = datetime.strptime(request.form.get("withdrawn0-"+school_id),'%Y-%m-%d')
+            withdrawn_post = request.form.get("withdrawn1-"+school_id)
+            if withdrawn_post == "":
+                withdrawn_post = ""
             else:
-                waitlist_post = datetime.strptime(request.form.get("waitlist1-"+school_id),'%m/%d/%y')
-            if waitlist_post != waitlist_pre:
-                if waitlist_post != "":
-                    waitlist_update = waitlist_post
+                withdrawn_post = datetime.strptime(request.form.get("withdrawn1-"+school_id),'%m/%d/%y')
+            if withdrawn_post != withdrawn_pre:
+                if withdrawn_post != "":
+                    withdrawn_update = withdrawn_post
                 else:
-                    waitlist_update = None
+                    withdrawn_update = None
                 school = School.query.filter_by(id=int(school_id)).first()
-                school.waitlist = waitlist_update
+                school.withdrawn = withdrawn_update
         elif key.startswith("delete"):
             school = School.query.get(school_id)
             if school:
