@@ -1,5 +1,7 @@
-# Cycles to include in site
-VALID_CYCLES = [2022, 2021, 2020]
+# Cycles available to add data
+VALID_CYCLES = [2023, 2022, 2021, 2020]
+# Current cycle to be used for explorer pages
+CURRENT_CYCLE = 2022
 
 # List of schools for adding to profile
 import pandas as pd

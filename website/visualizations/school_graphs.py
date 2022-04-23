@@ -2,12 +2,12 @@ import plotly
 import plotly.graph_objects as go
 import json
 from . import converters
-from ..form_options import VALID_CYCLES
+from ..form_options import VALID_CYCLES, CURRENT_CYCLE
 
 
 def cycle_progress(data):
     # Select relevant columns and drop any empty rows
-    data = data[data['cycle_year'] == VALID_CYCLES[0]]
+    data = data[data['cycle_year'] == CURRENT_CYCLE]
     data = data[['secondary_received', 'interview_received', 'acceptance']]
     data = data.dropna(axis=0, how='all')
 
