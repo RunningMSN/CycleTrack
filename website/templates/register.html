@@ -17,6 +17,11 @@
             <label for="password2">Confirm password</label>
             <input type="password" class="form-control" id="password2" name="password2" placeholder="Confirm password" />
         </div>
+        <div class="form-group" style="padding-bottom:10px">
+            <input type="checkbox" id="terms_agree" name="terms_agree" value="agree">
+            <label for="terms_agree"> I agree to CycleTrack's <a href="{{ url_for('pages.privacy') }}">Privacy Policy</a>
+                and <a href="{{ url_for('pages.privacy') }}">Terms and Conditions</a>.</label><br>
+        </div>
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
 </div>

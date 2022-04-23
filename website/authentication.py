@@ -49,7 +49,7 @@ def register():
         email = request.form.get('email')
         password1 = request.form.get('password1')
         password2 = request.form.get('password2')
-
+        terms_response = request.form.get('terms_agree')
         # check if user already exists
         user = User.query.filter_by(email=email).first()
         if user:
@@ -58,6 +58,9 @@ def register():
             flash('Email must be greater than 3 characters.', category='error')
         elif not password_meets_criteria(password1, password2):
             pass
+        # Check that agreed to privacy/terms
+        elif not terms_response == 'agree':
+            flash('You must agree to the privacy policy and terms and conditions to register.', category='error')
         else:
             # add user to database
             new_user = User(email=email, password=generate_password_hash(password1, method='sha256'))
