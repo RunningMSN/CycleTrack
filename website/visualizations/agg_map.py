@@ -17,7 +17,7 @@ def generate(data):
     loc_df = df.groupby(["School","Long","Lat"]).size().reset_index()
     loc_df = loc_df.rename(columns={0:"Count"})
     
-    urls = ["/explorer/"+i for i in loc_df.School]
+    urls = ["https://cycletrack.docs2be.org/explorer/"+i for i in loc_df.School]
 
     fig = go.Figure()
     data = go.Scattergeo(
