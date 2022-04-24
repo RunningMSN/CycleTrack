@@ -3,6 +3,7 @@ import plotly.graph_objects as go
 import json
 import numpy as np
 from . import converters
+from flask import url_for
 
 def scaler(dfseries,max_num,min_num):
     new_series = []
@@ -17,7 +18,7 @@ def generate(data):
     loc_df = df.groupby(["School","Long","Lat"]).size().reset_index()
     loc_df = loc_df.rename(columns={0:"Count"})
     
-    urls = ["https://cycletrack.docs2be.org/explorer/"+i for i in loc_df.School]
+    urls = [url_for('explorer.explorer_home')+'/'+i for i in loc_df.School]
 
     fig = go.Figure()
     data = go.Scattergeo(
