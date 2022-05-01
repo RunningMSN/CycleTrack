@@ -43,3 +43,15 @@ class School(db.Model):
     waitlist = db.Column(db.DateTime(timezone=True), nullable=True)
     acceptance = db.Column(db.DateTime(timezone=True), nullable=True)
     withdrawn = db.Column(db.DateTime(timezone=True), nullable=True)
+
+class School_Profiles_Data(db.Model):
+    school = db.Column(db.String(150), primary_key=True)
+    city = db.Column(db.String(150))
+    state = db.Column(db.String(150))
+    country = db.Column(db.String(150))
+    envt_type = db.Column(db.String(150))
+    private_public = db.Column(db.String(150))
+    lat = db.Column(db.Float)
+    long = db.Column(db.Float)
+    md_or_do = db.Column(db.String(150))
+    logo_file_name = db.Column(db.String(150))

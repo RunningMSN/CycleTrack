@@ -259,8 +259,10 @@ def lists():
     else:
         phd_applicant = False
 
-    return render_template('lists.html', user=current_user, cycle=cycle, md_school_list=form_options.MD_SCHOOL_LIST,
-                           do_school_list=form_options.DO_SCHOOL_LIST, phd_applicant=phd_applicant)
+    form_options.get_md_schools()
+
+    return render_template('lists.html', user=current_user, cycle=cycle, md_school_list=form_options.get_md_schools(),
+                           do_school_list=form_options.get_do_schools(), phd_applicant=phd_applicant)
 
 @dashboard.route("/update",methods=['POST','GET'])
 @login_required
@@ -544,8 +546,8 @@ def import_list():
                     flash('Your spreadsheet must have a column with school names. Please try again.', category='error')
                     return redirect(url_for('dashboard.cycles'))
                 return render_template('import-list.html', user=current_user, cycle=cycle, tableJSON=tableJSON,
-                                       school_names=cycle_data['name'], md_school_list=form_options.MD_SCHOOL_LIST,
-                                       do_school_list=form_options.DO_SCHOOL_LIST, best_matches=best_matches)
+                                       school_names=cycle_data['name'], md_school_list=form_options.get_md_schools(),
+                                       do_school_list=form_options.get_do_schools(), best_matches=best_matches)
             # Final processing step
             if request.form.get('named-schools'):
                 # Hold corrected names and schools with dual degree phd
@@ -570,9 +572,9 @@ def import_list():
                     else:
                         dual_degree_phd = False
                     # Get program type
-                    if school_name in form_options.MD_SCHOOL_LIST:
+                    if school_name in form_options.get_md_schools():
                         school_type = 'MD'
-                    elif school_name in form_options.DO_SCHOOL_LIST:
+                    elif school_name in form_options.get_do_schools():
                         school_type = 'DO'
 
                     # Obtain all other dates

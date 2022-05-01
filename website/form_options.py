@@ -1,13 +1,23 @@
+import pandas as pd
+from . import db
+from .models import School_Profiles_Data
+
 # Cycles available to add data
 VALID_CYCLES = [2023, 2022, 2021, 2020]
 # Current cycle to be used for explorer pages
 CURRENT_CYCLE = 2022
 
 # List of schools for adding to profile
-import pandas as pd
-profiles = pd.read_csv("./website/static/csv/SchoolProfiles.csv")
-MD_SCHOOL_LIST = sorted(list(profiles.loc[profiles["MD_or_DO"]=="MD"]["School"]))
-DO_SCHOOL_LIST = sorted(list(profiles.loc[profiles["MD_or_DO"]=="DO"]["School"]))
+def get_md_schools():
+    '''Returns list of all available MD schools'''
+    md_schools = School_Profiles_Data.query.filter_by(md_or_do='MD').all()
+    names = sorted([school.school for school in md_schools])
+    return names
+def get_do_schools():
+    '''Returns list of all available DO schools'''
+    do_schools = School_Profiles_Data.query.filter_by(md_or_do='DO').all()
+    names = sorted([school.school for school in do_schools])
+    return names
 
 # Options for cycle profile page
 SEX_OPTIONS = ["Male", "Female", "Other"]
