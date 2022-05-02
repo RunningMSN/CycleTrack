@@ -36,63 +36,7 @@
           $('[data-toggle="tooltip"]').tooltip()
         })
     </script>
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <script>
-        function toggleBulkEdit() {
-            var normal = document.getElementById("normal-list");
-            var bulk = document.getElementById("bulkedit-list");
-            if (!normal.classList.contains("d-lg-block")) {
-                if (confirm("Changes have not been saved! Do you want to proceed?")){
-                    normal.classList.add("d-lg-block");
-                    bulk.classList.remove("d-lg-block");
-                }
-                else{}
-            } else {
-                normal.classList.remove("d-lg-block");
-                bulk.classList.add("d-lg-block");
-            }
-        }
-    </script>
-    <script>
-        $(document).ready(function(){
-            if($("div").is(".list-page")){
-                $(".datepicker").each(function(){
-                    var val = ($(this).val());
-                    var current = new Date(val);
-                    var current_utc = new Date(current.getUTCFullYear(), current.getUTCMonth(), current.getUTCDate());
-                    var timestamp = Date.parse(val);
-                    var cycle_year = $(this).data("cycle");
-                    var cycle_min = new Date(cycle_year -1, 04, 01);
-                    var cycle_max = new Date(cycle_year, 07, 31);
-                    
-                    $(this).datepicker({
-                        showOtherMonths: true,
-                        selectOtherMonths: true,
-                        changeMonth: true,
-                        changeYear: true,
-                        dateFormat: 'mm/dd/y',
-                        minDate: cycle_min,
-                        maxDate: cycle_max,
-                        showButtonPanel: true,
-                        closeText: "Clear",
-                        onClose: function (dateText, inst) {
-                            function isDonePressed() {
-                                return ($('#ui-datepicker-div').html().indexOf('ui-datepicker-close ui-state-default ui-priority-primary ui-corner-all ui-state-hover') > -1);
-                            }
-                            if (isDonePressed()){
-                                $(this).datepicker('setDate',null)
-                            }
-                        },
-                    });
-                    
-                    if(isNaN(timestamp)==false){
-                        $(this).datepicker("setDate",current_utc);
-                    };
-            });
-        }
-        });
-            
-    </script>
+    {% block additional_js %}{% endblock %}
 </head>
 
 <body class="d-flex flex-column min-vh-100">

@@ -1,5 +1,8 @@
 {% extends 'base.html' %}
 {% block title %} {{ school_info['School'][0] }} {% endblock %}
+{% block additional_js %}
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+{% endblock %}
 {% block content %}
 <div class="container" style="padding-top:10px">
     <!-- GENERAL SCHOOL INFO -->
