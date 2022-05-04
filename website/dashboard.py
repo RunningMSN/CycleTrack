@@ -251,6 +251,11 @@ def lists():
             school.withdrawn = datetime.strptime(withdrawn, '%Y-%m-%d')
         else:
             school.withdrawn = None
+        note = request.form.get('note')
+        if note:
+            school.note = note
+        else:
+            school.note = None
         db.session.commit()
 
     # Check if PhD applicant for message about MD/DO-only consideration

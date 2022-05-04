@@ -43,6 +43,7 @@ class School(db.Model):
     waitlist = db.Column(db.DateTime(timezone=True), nullable=True)
     acceptance = db.Column(db.DateTime(timezone=True), nullable=True)
     withdrawn = db.Column(db.DateTime(timezone=True), nullable=True)
+    note = db.Column(db.Text(), nullable=True)
 
 class School_Profiles_Data(db.Model):
     school = db.Column(db.String(150), primary_key=True)
