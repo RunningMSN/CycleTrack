@@ -740,6 +740,11 @@ def delete_cycle():
         if cycle.user_id == current_user.id:
             for school in cycle.schools:
                 db.session.delete(school)
+                db.session.commit()
+                if school.phd:
+                    school_stats_calculators.count_apps_phd(school.name)
+                else:
+                    school_stats_calculators.count_apps_reg(school.name)
             db.session.delete(cycle)
             db.session.commit()
             return jsonify({})
@@ -754,6 +759,11 @@ def delete_school():
         if school.user_id == current_user.id:
             db.session.delete(school)
             db.session.commit()
+            # Remove school from count
+            if school.phd:
+                school_stats_calculators.count_apps_phd(school.name)
+            else:
+                school_stats_calculators.count_apps_reg(school.name)
             return jsonify({})
 
 
