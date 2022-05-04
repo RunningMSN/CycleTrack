@@ -1,9 +1,10 @@
 import plotly
 import plotly.graph_objects as go
 import json
+import textwrap
 from . import converters
 
-def generate(cycle_data,title,stats,color="default",map_scope="usa"):
+def generate(cycle_data,title,stats,color="default",map_scope="usa",custom_text=None):
     loc_df = converters.convert_map(cycle_data,aggregate=False,color=color)
     fig = go.Figure()
 
@@ -39,7 +40,10 @@ def generate(cycle_data,title,stats,color="default",map_scope="usa"):
         xanchor="right", yanchor="bottom")
     )
 
-    if stats:
+    if custom_text:
+        wrapped_text = textwrap.fill(custom_text,30).replace('\n', '<br />')
+
+    if stats and custom_text:
         fig.add_annotation(
             dict(
             xanchor="left",
@@ -47,13 +51,42 @@ def generate(cycle_data,title,stats,color="default",map_scope="usa"):
             showarrow=False,
             xref='paper',
             yref='paper',
-            x=1.05,
+            x=1.02,
+            y=0,
+            text=f'Demographics<br>MCAT: {stats["mcat"]}<br>cGPA: {stats["cgpa"]}<br>sGPA: {stats["sgpa"]}'
+                 f'<br>State: {stats["state"]}<br><br>{wrapped_text}',
+            align="left"
+            )
+        )
+    else:
+        if stats:
+            fig.add_annotation(
+            dict(
+            xanchor="left",
+            yanchor="bottom",
+            showarrow=False,
+            xref='paper',
+            yref='paper',
+            x=1.02,
             y=0.2,
             text=f'Demographics<br>MCAT: {stats["mcat"]}<br>cGPA: {stats["cgpa"]}<br>sGPA: {stats["sgpa"]}'
                  f'<br>State: {stats["state"]}',
             align="left"
             )
         )
-
+        if custom_text:
+            fig.add_annotation(
+                dict(
+                xanchor="left",
+                yanchor="bottom",
+                showarrow=False,
+                xref='paper',
+                yref='paper',
+                x=1.02,
+                y=0.2,
+                text=f'{wrapped_text}',
+                align="left"
+                )
+            )
     graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
     return graphJSON

@@ -2,6 +2,7 @@ import plotly
 import plotly.express as px
 import plotly.graph_objects as go
 import json
+import textwrap
 from . import converters
 
 #leaving this for now in case we want to use it in the future
@@ -17,7 +18,7 @@ symbol_map = {
     'withdrawn': 'star'
     }
 
-def generate(cycle_data, title, stats, color="default"):
+def generate(cycle_data, title, stats, color="default",custom_text=None):
     melted = cycle_data.melt(id_vars=cycle_data.columns[0], value_vars=cycle_data.columns[1:], var_name='Actions', value_name='date')
     
     actions = melted["Actions"].unique()
@@ -59,7 +60,10 @@ def generate(cycle_data, title, stats, color="default"):
             x=1, y=1,
             sizex=0.2, sizey=0.2,
             xanchor="right", yanchor="bottom"))
-    if stats:
+    if custom_text:
+        wrapped_text = textwrap.fill(custom_text,30).replace('\n', '<br />')
+
+    if stats and custom_text:
         fig.add_annotation(
             dict(
             xanchor="left",
@@ -67,13 +71,43 @@ def generate(cycle_data, title, stats, color="default"):
             showarrow=False,
             xref='paper',
             yref='paper',
-            x=1.05,
-            y=0.25,
+            x=1.02,
+            y=0,
+            text=f'Demographics<br>MCAT: {stats["mcat"]}<br>cGPA: {stats["cgpa"]}<br>sGPA: {stats["sgpa"]}'
+                 f'<br>State: {stats["state"]}<br><br>{wrapped_text}',
+            align="left"
+            )
+        )
+    else:
+        if stats:
+            fig.add_annotation(
+            dict(
+            xanchor="left",
+            yanchor="bottom",
+            showarrow=False,
+            xref='paper',
+            yref='paper',
+            x=1.02,
+            y=0.2,
             text=f'Demographics<br>MCAT: {stats["mcat"]}<br>cGPA: {stats["cgpa"]}<br>sGPA: {stats["sgpa"]}'
                  f'<br>State: {stats["state"]}',
             align="left"
             )
         )
+        if custom_text:
+            fig.add_annotation(
+                dict(
+                xanchor="left",
+                yanchor="bottom",
+                showarrow=False,
+                xref='paper',
+                yref='paper',
+                x=1.02,
+                y=0.2,
+                text=f'{wrapped_text}',
+                align="left"
+                )
+            )
 
     graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
     return graphJSON

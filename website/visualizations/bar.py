@@ -1,9 +1,11 @@
+from cgitb import text
 import plotly
 import plotly.express as px
 import json
+import textwrap
 from . import converters
 
-def generate(cycle_data, title, stats, color="default"):
+def generate(cycle_data, title, stats, color="default",custom_text=None):
     # Generate dataframe for plotly
     cycle_data = converters.convert_bar_df(cycle_data)
     fig = px.bar(cycle_data,
@@ -32,9 +34,27 @@ def generate(cycle_data, title, stats, color="default"):
         sizex=0.15, sizey=0.15,
         xanchor="right", yanchor="bottom")
     )
+    if custom_text:
+        wrapped_text = textwrap.fill(custom_text,30).replace('\n', '<br />')
 
-    if stats:
+    if stats and custom_text:
         fig.add_annotation(
+            dict(
+            xanchor="left",
+            yanchor="bottom",
+            showarrow=False,
+            xref='paper',
+            yref='paper',
+            x=1.02,
+            y=0,
+            text=f'Demographics<br>MCAT: {stats["mcat"]}<br>cGPA: {stats["cgpa"]}<br>sGPA: {stats["sgpa"]}'
+                 f'<br>State: {stats["state"]}<br><br>{wrapped_text}',
+            align="left"
+            )
+        )
+    else:
+        if stats:
+            fig.add_annotation(
             dict(
             xanchor="left",
             yanchor="bottom",
@@ -48,6 +68,20 @@ def generate(cycle_data, title, stats, color="default"):
             align="left"
             )
         )
+        if custom_text:
+            fig.add_annotation(
+                dict(
+                xanchor="left",
+                yanchor="bottom",
+                showarrow=False,
+                xref='paper',
+                yref='paper',
+                x=1.02,
+                y=0.2,
+                text=f'{wrapped_text}',
+                align="left"
+                )
+            )
 
     # Convert to JSON for plotting
     graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)

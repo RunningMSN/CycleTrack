@@ -1,9 +1,10 @@
 import plotly
 import json
 from . import converters
+import textwrap
 import plotly.graph_objects as go
 
-def generate(cycle_data, title, stats, color="default"):
+def generate(cycle_data, title, stats, color="default",custom_text=None):
     '''Returns JSON for plotly line graph of the application cycle.'''
     # Drop names and interview days
     cycle_data = cycle_data.drop('name', axis=1)
@@ -49,8 +50,28 @@ def generate(cycle_data, title, stats, color="default"):
 
     fig = go.Figure(fig)
 
-    if stats:
+
+    if custom_text:
+        wrapped_text = textwrap.fill(custom_text,55).replace('\n', '<br />')
+
+    if stats and custom_text:
         fig.add_annotation(
+            dict(
+            xanchor="center",
+            yanchor="top",
+            showarrow=False,
+            xref='paper',
+            yref='paper',
+            x=0.5,
+            y=0,
+            text=f'Demographics<br>MCAT: {stats["mcat"]} | cGPA: {stats["cgpa"]} | sGPA: {stats["sgpa"]} | '
+                 f'State: {stats["state"]}<br>{wrapped_text}',
+            align="center"
+            )
+        )
+    else:
+        if stats:
+            fig.add_annotation(
             dict(
             xanchor="center",
             yanchor="bottom",
@@ -64,6 +85,20 @@ def generate(cycle_data, title, stats, color="default"):
             align="center"
             )
         )
+        if custom_text:
+            fig.add_annotation(
+                dict(
+                xanchor="center",
+                yanchor="bottom",
+                showarrow=False,
+                xref='paper',
+                yref='paper',
+                x=0.5,
+                y=-0.1,
+                text=f'{wrapped_text}',
+                align="left"
+                )
+            )
 
 
     # Convert to JSON and return it for plotting

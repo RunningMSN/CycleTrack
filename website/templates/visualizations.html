@@ -102,14 +102,14 @@
                         </div>
                     </div>
 
-                    <div class="accordion accordion-flush" id="accordionFlushExample">
+                    <div class="accordion accordion-flush" id="accordionFlush">
                         <div class="accordion-item">
                           <h2 class="accordion-header" id="flush-headingOne">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
                               Advanced Options
                             </button>
                           </h2>
-                          <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                          <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlush">
                             <div class="accordion-body">
                                 <!-- Map Scope -->
                                 <div class="col">
@@ -196,6 +196,19 @@
                                                     <input type="checkbox" name="exclude-withdrawn" value="true" {% if save_settings['filters']['withdrawn'] %} checked {% endif %}> Withdrawn
                                                 </label>
                                             </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- CUSTOM TEXT -->
+                            <div class="row" style="padding-top:5px;padding-bottom:5px">
+                                <div class="col">
+                                    <table>
+                                        <tr>
+                                            <td style="width: 120px"><strong>Custom Text: </strong><br>(100 char max)</td>
+                                            <td>
+                                                <textarea name="custom_text" id="custom_text" class="form-control" rows="3" cols="25" maxlength="100">{% if save_settings['custom_text'] %}{{ save_settings['custom_text'] }}{% else %}{% endif %}</textarea>
+                                                </td>
                                         </tr>
                                     </table>
                                 </div>
