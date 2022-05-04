@@ -461,7 +461,16 @@ def update():
         else:
             continue
         db.session.commit()
-    return redirect("/lists")
+
+    # Check if PhD applicant for message about MD/DO-only consideration
+    if School.query.filter_by(cycle_id=cycle.id, phd=True).first():
+        phd_applicant = True
+    else:
+        phd_applicant = False
+
+    return render_template('lists.html', user=current_user, cycle=cycle, md_school_list=form_options.get_md_schools(),
+                        do_school_list=form_options.get_do_schools(), phd_applicant=phd_applicant)
+
 
 @dashboard.route('/import-list', methods=["GET", "POST"])
 @login_required
