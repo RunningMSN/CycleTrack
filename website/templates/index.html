@@ -16,14 +16,15 @@
 
 {% if graphJSON %}
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-<div class="container" style="padding-top:20px">
-<div id="chart" class="chart"></div>
-<script>
-	var graphs = {{ graphJSON | safe }};
-	graphs.config = {'responsive': true, 'displaylogo': false, 'scrollZoom': false,
-    modeBarButtonsToRemove:["toImage","select2d","lasso2d",]}
-    Plotly.newPlot('chart', graphs);
-</script></div>
+<div class="container d-none d-sm-none d-md-block" style="padding-top:20px">
+    <div id="chart" class="chart"></div>
+    <script>
+        var graphs = {{ graphJSON | safe }};
+        graphs.config = {'responsive': true, 'displaylogo': false, 'scrollZoom': false,
+        modeBarButtonsToRemove:["toImage","select2d","lasso2d",]}
+        Plotly.newPlot('chart', graphs);
+    </script>
+</div>
 
 <script type="text/javascript">
     var plot_element = document.getElementById('chart');
@@ -35,7 +36,7 @@
             window.open(point.customdata);
         }
     })
-    
+
 </script>
 {% endif %}
 
