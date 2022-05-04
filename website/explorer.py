@@ -4,7 +4,7 @@ from . import db, form_options
 from .models import Cycle, School, School_Profiles_Data
 from .visualizations import school_table, school_graphs
 import pandas as pd
-from .helpers import school_info_calcs
+from .helpers import school_info_calcs, school_stats_calculators
 import statistics
 
 explorer = Blueprint('explorer', __name__)
@@ -13,16 +13,14 @@ explorer = Blueprint('explorer', __name__)
 def explorer_home():
     # Get info about all available schools
     all_schools = School_Profiles_Data.query.all()
-    # Get info about schools in the database
-    schools_in_db = db.session.query(School.name)
 
     build_df = {'name': [], 'type': [], 'reg_apps': [], 'reg_med_mcat': [], 'reg_med_gpa': [],
                 'phd_apps': [], 'logo_link': [], 'city': [], 'state': [], 'country': [], 'envt': [], 'pub_pri': []}
 
     for school in all_schools:
-        # Grab number of applications TODO: Eventually grab from school profiles count once that is added
-        reg_num = schools_in_db.filter_by(name=school.school, phd=False).count()
-        phd_num = schools_in_db.filter_by(name=school.school, phd=True).count()
+        # Grab number of applications
+        reg_num = school.reg_apps_count
+        phd_num = school.phd_apps_count
         # Skip the school if no applications
         if reg_num > 0 or phd_num > 0:
             build_df['reg_apps'].append(reg_num)
@@ -137,3 +135,9 @@ def explore_school(school_name):
 
     return render_template('school_template.html', user=current_user, school_info=school_info, table_md=table_md,
                            table_mdphd=table_mdphd, reg_info=reg_info, phd_info=phd_info)
+
+@explorer.route('/update_all')
+def update_all():
+    school_stats_calculators.update_all_schools()
+    flash('Updated the stats for all schools in the database.', category='success')
+    return redirect(url_for('pages.index'))

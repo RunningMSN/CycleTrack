@@ -7,7 +7,7 @@ from datetime import datetime, date
 import re
 from .visualizations import dot, line, bar, sankey, map
 import pandas as pd
-from .helpers import import_list_funcs, categorize_stats
+from .helpers import import_list_funcs, categorize_stats, school_stats_calculators
 from flask_mail import Message
 
 dashboard = Blueprint('dashboard', __name__)
@@ -201,6 +201,13 @@ def lists():
             db.session.add(School(name=add_school_name, cycle_id=cycle.id, user_id=current_user.id, phd=dual_degree_phd,
                                   school_type=school_type))
             db.session.commit()
+
+            # Update the application counter
+            if dual_degree_phd:
+                school_stats_calculators.count_apps_phd(add_school_name)
+            else:
+                school_stats_calculators.count_apps_reg(add_school_name)
+            school_stats_calculators.update_all_schools()
 
     # Handle editing schools
     school_id = request.form.get('school_id')
