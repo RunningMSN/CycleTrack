@@ -1,5 +1,8 @@
 {% extends 'dashboard.html' %}
 {% block title %} Visualizations {% endblock %}
+{% block additional_js %}
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+{% endblock %}
 {% block dash_content %}
 <div id="visualizations" class="container" style="padding-top:10px" xmlns="http://www.w3.org/1999/html">
     <h2>Visualizations for {{ cycle.cycle_year }} Cycle</h2>
