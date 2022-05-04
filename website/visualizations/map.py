@@ -5,7 +5,7 @@ import textwrap
 from . import converters
 
 def generate(cycle_data,title,stats,color="default",map_scope="usa",custom_text=None):
-    loc_df = converters.convert_map(cycle_data,aggregate=False,color=color)
+    loc_df = converters.convert_map(cycle_data,color=color)
     fig = go.Figure()
 
     outcomes = list(loc_df["Best Outcome"].unique())

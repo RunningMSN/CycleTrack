@@ -1,8 +1,6 @@
 {% extends 'base.html' %}
 {% block title %}CycleTrack{% endblock %}
-{% block additional_js %}
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-{% endblock %}
+{% block additional_js %}{% endblock %}
 {% block content %}
 <div class="p-5 mb-4" style="background: #ebebeb">
     <div class="container-fluid py-5">
@@ -15,8 +13,9 @@
         </div>
     </div>
 </div>
-<!--
+
 {% if graphJSON %}
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 <div class="container" style="padding-top:20px">
 <div id="chart" class="chart"></div>
 <script>
@@ -39,5 +38,5 @@
     
 </script>
 {% endif %}
--->
+
 {% endblock %}

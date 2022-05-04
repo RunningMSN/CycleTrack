@@ -16,7 +16,7 @@ def index():
     # Drop empty columns
     map_data = map_data.dropna(axis=1, how='all')
     if len(map_data) > 0:
-        graphJSON = agg_map.generate(map_data)
+        graphJSON = agg_map.generate()
     else:
         graphJSON = None
     return render_template('index.html', user=current_user, user_count=user_count, school_count=school_count,
