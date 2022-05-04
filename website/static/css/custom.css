@@ -18,3 +18,15 @@
 .datepicker {
     width:90%;
 }
+
+.accordion-button:not(.collapsed) {
+    background-color: #ffff;
+    color:black;
+    border-color: #ebebeb;
+    border-width: 3px;
+    border-style: none none solid none;
+}
+
+.accordion-button:focus {
+    box-shadow: none;
+}
