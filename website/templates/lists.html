@@ -131,22 +131,22 @@
             {% for school in cycle.schools %}
             <!-- DISPLAY SCHOOLS -->
             <tr class="{% if school.acceptance %}table-success{% elif school.withdrawn %}table-secondary{% elif school.rejection %}table-danger{% elif school.waitlist %}table-warning{% endif %}">
-                <td>
+                <td class="align-middle">
                     <button type="button" class="btn btn-link" data-toggle="modal" data-target="#{{ school.name }}-{{ school.phd }}-modal">
                         <i class="far fa-edit"></i>
                     </button>
                 </td>
-                <td>
+                <td class="align-middle">
                     <a href="{{ url_for('explorer.explorer_home') }}/{{ school.name }}" style="color:black;text-decoration: none">
                     {{ school.name }} ({% if school.school_type == "MD" %}MD{% else %}DO{% endif %}{% if school.phd %}-PhD{% endif %})
                     </a>
                 </td>
-                <td>
+                <td class="align-middle">
                     {% if school.application_complete %}
                     {{ school.application_complete.strftime('%m/%d/%Y') }}
                     {% endif %}
                 </td>
-                <td>
+                <td class="align-middle">
                     {% if school.interview_received %}
                     {{ school.interview_received.strftime('%m/%d/%Y') }}
                     {% endif %}
@@ -173,42 +173,42 @@
             {% for school in cycle.schools %}
             <!-- DISPLAY SCHOOLS -->
              <tr class="{% if school.acceptance %}table-success{% elif school.withdrawn %}table-secondary{% elif school.rejection %}table-danger{% elif school.waitlist %}table-warning{% endif %}">
-               <td>
+               <td class="align-middle">
                     <button type="button" class="btn btn-link" data-toggle="modal" data-target="#{{ school.name }}-{{ school.phd }}-modal">
                         <i class="far fa-edit"></i>
                     </button>
                 </td>
-                <td>
+                <td class="align-middle">
                     <a href="{{ url_for('explorer.explorer_home') }}/{{ school.name }}" style="color:black;text-decoration: none">
                     {{ school.name }} ({% if school.school_type == "MD" %}MD{% else %}DO{% endif %}{% if school.phd %}-PhD{% endif %})
                     </a>
                 </td>
-                <td>
+                <td class="align-middle">
                     {% if school.secondary_received %}
                     {{ school.secondary_received.strftime('%m/%d/%Y') }}
                     {% endif %}
                 </td>
-                <td>
+                <td class="align-middle">
                     {% if school.application_complete %}
                     {{ school.application_complete.strftime('%m/%d/%Y') }}
                     {% endif %}
                 </td>
-                <td>
+                <td class="align-middle">
                     {% if school.interview_received %}
                     {{ school.interview_received.strftime('%m/%d/%Y') }}
                     {% endif %}
                 </td>
-                <td>
+                <td class="align-middle">
                     {% if school.rejection %}
                     {{ school.rejection.strftime('%m/%d/%Y') }}
                     {% endif %}
                 </td>
-                <td>
+                <td class="align-middle">
                     {% if school.waitlist %}
                     {{ school.waitlist.strftime('%m/%d/%Y') }}
                     {% endif %}
                 </td>
-                <td>
+                <td class="align-middle">
                     {% if school.acceptance %}
                     {{ school.acceptance.strftime('%m/%d/%Y') }}
                     {% endif %}
