@@ -869,7 +869,7 @@ def visualizations():
             cycle_data = cycle_data[cycle_data['school_type'] == 'DO']
 
         # Drop extra information
-        cycle_data = cycle_data.drop(['id', 'cycle_id', 'user_id', 'school_type', 'phd'], axis=1)
+        cycle_data = cycle_data.drop(['id', 'cycle_id', 'user_id', 'school_type', 'phd', 'note'], axis=1)
         # Drop empty columns
         cycle_data = cycle_data.dropna(axis=1, how='all')
         # Get visualization JSON
