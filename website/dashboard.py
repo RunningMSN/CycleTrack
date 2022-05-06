@@ -689,7 +689,7 @@ def export_list():
     cycle = Cycle.query.filter_by(id=cycle_id).first()
     # Create dataframe of schools for that cycle and convert to CSV
     cycle_data = pd.read_sql(School.query.filter_by(cycle_id=cycle_id).statement, db.session.bind).drop(
-        ['id', 'cycle_id', 'user_id', 'school_type', 'phd'], axis=1)
+        ['id', 'cycle_id', 'user_id', 'school_type', 'phd', 'note'], axis=1)
     csv = cycle_data.to_csv(index=False, encoding='utf-8')
     # Generate response/download
     response = Response(csv, mimetype='text/csv')
