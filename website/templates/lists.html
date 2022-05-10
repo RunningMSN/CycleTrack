@@ -218,7 +218,7 @@
             <tr class="{% if school.acceptance %}table-success{% elif school.withdrawn %}table-secondary{% elif school.rejection %}table-danger{% elif school.waitlist %}table-warning{% endif %}"
             style="border-top-style:hidden;">
                 <td></td>
-                <td colspan="10" style="white-space:pre-wrap; word-wrap:break-word">{{ school.note }}</td>
+                <td colspan="10" style="white-space:pre-wrap; word-wrap:break-word"><i>Notes:</i><br>{{ school.note }}</td>
             </tr>
             {% endif %}
             {% endfor %}
@@ -305,9 +305,26 @@
             <tr class="{% if school.acceptance %}table-success{% elif school.withdrawn %}table-secondary{% elif school.rejection %}table-danger{% elif school.waitlist %}table-warning{% endif %}"
             style="border-top-style:hidden;">
                 <td></td>
-                <td colspan="10" style="white-space:pre-wrap; word-wrap:break-word">{{ school.note }}</td>
+                <td colspan="10" style="white-space:pre-wrap; word-wrap:break-word"><i>Notes:</i><br>{{ school.note }}</td>
             </tr>
             {% endif %}
+            <tr class="{% if school.acceptance %}table-success{% elif school.withdrawn %}table-secondary{% elif school.rejection %}table-danger{% elif school.waitlist %}table-warning{% endif %}"
+            style="border-top-style:hidden;">
+                <td></td>
+                <td colspan="10" style="">
+                    <details>
+                        <summary>
+                            <i>Notable Dates:</i>
+                        </summary>
+                        First Rejection: XX.XX.XXXX |
+                        Most Recent Rejection: XX.XX.XXXX <br>
+                        First Interview Invitiation: XX.XX.XXXX |
+                        Most Recent Interview Invitiation: XX.XX.XXXX <br>
+                        First Acceptance: XX.XX.XXXX |
+                        Most Recent Acceptance: XX.XX.XXXX
+                    </details>
+                </td>
+            </tr>
             {% endfor %}
         </table>
     </div>
