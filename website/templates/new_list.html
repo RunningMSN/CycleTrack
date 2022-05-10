@@ -1,8 +1,20 @@
 {% extends 'dashboard.html' %}
 {% block title %} Dashboard {% endblock %}
 {% block additional_js %}
-
-
+<script>
+$(document).ready(function() {
+    $("#type").change(function() {
+        var val = $(this).val();
+        if (val == "USMD") {
+            $("#add_school").html("{% for school in usmd_school_list %}<option value='{{ school }}'>{{ school }}</option>{% endfor %}");
+        } else if (val == "DO") {
+            $("#add_school").html("{% for school in do_school_list %}<option value='{{ school }}'>{{ school }}</option>{% endfor %}");
+        } else if (val == "CAMD") {
+            $("#add_school").html("{% for school in camd_school_list %}<option value='{{ school }}'>{{ school }}</option>{% endfor %}");
+        }
+    });
+});
+</script>
 {% endblock %}
 {% block dash_content %}
 
@@ -192,22 +204,6 @@
     spreadsheet.</p>
     {% endif %}
 </div>
-
-
-<script>
-$(document).ready(function() {
-    $("#type").change(function() {
-        var val = $(this).val();
-        if (val == "USMD") {
-            $("#add_school").html("{% for school in usmd_school_list %}<option value='{{ school }}'>{{ school }}</option>{% endfor %}");
-        } else if (val == "DO") {
-            $("#add_school").html("{% for school in do_school_list %}<option value='{{ school }}'>{{ school }}</option>{% endfor %}");
-        } else if (val == "CAMD") {
-            $("#add_school").html("{% for school in camd_school_list %}<option value='{{ school }}'>{{ school }}</option>{% endfor %}");
-        }
-    });
-});
-</script>
 
 <!-- ADD SCHOOL MENU -->
 <div class="modal fade" id="add-school-modal" tabindex="-1" role="dialog" aria-hidden="true">
