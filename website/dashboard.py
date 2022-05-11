@@ -163,9 +163,9 @@ def cycles():
                            state_options=form_options.STATE_OPTIONS, empty_cycles=", ".join(empty_cycles))
 
 
-@dashboard.route('/new_list', methods=['GET', 'POST'])
+@dashboard.route('/list', methods=['GET', 'POST'])
 @login_required
-def new_list():
+def lists():
     # If GET request then did not provide a school
     if request.method == 'GET':
         if len(current_user.cycles) > 1:
@@ -273,124 +273,11 @@ def new_list():
             school.note = None
         db.session.commit()
 
-    return render_template('new_list.html', user=current_user, cycle=cycle, schools=schools, phd_applicant=phd_applicant,
+    return render_template('lists.html', user=current_user, cycle=cycle, schools=schools, phd_applicant=phd_applicant,
                            usmd_school_list=form_options.get_md_schools('USA'),
                            camd_school_list=form_options.get_md_schools('CAN'),
                            do_school_list=form_options.get_do_schools())
 
-
-
-@dashboard.route('/lists', methods=['GET', 'POST'])
-@login_required
-def lists():
-    # If GET request then did not provide a school
-    if request.method == 'GET':
-        if len(current_user.cycles) > 1:
-            flash('Please select a cycle before viewing your school list.', category='error')
-            return redirect(url_for('dashboard.cycles'))
-        elif len(current_user.cycles) == 0:
-            flash('Please add a cycle first.', category='error')
-            return redirect(url_for('dashboard.cycles'))
-        else:
-            cycle_id = current_user.cycles[0].id
-    # If POST then grab cycle ID
-    else:
-        cycle_id = request.form.get('cycle_id')
-
-    # Require to provide a cycle for obtaining school list for that cycle
-    cycle = Cycle.query.filter_by(id=int(cycle_id)).first()
-
-    # Handle adding school
-    add_school_name = request.form.get('add_school')
-    if add_school_name:
-        if request.form.get('phd'):
-            dual_degree_phd = True
-        else:
-            dual_degree_phd = False
-
-        school_type = request.form.get('school_type')
-        # Check if school already exists
-        school = School.query.filter_by(name=add_school_name, cycle_id=cycle.id, phd=dual_degree_phd).first()
-        if school:
-            flash('You cannot add the same program twice.', category='error')
-        else:
-            db.session.add(School(name=add_school_name, cycle_id=cycle.id, user_id=current_user.id, phd=dual_degree_phd,
-                                  school_type=school_type))
-            db.session.commit()
-
-            # Update the application counter
-            if dual_degree_phd:
-                school_stats_calculators.count_apps_phd(add_school_name)
-            else:
-                school_stats_calculators.count_apps_reg(add_school_name)
-            school_stats_calculators.update_all_schools()
-
-    # Handle editing schools
-    school_id = request.form.get('school_id')
-    if school_id:
-        school = School.query.filter_by(id=int(school_id)).first()
-        primary = request.form.get('primary')
-        if primary:
-            school.primary = datetime.strptime(primary, '%Y-%m-%d')
-        else:
-            school.primary = None
-        secondary_received = request.form.get('secondary_received')
-        if secondary_received:
-            school.secondary_received = datetime.strptime(secondary_received, '%Y-%m-%d')
-        else:
-            school.secondary_received = None
-        application_complete = request.form.get('application_complete')
-        if application_complete:
-            school.application_complete = datetime.strptime(application_complete, '%Y-%m-%d')
-        else:
-            school.application_complete = None
-        interview_received = request.form.get('interview_received')
-        if interview_received:
-            school.interview_received = datetime.strptime(interview_received, '%Y-%m-%d')
-        else:
-            school.interview_received = None
-        interview_date = request.form.get('interview_date')
-        if interview_date:
-            school.interview_date = datetime.strptime(interview_date, '%Y-%m-%d')
-        else:
-            school.interview_date = None
-        rejection = request.form.get('rejection')
-        if rejection:
-            school.rejection = datetime.strptime(rejection, '%Y-%m-%d')
-        else:
-            school.rejection = None
-        waitlist = request.form.get('waitlist')
-        if waitlist:
-            school.waitlist = datetime.strptime(waitlist, '%Y-%m-%d')
-        else:
-            school.waitlist = None
-        acceptance = request.form.get('acceptance')
-        if acceptance:
-            school.acceptance = datetime.strptime(acceptance, '%Y-%m-%d')
-        else:
-            school.acceptance = None
-        withdrawn = request.form.get('withdrawn')
-        if withdrawn:
-            school.withdrawn = datetime.strptime(withdrawn, '%Y-%m-%d')
-        else:
-            school.withdrawn = None
-        note = request.form.get('note')
-        if note:
-            school.note = note
-        else:
-            school.note = None
-        db.session.commit()
-
-    # Check if PhD applicant for message about MD/DO-only consideration
-    if School.query.filter_by(cycle_id=cycle.id, phd=True).first():
-        phd_applicant = True
-    else:
-        phd_applicant = False
-
-    form_options.get_md_schools()
-
-    return render_template('lists.html', user=current_user, cycle=cycle, md_school_list=form_options.get_md_schools(),
-                           do_school_list=form_options.get_do_schools(), phd_applicant=phd_applicant)
 
 @dashboard.route("/update",methods=['POST','GET'])
 @login_required
@@ -412,6 +299,10 @@ def update():
     # Require to provide a cycle for obtaining school list for that cycle
     cycle = Cycle.query.filter_by(id=int(cycle_id)).first()
 
+    schools = db.session.query(School, School_Profiles_Data).filter(School.cycle_id == cycle_id) \
+        .join(School, School.name == School_Profiles_Data.school).order_by(School.rejection.asc(),
+                                                                           School.withdrawn.asc(),
+                                                                           School.acceptance.asc(), School.name.asc())
     for key in request.form:
         school_id = key.partition("-")[-1]
         if key.startswith('primary1'):
@@ -591,8 +482,10 @@ def update():
     else:
         phd_applicant = False
 
-    return render_template('lists.html', user=current_user, cycle=cycle, md_school_list=form_options.get_md_schools(),
-                        do_school_list=form_options.get_do_schools(), phd_applicant=phd_applicant)
+    return render_template('lists.html', user=current_user, cycle=cycle, schools=schools, phd_applicant=phd_applicant,
+                           usmd_school_list=form_options.get_md_schools('USA'),
+                           camd_school_list=form_options.get_md_schools('CAN'),
+                           do_school_list=form_options.get_do_schools())
 
 
 @dashboard.route('/import-list', methods=["GET", "POST"])

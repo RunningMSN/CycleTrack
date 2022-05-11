@@ -1,26 +1,13 @@
 {% extends 'dashboard.html' %}
-{% block title %} Dashboard {% endblock %}
+{% block title %} {{ cycle.cycle_year }} School List {% endblock %}
 {% block additional_js %}
 <script>
-        function toggleBulkEdit() {
-            var normal = document.getElementById("normal-list");
-            var bulk = document.getElementById("bulkedit-list");
-            if (!normal.classList.contains("d-lg-block")) {
-                if (confirm("Changes have not been saved! Do you want to proceed?")){
-                    normal.classList.add("d-lg-block");
-                    bulk.classList.remove("d-lg-block");
-                }
-                else{}
-            } else {
-                normal.classList.remove("d-lg-block");
-                bulk.classList.add("d-lg-block");
-            }
-        }
-</script>
-<script>
-        $(document).ready(function(){
-            if($("div").is(".list-page")){
-                $(".datepicker").each(function(){
+    $(document).ready(function() {
+        // Start bulk edit components as hidden
+        //$('.bulk_list').hide();
+
+        // Setup datepicker for bulk edit
+        $(".datepicker").each(function(){
                     var val = ($(this).val());
                     var current = new Date(val);
                     var current_utc = new Date(current.getUTCFullYear(), current.getUTCMonth(), current.getUTCDate());
@@ -53,16 +40,42 @@
                         $(this).datepicker("setDate",current_utc);
                     };
             });
-        }
+
+        // Change shown list for adding school by type
+        $("#type").change(function() {
+            var val = $(this).val();
+            if (val == "USMD") {
+                $("#add_school").html("{% for school in usmd_school_list %}<option value='{{ school }}'>{{ school }}</option>{% endfor %}");
+            } else if (val == "DO") {
+                $("#add_school").html("{% for school in do_school_list %}<option value='{{ school }}'>{{ school }}</option>{% endfor %}");
+            } else if (val == "CAMD") {
+                $("#add_school").html("{% for school in camd_school_list %}<option value='{{ school }}'>{{ school }}</option>{% endfor %}");
+            }
         });
+    });
+
+    function toggleBulkEdit(){
+        var normal = document.getElementsByClassName('normal_list');
+        var bulk = document.getElementsByClassName('bulk_list');
+        // Unhide bulk edits
+        for (let i = 0; i < bulk.length; i++){
+            bulk[i].classList.remove("d-none");
+        }
+        // Hide normal
+        for (let i = 0; i < normal.length; i++){
+            normal[i].classList.add("d-none");
+        }
+    }
+
+    function toggleCancel() {
+        location.reload(true);
+    }
 </script>
 {% endblock %}
 {% block dash_content %}
 
-<!-- SCHOOL LIST MANAGEMENT -->
-<div id="lists" class="container list-page" style="padding-top:10px">
+<div id="lists" class="container" style="padding-top:10px">
     <h2>My {{ cycle.cycle_year }} School List</h2>
-    <!-- MESSAGE FOR DUAL DEGREE APPLICANTS -->
     {% if phd_applicant %}
     <p>
         <a href="#" data-toggle="tooltip" title="If you are being considered for MD/DO-only as well, please add an MD/DO-only second entry. If this consideration
@@ -73,341 +86,288 @@
         </a>
     </p>
     {% endif %}
-    <!-- BUTTONS FOR BULK EDIT ADDING SCHOOLS-->
-    <table>
-        <tr>
-            {% if cycle.schools|length > 0 %}
-            <td>
-                <button class="btn btn-primary d-none d-lg-block" type="button" onclick="toggleBulkEdit()">
-                    Bulk Edit
+
+    <!-- EDIT LIST BUTTONS -->
+    <div class="row row-cols-auto normal_list">
+        <div class="col normal_list" style="margin: 3px">
+            <button type="button" class="btn btn-primary rounded" data-toggle="modal" data-target="#add-school-modal">
+                Add School
+            </button>
+        </div>
+        {% if cycle.schools|length > 0 %}
+        <div class="col normal_list" style="margin: 3px">
+            <button class="btn btn-primary rounded" type="button" onclick="toggleBulkEdit()">
+                Multi-Edit
+            </button>
+        </div>
+        <div class="col normal_list" style="margin: 3px">
+            <form method="POST" action="{{ url_for('dashboard.import_list') }}">
+                <input type="hidden" id="import_cycle_id" name="cycle_id" value="{{ cycle.id }}"/>
+                <button type="submit" class="btn btn-primary">
+                    Import From Spreadsheet
                 </button>
-            </td>
-            {% endif %}
-            <td>
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-md-modal">
-                    Add MD School
+            </form>
+        </div>
+        <div class="col normal_list" style="margin: 3px">
+            <form method="POST" action="{{ url_for('dashboard.export_list') }}">
+                <input type="hidden" id="export_cycle_id" name="cycle_id" value="{{ cycle.id }}"/>
+                <button type="submit" class="btn btn-primary">
+                    Export To Spreadsheet
                 </button>
-            </td>
-            <td>
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-do-modal">
-                    Add DO School
+            </form>
+        </div>
+        {% endif %}
+    </div>
+    <form method="POST" action="{{ url_for('dashboard.update') }}">
+        <input type="hidden" value="{{cycle.id}}" name="cycle_id">
+        <div class="row row-cols-auto bulk_list d-none">
+            <div class="col" style="margin: 3px">
+                <button class="btn btn-secondary rounded" type="submit">
+                    Save Changes
                 </button>
-            </td>
-        </tr>
-    </table>
-    <table>
-        <tr>
-            <td>
-                <form method="POST" action="{{ url_for('dashboard.import_list') }}">
-                    <input type="hidden" id="import_cycle_id" name="cycle_id" value="{{ cycle.id }}"/>
-                    <button type="submit" class="btn btn-primary">
-                        Import From Spreadsheet
-                    </button>
-                </form>
-            </td>
-            <td>
-                <form method="POST" action="{{ url_for('dashboard.export_list') }}">
-                    <input type="hidden" id="export_cycle_id" name="cycle_id" value="{{ cycle.id }}"/>
-                    <button type="submit" class="btn btn-primary">
-                        Export To Spreadsheet
-                    </button>
-                </form>
-            </td>
-        </tr>
-    </table>
+                <button class="btn btn-danger rounded" type="button" onclick="toggleCancel()">
+                    Cancel
+                </button>
+            </div>
+        </div>
 
-    {% if cycle.schools|length > 0 %}
-    <!-- SMALLEST SCREEN SIZE -->
-    <div class="d-md-none">
-        <table class="table" style="font-size:0.9rem">
-            <thead>
-                <tr>
-                    <th></th>
-                    <th>School</th>
-                    <th>Application Complete</th>
-                    <th>Interview Received</th>
-                </tr>
-            </thead>
-            {% for school in cycle.schools %}
-            <!-- DISPLAY SCHOOLS -->
-            <tr class="{% if school.acceptance %}table-success{% elif school.withdrawn %}table-secondary{% elif school.rejection %}table-danger{% elif school.waitlist %}table-warning{% endif %}">
-                <td class="align-middle">
-                    <button type="button" class="btn btn-link" data-toggle="modal" data-target="#{{ school.name }}-{{ school.phd }}-modal">
-                        <i class="far fa-edit"></i>
-                    </button>
-                </td>
-                <td class="align-middle">
-                    <a href="{{ url_for('explorer.explorer_home') }}/{{ school.name }}" style="color:black;text-decoration: none">
-                    {{ school.name }} ({% if school.school_type == "MD" %}MD{% else %}DO{% endif %}{% if school.phd %}-PhD{% endif %})
+        {% if cycle.schools|length > 0 %}
+        {% for school, profile in schools %}
+        <li class="list-group-item">
+            <div class="row rows-cols-2">
+                <!-- SCHOOL LOGO AREA ON LEFT -->
+                <div class="col-lg-1">
+                    <!-- LOGO -->
+                    <center>
+                        <div class="row">
+                            <a href="{{ url_for('explorer.explorer_home') }}/{{ school['name'] }}">
+                                <img src="{{ url_for('static', filename='images/school_logos/' + profile.logo_file_name) }}" style="max-width:100px;max-height:100px" width="100%" height="auto">
+                            </a>
+                        </div>
+                        <div class="row">
+                            {% if school.acceptance %}
+                            <div class="text-center rounded" style="margin-top: 3px; background-color: #6af799">
+                                Accepted
+                            </div>
+                            {% elif school.withdrawn %}
+                            <div class="text-center rounded" style="margin-top: 3px; background-color: #d1d1d1">
+                                Withdrawn
+                            </div>
+                            {% elif school.waitlist %}
+                            <div class="text-center rounded" style="margin-top: 3px; background-color: #ffca80">
+                                Waitlist
+                            </div>
+                            {% elif school.rejection %}
+                            <div class="text-center rounded" style="1px; margin-top: 3px; background-color: #ff8282">
+                                Rejected
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="row">
+                            <!-- ICONS -->
+                            <span class="btn-group">
+                                <button type="button" class="btn btn-link" data-toggle="modal" data-target="#{{ school.name }}-{{ school.phd }}-modal">
+                                    <i class="far fa-edit"></i>
+                                </button>
+                            </span>
+                        </div>
+                    </center>
+                </div>
+
+                <!-- SCHOOL TEXT AREA ON RIGHT -->
+                <div class="col-lg">
+                    <a href="{{ url_for('explorer.explorer_home') }}/{{ school.name }}"
+                       style="color:black;text-decoration: none">
+                        <h5>{{ school.name }} ({{ school.school_type }}{% if school.phd %}-PhD{% endif %})</h5>
                     </a>
-                </td>
-                <td class="align-middle">
-                    {% if school.application_complete %}
-                    {{ school.application_complete.strftime('%m/%d/%Y') }}
+                    <div class="row" style="padding-bottom: 10px">
+                        <div class="col-lg-2">
+                            <strong>Primary Submitted:</strong><br>
+                            <span class="normal_list">
+                            {% if school.primary %}
+                            {{ school.primary.strftime('%m/%d/%Y') }}
+                            {% else %}
+                            -
+                            {% endif %}
+                            </span>
+                            <span class="bulk_list d-none">
+                                <input type="hidden" value="{%- if school.primary -%}{{ school.primary.strftime('%Y-%m-%d') }}{%- endif -%}" name="primary0-{{school.id}}">
+                                <input class="datepicker" type="text" data-cycle="{{cycle.cycle_year}}" value="{%- if school.primary -%}{{ school.primary.strftime('%Y-%m-%d') }}{%- endif -%}" name="primary1-{{school.id}}">
+                            </span>
+                        </div>
+                        <div class="col-lg-2">
+                            <strong>Secondary Received:</strong><br>
+                            <span class="normal_list">
+                            {% if school.secondary_received %}
+                            {{ school.secondary_received.strftime('%m/%d/%Y') }}
+                            {% else %}
+                            -
+                            {% endif %}
+                            </span>
+                            <span class="bulk_list d-none">
+                                <input type="hidden" value="{%- if school.secondary_received -%}{{ school.secondary_received.strftime('%Y-%m-%d') }}{%- endif -%}" name="secondary_received0-{{school.id}}">
+                                <input class="datepicker" type="text" data-cycle="{{cycle.cycle_year}}" value="{%- if school.secondary_received -%}{{ school.secondary_received.strftime('%Y-%m-%d') }}{%- endif -%}" name="secondary_received1-{{school.id}}">
+                            </span>
+                        </div>
+                        <div class="col-lg-2">
+                            <strong>Application Complete:</strong><br>
+                            <span class="normal_list">
+                            {% if school.application_complete %}
+                            {{ school.application_complete.strftime('%m/%d/%Y') }}
+                            {% else %}
+                            -
+                            {% endif %}
+                            </span>
+                            <span class="bulk_list d-none">
+                                <input type="hidden" value="{%- if school.application_complete-%}{{ school.application_complete.strftime('%Y-%m-%d') }}{%- endif -%}" name="application_complete0-{{school.id}}">
+                                <input class="datepicker" type="text" data-cycle="{{cycle.cycle_year}}" value="{%- if school.application_complete-%}{{ school.application_complete.strftime('%Y-%m-%d') }}{%- endif -%}" name="application_complete1-{{school.id}}">
+                            </span>
+                        </div>
+                        <div class="col-lg-2">
+                            <strong>Interview Received:</strong><br>
+                            <span class="normal_list">
+                            {% if school.interview_received %}
+                            {{ school.interview_received.strftime('%m/%d/%Y') }}
+                            {% else %}
+                            -
+                            {% endif %}
+                            </span>
+                            <span class="bulk_list d-none">
+                                <input type="hidden" value="{%- if school.interview_received -%}{{ school.interview_received.strftime('%Y-%m-%d') }}{%- endif -%}" name="interview_received0-{{school.id}}">
+                                <input class="datepicker" type="text" data-cycle="{{cycle.cycle_year}}" value="{%- if school.interview_received -%}{{ school.interview_received.strftime('%Y-%m-%d') }}{%- endif -%}" name="interview_received1-{{school.id}}">
+                            </span>
+                        </div>
+                        <div class="col-lg-2">
+                            <strong>Interview Date:</strong><br>
+                            <span class="normal_list d-none">
+                            {% if school.interview_date %}
+                            {{ school.interview_date.strftime('%m/%d/%Y') }}
+                            {% else %}
+                            -
+                            {% endif %}
+                            </span>
+                            <span class="bulk_list d-none">
+                                <input type="hidden" value="{%- if school.interview_date -%}{{ school.interview_date.strftime('%Y-%m-%d') }}{%- endif -%}" name="interview_date0-{{school.id}}">
+                                <input class="datepicker" type="text" data-cycle="{{cycle.cycle_year}}" value="{%- if school.interview_date -%}{{ school.interview_date.strftime('%Y-%m-%d') }}{%- endif -%}" name="interview_date1-{{school.id}}">
+                            </span>
+                        </div>
+                        <div class="col-lg-2">
+                            <strong>Rejected:</strong><br>
+                            <span class="normal_list d-none">
+                            {% if school.rejection %}
+                            {{ school.rejection.strftime('%m/%d/%Y') }}
+                            {% else %}
+                            -
+                            {% endif %}
+                            </span>
+                            <span class="bulk_list d-none">
+                                <input type="hidden" value="{%- if school.rejection -%}{{ school.rejection.strftime('%Y-%m-%d') }}{%- endif -%}" name="rejection0-{{school.id}}">
+                                <input class="datepicker" type="text" data-cycle="{{cycle.cycle_year}}" value="{%- if school.rejection -%}{{ school.rejection.strftime('%Y-%m-%d') }}{%- endif -%}" name="rejection1-{{school.id}}">
+                            </span>
+                        </div>
+                        <div class="col-lg-2">
+                            <strong>Waitlisted:</strong><br>
+                            <span class="normal_list">
+                            {% if school.waitlist %}
+                            {{ school.waitlist.strftime('%m/%d/%Y') }}
+                            {% else %}
+                            -
+                            {% endif %}
+                            </span>
+                            <span class="bulk_list d-none">
+                                <input type="hidden" value="{%- if school.waitlist -%}{{ school.waitlist.strftime('%Y-%m-%d') }}{%- endif -%}" name="waitlist0-{{school.id}}">
+                                <input class="datepicker" type="text" data-cycle="{{cycle.cycle_year}}" value="{%- if school.waitlist -%}{{ school.waitlist.strftime('%Y-%m-%d') }}{%- endif -%}" name="waitlist1-{{school.id}}">
+                            </span>
+                        </div>
+                        <div class="col-lg-2">
+                            <strong>Accepted:</strong><br>
+                            <span class="normal_list d-none">
+                            {% if school.acceptance %}
+                            {{ school.acceptance.strftime('%m/%d/%Y') }}
+                            {% else %}
+                            -
+                            {% endif %}
+                            </span>
+                            <span class="bulk_list d-none">
+                                <input type="hidden" value="{%- if school.acceptance -%}{{ school.acceptance.strftime('%Y-%m-%d') }}{%- endif -%}" name="acceptance0-{{school.id}}">
+                                <input class="datepicker" type="text" data-cycle="{{cycle.cycle_year}}" value="{%- if school.acceptance -%}{{ school.acceptance.strftime('%Y-%m-%d') }}{%- endif -%}" name="acceptance1-{{school.id}}">
+                            </span>
+                        </div>
+                        <div class="col-lg-2">
+                            <strong>Withdrawn:</strong><br>
+                            <span class="normal_list d-none">
+                                {% if school.withdrawn %}
+                                {{ school.withdrawn.strftime('%m/%d/%Y') }}
+                                {% else %}
+                                -
+                                {% endif %}
+                            </span>
+                            <span class="bulk_list d-none">
+                                <input type="hidden" value="{%- if school.withdrawn -%}{{ school.withdrawn.strftime('%Y-%m-%d') }}{%- endif -%}" name="withdrawn0-{{school.id}}">
+                                <input class="datepicker" type="text" data-cycle="{{cycle.cycle_year}}" value="{%- if school.withdrawn -%}{{ school.withdrawn.strftime('%Y-%m-%d') }}{%- endif -%}" name="withdrawn1-{{school.id}}">
+                            </span>
+                        </div>
+                    </div>
+                    <!-- NOTES -->
+                    {% if school.note %}
+                    <div class="row" style="padding-top: 10px">
+                        <details open>
+                            <summary><strong>Notes:</strong></summary>
+                            <p style="white-space:pre-wrap; word-wrap:break-word">{{ school.note }}</p>
+                        </details>
+                    </div>
                     {% endif %}
-                </td>
-                <td class="align-middle">
-                    {% if school.interview_received %}
-                    {{ school.interview_received.strftime('%m/%d/%Y') }}
-                    {% endif %}
-                </td>
-            </tr>
-            {% endfor %}
-        </table>
-    </div>
-    <!-- MEDIUM SCREEN SIZE -->
-    <div class="d-none d-md-block d-lg-none">
-        <table class="table" style="font-size:0.9rem">
-            <thead>
-                <tr>
-                    <th></th>
-                    <th>School</th>
-                    <th>Secondary Received</th>
-                    <th>Application Complete</th>
-                    <th>Interview Received</th>
-                    <th>Rejected</th>
-                    <th>Waitlisted</th>
-                    <th>Accepted</th>
-                </tr>
-            </thead>
-            {% for school in cycle.schools %}
-            <!-- DISPLAY SCHOOLS -->
-             <tr class="{% if school.acceptance %}table-success{% elif school.withdrawn %}table-secondary{% elif school.rejection %}table-danger{% elif school.waitlist %}table-warning{% endif %}">
-               <td class="align-middle">
-                    <button type="button" class="btn btn-link" data-toggle="modal" data-target="#{{ school.name }}-{{ school.phd }}-modal">
-                        <i class="far fa-edit"></i>
-                    </button>
-                </td>
-                <td class="align-middle">
-                    <a href="{{ url_for('explorer.explorer_home') }}/{{ school.name }}" style="color:black;text-decoration: none">
-                    {{ school.name }} ({% if school.school_type == "MD" %}MD{% else %}DO{% endif %}{% if school.phd %}-PhD{% endif %})
-                    </a>
-                </td>
-                <td class="align-middle">
-                    {% if school.secondary_received %}
-                    {{ school.secondary_received.strftime('%m/%d/%Y') }}
-                    {% endif %}
-                </td>
-                <td class="align-middle">
-                    {% if school.application_complete %}
-                    {{ school.application_complete.strftime('%m/%d/%Y') }}
-                    {% endif %}
-                </td>
-                <td class="align-middle">
-                    {% if school.interview_received %}
-                    {{ school.interview_received.strftime('%m/%d/%Y') }}
-                    {% endif %}
-                </td>
-                <td class="align-middle">
-                    {% if school.rejection %}
-                    {{ school.rejection.strftime('%m/%d/%Y') }}
-                    {% endif %}
-                </td>
-                <td class="align-middle">
-                    {% if school.waitlist %}
-                    {{ school.waitlist.strftime('%m/%d/%Y') }}
-                    {% endif %}
-                </td>
-                <td class="align-middle">
-                    {% if school.acceptance %}
-                    {{ school.acceptance.strftime('%m/%d/%Y') }}
-                    {% endif %}
-                </td>
-            </tr>
-            {% if school.note %}
-            <tr class="{% if school.acceptance %}table-success{% elif school.withdrawn %}table-secondary{% elif school.rejection %}table-danger{% elif school.waitlist %}table-warning{% endif %}"
-            style="border-top-style:hidden;">
-                <td></td>
-                <td colspan="10" style="white-space:pre-wrap; word-wrap:break-word"><i>Notes:</i><br>{{ school.note }}</td>
-            </tr>
-            {% endif %}
-            {% endfor %}
-        </table>
-    </div>
-    <!-- FULL TABLE ON LARGE SCREENS -->
-     <div class="d-none d-lg-block" id="normal-list">
-        <table class="table table-sm" style="font-size:0.9rem">
-            <thead>
-                <tr>
-                    <th></th>
-                    <th>School</th>
-                    <th>Primary Submitted</th>
-                    <th>Secondary Received</th>
-                    <th>Application Complete</th>
-                    <th>Interview Received</th>
-                    <th>Interview Date</th>
-                    <th>Rejected</th>
-                    <th>Waitlisted</th>
-                    <th>Accepted</th>
-                    <th>Withdrawn</th>
-                </tr>
-            </thead>
-            {% for school in cycle.schools %}
-            <!-- DISPLAY SCHOOLS -->
-            <tr class="{% if school.acceptance %}table-success{% elif school.withdrawn %}table-secondary{% elif school.rejection %}table-danger{% elif school.waitlist %}table-warning{% endif %}">
-                <td class="align-middle">
-                    <button type="button" class="btn btn-link" data-toggle="modal" data-target="#{{ school.name }}-{{ school.phd }}-modal">
-                        <i class="far fa-edit"></i>
-                    </button>
-                </td>
-                <td class="align-middle">
-                    <a href="{{ url_for('explorer.explorer_home') }}/{{ school.name }}" style="color:black;text-decoration: none">
-                    {{ school.name }} ({% if school.school_type == "MD" %}MD{% else %}DO{% endif %}{% if school.phd %}-PhD{% endif %})
-                    </a>
-                </td>
-                <td class="align-middle">
-                    {% if school.primary %}
-                    {{ school.primary.strftime('%m/%d/%Y') }}
-                    {% endif %}
-                </td>
-                <td class="align-middle">
-                    {% if school.secondary_received %}
-                    {{ school.secondary_received.strftime('%m/%d/%Y') }}
-                    {% endif %}
-                </td>
-                <td class="align-middle">
-                    {% if school.application_complete %}
-                    {{ school.application_complete.strftime('%m/%d/%Y') }}
-                    {% endif %}
-                </td>
-                <td class="align-middle">
-                    {% if school.interview_received %}
-                    {{ school.interview_received.strftime('%m/%d/%Y') }}
-                    {% endif %}
-                </td>
-                <td class="align-middle">
-                    {% if school.interview_date %}
-                    {{ school.interview_date.strftime('%m/%d/%Y') }}
-                    {% endif %}
-                </td>
-                <td class="align-middle">
-                    {% if school.rejection %}
-                    {{ school.rejection.strftime('%m/%d/%Y') }}
-                    {% endif %}
-                </td>
-                <td class="align-middle">
-                    {% if school.waitlist %}
-                    {{ school.waitlist.strftime('%m/%d/%Y') }}
-                    {% endif %}
-                </td>
-                <td class="align-middle">
-                    {% if school.acceptance %}
-                    {{ school.acceptance.strftime('%m/%d/%Y') }}
-                    {% endif %}
-                </td>
-                <td class="align-middle">
-                    {% if school.withdrawn %}
-                    {{ school.withdrawn.strftime('%m/%d/%Y') }}
-                    {% endif %}
-                </td>
-            </tr>
-            {% if school.note %}
-            <tr class="{% if school.acceptance %}table-success{% elif school.withdrawn %}table-secondary{% elif school.rejection %}table-danger{% elif school.waitlist %}table-warning{% endif %}"
-            style="border-top-style:hidden;">
-                <td></td>
-                <td colspan="10" style="white-space:pre-wrap; word-wrap:break-word"><i>Notes:</i><br>{{ school.note }}</td>
-            </tr>
-            {% endif %}
-            <tr class="{% if school.acceptance %}table-success{% elif school.withdrawn %}table-secondary{% elif school.rejection %}table-danger{% elif school.waitlist %}table-warning{% endif %}"
-            style="border-top-style:hidden;">
-                <td></td>
-                <td colspan="10" style="">
-                    <details>
-                        <summary>
-                            <i>Notable Dates:</i>
-                        </summary>
-                        First Rejection: XX.XX.XXXX |
-                        Most Recent Rejection: XX.XX.XXXX <br>
-                        First Interview Invitiation: XX.XX.XXXX |
-                        Most Recent Interview Invitiation: XX.XX.XXXX <br>
-                        First Acceptance: XX.XX.XXXX |
-                        Most Recent Acceptance: XX.XX.XXXX
-                    </details>
-                </td>
-            </tr>
-            {% endfor %}
-        </table>
-    </div>
-    <!--BULK EDIT FULL TABLE ON LARGE SCREENS-->
-    <div class="d-none" id="bulkedit-list">
-        <form method="POST" action="./update">
-            <input type="submit" value="Save Changes" class="btn btn-secondary">
-            <input type="hidden" value="{{cycle.id}}" name="cycle_id">
-
-            <table class="table table-sm" style="font-size:0.9rem" id="edit-table">
-                <thead>
-                    <tr>
-                        <th>Del</th>
-                        <th>School</th>
-                        <th>Primary Submitted</th>
-                        <th>Secondary Received</th>
-                        <th>Application Complete</th>
-                        <th>Interview Received</th>
-                        <th>Interview Date</th>
-                        <th>Rejected</th>
-                        <th>Waitlisted</th>
-                        <th>Accepted</th>
-                        <th>Withdrawn</th>
-                    </tr>
-                </thead>
-                {% for school in cycle.schools %}
-                <tr class="{% if school.acceptance %}table-success{% elif school.waitlist %}table-warning{% elif school.rejection %}table-danger{% elif school.withdrawn %}table-secondary{% endif %}">
-                    <td>
-                        <input type="checkbox" id="bulkDelete" name="delete-{{school.id}}">
-                    </td>
-                    <td>
-                        <a href="{{ url_for('explorer.explorer_home') }}/{{ school.name }}" style="color:black;text-decoration: none">
-                        {{ school.name }} ({% if school.school_type == "MD" %}MD{% else %}DO{% endif %}{% if school.phd %}-PhD{% endif %})
-                        </a>
-                    </td>
-                    <td>
-                        <input type="hidden" value="{%- if school.primary -%}{{ school.primary.strftime('%Y-%m-%d') }}{%- endif -%}" name="primary0-{{school.id}}">
-                        <input class="datepicker" type="text" data-cycle="{{cycle.cycle_year}}" value="{%- if school.primary -%}{{ school.primary.strftime('%Y-%m-%d') }}{%- endif -%}" name="primary1-{{school.id}}">
-                    </td>
-                    <td>
-                        <input type="hidden" value="{%- if school.secondary_received -%}{{ school.secondary_received.strftime('%Y-%m-%d') }}{%- endif -%}" name="secondary_received0-{{school.id}}">
-                        <input class="datepicker" type="text" data-cycle="{{cycle.cycle_year}}" value="{%- if school.secondary_received -%}{{ school.secondary_received.strftime('%Y-%m-%d') }}{%- endif -%}" name="secondary_received1-{{school.id}}">
-                    </td>
-                    <td>
-                        <input type="hidden" value="{%- if school.application_complete-%}{{ school.application_complete.strftime('%Y-%m-%d') }}{%- endif -%}" name="application_complete0-{{school.id}}">
-                        <input class="datepicker" type="text" data-cycle="{{cycle.cycle_year}}" value="{%- if school.application_complete-%}{{ school.application_complete.strftime('%Y-%m-%d') }}{%- endif -%}" name="application_complete1-{{school.id}}">
-                    </td>
-                    <td>
-                        <input type="hidden" value="{%- if school.interview_received -%}{{ school.interview_received.strftime('%Y-%m-%d') }}{%- endif -%}" name="interview_received0-{{school.id}}">
-                        <input class="datepicker" type="text" data-cycle="{{cycle.cycle_year}}" value="{%- if school.interview_received -%}{{ school.interview_received.strftime('%Y-%m-%d') }}{%- endif -%}" name="interview_received1-{{school.id}}">
-                    </td>
-                    <td>
-                        <input type="hidden" value="{%- if school.interview_date -%}{{ school.interview_date.strftime('%Y-%m-%d') }}{%- endif -%}" name="interview_date0-{{school.id}}">
-                        <input class="datepicker" type="text" data-cycle="{{cycle.cycle_year}}" value="{%- if school.interview_date -%}{{ school.interview_date.strftime('%Y-%m-%d') }}{%- endif -%}" name="interview_date1-{{school.id}}">
-                    </td>
-                    <td>
-                        <input type="hidden" value="{%- if school.rejection -%}{{ school.rejection.strftime('%Y-%m-%d') }}{%- endif -%}" name="rejection0-{{school.id}}">
-                        <input class="datepicker" type="text" data-cycle="{{cycle.cycle_year}}" value="{%- if school.rejection -%}{{ school.rejection.strftime('%Y-%m-%d') }}{%- endif -%}" name="rejection1-{{school.id}}">
-                    </td>
-                    <td>
-                        <input type="hidden" value="{%- if school.waitlist -%}{{ school.waitlist.strftime('%Y-%m-%d') }}{%- endif -%}" name="waitlist0-{{school.id}}">
-                        <input class="datepicker" type="text" data-cycle="{{cycle.cycle_year}}" value="{%- if school.waitlist -%}{{ school.waitlist.strftime('%Y-%m-%d') }}{%- endif -%}" name="waitlist1-{{school.id}}">
-                    </td>
-                    <td>
-                        <input type="hidden" value="{%- if school.acceptance -%}{{ school.acceptance.strftime('%Y-%m-%d') }}{%- endif -%}" name="acceptance0-{{school.id}}">
-                        <input class="datepicker" type="text" data-cycle="{{cycle.cycle_year}}" value="{%- if school.acceptance -%}{{ school.acceptance.strftime('%Y-%m-%d') }}{%- endif -%}" name="acceptance1-{{school.id}}">
-                    </td>
-                    <td>
-                        <input type="hidden" value="{%- if school.withdrawn -%}{{ school.withdrawn.strftime('%Y-%m-%d') }}{%- endif -%}" name="withdrawn0-{{school.id}}">
-                        <input class="datepicker" type="text" data-cycle="{{cycle.cycle_year}}" value="{%- if school.withdrawn -%}{{ school.withdrawn.strftime('%Y-%m-%d') }}{%- endif -%}" name="withdrawn1-{{school.id}}">
-                    </td>
-                </tr>
-                {% endfor %}
-            </table>
-        </form>
-    </div>
-    {% else %}
-    <p>You have not added any schools. Get started by adding schools manually or importing an existing list from a
-    spreadsheet.</p>
-    {% endif %}
-
-
+                </div>
+            </div>
+        </li>
+        {% endfor %}
+        {% else %}
+        <p>You have not added any schools. Get started by adding schools manually or importing an existing list from a
+        spreadsheet.</p>
+        {% endif %}
+    </form>
 </div>
+
+<!-- ADD SCHOOL MENU -->
+<div class="modal fade" id="add-school-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form method="POST">
+                <div class="modal-header">
+                    <h5 class="modal-title">New School</h5>
+                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="type">School Type</label>
+                        <select id="type" class="btn-sm form-control">
+                            <option value=""></option>
+                            <option value="USMD">United States MD</option>
+                            <option value="DO">DO</option>
+                            <option value="CAMD">Canada MD</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="type">Choose a School</label>
+                        <select id="add_school" name="add_school" class="btn-sm form-control">
+                            <option value="">Choose a School Type First</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <input type="checkbox" id="md_phd_check" name="phd" value="true">
+                        <label for="md_phd_check"> I am applying MD/DO-PhD</label><br>
+                    </div>
+                    <input type="hidden" name="cycle_id" id="cycle_id_md" value="{{ cycle.id }}">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Add School</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 
 <!-- SETUP MODAL FOR EDITING EACH SCHOOL -->
 {% for school in cycle.schools %}
@@ -496,72 +456,4 @@
     </div>
 </div>
 {% endfor %}
-
-<!-- ADD MD SCHOOL MENU -->
-<div class="modal fade" id="add-md-modal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <form method="POST">
-                <div class="modal-header">
-                    <h5 class="modal-title">New MD School</h5>
-                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label for="add_school">Choose a School</label>
-                        <select name="add_school" id="add_md_school" class="btn-sm form-control">
-                            {% for school in md_school_list %}
-                            <option value="{{ school }}">{{ school }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <input type="checkbox" id="md_phd_check" name="phd" value="true">
-                        <label for="md_phd_check"> I am applying MD-PhD</label><br>
-                    </div>
-                    <input type="hidden" name="cycle_id" id="cycle_id_md" value="{{ cycle.id }}">
-                    <input type="hidden" name="school_type" id="school_type_md" value="MD">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Add School</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<!-- ADD DO SCHOOL MENU -->
-<div class="modal fade" id="add-do-modal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <form method="POST">
-                <div class="modal-header">
-                    <h5 class="modal-title">New DO School</h5>
-                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label for="add_school">Choose a School</label>
-                        <select name="add_school" id="add_do_school" class="btn-sm form-control">
-                            {% for school in do_school_list %}
-                            <option value="{{ school }}">{{ school }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <input type="checkbox" id="do_phd_check" name="phd" value="true">
-                        <label for="md_phd_check"> I am applying DO-PhD</label><br>
-                    </div>
-                    <input type="hidden" name="cycle_id" id="cycle_id_do" value="{{ cycle.id }}">
-                    <input type="hidden" name="school_type" id="school_type_do" value="DO">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Add School</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
 {% endblock %}
