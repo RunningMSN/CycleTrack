@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %} {{ school_info['School'][0] }} {% endblock %}
+{% block title %} {{ school_info.school }} {% endblock %}
 {% block additional_js %}
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 {% endblock %}
@@ -9,18 +9,18 @@
     <div class="row" id="information" style="padding: 10px">
         <div class="col-2 d-flex align-items-center justify-content-center">
             <center>
-                <img src="{{ url_for('static', filename='images/school_logos/' + school_info['Logo_File_Name'][0]) }}" style="max-width:150px;max-height:150px" width="100%" height="auto">
+                <img src="{{ url_for('static', filename='images/school_logos/' + school_info.logo_file_name) }}" style="max-width:150px;max-height:150px" width="100%" height="auto">
             </center>
             </div>
         <div class="col-10">
-            <h2>{{ school_info['School'][0] }}</h2>
-            <strong>Location: </strong> <a href="https://www.google.com/maps/search/?api=1&query={{ school_info['Lat'][0] }},{{ school_info['Long'][0] }}">{{ school_info['City'][0] }}, {{ school_info['State'][0] }}</a>
+            <h2>{{ school_info.school }}</h2>
+            <strong>Location: </strong> <a href="https://www.google.com/maps/search/?api=1&query={{ school_info.lat }},{{ school_info.long }}">{{ school_info.city }}, {{ school_info.state }}</a>
             <br />
-            <strong>Campus Environment: </strong> {{ school_info['Envt_Type'][0] }} Campus
+            <strong>Campus Environment: </strong> {{ school_info.envt_type }} Campus
             <br />
-            <strong>School Type: </strong> {{ school_info['Private_Public'][0] }} Institution
+            <strong>School Type: </strong> {{ school_info.private_public }} Institution
             <br />
-            <strong>Program Type: </strong> {{ school_info['MD_or_DO'][0] }}
+            <strong>Program Type: </strong> {{ school_info.md_or_do }}
         </div>
     </div>
 
@@ -34,14 +34,18 @@
     <div class="row" id="school-info">
             <!-- TAB LIST -->
             <ul class="nav nav-tabs" id="myTab" role="tablist">
+                {% if school_info.reg_apps_count > 0 %}
                 <li class="nav-item">
                     <a class="nav-link active" id="md-tab" data-toggle="tab" href="#md" role="tab" aria-controls="md"
-                       aria-selected="true"><h6>{{ school_info['MD_or_DO'][0] }}</h6></a>
+                       aria-selected="true"><h6>{{ school_info.md_or_do }}</h6></a>
                 </li>
+                {% endif %}
+                {% if school_info.phd_apps_count > 0 %}
                 <li class="nav-item">
                     <a class="nav-link" id="mdphd-tab" data-toggle="tab" href="#mdphd" role="tab" aria-controls="mdphd"
-                       aria-selected="false"><h6>{{ school_info['MD_or_DO'][0] }}/PhD</h6></a>
+                       aria-selected="false"><h6>{{ school_info.md_or_do }}/PhD</h6></a>
                 </li>
+                {% endif %}
             </ul>
 
             <div class="tab-content" id="myTabContent" style="padding:10px; border-style: none solid solid; border-color:#dee2e6; border-width:1px">
@@ -159,7 +163,7 @@
                     </div>
 
 
-                    {% if school_info['MD_or_DO'][0] == "MD" %}
+                    {% if school_info.md_or_do == "MD" %}
                     <div style="padding:10px;">
                         <h5>AAMC Data</h5>
                         {{ reg_info['aamc_table'] | safe }}
@@ -282,7 +286,7 @@
                         </div>
                     </div>
 
-                    {% if school_info['MD_or_DO'][0] == "MD" %}
+                    {% if school_info.md_or_do == "MD" %}
                     <div style="padding:10px;">
                         <h5>AAMC Data</h5>
                         {{ phd_info['aamc_table'] | safe }}

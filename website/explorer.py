@@ -5,7 +5,6 @@ from .models import Cycle, School, School_Profiles_Data
 from .visualizations import school_table, school_graphs
 import pandas as pd
 from .helpers import school_info_calcs, school_stats_calculators
-import statistics
 
 explorer = Blueprint('explorer', __name__)
 
@@ -40,44 +39,6 @@ def explorer_home():
             build_df['reg_med_mcat'].append(0)
             build_df['reg_med_gpa'].append(0)
 
-    # # Query database for schools
-    # schools = db.session.query(School).group_by(School.name).all()
-    # # Dataframe with info about schools
-    # school_profiles = pd.read_csv('website/static/csv/SchoolProfiles.csv')
-    # # Dict to convert into dataframe with final results
-    # build_df = {'name': [], 'type': [], 'reg_apps': [], 'reg_med_mcat': [], 'reg_med_gpa': [],
-    #             'phd_apps': [], 'logo_link' : [], 'city' : [], 'state' : [],'country': [], 'envt' : [], 'pub_pri' : []}
-    # for school in schools:
-    #     build_df['name'].append(school.name)
-    #     build_df['type'].append(school.school_type)
-    #     # Build lookup for school info
-    #     school_info = school_profiles[school_profiles['School'] == school.name].reset_index()
-    #     # Grab logo and school info
-    #     build_df['logo_link'].append(school_info['Logo_File_Name'][0])
-    #     build_df['city'].append(school_info['City'][0])
-    #     build_df['state'].append(school_info['State'][0])
-    #     build_df['country'].append(school_info['Country'][0])
-    #     build_df['envt'].append(school_info['Envt_Type'][0])
-    #     build_df['pub_pri'].append(school_info['Private_Public'][0])
-    #
-    #     # Grab stats data
-    #     query = db.session.query(School, Cycle).filter(School.name == school.name).join(Cycle, School.cycle_id == Cycle.id)
-    #     reg_data = pd.read_sql(query.filter(School.phd == False).statement, db.session.bind)
-    #     # Get number of applications
-    #     build_df['reg_apps'].append(len(reg_data))
-    #     build_df['phd_apps'].append(query.filter(School.phd == True).count())
-    #
-    #     # Grab median cGPA and MCAT accepted for reg applications
-    #     accepted = reg_data[pd.notna(reg_data['acceptance'])]
-    #     if len(accepted['cgpa'].dropna(axis=0)) > 4:
-    #         build_df['reg_med_gpa'].append('{:.2f}'.format(statistics.median(accepted['cgpa'].dropna(axis=0))))
-    #     else:
-    #         build_df['reg_med_gpa'].append('X.XX')
-    #     if len(accepted['mcat_total'].dropna(axis=0)) > 4:
-    #         build_df['reg_med_mcat'].append('{:.1f}'.format(statistics.median(accepted['mcat_total'].dropna(axis=0))))
-    #     else:
-    #         build_df['reg_med_mcat'].append('XXX')
-    #
     # Generate dataframe
     df = pd.DataFrame(build_df).sort_values('name')
 
@@ -103,9 +64,10 @@ def explore_school(school_name):
         flash(f'Could not find {school_name}. Please navigate to your school using the explorer.', category='error')
         return redirect(url_for('explorer.explorer'))
 
+    # Grab school information
+    school_info = School_Profiles_Data.query.filter_by(school=school_name).first()
+
     # Build AAMC tables
-    school_profiles = pd.read_csv('website/static/csv/SchoolProfiles.csv')
-    school_info = school_profiles[school_profiles['School'] == school_name].reset_index()
     table_md, table_mdphd = school_table.generate(school_name)
 
     # Query info about the school
