@@ -239,7 +239,7 @@
                         </div>
                         <div class="col-lg-2">
                             <strong>Interview Date:</strong><br>
-                            <span class="normal_list d-none">
+                            <span class="normal_list">
                             {% if school.interview_date %}
                             {{ school.interview_date.strftime('%m/%d/%Y') }}
                             {% else %}
@@ -253,7 +253,7 @@
                         </div>
                         <div class="col-lg-2">
                             <strong>Rejected:</strong><br>
-                            <span class="normal_list d-none">
+                            <span class="normal_list">
                             {% if school.rejection %}
                             {{ school.rejection.strftime('%m/%d/%Y') }}
                             {% else %}
@@ -281,7 +281,7 @@
                         </div>
                         <div class="col-lg-2">
                             <strong>Accepted:</strong><br>
-                            <span class="normal_list d-none">
+                            <span class="normal_list">
                             {% if school.acceptance %}
                             {{ school.acceptance.strftime('%m/%d/%Y') }}
                             {% else %}
@@ -295,7 +295,7 @@
                         </div>
                         <div class="col-lg-2">
                             <strong>Withdrawn:</strong><br>
-                            <span class="normal_list d-none">
+                            <span class="normal_list">
                                 {% if school.withdrawn %}
                                 {{ school.withdrawn.strftime('%m/%d/%Y') }}
                                 {% else %}
