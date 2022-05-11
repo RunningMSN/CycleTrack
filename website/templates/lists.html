@@ -117,7 +117,7 @@
         </div>
         {% endif %}
     </div>
-    <form method="POST" action="{{ url_for('dashboard.update') }}">
+    <form method="POST">
         <input type="hidden" value="{{cycle.id}}" name="cycle_id">
         <div class="row row-cols-auto bulk_list d-none">
             <div class="col" style="margin: 3px">
