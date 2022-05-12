@@ -99,6 +99,7 @@
                 Multi-Edit
             </button>
         </div>
+        {% endif %}
         <div class="col normal_list" style="margin: 3px">
             <form method="POST" action="{{ url_for('dashboard.import_list') }}">
                 <input type="hidden" id="import_cycle_id" name="cycle_id" value="{{ cycle.id }}"/>
@@ -107,6 +108,7 @@
                 </button>
             </form>
         </div>
+        {% if cycle.schools|length > 0 %}
         <div class="col normal_list" style="margin: 3px">
             <form method="POST" action="{{ url_for('dashboard.export_list') }}">
                 <input type="hidden" id="export_cycle_id" name="cycle_id" value="{{ cycle.id }}"/>
