@@ -25,6 +25,7 @@
             {% if school_info.phd_website %}
             | <a href="{{ school_info.phd_website }}" target="_blank">{{ school_info.md_or_do }}-PhD</a>
             {% endif %}
+            | <a href="{{school_info.msar_choosedo_link}}" target="_blank">{% if school_info.md_or_do == 'MD' %}MSAR{% else %}Choose DO Explorer{% endif %}</a>
             <br />
             <strong>Letters of Recommendation: </strong>
             {% if school_info.lor_reg_link == 'unk' %}
@@ -40,6 +41,7 @@
             <a href="{{ school_info.lor_phd_link }}" target="_blank">{{ school_info.md_or_do }}-PhD</a>
             {% endif %}
             {% endif %}
+            <br />
         </div>
     </div>
 
