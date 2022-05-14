@@ -27,6 +27,11 @@
             {% endif %}
             <br />
             <strong>Letters of Recommendation: </strong>
+            {% if school_info.lor_reg_link == 'unk' %}
+            <a href="#" data-toggle="tooltip" title="We do not currently have the LOR requirement link for this school. If you find the requirements, please send us the link at admin@docs2be.org." style="text-decoration-style: dotted; color:gray">{{ school_info.md_or_do }}</a>
+            {% else %}
+            <a href="{{ school_info.lor_reg_link }}">{{ school_info.md_or_do }}</a>
+            {% endif %}
             <a href="{{school_info.lor_reg_link}}">{{ school_info.md_or_do }}</a>
             {% if school_info.phd_website %}
              |
