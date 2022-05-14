@@ -58,3 +58,8 @@ class School_Profiles_Data(db.Model):
     logo_file_name = db.Column(db.String(150))
     reg_apps_count = db.Column(db.Integer())
     phd_apps_count = db.Column(db.Integer())
+    msar_choosedo_link = db.Column(db.String(150))
+    reg_website = db.Column(db.String(150))
+    phd_website = db.Column(db.String(150))
+    lor_reg_link = db.Column(db.String(150))
+    lor_phd_link = db.Column(db.String(150))
