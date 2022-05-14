@@ -20,7 +20,22 @@
             <br />
             <strong>School Type: </strong> {{ school_info.private_public }} Institution
             <br />
-            <strong>Program Type: </strong> {{ school_info.md_or_do }}
+            <strong>Website: </strong>
+            <a href="{{school_info.reg_website}}">{{ school_info.md_or_do }}</a>
+            {% if school_info.phd_website %}
+            | <a href="{{ school_info.phd_website }}">{{ school_info.md_or_do }}-PhD</a>
+            {% endif %}
+            <br />
+            <strong>Letters of Recommendation: </strong>
+            <a href="{{school_info.lor_reg_link}}">{{ school_info.md_or_do }}</a>
+            {% if school_info.phd_website %}
+             |
+            {% if school_info.lor_phd_link == 'unk' %}
+            <a href="#" data-toggle="tooltip" title="We do not currently have the LOR requirement link for this school. If you find the requirements, please send us the link at admin@docs2be.org." style="text-decoration-style: dotted; color:gray">{{ school_info.md_or_do }}-PhD</a>
+            {% else %}
+            <a href="{{ school_info.lor_phd_link }}">{{ school_info.md_or_do }}-PhD</a>
+            {% endif %}
+            {% endif %}
         </div>
     </div>
 
