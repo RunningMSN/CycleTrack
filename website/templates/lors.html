@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+{% block title %} Letters of Recommendation  {% endblock %}
+{% block content %}
+<!-- SCHOOL LIST MANAGEMENT -->
+<div class="container" style="padding-top:10px">
+    <h2>Letters of Recommendation</h2>
+    <p>
+        This page contains a list of links to letter of recommendation requirements for medical schools. Rather than
+        rewriting the requirements here, we use links to pages that are updated by individual schools year-to-year.
+        CycleTrack is not affiliated with any medical schools.
+    </p>
+
+    <!-- TAB LIST -->
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="md-tab" data-toggle="tab" href="#md" role="tab" aria-controls="md"
+               aria-selected="true"><h6>USA MD</h6></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="do-tab" data-toggle="tab" href="#do" role="tab" aria-controls="do"
+               aria-selected="false"><h6>DO</h6></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="ca-tab" data-toggle="tab" href="#ca" role="tab" aria-controls="ca"
+               aria-selected="true"><h6>CAN MD</h6></a>
+        </li>
+    </ul>
+
+    <div class="tab-content" id="myTabContent" style="padding:10px; border-style: none solid solid; border-color:#dee2e6; border-width:1px">
+        <!-- MD SCHOOLS -->
+        <div class="tab-pane fade show active" id="md" role="tabpanel" aria-labelledby="md-tab">
+            {% for school in usmd_schools %}
+            <li class="list-group-item">
+                <div class="row">
+                    <div class="col">
+                        {{ school.school }}
+                    </div>
+                    <div class="col">
+                        {% if school.lor_reg_link != 'unk' %}
+                        <a href="{{ school.lor_reg_link }}" target="_blank">MD Requirements</a>
+                        {% else %}
+                        We do not currently have the requirements for this program. Please send us the link for this program at admin@docs2be.org.
+                        {% endif %}
+                    </div>
+                    <div class="col">
+                        {% if school.phd_website %}
+                            {% if school.lor_phd_link != 'unk' %}
+                            <a href="{{ school.lor_phd_link }}" target="_blank">MD-PhD Requirements</a>
+                            {% else %}
+                            We do not currently have the requirements for this program. Please send us the link for this program at admin@docs2be.org.
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+            </li>
+            {% endfor %}
+        </div>
+
+        <!-- DO SCHOOLS -->
+        <div class="tab-pane fade" id="do" role="tabpanel" aria-labelledby="do-tab">
+            {% for school in do_schools %}
+            <li class="list-group-item">
+                <div class="row">
+                    <div class="col">
+                        {{ school.school }}
+                    </div>
+                    <div class="col">
+                        {% if school.lor_reg_link != 'unk' %}
+                        <a href="{{ school.lor_reg_link }}" target="_blank">DO Requirements</a>
+                        {% else %}
+                        We do not currently have the requirements for this program. Please send us the link for this program at admin@docs2be.org.
+                        {% endif %}
+                    </div>
+                    <div class="col">
+                        {% if school.phd_website %}
+                            {% if school.lor_phd_link != 'unk' %}
+                            <a href="{{ school.lor_phd_link }}" target="_blank">DO-PhD Requirements</a>
+                            {% else %}
+                            We do not currently have the requirements for this program. Please send us the link for this program at admin@docs2be.org.
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+            </li>
+            {% endfor %}
+        </div>
+
+        <!-- CANADA SCHOOLS -->
+        <div class="tab-pane fade" id="ca" role="tabpanel" aria-labelledby="ca-tab">
+            {% for school in camd_schools %}
+            <li class="list-group-item">
+                <div class="row">
+                    <div class="col">
+                        {{ school.school }}
+                    </div>
+                    <div class="col">
+                        {% if school.lor_reg_link != 'unk' %}
+                        <a href="{{ school.lor_reg_link }}" target="_blank">MD Requirements</a>
+                        {% else %}
+                        We do not currently have the requirements for this program. Please send us the link for this program at admin@docs2be.org.
+                        {% endif %}
+                    </div>
+                    <div class="col">
+                        {% if school.phd_website %}
+                            {% if school.lor_phd_link != 'unk' %}
+                            <a href="{{ school.lor_phd_link }}" target="_blank">MD-PhD Requirements</a>
+                            {% else %}
+                            We do not currently have the requirements for this program. Please send us the link for this program at admin@docs2be.org.
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+            </li>
+            {% endfor %}
+        </div>
+    </div>
+
+
+</div>
+
+{% endblock %}

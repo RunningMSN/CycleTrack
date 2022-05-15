@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template
 from flask_login import current_user
 from . import db
-from .models import User, School
+from .models import User, School, School_Profiles_Data
 from .visualizations import agg_map
 import pandas as pd
 
@@ -37,3 +37,10 @@ def terms():
 @pages.route('/changelog')
 def changelog():
     return render_template('changelog.html', user=current_user)
+
+@pages.route('/lors')
+def lors():
+    usmd_schools = School_Profiles_Data.query.filter_by(md_or_do='MD', country='USA').order_by(School_Profiles_Data.school).all()
+    camd_schools = School_Profiles_Data.query.filter_by(md_or_do='MD', country='CAN').order_by(School_Profiles_Data.school).all()
+    do_schools = School_Profiles_Data.query.filter_by(md_or_do='DO').order_by(School_Profiles_Data.school).all()
+    return render_template('lors.html', user=current_user, usmd_schools=usmd_schools, camd_schools=camd_schools, do_schools=do_schools)
