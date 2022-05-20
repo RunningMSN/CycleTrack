@@ -182,14 +182,6 @@
                             </div>
                         </div>
                     </div>
-
-
-                    {% if school_info.md_or_do == "MD" %}
-                    <div style="padding:10px;">
-                        <h5>AAMC Data</h5>
-                        {{ reg_info['aamc_table'] | safe }}
-                    </div>
-                    {% endif %}
                 </div>
 
                 <!-- MD/DO-PhD INFO -->
@@ -306,13 +298,6 @@
                             </div>
                         </div>
                     </div>
-
-                    {% if school_info.md_or_do == "MD" %}
-                    <div style="padding:10px;">
-                        <h5>AAMC Data</h5>
-                        {{ phd_info['aamc_table'] | safe }}
-                    </div>
-                    {% endif %}
                 </div>
             </div>
     </div>
