@@ -92,8 +92,7 @@ def explore_school(school_name):
     school_info_calcs.acceptance_calculations(reg_data, reg_info)
     school_info_calcs.acceptance_calculations(phd_data, phd_info)
 
-    return render_template('school_template.html', user=current_user, school_info=school_info, table_md=table_md,
-                           table_mdphd=table_mdphd, reg_info=reg_info, phd_info=phd_info)
+    return render_template('school_template.html', user=current_user, school_info=school_info, reg_info=reg_info, phd_info=phd_info)
 
 @explorer.route('/update_all')
 def update_all():
