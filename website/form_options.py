@@ -142,3 +142,34 @@ STATE_ABBREV = {
 }
 
 ABBREV_TO_STATE = dict(map(reversed, STATE_ABBREV.items()))
+
+# GPA Calculator
+GRADE_OPTIONS = ['A+', 'A', 'A-', 'AB', 'B+', 'B', 'B-', 'BC', 'C+', 'C', 'C-', 'CD', 'D+', 'D', 'D-', 'DE', 'DF', 'E',
+                 'F', 'AP (Tested Out)', 'AU (Audit)', 'Currently Taking', 'CR (Credit)', 'P (Pass/Fail)',
+                 'F (Pass/Fail)', 'W (Withdrawn)', 'EX (Exempt)', 'Future']
+
+AMCAS_WEIGHT = {'A+': 4, 'A': 4, 'A-': 3.7, 'B+': 3.3, 'B': 3, 'B-': 2.7, 'C+': 2.3, 'C': 2, 'C-': 1.7, 'D+': 1.3,
+                'D': 1, 'D-': 0.7, 'F': 0, 'AB': 3.5, 'BC': 2.5, 'CD': 1.5, 'DE': 0.5, 'DF': 0.5}
+
+AACOMAS_WEIGHT = {'A+': 4, 'A': 4, 'A-': 3.7, 'B+': 3.3, 'B': 3, 'B-': 2.7, 'C+': 2.3, 'C': 2, 'C-': 1.7, 'D+': 1.3,
+                  'D':1, 'D-': 0.7, 'F': 0, 'AB': 3.5, 'BC': 2.5, 'CD': 1.5, 'DE': 0.5, 'DF': 0.5}
+
+TMDSAS_WEIGHT = {'A+': 4, 'A': 4, 'A-': 4, 'B+': 3, 'B': 3, 'B-': 3, 'C+': 2, 'C': 2, 'C-': 2, 'D+': 1,
+                  'D': 1, 'D-': 1, 'F': 0, 'AB': 3.5, 'BC': 2.5, 'CD': 1.5, 'DE': 0.5, 'DF': 0.5}
+
+COURSE_CLASSIFICATIONS = sorted(['Biology', 'Chemistry', 'Physics', 'Math', 'Behavioral/Social Science', 'Business',
+                          'Computer Science/Technology', 'Education', 'Engineering', 'English', 'Fine Arts',
+                          'Foreign Language', 'Government', 'Health Science', 'History', 'Natural/Physica Science',
+                          'Other', 'Philosophy/Religion'])
+
+AMCAS_SCIENCE = ['Biology', 'Chemistry', 'Physics', 'Math']
+
+COURSE_TERMS = {0:'Summer', 1:'Fall', 2:'Winter', 3:'Spring'}
+
+COURSE_YEARS = list(reversed([str(i) + '-' + str(i+1) for i in range(1950,VALID_CYCLES[0]+2)]))
+
+PROGRAM_TYPES = ['Undergraduate', 'Post-bac', 'Graduate']
+
+# Quarter conversion to semester hours
+AMCAS_QUARTER_CONVERSION = {0.5:0.3, 1:0.7, 1.5:1, 2:1.3, 2.5:1.7, 3:2, 3.5:2.3, 4:2.7, 4.5:3, 5:3.3, 6:4,
+                            7:4.7, 8:5.3, 9:6, 10:6.7, 12:8, 15:10, 20:13.3}

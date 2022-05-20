@@ -1,0 +1,300 @@
+{% extends 'dashboard.html' %}
+{% block title %} GPA Calculator {% endblock %}
+{% block additional_js %}
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+{% endblock %}
+{% block dash_content %}
+<div class="container" style="padding-top:10px">
+    <h2>GPA Calculator</h2>
+    <!--<p>
+        Enter your courses into this list in order to calculator your GPA. Based on your classification, we will calculate
+        science GPA as defined by AMCAS, AACOMAS, and TMDSAS. If you feel a course does not meet any categories, please use
+        'other science' and 'other non-science' to add the course to the science and non-science GPAs respectively.
+    </p>-->
+    <li class="list-group-item">
+        <div class="row">
+            <div class="col">
+                <strong>AMCAS</strong><br/>
+                <i>Cumulative:</i> {{ amcas_gpa['cumulative'] }}<br/>
+                <i>Science:</i> {{ amcas_gpa['science'] }}<br/>
+                <i>Non-Science:</i> {{ amcas_gpa['nonscience'] }}
+            </div>
+            <div class="col">
+                <strong>AACOMAS</strong><br/>
+                <i>Cumulative:</i> {{ aacomas_gpa['cumulative'] }}<br/>
+                <i>Science:</i> {{ aacomas_gpa['science'] }}<br/>
+                <i>Non-Science:</i> {{ aacomas_gpa['nonscience'] }}
+            </div>
+            <div class="col">
+                <strong>TMDSAS</strong><br/>
+                <i>Cumulative:</i> {{ tmdsas_gpa['cumulative'] }}<br/>
+                <i>Science:</i> {{ tmdsas_gpa['science'] }}<br/>
+                <i>Non-Science:</i> {{ tmdsas_gpa['nonscience'] }}
+            </div>
+        </div>
+    </li>
+    <div style="margin-top: 10px; margin-bottom: 10px">
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-course">Add Course</button>
+    </div>
+    <!-- COURSE LIST -->
+    <div>
+        {% if user_courses|length > 0 %}
+            <table class="table">
+                <thead>
+                    <td></td>
+                    <td>Class</td>
+                    <td>Classification</td>
+                    <td>Credits</td>
+                    <td>Grade</td>
+                    <td>Term</td>
+                </thead>
+                {% for course in user_courses %}
+                    <tr>
+                        <td style="padding-right: 0px">
+                            <button type="button" class="btn btn-link" data-toggle="modal" data-target="#edit-{{ course.id }}-modal" style="padding: 0px">
+                                <i class="bi bi-pencil-square"></i>
+                            </button>
+                            <button type="button" class="btn btn-link" onclick="deleteClass({{ course.id }})" style="padding: 0px">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </td>
+                        <td>
+                            {{ course.course }}
+                        </td>
+                        <td>
+                            {{ course.classification }}
+                            {% if course.classification in amcas_science %}
+                                <i class="bi bi-check" style="color: purple" data-toggle="tooltip" data-placement="top" title="AMCAS Science GPA"></i>
+                            {% endif %}
+                            {% if course.aacomas_science %}
+                                <i class="bi bi-check" style="color: orange" data-toggle="tooltip" data-placement="top" title="AACOMAS Science GPA"></i>
+                            {% endif %}
+                            {% if course.tmdsas_science %}
+                                <i class="bi bi-check" style="color: blue" data-toggle="tooltip" data-placement="top" title="TMDSAS Science GPA"></i>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {{ course.credits }}
+                        </td>
+                        <td>
+                            {{ course.grade }}
+                        </td>
+                        <td>
+                            {{ terms[course.term] }}, {{ course.year }}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            You have not added any courses yet.
+        {% endif %}
+    </div>
+</div>
+
+<!-- MODAL FOR ADDING COURSES -->
+<div class="modal fade" id="add-course" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form method="POST" action="{{ url_for('dashboard.add_course') }}">
+                <input type="hidden" name="add_course" value="true" />
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Course</h5>
+                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <table width="100%">
+                        <tr>
+                            <td colspan="2">Course Name<br>
+                                <input type="text" class="form-control" name="course" style="height: 2.5rem"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Credits<br />
+                                <input type="text" class="form-control" name="credits" style="height: 2.5rem"/>
+                            </td>
+                            <td>Grade<br />
+                                <select id="grade" name="grade" class="btn-sm form-control" style="height: 2.5rem">
+                                    <option value=""></option>
+                                    {% for grade in grades %}
+                                        <option value="{{ grade }}">{{ grade }}</option>
+                                    {% endfor %}
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Classification<br />
+                                <select id="classification" name="classification" class="btn-sm form-control" style="height: 2.5rem">
+                                    <option value=""></option>
+                                    {% for class in classifications %}
+                                        <option value="{{ class }}">{{ class }}</option>
+                                    {% endfor %}
+                                </select>
+                            </td>
+                            <td>Term<br />
+                                <select id="term" name="term" class="btn-sm form-control" style="height: 2.5rem">
+                                    <option value=""></option>
+                                    {% for term in terms.values() %}
+                                        <option value="{{ term }}">{{ term }}</option>
+                                    {% endfor %}
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>School Year<br />
+                                <select id="year" name="year" class="btn-sm form-control" style="height: 2.5rem">
+                                    <option value=""></option>
+                                    {% for year in years %}
+                                        <option value="{{ year }}">{{ year }}</option>
+                                    {% endfor %}
+                                </select>
+                            </td>
+                            <td>Program Type<br />
+                                <select id="prog_type" name="prog_type" class="btn-sm form-control" style="height: 2.5rem">
+                                    <option value=""></option>
+                                    {% for prog_type in program_types %}
+                                        <option value="{{ prog_type }}">{{ prog_type }}</option>
+                                    {% endfor %}
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input type="checkbox" id="aacomas_science" name="aacomas_science" value="yes">
+                                <label for="aacomas_science"> <a href="https://help.liaisonedu.com/AACOMAS_Applicant_Help_Center/Filling_Out_Your_AACOMAS_Application/Academic_History/5_AACOMAS_Course_Subjects">AACOMAS Science GPA</a></label>
+                            </td>
+                            <td>
+                                <input type="checkbox" id="tmdsas_science" name="tmdsas_science" value="yes">
+                                <label for="tmdsas_science"> TMDSAS Science GPA</label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <input type="checkbox" id="quarter" name="quarter" value="yes">
+                                <label for="quarter"> Quarter</label><br>
+                            </td>
+                        </tr>
+                    </table>
+                    <input type="hidden" name="user_ud" id="user_id" value="{{ user.id }}">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Add Course</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- MODALS FOR EDITING COURSES -->
+{% for course in user_courses %}
+<div class="modal fade" id="edit-{{ course.id }}-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form method="POST" action="{{ url_for('dashboard.add_course') }}">
+                <input type="hidden" name="edit_course" value="true" />
+                <input type="hidden" name="course_id" value="{{ course.id }}" />
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Course</h5>
+                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <table width="100%">
+                        <tr>
+                            <td colspan="2">Course Name<br>
+                                <input type="text" class="form-control" name="course" style="height: 2.5rem" value="{{ course.course }}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Credits<br />
+                                <input type="text" class="form-control" name="credits" style="height: 2.5rem" value="{{ course.credits }}"/>
+                            </td>
+                            <td>Grade<br />
+                                <select id="grade" name="grade" class="btn-sm form-control" style="height: 2.5rem">
+                                    {% for grade in grades %}
+                                        {% if grade != course.grade %}
+                                        <option value="{{ grade }}">{{ grade }}</option>
+                                        {% else %}
+                                        <option value="{{ course.grade }}" selected>{{ course.grade }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Classification<br />
+                                <select id="classification" name="classification" class="btn-sm form-control" style="height: 2.5rem">
+                                    {% for class in classifications %}
+                                        {% if class != course.classification %}
+                                        <option value="{{ class }}">{{ class }}</option>
+                                        {% else %}
+                                        <option value="{{ course.classification }}" selected> {{ course.classification }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </td>
+                            <td>Term<br />
+                                <select id="term" name="term" class="btn-sm form-control" style="height: 2.5rem">
+                                    {% for term in terms.values() %}
+                                        {% if term != terms[course.term] %}
+                                        <option value="{{ term }}">{{ term }}</option>
+                                        {% else %}
+                                        <option value="{{ terms[course.term] }}" selected>{{ terms[course.term] }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>School Year<br />
+                                <select id="year" name="year" class="btn-sm form-control" style="height: 2.5rem">
+                                    {% for year in years %}
+                                        {% if year != course.year %}
+                                        <option rvalue="{{ year }}">{{ year }}</option>
+                                        {% else %}
+                                        <option value="{{ course.year }}" selected>{{ course.year }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </td>
+                            <td>Program Type<br />
+                                <select id="prog_type" name="prog_type" class="btn-sm form-control" style="height: 2.5rem">
+                                    {% for prog_type in program_types %}
+                                        {% if prog_type != course.program_type %}
+                                        <option value="{{ prog_type }}">{{ prog_type }}</option>
+                                        {% else %}
+                                        <option value="{{ course.program_type }}" selected>{{ course.program_type }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input type="checkbox" id="aacomas_science" name="aacomas_science" value="yes" {% if course.aacomas_science %}checked {% endif %}>
+                                <label for="aacomas_science"> <a href="https://help.liaisonedu.com/AACOMAS_Applicant_Help_Center/Filling_Out_Your_AACOMAS_Application/Academic_History/5_AACOMAS_Course_Subjects">AACOMAS Science GPA</a></label>
+                            </td>
+                            <td>
+                                <input type="checkbox" id="tmdsas_science" name="tmdsas_science" value="yes" {% if course.tmdsas_science %}checked {% endif %}>
+                                <label for="tmdsas_science"> TMDSAS Science GPA</label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <input type="checkbox" id="quarter" name="quarter" value="yes" {% if course.quarter %}checked {% endif %}>
+                                <label for="quarter"> Quarter</label><br>
+                            </td>
+                        </tr>
+                    </table>
+                    <input type="hidden" name="user_ud" id="user_id" value="{{ user.id }}">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-danger" onclick="deleteClass({{ course.id }})">Delete Course</button>
+                    <button type="submit" class="btn btn-primary">Edit School</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% endblock %}

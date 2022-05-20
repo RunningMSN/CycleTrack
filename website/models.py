@@ -63,3 +63,17 @@ class School_Profiles_Data(db.Model):
     phd_website = db.Column(db.String(150))
     lor_reg_link = db.Column(db.String(150))
     lor_phd_link = db.Column(db.String(150))
+
+class Courses(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    course = db.Column(db.String(150))
+    classification = db.Column(db.String(150))
+    credits = db.Column(db.Integer())
+    grade = db.Column(db.String(150))
+    year = db.Column(db.Integer())
+    term = db.Column(db.Integer()) # 0 = summer, 1 = fall, 2 = winter, 3 = spring
+    aacomas_science = db.Column(db.Boolean)
+    tmdsas_science = db.Column(db.Boolean)
+    program_type = db.Column(db.String(150))
+    quarter = db.Column(db.Boolean)

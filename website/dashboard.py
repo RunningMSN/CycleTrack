@@ -1,14 +1,15 @@
 from flask import Blueprint, render_template, request, flash, jsonify, redirect, url_for, Response
 from flask_login import current_user, login_required
 from . import db, form_options, mail
-from .models import Cycle, School, School_Profiles_Data
+from .models import Cycle, School, School_Profiles_Data, Courses
 import json
 from datetime import datetime, date
 import re
 from .visualizations import dot, line, bar, sankey, map
 import pandas as pd
-from .helpers import import_list_funcs, categorize_stats, school_stats_calculators
+from .helpers import import_list_funcs, categorize_stats, school_stats_calculators, gpa_calculators
 from flask_mail import Message
+
 dashboard = Blueprint('dashboard', __name__)
 
 
@@ -181,8 +182,10 @@ def lists():
         cycle_id = request.form.get('cycle_id')
 
     cycle = Cycle.query.filter_by(id=cycle_id).first()
-    schools = db.session.query(School, School_Profiles_Data).filter(School.cycle_id == cycle_id)\
-        .join(School, School.name == School_Profiles_Data.school).order_by(School.rejection.asc(), School.withdrawn.asc(), School.acceptance.asc(), School.name.asc())
+    schools = db.session.query(School, School_Profiles_Data).filter(School.cycle_id == cycle_id) \
+        .join(School, School.name == School_Profiles_Data.school).order_by(School.rejection.asc(),
+                                                                           School.withdrawn.asc(),
+                                                                           School.acceptance.asc(), School.name.asc())
 
     # Check if PhD applicant for message about MD/DO-only consideration
     if School.query.filter_by(cycle_id=cycle.id, phd=True).first():
@@ -786,7 +789,7 @@ def visualizations():
     vis_type = request.form.get('vis_type')
     # Default to no graph and no settings saved
     save_settings = {'vis_type': None, 'app_type': None, 'color_type': None, 'plot_title': None, 'filters': None,
-                     'map_type': None, 'demographics': None, 'anonymize_demographics': None, 'custom_text':None}
+                     'map_type': None, 'demographics': None, 'anonymize_demographics': None, 'custom_text': None}
     graphJSON = None
     if vis_type:
         # Grab Settings
@@ -803,13 +806,15 @@ def visualizations():
         # Default to no stats
         if demographics and not anonymize_demographics:
             if not cycle.mcat_total and not cycle.cgpa and not cycle.sgpa and not cycle.home_state:
-                flash('You have not added your demographics yet. Please add them using the "cycles" page.', category='error')
+                flash('You have not added your demographics yet. Please add them using the "cycles" page.',
+                      category='error')
                 stats = None
             else:
                 stats = {'mcat': cycle.mcat_total, 'cgpa': cycle.cgpa, 'sgpa': cycle.sgpa, 'state': cycle.home_state}
         elif demographics and anonymize_demographics:
             if not cycle.mcat_total and not cycle.cgpa and not cycle.sgpa and not cycle.home_state:
-                flash('You have not added your demographics yet. Please add them using the "cycles" page.', category='error')
+                flash('You have not added your demographics yet. Please add them using the "cycles" page.',
+                      category='error')
                 stats = None
             else:
                 stats = {'mcat': categorize_stats.categorize_mcat(cycle.mcat_total),
@@ -819,11 +824,10 @@ def visualizations():
         else:
             stats = None
 
-
         # Save Settings
         save_settings = {'vis_type': vis_type, 'app_type': app_type, 'color_type': color_type, 'plot_title': plot_title,
                          'map_type': map_type, 'demographics': demographics,
-                         'anonymize_demographics': anonymize_demographics, 'filters': {},'custom_text':custom_text}
+                         'anonymize_demographics': anonymize_demographics, 'filters': {}, 'custom_text': custom_text}
 
         # Grab filters
         filter_types = {'primary': None, 'secondary_received': None, 'application_complete': None,
@@ -857,18 +861,147 @@ def visualizations():
         # Get visualization JSON
         if len(cycle_data.columns) > 1:
             if vis_type.lower() == 'dot':
-                graphJSON = dot.generate(cycle_data, plot_title, stats, color=color_type.lower(),custom_text=save_settings['custom_text'])
+                graphJSON = dot.generate(cycle_data, plot_title, stats, color=color_type.lower(),
+                                         custom_text=save_settings['custom_text'])
             elif vis_type.lower() == 'line':
-                graphJSON = line.generate(cycle_data, plot_title, stats, color=color_type.lower(),custom_text=save_settings['custom_text'])
+                graphJSON = line.generate(cycle_data, plot_title, stats, color=color_type.lower(),
+                                          custom_text=save_settings['custom_text'])
             elif vis_type.lower() == 'bar':
-                graphJSON = bar.generate(cycle_data, plot_title, stats, color=color_type.lower(),custom_text=save_settings['custom_text'])
+                graphJSON = bar.generate(cycle_data, plot_title, stats, color=color_type.lower(),
+                                         custom_text=save_settings['custom_text'])
             elif vis_type.lower() == 'sankey':
-                graphJSON = sankey.generate(cycle_data, plot_title, stats, color=color_type.lower(),custom_text=save_settings['custom_text'])
+                graphJSON = sankey.generate(cycle_data, plot_title, stats, color=color_type.lower(),
+                                            custom_text=save_settings['custom_text'])
             elif vis_type.lower() == 'map':
-                graphJSON = map.generate(cycle_data, plot_title, stats, color=color_type.lower(),map_scope=map_type.lower(),custom_text=save_settings['custom_text'])
+                graphJSON = map.generate(cycle_data, plot_title, stats, color=color_type.lower(),
+                                         map_scope=map_type.lower(), custom_text=save_settings['custom_text'])
         else:
             flash(f'Your selected school list for {cycle.cycle_year} does not have any dates yet!', category='error')
 
     return render_template('visualizations.html', user=current_user, cycle=cycle, app_types=app_types,
                            vis_types=form_options.VIS_TYPES, color_types=form_options.COLOR_TYPES, graphJSON=graphJSON,
                            save_settings=save_settings, map_types=form_options.MAP_TYPES)
+
+
+@dashboard.route('/gpa', methods=['GET'])
+@login_required
+def gpa():
+    user_courses = Courses.query.filter_by(user_id=current_user.id).order_by(Courses.year.asc(), Courses.term.asc(), Courses.course.asc()).all()
+
+    amcas_gpa = {'cumulative': gpa_calculators.amcas_gpa(user_courses, 'cumulative'),
+                 'science': gpa_calculators.amcas_gpa(user_courses, 'science'),
+                 'nonscience': gpa_calculators.amcas_gpa(user_courses, 'nonscience')
+                 }
+
+    aacomas_gpa = {'cumulative': gpa_calculators.aacomas_gpa(user_courses, 'cumulative'),
+                 'science': gpa_calculators.aacomas_gpa(user_courses, 'science'),
+                 'nonscience': gpa_calculators.aacomas_gpa(user_courses, 'nonscience')
+                 }
+
+    tmdsas_gpa = {'cumulative': gpa_calculators.tmdsas_gpa(user_courses, 'cumulative'),
+                   'science': gpa_calculators.tmdsas_gpa(user_courses, 'science'),
+                   'nonscience': gpa_calculators.tmdsas_gpa(user_courses, 'nonscience')
+                   }
+
+    return render_template('gpa_calc.html', user=current_user, grades=form_options.GRADE_OPTIONS,
+                           classifications=form_options.COURSE_CLASSIFICATIONS, terms=form_options.COURSE_TERMS,
+                           years=form_options.COURSE_YEARS, user_courses=user_courses,
+                           amcas_science=form_options.AMCAS_SCIENCE, program_types=form_options.PROGRAM_TYPES,
+                           amcas_gpa=amcas_gpa, aacomas_gpa=aacomas_gpa, tmdsas_gpa=tmdsas_gpa)
+
+@dashboard.route('/add_course', methods=['POST'])
+@login_required
+def add_course():
+    # Handle adding classes
+    if request.form.get('add_course'):
+        # Make sure have all other info
+        if request.form.get('course') and request.form.get('credits') and request.form.get('grade') \
+                and request.form.get('classification') and request.form.get('term') and request.form.get('year') \
+                and request.form.get('prog_type'):
+            new_course = Courses(course=request.form.get('course'), credits=request.form.get('credits'),
+                                 classification=request.form.get('classification'),
+                                 year=request.form.get('year'), grade=request.form.get('grade'),
+                                 user_id=current_user.id, program_type=request.form.get('prog_type'))
+            # Assign terms
+            if request.form.get('term') == 'Summer':
+                new_course.term = 0
+            elif request.form.get('term') == 'Fall':
+                new_course.term = 1
+            elif request.form.get('term') == 'Winter':
+                new_course.term = 2
+            elif request.form.get('term') == 'Spring':
+                new_course.term = 3
+
+            # Assign AACOMAS science
+            if request.form.get('aacomas_science'):
+                new_course.aacomas_science = True
+            else:
+                new_course.aacomas_science = False
+            # Assign TMDSAS science
+            if request.form.get('tmdsas_science'):
+                new_course.tmdsas_science = True
+            else:
+                new_course.tmdsas_science = False
+            # Check if quarter
+            if request.form.get('quarter'):
+                new_course.quarter = True
+            else:
+                new_course.quarter = False
+            db.session.add(new_course)
+            db.session.commit()
+        else:
+            flash('Please make sure to fill in all fields when entering a course.', category='error')
+
+    # Handle editing classes
+    if request.form.get('edit_course'):
+        if request.form.get('course') and request.form.get('credits') and request.form.get('course_id'):
+            # Find course
+            course = Courses.query.filter_by(id=request.form.get('course_id')).first()
+
+            # Edit properties to new values
+            course.course = request.form.get('course')
+            course.credits = request.form.get('credits')
+            course.classification = request.form.get('classification')
+            course.year = request.form.get('year')
+            course.grade = request.form.get('grade')
+            course.program_type = request.form.get('prog_type')
+            # Assign term
+            if request.form.get('term') == 'Summer':
+                course.term = 0
+            elif request.form.get('term') == 'Fall':
+                course.term = 1
+            elif request.form.get('term') == 'Winter':
+                course.term = 2
+            elif request.form.get('term') == 'Spring':
+                course.term = 3
+            # Assign AACOMAS science
+            if request.form.get('aacomas_science'):
+                course.aacomas_science = True
+            else:
+                course.aacomas_science = False
+            # Assign TMDSAS science
+            if request.form.get('tmdsas_science'):
+                course.tmdsas_science = True
+            else:
+                course.tmdsas_science = False
+            # Check if quarter
+            if request.form.get('quarter'):
+                course.quarter = True
+            else:
+                course.quarter = False
+
+            db.session.commit()
+        else:
+            flash('Please make sure the course name and number of credits are not blank.', category='error')
+    return redirect(url_for('dashboard.gpa'))
+
+
+@dashboard.route('/delete-class', methods=['POST'])
+def delete_class():
+    course = json.loads(request.data)
+    courseId = course['courseId']
+    course = Courses.query.get(courseId)
+    if course:
+        db.session.delete(course)
+        db.session.commit()
+        return jsonify({})

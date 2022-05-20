@@ -18,3 +18,12 @@ function deleteSchool(schoolId, cycleId) {
     $(formElement).submit()
   });
 }
+
+function deleteClass(courseId) {
+  fetch("/delete-class", {
+    method: "POST",
+    body: JSON.stringify({ courseId: courseId }),
+  }).then((_res) => {
+    window.location.href = "/gpa";
+  });
+}
