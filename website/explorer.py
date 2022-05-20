@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask_login import current_user
 from . import db, form_options
 from .models import Cycle, School, School_Profiles_Data
-from .visualizations import school_table, school_graphs
+from .visualizations import school_graphs
 import pandas as pd
 from .helpers import school_info_calcs, school_stats_calculators
 
@@ -67,19 +67,16 @@ def explore_school(school_name):
     # Grab school information
     school_info = School_Profiles_Data.query.filter_by(school=school_name).first()
 
-    # Build AAMC tables
-    table_md, table_mdphd = school_table.generate(school_name)
-
     # Query info about the school
     query = db.session.query(School, Cycle).filter(School.name == school_name).join(Cycle, School.cycle_id == Cycle.id)
     reg_data = pd.read_sql(query.filter(School.phd == False).statement, db.session.bind)
     phd_data = pd.read_sql(query.filter(School.phd == True).statement, db.session.bind)
 
     # Dictionaries with all information about the school
-    reg_info = {'aamc_table': table_md, 'cycle_status_json': school_graphs.cycle_progress(reg_data),
+    reg_info = {'cycle_status_json': school_graphs.cycle_progress(reg_data),
                 'interview_graph': school_graphs.interview_acceptance_histogram(reg_data, 'interview_received'),
                 'acceptance_graph': school_graphs.interview_acceptance_histogram(reg_data, 'acceptance')}
-    phd_info = {'aamc_table': table_mdphd, 'cycle_status_json': school_graphs.cycle_progress(phd_data),
+    phd_info = {'cycle_status_json': school_graphs.cycle_progress(phd_data),
                 'interview_graph': school_graphs.interview_acceptance_histogram(phd_data, 'interview_received'),
                 'acceptance_graph': school_graphs.interview_acceptance_histogram(phd_data, 'acceptance')}
 
