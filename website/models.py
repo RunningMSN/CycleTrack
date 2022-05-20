@@ -71,7 +71,7 @@ class Courses(db.Model):
     classification = db.Column(db.String(150))
     credits = db.Column(db.Integer())
     grade = db.Column(db.String(150))
-    year = db.Column(db.Integer())
+    year = db.Column(db.String(150))
     term = db.Column(db.Integer()) # 0 = summer, 1 = fall, 2 = winter, 3 = spring
     aacomas_science = db.Column(db.Boolean)
     tmdsas_science = db.Column(db.Boolean)
