@@ -35,6 +35,9 @@
     </li>
     <div style="margin-top: 10px; margin-bottom: 10px">
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-course">Add Course</button>
+        {% if user_courses|length > 0 %}
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#gpa-graph">GPA Graph</button>
+        {% endif %}
     </div>
     <!-- COURSE LIST -->
     <div>
@@ -290,11 +293,44 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-danger" onclick="deleteClass({{ course.id }})">Delete Course</button>
-                    <button type="submit" class="btn btn-primary">Edit School</button>
+                    <button type="submit" class="btn btn-primary">Edit Course</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
 {% endfor %}
+
+<!-- GPA GRAPH MODAL -->
+<div class="modal fade" id="gpa-graph" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <form method="POST" action="{{ url_for('dashboard.add_course') }}">
+                <input type="hidden" name="add_course" value="true" />
+                <div class="modal-header">
+                    <h5 class="modal-title">GPA Graph</h5>
+                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    {% if graphJSON %}
+                        <center>
+                            <div id="chart" class="chart"></div>
+                        </center>
+                        <script>
+                                var graphs = {{ graphJSON | safe }};
+                                graphs.config = {'responsive': true, 'displaylogo': false,
+                                modeBarButtonsToRemove:["autoScale2d","zoomIn2d","zoomOut2d","toggleSpikelines","select2d","lasso2d"]}
+                                Plotly.newPlot('chart', graphs);
+                        </script>
+                    {% else %}
+                        The GPA graph is currently unavailable.
+                    {% endif %}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock %}

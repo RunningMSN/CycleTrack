@@ -5,7 +5,7 @@ from .models import Cycle, School, School_Profiles_Data, Courses
 import json
 from datetime import datetime, date
 import re
-from .visualizations import dot, line, bar, sankey, map
+from .visualizations import dot, line, bar, sankey, map, gpa_graph
 import pandas as pd
 from .helpers import import_list_funcs, categorize_stats, school_stats_calculators, gpa_calculators
 from flask_mail import Message
@@ -886,8 +886,10 @@ def visualizations():
 @dashboard.route('/gpa', methods=['GET'])
 @login_required
 def gpa():
-    user_courses = Courses.query.filter_by(user_id=current_user.id).order_by(Courses.year.asc(), Courses.term.asc(), Courses.course.asc()).all()
+    # Grab course list
+    user_courses = Courses.query.filter_by(user_id=current_user.id).order_by(Courses.year.asc(), Courses.term.asc(), Courses.course.asc())
 
+    # Create dictionaries for GPAs
     amcas_gpa = {'cumulative': gpa_calculators.amcas_gpa(user_courses, 'cumulative'),
                  'science': gpa_calculators.amcas_gpa(user_courses, 'science'),
                  'nonscience': gpa_calculators.amcas_gpa(user_courses, 'nonscience')
@@ -903,11 +905,17 @@ def gpa():
                    'nonscience': gpa_calculators.tmdsas_gpa(user_courses, 'nonscience')
                    }
 
+    # Create GPA graph
+    if len(user_courses.all()) > 0:
+        graphJSON = gpa_graph.generate(user_courses)
+    else:
+        graphJSON = None
+
     return render_template('gpa_calc.html', user=current_user, grades=form_options.GRADE_OPTIONS,
                            classifications=form_options.COURSE_CLASSIFICATIONS, terms=form_options.COURSE_TERMS,
-                           years=form_options.COURSE_YEARS, user_courses=user_courses,
+                           years=form_options.COURSE_YEARS, user_courses=user_courses.all(),
                            amcas_science=form_options.AMCAS_SCIENCE, program_types=form_options.PROGRAM_TYPES,
-                           amcas_gpa=amcas_gpa, aacomas_gpa=aacomas_gpa, tmdsas_gpa=tmdsas_gpa)
+                           amcas_gpa=amcas_gpa, aacomas_gpa=aacomas_gpa, tmdsas_gpa=tmdsas_gpa, graphJSON=graphJSON)
 
 @dashboard.route('/add_course', methods=['POST'])
 @login_required
