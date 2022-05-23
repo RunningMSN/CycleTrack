@@ -159,7 +159,7 @@ TMDSAS_WEIGHT = {'A+': 4, 'A': 4, 'A-': 4, 'B+': 3, 'B': 3, 'B-': 3, 'C+': 2, 'C
 
 COURSE_CLASSIFICATIONS = sorted(['Biology', 'Chemistry', 'Physics', 'Math', 'Behavioral/Social Science', 'Business',
                           'Computer Science/Technology', 'Education', 'Engineering', 'English', 'Fine Arts',
-                          'Foreign Language', 'Government', 'Health Science', 'History', 'Natural/Physica Science',
+                          'Foreign Language', 'Government', 'Health Science', 'History', 'Natural/Physical Science',
                           'Other', 'Philosophy/Religion'])
 
 AMCAS_SCIENCE = ['Biology', 'Chemistry', 'Physics', 'Math']
