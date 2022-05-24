@@ -928,40 +928,43 @@ def add_course():
                 and request.form.get('prog_type'):
 
             # Check that credits is a number
-            if isinstance(request.form.get('credits'), int) or isinstance(request.form.get('credits'), int):
-                new_course = Courses(course=request.form.get('course'), credits=request.form.get('credits'),
-                                     classification=request.form.get('classification'),
-                                     year=request.form.get('year'), grade=request.form.get('grade'),
-                                     user_id=current_user.id, program_type=request.form.get('prog_type'))
-                # Assign terms
-                if request.form.get('term') == 'Summer':
-                    new_course.term = 0
-                elif request.form.get('term') == 'Fall':
-                    new_course.term = 1
-                elif request.form.get('term') == 'Winter':
-                    new_course.term = 2
-                elif request.form.get('term') == 'Spring':
-                    new_course.term = 3
-
-                # Assign AACOMAS science
-                if request.form.get('aacomas_science'):
-                    new_course.aacomas_science = True
-                else:
-                    new_course.aacomas_science = False
-                # Assign TMDSAS science
-                if request.form.get('tmdsas_science'):
-                    new_course.tmdsas_science = True
-                else:
-                    new_course.tmdsas_science = False
-                # Check if quarter
-                if request.form.get('quarter'):
-                    new_course.quarter = True
-                else:
-                    new_course.quarter = False
-                db.session.add(new_course)
-                db.session.commit()
-            else:
+            try:
+                float(request.form.get('credits'))
+            except ValueError as e:
                 flash('The number of credits must be a number.', category='error')
+                return redirect(url_for('dashboard.gpa'))
+
+            new_course = Courses(course=request.form.get('course'), credits=request.form.get('credits'),
+                                 classification=request.form.get('classification'),
+                                 year=request.form.get('year'), grade=request.form.get('grade'),
+                                 user_id=current_user.id, program_type=request.form.get('prog_type'))
+            # Assign terms
+            if request.form.get('term') == 'Summer':
+                new_course.term = 0
+            elif request.form.get('term') == 'Fall':
+                new_course.term = 1
+            elif request.form.get('term') == 'Winter':
+                new_course.term = 2
+            elif request.form.get('term') == 'Spring':
+                new_course.term = 3
+
+            # Assign AACOMAS science
+            if request.form.get('aacomas_science'):
+                new_course.aacomas_science = True
+            else:
+                new_course.aacomas_science = False
+            # Assign TMDSAS science
+            if request.form.get('tmdsas_science'):
+                new_course.tmdsas_science = True
+            else:
+                new_course.tmdsas_science = False
+            # Check if quarter
+            if request.form.get('quarter'):
+                new_course.quarter = True
+            else:
+                new_course.quarter = False
+            db.session.add(new_course)
+            db.session.commit()
         else:
             flash('Please make sure to fill in all fields when entering a course.', category='error')
 
@@ -969,45 +972,48 @@ def add_course():
     if request.form.get('edit_course'):
         if request.form.get('course') and request.form.get('credits') and request.form.get('course_id'):
             # Check that credits is a number
-            if isinstance(request.form.get('credits'), int) or isinstance(request.form.get('credits'), float):
-                # Find course
-                course = Courses.query.filter_by(id=request.form.get('course_id')).first()
-
-                # Edit properties to new values
-                course.course = request.form.get('course')
-                course.credits = request.form.get('credits')
-                course.classification = request.form.get('classification')
-                course.year = request.form.get('year')
-                course.grade = request.form.get('grade')
-                course.program_type = request.form.get('prog_type')
-                # Assign term
-                if request.form.get('term') == 'Summer':
-                    course.term = 0
-                elif request.form.get('term') == 'Fall':
-                    course.term = 1
-                elif request.form.get('term') == 'Winter':
-                    course.term = 2
-                elif request.form.get('term') == 'Spring':
-                    course.term = 3
-                # Assign AACOMAS science
-                if request.form.get('aacomas_science'):
-                    course.aacomas_science = True
-                else:
-                    course.aacomas_science = False
-                # Assign TMDSAS science
-                if request.form.get('tmdsas_science'):
-                    course.tmdsas_science = True
-                else:
-                    course.tmdsas_science = False
-                # Check if quarter
-                if request.form.get('quarter'):
-                    course.quarter = True
-                else:
-                    course.quarter = False
-
-                db.session.commit()
-            else:
+            try:
+                float(request.form.get('credits'))
+            except ValueError as e:
                 flash('The number of credits must be a number.', category='error')
+                return redirect(url_for('dashboard.gpa'))
+
+            # Find course
+            course = Courses.query.filter_by(id=request.form.get('course_id')).first()
+
+            # Edit properties to new values
+            course.course = request.form.get('course')
+            course.credits = request.form.get('credits')
+            course.classification = request.form.get('classification')
+            course.year = request.form.get('year')
+            course.grade = request.form.get('grade')
+            course.program_type = request.form.get('prog_type')
+            # Assign term
+            if request.form.get('term') == 'Summer':
+                course.term = 0
+            elif request.form.get('term') == 'Fall':
+                course.term = 1
+            elif request.form.get('term') == 'Winter':
+                course.term = 2
+            elif request.form.get('term') == 'Spring':
+                course.term = 3
+            # Assign AACOMAS science
+            if request.form.get('aacomas_science'):
+                course.aacomas_science = True
+            else:
+                course.aacomas_science = False
+            # Assign TMDSAS science
+            if request.form.get('tmdsas_science'):
+                course.tmdsas_science = True
+            else:
+                course.tmdsas_science = False
+            # Check if quarter
+            if request.form.get('quarter'):
+                course.quarter = True
+            else:
+                course.quarter = False
+
+            db.session.commit()
         else:
             flash('Please make sure the course name and number of credits are not blank.', category='error')
     return redirect(url_for('dashboard.gpa'))
