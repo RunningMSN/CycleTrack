@@ -8,7 +8,7 @@ from .helpers import school_info_calcs, school_stats_calculators
 
 explorer = Blueprint('explorer', __name__)
 
-@explorer.route('/explorer', methods=['GET', 'POST'])
+@explorer.route('/explorer', methods=['GET'])
 def explorer_home():
     # Get info about all available schools
     all_schools = School_Profiles_Data.query.all()
@@ -42,19 +42,11 @@ def explorer_home():
     # Generate dataframe
     df = pd.DataFrame(build_df).sort_values('name')
 
-    # Perform filtering
-    if request.method == 'POST':
-        # Filter type
-        if request.form.get('school_type') != "All":
-            df = df[df['type'] == request.form.get('school_type')]
-        if request.form.get('state') != "All":
-            df = df[df['state'] == form_options.STATE_ABBREV[request.form.get('state')]]
-        if request.form.get('country') != "All":
-            df = df[df['country'] == request.form.get('country')]
-
-    if len(df) == 0: df = None
+    if len(df) == 0:
+        df = None
     # Render page
-    return render_template('explorer.html', user=current_user, state_options=form_options.STATES_WITH_SCHOOLS, schools=df)
+    return render_template('explorer.html', user=current_user, state_options=sorted(form_options.STATES_WITH_SCHOOLS),
+                           state_abbrev=form_options.STATE_ABBREV,schools=df)
 
 @explorer.route('/explorer/<school_name>')
 def explore_school(school_name):

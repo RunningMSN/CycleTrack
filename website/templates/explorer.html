@@ -1,5 +1,8 @@
 {% extends 'base.html' %}
 {% block title %} School Explorer {% endblock %}
+{% block additional_js %}
+    <script src="{{ url_for('static', filename='/js/explorer_home.js') }}"></script>
+{% endblock %}
 {% block content %}
 <!-- SCHOOL LIST MANAGEMENT -->
 <div class="container" style="padding-top:10px">
@@ -19,71 +22,59 @@
         <div class="col" style="padding: 10px;">
             <div class="container" style="background:white; padding:10px">
                 <h4>Filter Schools</h4>
-                <form method="POST">
-                    <div class="row" style="padding-top:5px;padding-bottom:5px">
-                        <div class="col">
-                            <table>
-                                <tr>
-                                    <td style="width: 120px"><strong>School Type: </strong></td>
-                                    <td>
-                                        <select name="school_type" id="school_type" class="btn-sm form-control" style="width: 100px">
-                                            <option value="All">All</option>
-                                            <option value="MD">MD</option>
-                                            <option value="DO">DO</option>
-                                        </select>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-                        <div class="col">
-                            <table>
-                                <tr>
-                                    <td style="width: 120px"><strong>State: </strong></td>
-                                    <td>
-                                        <select name="state" id="state" class="btn-sm form-control" style="width: 100px">
-                                            <option value="All">All</option>
-                                            {% for state in state_options %}
-                                            <option value="{{ state }}">{{ state }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-                        <div class="col">
-                            <table>
-                                <tr>
-                                    <td style="width: 120px"><strong>Country: </strong></td>
-                                    <td>
-                                        <select name="country" id="country" class="btn-sm form-control" style="width: 100px">
-                                            <option value="All">All</option>
-                                            <option value="USA">USA</option>
-                                            <option value="CAN">Canada</option>
-                                        </select>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
+                <div class="row" style="padding-top:5px;padding-bottom:5px">
+                    <div class="col">
+                        <table>
+                            <tr>
+                                <td style="width: 120px"><strong>School Type: </strong></td>
+                                <td>
+                                    <select name="school_type" id="school_type" class="btn-sm form-control"
+                                            style="width: 100px">
+                                        <option value="All">All</option>
+                                        <option value="MD">MD</option>
+                                        <option value="DO">DO</option>
+                                    </select>
+                                </td>
+                            </tr>
+                        </table>
                     </div>
-                    <div class="row" style="padding-top:5px;padding-bottom:5px">
-                        <div clas="col">
-                            <button class="btn btn-primary" type="submit">Filter</button>
-                        </div>
+                    <div class="col">
+                        <table>
+                            <tr>
+                                <td style="width: 120px"><strong>State: </strong></td>
+                                <td>
+                                    <select name="state" id="state" class="btn-sm form-control" style="width: 100px">
+                                        <option value="All">All</option>
+                                        {% for state in state_options %}
+                                        <option value="{{ state_abbrev[state] }}">{{ state }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </td>
+                            </tr>
+                        </table>
                     </div>
-                </form>
+                    <div class="col">
+                        <table>
+                            <tr>
+                                <td style="width: 120px"><strong>Country: </strong></td>
+                                <td>
+                                    <select name="country" id="country" class="btn-sm form-control"
+                                            style="width: 100px">
+                                        <option value="All">All</option>
+                                        <option value="USA">USA</option>
+                                        <option value="CAN">Canada</option>
+                                    </select>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
     <div class="row">
-        {% if schools is none %}
-        <div class="col" style="padding:10px;min-width: 350px;">
-            <div class="container" style="background:white; padding:10px">
-                <p>Your search did not yield any schools. Please try changing your filter options.</p>
-            </div>
-        </div>
-        {% else %}
         {% for key,value in schools.iterrows() %}
-        <div class="col" style="padding:10px; min-width: 350px;">
+        <div class="col school_entry school_type_{{ value['type'] }} state_{{ value['state'] }} country_{{ value['country'] }}" style="padding:10px; min-width: 350px;">
             <div class="container" style="background:white; padding:10px">
                     <div class="col d-flex align-items-center justify-content-center" style="height: 100px;">
                         <a href="{{ url_for('explorer.explorer_home') }}/{{ value['name'] }}">
@@ -117,7 +108,6 @@
             </div>
         </div>
         {% endfor %}
-        {% endif %}
     </div>
 </div>
 {% endblock %}
