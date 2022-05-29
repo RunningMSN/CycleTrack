@@ -65,7 +65,7 @@ STATES_WITH_SCHOOLS = ["Alabama",  "Arizona", "Arkansas", "California", "Colorad
                  "Mississippi", "Missouri", "Nebraska", "Nevada", "New Hampshire", "New Jersey",
                  "New Mexico", "New York", "North Carolina", "North Dakota","Ohio","Oklahoma", "Oregon", "Pennsylvania",
                  "Rhode Island", "South Carolina", "South Dakota", "Tennessee","Texas", "Utah", "Vermont", "Virginia",
-                 "Washington", "West Virginia", "Wisconsin", "Puerto Rico"]
+                 "Washington", "West Virginia", "Wisconsin", "Puerto Rico", "Qeuebec", "Ontario", "Saskatchewan"]
 
 STATE_ABBREV = {
     "Alabama": "AL",
@@ -137,8 +137,7 @@ STATE_ABBREV = {
     "Prince Edward Island": "PE",
     "Quebec": "QC",
     "Saskatchewan": "SK",
-    "Yukon": "YT",
-    "Canada": "CAN"
+    "Yukon": "YT"
 }
 
 ABBREV_TO_STATE = dict(map(reversed, STATE_ABBREV.items()))
