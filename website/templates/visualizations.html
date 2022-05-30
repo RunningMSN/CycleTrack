@@ -2,6 +2,7 @@
 {% block title %} Visualizations {% endblock %}
 {% block additional_js %}
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="{{ url_for('static', filename='/js/vis_menu.js') }}"></script>
 {% endblock %}
 {% block dash_content %}
 <div id="visualizations" class="container" style="padding-top:10px" xmlns="http://www.w3.org/1999/html">
@@ -16,214 +17,221 @@
     </div>
 
     <div class="container" style="padding:20px;background:#ebebeb">
-        <div class="row-flex">
-            <div class="container" style="background:#ebebeb; padding:10px">
-                <h4>Settings</h4>
-                <form method="POST">
-                    <input type="hidden" name="cycle_id" id="cycle_id" value="{{ cycle.id }}">
-                    <!-- OPTIONS FOR GRAPHS -->
-                    <div class="row" style="padding-top:5px;padding-bottom:5px">
-                        <!-- VIS TYPE -->
-                        <div class="col">
-                            <table>
-                                <tr>
-                                    <td style="width: 120px"><strong>Visualization: </strong></td>
-                                    <td>
-                                        <select name="vis_type" id="vis_type" class="btn-sm form-control"
-                                                style="width: 100px">
-                                            {% if save_settings['vis_type'] %}
-                                            <option selected="{{ save_settings['vis_type'] }}">{{ save_settings['vis_type'] }}</option>
-                                            {% endif %}
-                                            {% for vis_type in vis_types %}
-                                            {% if vis_type != save_settings['vis_type'] %}
-                                            <option value="{{ vis_type }}">{{ vis_type }}</option>
-                                            {% endif %}
-                                            {% endfor %}
-                                        </select>
-                                    </td>
-                                </tr>
-                            </table>
+        <h4>Settings</h4>
+        <form method="POST">
+            <input type="hidden" name="cycle_id" id="cycle_id" value="{{ cycle.id }}">
+            <div class="row row-cols-auto">
+                <!-- VIS TYPE -->
+                <div class="col" style="min-width: 300px">
+                    <div class="row" style="margin-bottom:5px">
+                        <div class="col-auto">
+                            <strong class="align-middle">Visualization: </strong>
                         </div>
-
-                        <!-- APPLICATION TYPES -->
-                        <div class="col">
-                            <table>
-                                <tr>
-                                    <td style="width: 120px"><strong>Applications: </strong></td>
-                                    <td>
-                                        <select name="app_type" id="app-type" class="btn-sm form-control"
-                                                style="width: 120px">
-                                            {% if save_settings['app_type'] %}
-                                            <option selected="{{ save_settings['app_type'] }}">{{ save_settings['app_type'] }}</option>
-                                            {% endif %}
-                                            {% for app_type in app_types %}
-                                            {% if app_type != save_settings['app_type'] %}
-                                            <option value="{{ app_type }}">{{ app_type }}</option>
-                                            {% endif %}
-                                            {% endfor %}
-                                        </select>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-                        <!-- Color Palette -->
-                        <div class="col">
-                            <table>
-                                <tr>
-                                    <td style="width: 75px"><strong>Colors: </strong></td>
-                                    <td>
-                                        <select name="color_type" id="color_type" class="btn-sm form-control" >
-                                            {% if save_settings['color_type'] %}
-                                            <option selected="{{ save_settings['color_type'] }}">{{ save_settings['color_type'] }}</option>
-                                            {% endif %}
-                                            {% for color_type in color_types %}
-                                            {% if color_type != save_settings['color_type'] %}
-                                            <option value="{{ color_type }}">{{ color_type }}</option>
-                                            {% endif %}
-                                            {% endfor %}
-                                        </select>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-                       
-                    <!-- GRAPH TITLE -->
-                    <div class="row" style="padding-top:5px;padding-bottom:5px">
-                        <div class="col">
-                            <table>
-                                <tr>
-                                    <td style="width: 120px"><strong>Title: </strong></td>
-                                    <td>
-                                        <input type="text" class="form-control" id="plot_title" name = "plot_title"
-                                               value="{% if save_settings['plot_title'] %}{{ save_settings['plot_title'] }}{% else %}{{ cycle.cycle_year }} Application Cycle{% endif %}"></input>
-                                    </td>
-                                </tr>
-                            </table>
+                        <div class="col-auto">
+                            <select name="vis_type" id="vis_type" class="btn-sm form-control align-middle"
+                                    style="width: 120px">
+                                {% if save_settings['vis_type'] %}
+                                <option selected="{{ save_settings['vis_type'] }}">{{ save_settings['vis_type'] }}
+                                </option>
+                                {% endif %}
+                                {% for vis_type in vis_types %}
+                                {% if vis_type != save_settings['vis_type'] %}
+                                <option value="{{ vis_type }}">{{ vis_type }}</option>
+                                {% endif %}
+                                {% endfor %}
+                            </select>
                         </div>
                     </div>
-
-                    <div class="accordion accordion-flush" id="accordionFlush">
-                        <div class="accordion-item">
-                          <h2 class="accordion-header" id="flush-headingOne">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
-                              Advanced Options
-                            </button>
-                          </h2>
-                          <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlush">
-                            <div class="accordion-body">
-                                <!-- Map Scope -->
-                                <div class="col">
-                                    <table>
-                                        <tr>
-                                            <td style="width: 75px"><strong>Map: </strong></>
-                                            <td>
-                                                <select name="map_type" id="map_type" class="btn-sm form-control" style="width: 120px">
-                                                    {% if save_settings['map_type'] %}
-                                                    <option selected="{{ save_settings['map_type'] }}">{{ save_settings['map_type'] }}</option>
-                                                    {% endif %}
-                                                    {% for map_type in map_types %}
-                                                    {% if map_type!= save_settings['map_type'] %}
-                                                    <option value="{{ map_type }}">{{ map_type }}</option>
-                                                    {% endif %}
-                                                    {% endfor %}
-                                                </select>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </div>
-                            </div>
-                            <!-- ANNOTATE DEMOGRAPHICS -->
-                            <div class="row">
-                                <!-- Annotate -->
-                                <div class="col">
-                                    <table>
-                                        <tr>
-                                            <td style="width: 120px"><strong>Demographics: </strong></td>
-                                            <td>
-                                                <label style="padding-right:10px">
-                                                    <input type="checkbox" name="demographics" value="true" {% if save_settings['demographics'] %} checked {% endif %}> Include
-                                                </label>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </div>
-                                <!-- Anonymoze Demographics -->
-                                <div class="col">
-                                    <table>
-                                        <tr>
-                                            <td style="width: 120px"><strong>Anonymize: </strong></td>
-                                            <td>
-                                                <label style="padding-right:10px">
-                                                    <input type="checkbox" name="anonymize_demographics" value="true" {% if save_settings['anonymize_demographics'] %} checked {% endif %}> Yes
-                                                </label>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </div>
-                            </div>
-                            <!-- EXCLUDE DATA -->
-                            <div class="row" style="padding-top:5px;padding-bottom:5px">
-                                <div class="col">
-                                    <table>
-                                        <tr>
-                                            <td style="width: 120px"><strong>Exclude Data: </strong></td>
-                                            <td>
-                                                <label style="padding-right:10px">
-                                                    <input type="checkbox" name="exclude-primary" value="true" {% if save_settings['filters']['primary'] %} checked {% endif %}> Primary Submitted
-                                                </label>
-                                                <label style="padding-right:10px">
-                                                    <input type="checkbox" name="exclude-secondary_received" value="true" {% if save_settings['filters']['secondary_received'] %} checked {% endif %}> Secondary Received
-                                                </label>
-                                                <label style="padding-right:10px">
-                                                    <input type="checkbox" name="exclude-application_complete" value="true" {% if save_settings['filters']['application_complete'] %} checked {% endif %}> Application Complete
-                                                </label>
-                                                <label style="padding-right:10px">
-                                                    <input type="checkbox" name="exclude-interview_received" value="true" {% if save_settings['filters']['interview_received'] %} checked {% endif %}> Interview Received
-                                                </label>
-                                                <label style="padding-right:10px">
-                                                    <input type="checkbox" name="exclude-interview_date" value="true" {% if save_settings['filters']['interview_date'] %} checked {% endif %}> Interview Complete
-                                                </label>
-                                                <label style="padding-right:10px">
-                                                    <input type="checkbox" name="exclude-rejection" value="true" {% if save_settings['filters']['rejection'] %} checked {% endif %}> Rejection
-                                                </label>
-                                                <label style="padding-right:10px">
-                                                    <input type="checkbox" name="exclude-waitlist" value="true" {% if save_settings['filters']['waitlist'] %} checked {% endif %}> Waitlist
-                                                </label>
-                                                <label style="padding-right:10px">
-                                                    <input type="checkbox" name="exclude-acceptance" value="true" {% if save_settings['filters']['acceptance'] %} checked {% endif %}> Acceptance
-                                                </label>
-                                                <label style="padding-right:10px">
-                                                    <input type="checkbox" name="exclude-withdrawn" value="true" {% if save_settings['filters']['withdrawn'] %} checked {% endif %}> Withdrawn
-                                                </label>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </div>
-                            </div>
-                            <!-- CUSTOM TEXT -->
-                            <div class="row" style="padding-top:5px;padding-bottom:5px">
-                                <div class="col">
-                                    <table>
-                                        <tr>
-                                            <td style="width: 120px"><strong>Custom Text: </strong><br>(100 char max)</td>
-                                            <td>
-                                                <textarea name="custom_text" id="custom_text" class="form-control" rows="3" cols="25" maxlength="100">{% if save_settings['custom_text'] %}{{ save_settings['custom_text'] }}{% else %}{% endif %}</textarea>
-                                                </td>
-                                        </tr>
-                                    </table>
-                                </div>
-                            </div>
-                            </div>
-                          </div>
+                </div>
+                <!-- APPLICATIONS -->
+                <div class="col" style="min-width: 300px">
+                    <div class="row" style="margin-bottom:5px">
+                        <div class="col-auto">
+                            <strong class="align-middle">Applications: </strong>
                         </div>
-                    <div class="row-flex" style="padding-top:5px;padding-bottom:5px">
-                        <div clas="col">
-                            <button class="btn btn-primary" type="submit">Generate</button>
+                        <div class="col-auto">
+                            <select name="app_type" id="app-type" class="btn-sm form-control" style="width: 120px">
+                                {% if save_settings['app_type'] %}
+                                <option selected="{{ save_settings['app_type'] }}">{{ save_settings['app_type'] }}
+                                </option>
+                                {% endif %}
+                                {% for app_type in app_types %}
+                                {% if app_type != save_settings['app_type'] %}
+                                <option value="{{ app_type }}">{{ app_type }}</option>
+                                {% endif %}
+                                {% endfor %}
+                            </select>
                         </div>
                     </div>
-                </form>
+                </div>
+                <!-- COLORS -->
+                <div class="col" style="min-width: 300px">
+                    <div class="row" style="margin-bottom:5px">
+                        <div class="col-auto">
+                            <strong class="align-middle">Colors: </strong>
+                        </div>
+                        <div class="col-auto">
+                            <select name="color_type" id="color_type" class="btn-sm form-control align-middle"
+                                    style="width: 120px">
+                                {% if save_settings['color_type'] %}
+                                <option selected="{{ save_settings['color_type'] }}">{{ save_settings['color_type'] }}
+                                </option>
+                                {% endif %}
+                                {% for color_type in color_types %}
+                                {% if color_type != save_settings['color_type'] %}
+                                <option value="{{ color_type }}">{{ color_type }}</option>
+                                {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <!-- TITLE -->
+                <div class="col" style="min-width: 300px">
+                    <div class="row" style="margin-bottom:5px">
+                        <div class="col-auto">
+                            <strong class="align-middle">Title: </strong>
+                        </div>
+                        <div class="col-auto">
+                            <input type="text" class="form-control btn-sm" id="plot_title" name="plot_title"
+                                   value="{% if save_settings['plot_title'] %}{{ save_settings['plot_title'] }}{% else %}{{ cycle.cycle_year }} Application Cycle{% endif %}"></input>
+                        </div>
+                    </div>
+                </div>
+                <!-- MAP SCOPE  -->
+                <div class="col {% if save_settings['vis_type'] != 'Map' %}d-none{% endif %}" style="min-width: 300px"
+                     id="mapScope">
+                    <div class="row" style="margin-bottom:5px">
+                        <div class="col-auto">
+                            <strong class="align-middle">Map Scope: </strong>
+                        </div>
+                        <div class="col-auto">
+                            <select name="map_type" id="map_type" class="btn-sm form-control" style="width: 120px">
+                                {% if save_settings['map_type'] %}
+                                <option selected="{{ save_settings['map_type'] }}">{{ save_settings['map_type'] }}
+                                </option>
+                                {% endif %}
+                                {% for map_type in map_types %}
+                                {% if map_type!= save_settings['map_type'] %}
+                                <option value="{{ map_type }}">{{ map_type }}</option>
+                                {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
+            <div class="row row-cols-auto">
+                <div class="col" style="margin-bottom: 5px">
+                    <label style="padding-right:10px">
+                        <input type="checkbox" id="advancedOptions" name="advanced_options" value="true">
+                        <label for="advancedOptions"> <strong>Advanced Options</strong></label><br>
+                    </label>
+                </div>
+            </div>
+            <div id="advancedArea" style="display: none">
+                <h5>Graph Annotations</h5>
+                <div class="row row-cols-auto">
+                    <!-- DEMOGRAPHICS -->
+                    <div class="col" style="min-width: 300px">
+                        <div class="row" style="margin-bottom:5px">
+                            <div class="col-auto">
+                                <strong class="align-middle">Demographics: </strong>
+                            </div>
+                            <div class="col-auto">
+                                <label style="padding-right:10px">
+                                    <input type="checkbox" name="demographics" value="true" {% if save_settings['demographics']
+                                    %} checked {% endif %}> Include
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ANONYMIZE -->
+                    <div class="col" style="min-width: 300px">
+                        <div class="row" style="margin-bottom:5px">
+                            <div class="col-auto">
+                                <strong class="align-middle">Anonymize Data: </strong>
+                            </div>
+                            <div class="col-auto">
+                                <label style="padding-right:10px">
+                                    <input type="checkbox" name="anonymize_demographics" value="true" {% if
+                                           save_settings['anonymize_demographics'] %} checked {% endif %}> Yes
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-auto">
+                        <strong class="align-middle">Custom Text: </strong>
+                        <br/>
+                        (Max 100 Char)
+                    </div>
+                    <div class="col">
+                        <textarea name="custom_text" id="custom_text" class="form-control" maxlength="100">{% if save_settings['custom_text'] %}{{ save_settings['custom_text'] }}{% else %}{% endif %}</textarea>
+                    </div>
+                </div>
+                <h5>Exclude Data</h5>
+                <div class="row row-cols-auto" style="margin-bottom: 5px">
+                    <div class="col">
+                        <label style="padding-right:10px">
+                            <input type="checkbox" name="exclude-primary" value="true" {% if save_settings['filters']['primary']
+                            %} checked {% endif %}> Primary Submitted
+                        </label>
+                    </div>
+                    <div class="col">
+                        <label style="padding-right:10px">
+                            <input type="checkbox" name="exclude-secondary_received" value="true" {% if save_settings['filters']['secondary_received']
+                            %} checked {% endif %}> Secondary Received
+                        </label>
+                    </div>
+                    <div class="col">
+                        <label style="padding-right:10px">
+                            <input type="checkbox" name="exclude-application_complete" value="true" {% if save_settings['filters']['application_complete']
+                            %} checked {% endif %}> Application Complete
+                        </label>
+                    </div>
+                    <div class="col">
+                        <label style="padding-right:10px">
+                            <input type="checkbox" name="exclude-interview_received" value="true" {% if save_settings['filters']['interview_received']
+                            %} checked {% endif %}> Interview Received
+                        </label>
+                    </div>
+                    <div class="col">
+                        <label style="padding-right:10px">
+                            <input type="checkbox" name="exclude-interview_date" value="true" {% if save_settings['filters']['interview_date']
+                            %} checked {% endif %}> Interview Complete
+                        </label>
+                    </div>
+                    <div class="col">
+                        <label style="padding-right:10px">
+                            <input type="checkbox" name="exclude-rejection" value="true" {% if save_settings['filters']['rejection']
+                            %} checked {% endif %}> Rejection
+                        </label>
+                    </div>
+                    <div class="col">
+                        <label style="padding-right:10px">
+                            <input type="checkbox" name="exclude-waitlist" value="true" {% if save_settings['filters']['waitlist']
+                            %} checked {% endif %}> Waitlist
+                        </label>
+                    </div>
+                    <div class="col">
+                        <label style="padding-right:10px">
+                            <input type="checkbox" name="exclude-acceptance" value="true" {% if save_settings['filters']['acceptance']
+                            %} checked {% endif %}> Acceptance
+                        </label>
+                    </div>
+                    <div class="col">
+                        <label style="padding-right:10px">
+                            <input type="checkbox" name="exclude-withdrawn" value="true" {% if save_settings['filters']['withdrawn']
+                            %} checked {% endif %}> Withdrawn
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <button class="btn btn-primary" type="submit">Generate</button>
+        </form>
+
         {% if graphJSON %}
         <div class="row-flex" style="margin-top:15px">
             <div class="container" style="background:white; padding:10px">
@@ -235,7 +243,6 @@
                         graphs.config = {'responsive': true, 'displaylogo': false,
                         modeBarButtonsToRemove:["autoScale2d","zoomIn2d","zoomOut2d","toggleSpikelines","select2d","lasso2d"]}
                         Plotly.newPlot('chart', graphs);
-
                 </script>
             </div>
         </div>
