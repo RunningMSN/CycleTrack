@@ -2,73 +2,108 @@
 {% block title %} {{ cycle.cycle_year }} School List {% endblock %}
 {% block additional_js %}
 <script>
-    $(document).ready(function() {
-        // Setup datepicker for bulk edit
-        $(".datepicker").each(function(){
-                    var val = ($(this).val());
-                    var current = new Date(val);
-                    var current_utc = new Date(current.getUTCFullYear(), current.getUTCMonth(), current.getUTCDate());
-                    var timestamp = Date.parse(val);
-                    var cycle_year = $(this).data("cycle");
-                    var cycle_min = new Date(cycle_year -1, 04, 01);
-                    var cycle_max = new Date(cycle_year, 07, 31);
+$(document).ready(function() {
+    // Setup datepicker for bulk edit
+    $(".datepicker").each(function(){
+                var val = ($(this).val());
+                var current = new Date(val);
+                var current_utc = new Date(current.getUTCFullYear(), current.getUTCMonth(), current.getUTCDate());
+                var timestamp = Date.parse(val);
+                var cycle_year = $(this).data("cycle");
+                var cycle_min = new Date(cycle_year -1, 04, 01);
+                var cycle_max = new Date(cycle_year, 07, 31);
 
-                    $(this).datepicker({
-                        showOtherMonths: true,
-                        selectOtherMonths: true,
-                        changeMonth: true,
-                        changeYear: true,
-                        dateFormat: 'mm/dd/y',
-                        minDate: cycle_min,
-                        maxDate: cycle_max,
-                        showButtonPanel: true,
-                        closeText: "Clear",
-                        onClose: function (dateText, inst) {
-                            function isDonePressed() {
-                                return ($('#ui-datepicker-div').html().indexOf('ui-datepicker-close ui-state-default ui-priority-primary ui-corner-all ui-state-hover') > -1);
-                            }
-                            if (isDonePressed()){
-                                $(this).datepicker('setDate',null)
-                            }
-                        },
-                    });
+                $(this).datepicker({
+                    showOtherMonths: true,
+                    selectOtherMonths: true,
+                    changeMonth: true,
+                    changeYear: true,
+                    dateFormat: 'mm/dd/y',
+                    minDate: cycle_min,
+                    maxDate: cycle_max,
+                    showButtonPanel: true,
+                    closeText: "Clear",
+                    onClose: function (dateText, inst) {
+                        function isDonePressed() {
+                            return ($('#ui-datepicker-div').html().indexOf('ui-datepicker-close ui-state-default ui-priority-primary ui-corner-all ui-state-hover') > -1);
+                        }
+                        if (isDonePressed()){
+                            $(this).datepicker('setDate',null)
+                        }
+                    },
+                });
 
-                    if(isNaN(timestamp)==false){
-                        $(this).datepicker("setDate",current_utc);
-                    };
-            });
-
-        // Change shown list for adding school by type
-        $("#type").change(function() {
-            var val = $(this).val();
-            if (val == "USMD") {
-                $("#add_school").html("{% for school in usmd_school_list %}<option value='{{ school }}'>{{ school }}</option>{% endfor %}");
-            } else if (val == "DO") {
-                $("#add_school").html("{% for school in do_school_list %}<option value='{{ school }}'>{{ school }}</option>{% endfor %}");
-            } else if (val == "CAMD") {
-                $("#add_school").html("{% for school in camd_school_list %}<option value='{{ school }}'>{{ school }}</option>{% endfor %}");
-            }
+                if(isNaN(timestamp)==false){
+                    $(this).datepicker("setDate",current_utc);
+                };
         });
+
+    // Change shown list for adding school by type
+    $("#type").change(function() {
+        var val = $(this).val();
+        if (val == "USMD") {
+            $("#add_school").html("{% for school in usmd_school_list %}<option value='{{ school }}'>{{ school }}</option>{% endfor %}");
+        } else if (val == "DO") {
+            $("#add_school").html("{% for school in do_school_list %}<option value='{{ school }}'>{{ school }}</option>{% endfor %}");
+        } else if (val == "CAMD") {
+            $("#add_school").html("{% for school in camd_school_list %}<option value='{{ school }}'>{{ school }}</option>{% endfor %}");
+        }
     });
 
-    // Enter bulk edit mode
-    function toggleBulkEdit(){
-        var normal = document.getElementsByClassName('normal_list');
-        var bulk = document.getElementsByClassName('bulk_list');
-        // Unhide bulk edits
-        for (let i = 0; i < bulk.length; i++){
-            bulk[i].classList.remove("d-none");
+    // Filter list based on selection
+    $("#program_select").change(function() {
+        var val = $(this).val();
+        var all_schools = document.getElementsByClassName('school_entry');
+        for (let i = 0; i < all_schools.length; i++) {
+            if (val == 'All') {
+                all_schools[i].classList.remove('d-none');
+            } else if (val == 'MD-PhD') {
+                if (all_schools[i].classList.contains('type_MD') && all_schools[i].classList.contains('phd_true')) {
+                    all_schools[i].classList.remove('d-none');
+                } else {
+                    all_schools[i].classList.add('d-none');
+                }
+            } else if (val == 'MD') {
+                if (all_schools[i].classList.contains('type_MD') && all_schools[i].classList.contains('phd_false')) {
+                    all_schools[i].classList.remove('d-none');
+                } else {
+                    all_schools[i].classList.add('d-none');
+                }
+            } else if (val == 'DO-PhD') {
+                if (all_schools[i].classList.contains('type_DO') && all_schools[i].classList.contains('phd_true')) {
+                    all_schools[i].classList.remove('d-none');
+                } else {
+                    all_schools[i].classList.add('d-none');
+                }
+            } else if (val == 'DO') {
+                if (all_schools[i].classList.contains('type_DO') && all_schools[i].classList.contains('phd_false')) {
+                    all_schools[i].classList.remove('d-none');
+                } else {
+                    all_schools[i].classList.add('d-none');
+                }
+            }
         }
-        // Hide normal
-        for (let i = 0; i < normal.length; i++){
-            normal[i].classList.add("d-none");
-        }
-    }
+    });
+});
 
-    // Cancel bulk edit
-    function toggleCancel() {
-        location.reload(true);
+// Enter bulk edit mode
+function toggleBulkEdit(){
+    var normal = document.getElementsByClassName('normal_list');
+    var bulk = document.getElementsByClassName('bulk_list');
+    // Unhide bulk edits
+    for (let i = 0; i < bulk.length; i++){
+        bulk[i].classList.remove("d-none");
     }
+    // Hide normal
+    for (let i = 0; i < normal.length; i++){
+        normal[i].classList.add("d-none");
+    }
+}
+
+// Cancel bulk edit
+function toggleCancel() {
+    location.reload(true);
+}
 </script>
 {% endblock %}
 {% block dash_content %}
@@ -86,56 +121,61 @@
     </p>
     {% endif %}
 
-    <!-- EDIT LIST BUTTONS -->
-    <div class="row row-cols-auto normal_list">
-        <div class="col normal_list" style="margin: 3px">
-            <button type="button" class="btn btn-primary rounded" data-toggle="modal" data-target="#add-school-modal">
+    <div class="row">
+        <div class="col-auto">
+            <!-- EDIT SCHOOL LIST BUTTONS -->
+            <button type="button" class="btn btn-primary rounded normal_list" data-toggle="modal" data-target="#add-school-modal" style="margin: 3px; margin-left: 0px">
                 Add School
             </button>
-        </div>
-        {% if cycle.schools|length > 0 %}
-        <div class="col normal_list" style="margin: 3px">
-            <button class="btn btn-primary rounded" type="button" onclick="toggleBulkEdit()">
+            {% if cycle.schools|length > 0 %}
+            <button class="btn btn-primary rounded normal_list" type="button" onclick="toggleBulkEdit()" style="margin: 3px;">
                 Multi-Edit
             </button>
-        </div>
-        {% endif %}
-        <div class="col normal_list" style="margin: 3px">
-            <form method="POST" action="{{ url_for('dashboard.import_list') }}">
+            {% endif %}
+            <form method="POST" action="{{ url_for('dashboard.import_list') }}" style="position: relative; display:inline;">
                 <input type="hidden" id="import_cycle_id" name="cycle_id" value="{{ cycle.id }}"/>
-                <button type="submit" class="btn btn-primary">
+                <button type="submit" class="btn btn-primary normal_list" style="margin: 3px;">
                     Import From Spreadsheet
                 </button>
             </form>
-        </div>
-        {% if cycle.schools|length > 0 %}
-        <div class="col normal_list" style="margin: 3px">
-            <form method="POST" action="{{ url_for('dashboard.export_list') }}">
+            {% if cycle.schools|length > 0 %}
+            <form method="POST" action="{{ url_for('dashboard.export_list') }}" style="position: relative; display:inline;">
                 <input type="hidden" id="export_cycle_id" name="cycle_id" value="{{ cycle.id }}"/>
-                <button type="submit" class="btn btn-primary">
+                <button type="submit" class="btn btn-primary normal_list" style="margin: 3px;">
                     Export To Spreadsheet
                 </button>
             </form>
-        </div>
-        {% endif %}
-    </div>
-    <form method="POST">
-        <input type="hidden" value="{{cycle.id}}" name="cycle_id">
-        <input type="hidden" value="true" name="bulk_edit">
-        <div class="row row-cols-auto bulk_list d-none">
-            <div class="col" style="margin: 3px">
-                <button class="btn btn-secondary rounded" type="submit">
-                    Save Changes
-                </button>
-                <button class="btn btn-danger rounded" type="button" onclick="toggleCancel()">
-                    Cancel
-                </button>
-            </div>
+            {% endif %}
+
+            <!-- BULK EDIT BUTTONS -->
+            <form method="POST" style="position: relative; display:inline;">
+            <input type="hidden" value="{{cycle.id}}" name="cycle_id">
+            <input type="hidden" value="true" name="bulk_edit">
+
+            <button class="btn btn-secondary rounded bulk_list d-none" type="submit" style="margin: 3px; margin-left: 0px;">
+                Save Changes
+            </button>
+            <button class="btn btn-danger rounded bulk_list d-none" type="button" onclick="toggleCancel()" style="margin: 3px;">
+                Cancel
+            </button>
         </div>
 
         {% if cycle.schools|length > 0 %}
+        <div class="col">
+            <select class="btn-md form-control ms-auto text-center" id="program_select" style="width: 100px; margin: 3px; margin-right: 0px;">
+                <option>All</option>
+                {% for program in program_types %}
+                <option>{{ program }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        {% endif %}
+    </div>
+
+
+        {% if cycle.schools|length > 0 %}
         {% for school, profile in schools %}
-        <li class="list-group-item">
+        <li class="list-group-item school_entry type_{{ school.school_type }} {% if school.phd %}phd_true{% else %}phd_false{% endif %}">
             <div class="row rows-cols-2">
                 <!-- SCHOOL LOGO AREA ON LEFT -->
                 <div class="col-lg-1">

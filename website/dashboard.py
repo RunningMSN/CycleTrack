@@ -187,12 +187,6 @@ def lists():
                                                                            School.withdrawn.asc(),
                                                                            School.acceptance.asc(), School.name.asc())
 
-    # Check if PhD applicant for message about MD/DO-only consideration
-    if School.query.filter_by(cycle_id=cycle.id, phd=True).first():
-        phd_applicant = True
-    else:
-        phd_applicant = False
-
     # Handle adding school
     add_school_name = request.form.get('add_school')
     if add_school_name and len(add_school_name) > 0:
@@ -458,10 +452,27 @@ def lists():
                 continue
             db.session.commit()
 
+    # Check if PhD applicant for message about MD/DO-only consideration
+    if School.query.filter_by(cycle_id=cycle.id, phd=True).first():
+        phd_applicant = True
+    else:
+        phd_applicant = False
+
+    # Grab list of programs types for filtering
+    program_types = []
+    if School.query.filter_by(cycle_id=cycle.id, school_type='MD', phd=True).first():
+        program_types.append('MD-PhD')
+    if School.query.filter_by(cycle_id=cycle.id, school_type='DO', phd=True).first():
+        program_types.append('DO-PhD')
+    if School.query.filter_by(cycle_id=cycle.id, school_type='MD', phd=False).first():
+        program_types.append('MD')
+    if School.query.filter_by(cycle_id=cycle.id, school_type='DO', phd=False).first():
+        program_types.append('DO')
+
     return render_template('lists.html', user=current_user, cycle=cycle, schools=schools, phd_applicant=phd_applicant,
                            usmd_school_list=form_options.get_md_schools('USA'),
                            camd_school_list=form_options.get_md_schools('CAN'),
-                           do_school_list=form_options.get_do_schools())
+                           do_school_list=form_options.get_do_schools(), program_types=program_types)
 
 
 @dashboard.route('/import-list', methods=["GET", "POST"])
