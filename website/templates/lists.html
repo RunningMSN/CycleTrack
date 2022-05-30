@@ -55,7 +55,7 @@ $(document).ready(function() {
         var val = $(this).val();
         var all_schools = document.getElementsByClassName('school_entry');
         for (let i = 0; i < all_schools.length; i++) {
-            if (val == 'All') {
+            if (val == 'All Programs') {
                 all_schools[i].classList.remove('d-none');
             } else if (val == 'MD-PhD') {
                 if (all_schools[i].classList.contains('type_MD') && all_schools[i].classList.contains('phd_true')) {
@@ -162,8 +162,8 @@ function toggleCancel() {
 
         {% if cycle.schools|length > 0 %}
         <div class="col">
-            <select class="btn-md form-control ms-auto text-center" id="program_select" style="width: 100px; margin: 3px; margin-right: 0px;">
-                <option>All</option>
+            <select class="btn-md form-control ms-auto text-center" id="program_select" style="width: 120px; margin: 3px; margin-right: 0px;">
+                <option>All Programs</option>
                 {% for program in program_types %}
                 <option>{{ program }}</option>
                 {% endfor %}
