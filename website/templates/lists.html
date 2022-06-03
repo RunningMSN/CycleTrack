@@ -2,6 +2,9 @@
 {% block title %} {{ cycle.cycle_year }} School List {% endblock %}
 {% block additional_js %}
 <script>
+var status = 'all';
+var program = 'all';
+
 $(document).ready(function() {
     // Setup datepicker for bulk edit
     $(".datepicker").each(function(){
@@ -50,41 +53,75 @@ $(document).ready(function() {
         }
     });
 
-    // Filter list based on selection
+
+    // Change shown list by status
+    $("#status_select").change(function() {
+        status = $(this).val();
+        filterSettings();
+    });
     $("#program_select").change(function() {
-        var val = $(this).val();
-        var all_schools = document.getElementsByClassName('school_entry');
-        for (let i = 0; i < all_schools.length; i++) {
-            if (val == 'All Programs') {
-                all_schools[i].classList.remove('d-none');
-            } else if (val == 'MD-PhD') {
-                if (all_schools[i].classList.contains('type_MD') && all_schools[i].classList.contains('phd_true')) {
-                    all_schools[i].classList.remove('d-none');
-                } else {
-                    all_schools[i].classList.add('d-none');
-                }
-            } else if (val == 'MD') {
-                if (all_schools[i].classList.contains('type_MD') && all_schools[i].classList.contains('phd_false')) {
-                    all_schools[i].classList.remove('d-none');
-                } else {
-                    all_schools[i].classList.add('d-none');
-                }
-            } else if (val == 'DO-PhD') {
-                if (all_schools[i].classList.contains('type_DO') && all_schools[i].classList.contains('phd_true')) {
-                    all_schools[i].classList.remove('d-none');
-                } else {
-                    all_schools[i].classList.add('d-none');
-                }
-            } else if (val == 'DO') {
-                if (all_schools[i].classList.contains('type_DO') && all_schools[i].classList.contains('phd_false')) {
-                    all_schools[i].classList.remove('d-none');
-                } else {
-                    all_schools[i].classList.add('d-none');
-                }
-            }
-        }
+        program = $(this).val();
+        filterSettings();
     });
 });
+
+// Filter school list based on settings
+function filterSettings() {
+    var all_schools = document.getElementsByClassName('school_entry');
+    var removeCount = 0;
+    for (let i = 0; i < all_schools.length; i++) {
+        var remove = false;
+        // Check for program type
+        if (program == 'all') {
+            remove = false;
+        } else if (program == 'MD-PhD') {
+            if (all_schools[i].classList.contains('type_MD') && all_schools[i].classList.contains('phd_true')) {
+                remove = false;
+            } else {
+                remove = true;
+            }
+        } else if (program == 'MD') {
+            if (all_schools[i].classList.contains('type_MD') && all_schools[i].classList.contains('phd_false')) {
+                remove = false;
+            } else {
+                remove = true;
+            }
+        } else if (program == 'DO-PhD') {
+            if (all_schools[i].classList.contains('type_DO') && all_schools[i].classList.contains('phd_true')) {
+                remove = false;
+            } else {
+                remove = true;
+            }
+        } else if (program == 'DO') {
+            if (all_schools[i].classList.contains('type_DO') && all_schools[i].classList.contains('phd_false')) {
+                remove = false;
+            } else {
+                remove = true;
+            }
+        }
+
+        // Check for status
+        if (!all_schools[i].classList.contains('status_' + status) && status != 'all') {
+            remove = true;
+        }
+
+        // Perform remove if needed
+        if (remove) {
+            all_schools[i].classList.add('d-none');
+            removeCount++;
+        } else {
+            all_schools[i].classList.remove('d-none');
+        }
+    }
+
+    // Display no schools found message when number of schools removed matches school count
+    var noSchools = document.getElementById('no_schools');
+    if (all_schools.length == removeCount) {
+        noSchools.classList.remove("d-none");
+    } else {
+        noSchools.classList.add("d-none");
+    }
+}
 
 // Enter bulk edit mode
 function toggleBulkEdit(){
@@ -160,22 +197,47 @@ function toggleCancel() {
             </button>
         </div>
 
-        {% if program_types|length > 1 %}
-        <div class="col">
-            <select class="btn-md form-control ms-auto text-center" id="program_select" style="width: 120px; margin: 3px; margin-right: 0px;">
-                <option>All Programs</option>
-                {% for program in program_types %}
-                <option>{{ program }}</option>
-                {% endfor %}
-            </select>
+        {% if cycle.schools|length > 0 %}
+        <div class="col d-flex justify-content-end">
+                <select class="btn-md form-control text-center" id="status_select" style="width: 150px; margin: 3px; position: relative; display:inline;">
+                    <option value="all">All Status</option>
+                    <option value="primary">Primary Submitted</option>
+                    <option value="secondary">Secondary Received</option>
+                    <option value="complete">App Complete</option>
+                    <option value="interview">Interviewed</option>
+                    <option value="rejection">Rejected</option>
+                    <option value="waitlist">Waitlist</option>
+                    <option value="acceptance">Accepted</option>
+                    <option value="withdrawn">Withdrawn</option>
+                </select>
+                {% if program_types|length > 1 %}
+                <select class="btn-md form-control text-center" id="program_select" style="width: 150px; margin: 3px; margin-right: 0px; position: relative; display:inline;">
+                    <option>All Programs</option>
+                    {% for program in program_types %}
+                    <option value="{{ program }}">{{ program }}</option>
+                    {% endfor %}
+                </select>
+                {% endif %}
         </div>
         {% endif %}
     </div>
 
+        <p id="no_schools" class="d-none">
+            You do not have any schools that meet the filter criteria. Please edit the filters or add the school if it is missing.
+        </p>
 
         {% if cycle.schools|length > 0 %}
         {% for school, profile in schools %}
-        <li class="list-group-item school_entry type_{{ school.school_type }} {% if school.phd %}phd_true{% else %}phd_false{% endif %}">
+        <li class="list-group-item school_entry type_{{ school.school_type }} {% if school.phd %}phd_true{% else %}phd_false{% endif %}
+            status_{%if school.acceptance %}acceptance
+            {% elif school.withdrawn%}withdrawn
+            {% elif school.rejection%}rejection
+            {% elif school.waitlist %}waitlist
+            {% elif school.interview_received %}interview
+            {% elif school.application_complete %}complete
+            {% elif school.secondary_received %}secondary
+            {% elif school.primary %}primary
+            {%endif%}">
             <div class="row rows-cols-2">
                 <!-- SCHOOL LOGO AREA ON LEFT -->
                 <div class="col-lg-1">
@@ -202,6 +264,10 @@ function toggleCancel() {
                             {% elif school.rejection %}
                             <div class="text-center rounded" style="1px; margin-top: 3px; background-color: #ff8282">
                                 Rejected
+                            </div>
+                            {% elif school.interview_received %}
+                            <div class="text-center rounded" style="1px; margin-top: 3px; background-color: #d9abff">
+                                Interview
                             </div>
                             {% endif %}
                         </div>
