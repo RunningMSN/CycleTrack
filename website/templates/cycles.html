@@ -211,8 +211,7 @@
                                              style="text-decoration-style:dotted;color:black">Add a new cycle:</a></td>
                 <td style="padding: 10px">
                     <select name="add_cycle" id="add_cycle" class="btn-sm">
-                        {% for cycle_option in cycle_options[0:4] %}
-                        <!-- Only allow entry in latest 4 cycles -->
+                        {% for cycle_option in cycle_options %}
                         <option value="{{ cycle_option }}">Matriculate in {{ cycle_option }}</option>
                         {% endfor %}
                     </select>
