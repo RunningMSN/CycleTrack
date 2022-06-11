@@ -23,42 +23,17 @@
         <div class="tab-pane fade show active" id="excel" role="tabpanel" aria-labelledby="excel-tab" style="padding-top:10px">
             <!-- INSTRUCTIONS -->
             <div style="padding-bottom:10px">
-                <details>
-                    <summary><strong>Click Here For Instructions</strong></summary>
-                    <ol type="1">
-                        <li>Create a new excel spreadsheet or use our provided
-                            <a href="{{ url_for('static', filename='/Sample_Excel_Import.xlsx') }}"> template</a>.</li>
-                        <li>
-                            The first column of your spreadsheet must contain the names of schools. <br />
-                            <span style="font-style:italic">MD/DO-PhD Applicants: </span> Add the keywords MSTP
-                            or PhD to the names of your schools to automatically detect dual degree applications to save
-                            time later on. If you are also under MD/DO only consideration, create 2 entries in your sheet,
-                            one for MD/DO-PhD and one MD/DO only. For the MD/DO-only, the application complete date is
-                            date you began consideration (e.g. date of rejection from the MD/DO-PhD).
-                        </li>
-                        <li>Create columns to store dates of application actions you have tracked. These can include the
-                            following information (you can skip any columns you have not tracked):
-                            <ul>
-                                <li>Primary Application Submitted Date</li>
-                                <li>Secondary Application Received Date</li>
-                                <li>Application Complete Date</li>
-                                <li>Interview Received Date</li>
-                                <li>Interview Scheduled-for Date</li>
-                                <li>Rejection Date</li>
-                                <li>Waitlist Date</li>
-                                <li>Acceptance Received Date</li>
-                                <li>Application Withdrawn Date</li>
-                            </ul>
-                        </li>
-                        <li><strong><u>Important:</u></strong> All dates entered must be formatted as dates (e.g. MM/DD/YYYY),
-                        otherwise you will receive an error when importing. Leave any cells that do not apply empty.</li>
-                        <li>Save your file and make sure it is in either '.xlsx' or '.csv' format.</li>
-                        <div style="margin-top:5px;margin-bottom:5px;">Example Spreadsheet:
-                        <img src="{{ url_for('static', filename='/images/sample_import_excel.png') }}" style='height: 100%; width: 100%; object-fit: contain' />
-                        </div>
-                        <li>Upload your spreadsheet by pressing the 'Choose File' button below.</li>
-                    </ol>
-                </details>
+                <h4>Instructions</h4>
+                <ol type="1">
+                    <li>Download the <a href="{{ url_for('static', filename='/Sample_Excel_Import.xlsx') }}">template sheet</a>.</li>
+                    <li>Enter your school names and dates of corresponding actions. Leave any missing or non-applicable data as empty cells. <strong>All dates must be in the 'MM/DD/YYYY' format.</strong><br />
+                        <span style="font-style:italic"><strong>MD/DO-PhD Applicants:</strong> </span> Add the keywords MSTP
+                        or PhD to the names of your schools. If you are also under MD/DO only consideration, create 2 entries in your sheet,
+                        one for MD/DO-PhD and one MD/DO only. For the MD/DO-only, the application complete date is
+                        date you began consideration (e.g. date of rejection from the MD/DO-PhD).
+                    </li>
+                    <li>Upload your sheet below.</li>
+                </ol>
             </div>
 
             <form method="POST" enctype="multipart/form-data">
@@ -75,53 +50,22 @@
         <div class="tab-pane fade" id="google-sheets" role="tabpanel" aria-labelledby="google-sheets-tab" style="padding-top:10px">
             <!-- INSTRUCTIONS -->
             <div style="padding-bottom:10px">
-                <details>
-                    <summary><strong>Click Here For Instructions</strong></summary>
-                    <strong>Formatting Your Sheet</strong>
-                    <ol type="1">
-                        <li>Create a new Google sheet or use our provided
-                            <a href="https://docs.google.com/spreadsheets/d/1O4H45unuCyJK8BDv7J8nA8nKdAeNpscRjSvXSIDoGZo/edit?usp=sharing">
-                                template</a>. If using our template, you will need to create a create a copy ('File' ->
-                                'Make a copy')
-                        </li>
-                        <li>
-                            The first column of your spreadsheet must contain the names of schools. <br />
-                            <span style="font-style:italic">MD/DO-PhD Applicants: </span> Add the keywords MSTP
-                            or PhD to the names of your schools to automatically detect dual degree applications to save
-                            time later on. If you are also under MD/DO only consideration, create 2 entries in your sheet,
-                            one for MD/DO-PhD and one MD/DO only. For the MD/DO-only, the application complete date is
-                            date you began consideration (e.g. date of rejection from the MD/DO-PhD).
-                        </li>
-                        <li>Create columns to store dates of application actions you have tracked. These can include the
-                            following information (you can skip any columns you have not tracked):
-                            <ul>
-                                <li>Primary Application Submitted Date</li>
-                                <li>Secondary Application Received Date</li>
-                                <li>Application Complete Date</li>
-                                <li>Interview Received Date</li>
-                                <li>Interview Scheduled-for Date</li>
-                                <li>Rejection Date</li>
-                                <li>Waitlist Date</li>
-                                <li>Acceptance Received Date</li>
-                                <li>Application Withdrawn Date</li>
-                            </ul>
-                        </li>
-                        <li><strong><u>Important:</u></strong> All dates entered must be formatted as dates (e.g. MM/DD/YYYY),
-                        otherwise you will receive an error when importing. Leave any cells that do not apply empty.</li>
-                        <div style="margin-top:5px;margin-bottom:5px;">Example Spreadsheet:
-                        <img src="{{ url_for('static', filename='/images/sample_import_google.png') }}" style='height: 100%; width: 100%; object-fit: contain' />
-                        </div>
-                    </ol>
-
-                    <strong>Uploading Your Sheet</strong>
-                    <ol type="1">
-                        <li>In the Google Sheets menu, click "File."</li>
-                        <li>Click "Share", then click "Publish to web."</li>
-                        <li>In the pop-up, click "Publish."</li>
-                        <li>Copy the provided link, paste it into the textbox below these instructions, and click
-                            "Upload."</li>
-                    </ol>
-                </details>
+                <h4>Instructions</h4>
+                <ol type="1">
+                    <li>Create a copy of our <a href="https://docs.google.com/spreadsheets/d/1O4H45unuCyJK8BDv7J8nA8nKdAeNpscRjSvXSIDoGZo/edit?usp=sharing">
+                        template sheet</a> ('File' -> 'Make a copy').</li>
+                    <li>Enter your school names and dates of corresponding actions. Leave any missing or non-applicable data as empty cells. <strong>All dates must be in the 'MM/DD/YYYY' format.</strong><br />
+                        <span style="font-style:italic"><strong>MD/DO-PhD Applicants:</strong> </span> Add the keywords MSTP
+                        or PhD to the names of your schools. If you are also under MD/DO only consideration, create 2 entries in your sheet,
+                        one for MD/DO-PhD and one MD/DO only. For the MD/DO-only, the application complete date is
+                        date you began consideration (e.g. date of rejection from the MD/DO-PhD).
+                    </li>
+                    <li>In the Google Sheets menu, click "File."</li>
+                    <li>Click "Share", then click "Publish to web."</li>
+                    <li>In the pop-up, click "Publish."</li>
+                    <li>Copy the provided link, paste it into the textbox below these instructions, and click
+                        "Upload."</li>
+                </ol>
             </div>
 
             <form method="POST">
