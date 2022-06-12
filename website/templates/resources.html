@@ -1,0 +1,205 @@
+{% extends 'base.html' %}
+{% block title %} Resources {% endblock %}
+{% block additional_js %}
+    <script src="{{ url_for('static', filename='/js/resources_page.js') }}"></script>
+{% endblock %}
+{% block content %}
+<!-- SCHOOL LIST MANAGEMENT -->
+<div class="container" style="padding-top:10px">
+    <h2>Free Application Resources</h2>
+    <p>
+        This page contains a curated list of resources we believe are helpful for current and/or future medical school
+        applicants. Resources are not ordered in any particular manner. Find resources for specific topics by clicking
+        the tags below.
+    </p>
+    <p>
+        <button class="btn btn-outline-primary btn-sm" id="mddo_button" onclick="changeSetting('mddo_button')" style="margin-bottom: 5px;">MD/DO</button>
+        <button class="btn btn-outline-primary btn-sm" id="mddophd_button" onclick="changeSetting('mddophd_button')" style="margin-bottom: 5px;">MD/DO-PhD</button>
+        <button class="btn btn-outline-primary btn-sm" id="mentorship_button" onclick="changeSetting('mentorship_button')" style="margin-bottom: 5px;">Mentorship</button>
+        <button class="btn btn-outline-primary btn-sm" id="lors_button" onclick="changeSetting('lors_button')" style="margin-bottom: 5px;">LORs</button>
+        <button class="btn btn-outline-primary btn-sm" id="mcat_button" onclick="changeSetting('mcat_button')" style="margin-bottom: 5px;">MCAT</button>
+        <button class="btn btn-outline-primary btn-sm" id="qa_button" onclick="changeSetting('qa_button')" style="margin-bottom: 5px;">Q&A</button>
+        <button class="btn btn-outline-primary btn-sm" id="international_button" onclick="changeSetting('international_button')" style="margin-bottom: 5px;">International</button>
+    </p>
+    <li class="list-group-item resource-item mddo mddophd lors">
+        <h4>Letter of Recommendation Requirements List</h4>
+        <p>
+            CycleTrack has compiled a list of letter of recommendation requirements for MD/DO and MD/DO-PhD programs in
+            the United States and Canada. Access the list by clicking <a href="{{ url_for('pages.lors') }}">here</a>.
+        </p>
+        <button type="button" class="btn btn-outline-primary btn-sm"  style="margin: 3px; margin-left: 0px" disabled>
+            MD/DO
+        </button>
+        <button type="button" class="btn btn-outline-primary btn-sm" style="margin: 3px; margin-left: 0px" disabled>
+            MD/DO-PhD
+        </button>
+        <button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal"  style="margin: 3px; margin-left: 0px" disabled>
+            LORs
+        </button>
+    </li>
+
+    <li class="list-group-item resource-item mddophd mentorship">
+        <h4>American Physician Scientist Association (APSA)</h4>
+        <p>
+            The <a href="https://www.physicianscientists.org">American Physician Scientist Association (APSA)</a>
+            is a student organization serving as the voice for physician-scientist trainees at all levels. APSA offers
+            <a href="https://www.physicianscientists.org/page/ugmentoring">mentorship for undergraduates</a>,
+            <a href="https://www.physicianscientists.org/page/VSRP-2022">undergraduate research opportunities</a>,
+            and <a href="https://www.physicianscientists.org/page/interactive-series">interactive sessions</a> focused
+            on the application process.
+        </p>
+        <button type="button" class="btn btn-outline-primary btn-sm" style="margin: 3px; margin-left: 0px" disabled>
+            MD/DO-PhD
+        </button>
+        <button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal"  style="margin: 3px; margin-left: 0px" disabled>
+            Mentorship
+        </button>
+    </li>
+
+    <li class="list-group-item resource-item mddo mddophd">
+        <h4>The Free Guide To Medical School Admission</h4>
+        <p>
+            <a href="https://www.scribd.com/document/409090664/The-Free-Guide-to-Medical-School-Admission">The Free Guide
+            to Medical School Admission</a> is an e-book written by medical students, residents, and attending physicians
+            with information and tips for all steps of the process from preparing to apply to interviews and choosing a
+            program.
+        </p>
+        <button type="button" class="btn btn-outline-primary btn-sm" style="margin: 3px; margin-left: 0px" disabled>
+            MD/DO
+        </button>
+        <button type="button" class="btn btn-outline-primary btn-sm" style="margin: 3px; margin-left: 0px" disabled>
+            MD/DO-PhD
+        </button>
+    </li>
+
+    <li class="list-group-item resource-item mddo mddophd mcat mentorship">
+        <h4>MD Collective</h4>
+        <p>
+            <a href="https://mdcollective.io">MD Collective</a> is a 501c3 non-profit organization that offers free
+            mentorship and MCAT tutoring for first-generation low-income students.
+        </p>
+        <button type="button" class="btn btn-outline-primary btn-sm" style="margin: 3px; margin-left: 0px" disabled>
+            MD/DO
+        </button>
+        <button type="button" class="btn btn-outline-primary btn-sm" style="margin: 3px; margin-left: 0px" disabled>
+            MD/DO-PhD
+        </button>
+        <button type="button" class="btn btn-outline-primary btn-sm" style="margin: 3px; margin-left: 0px" disabled>
+            Mentorship
+        </button>
+        <button type="button" class="btn btn-outline-primary btn-sm" style="margin: 3px; margin-left: 0px" disabled>
+            MCAT
+        </button>
+    </li>
+
+    <li class="list-group-item resource-item mddo mddophd mentorship">
+        <h4>Prescribe it Forward</h4>
+        <p>
+            <a href="https://www.prescribeitforward.org/">Prescribe it Forward</a> is a 501c3 non-profit organization
+            that provides free mentorship to medical school applicants.
+        </p>
+        <button type="button" class="btn btn-outline-primary btn-sm" style="margin: 3px; margin-left: 0px" disabled>
+            MD/DO
+        </button>
+        <button type="button" class="btn btn-outline-primary btn-sm" style="margin: 3px; margin-left: 0px" disabled>
+            MD/DO-PhD
+        </button>
+        <button type="button" class="btn btn-outline-primary btn-sm" style="margin: 3px; margin-left: 0px" disabled>
+            Mentorship
+        </button>
+    </li>
+
+    <li class="list-group-item resource-item mddo mddophd mentorship">
+        <h4>Chasing Medicine</h4>
+        <p>
+            <a href="https://www.chasingmedicine.org/">Chasing Medicine</a> is a 501c3 non-profit organization that
+            provides application resources to applicants from under-represented backgrounds to help them succeed
+            throughout application process.
+        </p>
+        <button type="button" class="btn btn-outline-primary btn-sm" style="margin: 3px; margin-left: 0px" disabled>
+            MD/DO
+        </button>
+        <button type="button" class="btn btn-outline-primary btn-sm" style="margin: 3px; margin-left: 0px" disabled>
+            MD/DO-PhD
+        </button>
+        <button type="button" class="btn btn-outline-primary btn-sm" style="margin: 3px; margin-left: 0px" disabled>
+            Mentorship
+        </button>
+    </li>
+
+    <li class="list-group-item resource-item mddo mddophd mentorship">
+        <h4>Project Short</h4>
+        <p>
+            <a href="https://www.chasingmedicine.org/">Project Short</a> is a 501c3 non-profit organization that
+            seeks to shrink the socioeconomic gap in medical and graduate school by providing mentorship and resources
+            for applicants.
+        </p>
+        <button type="button" class="btn btn-outline-primary btn-sm" style="margin: 3px; margin-left: 0px" disabled>
+            MD/DO
+        </button>
+        <button type="button" class="btn btn-outline-primary btn-sm" style="margin: 3px; margin-left: 0px" disabled>
+            MD/DO-PhD
+        </button>
+        <button type="button" class="btn btn-outline-primary btn-sm" style="margin: 3px; margin-left: 0px" disabled>
+            Mentorship
+        </button>
+    </li>
+    <li class="list-group-item resource-item mddo mddophd mentorship international">
+        <h4>F-1 Doctors</h4>
+        <p>
+            <a href="https://www.chasingmedicine.org/">F-1 Doctors</a> is a peer-to-peer mentorship platform for
+            international students seeking to apply to medical school programs in the United States.
+        </p>
+        <button type="button" class="btn btn-outline-primary btn-sm" style="margin: 3px; margin-left: 0px" disabled>
+            MD/DO
+        </button>
+        <button type="button" class="btn btn-outline-primary btn-sm" style="margin: 3px; margin-left: 0px" disabled>
+            MD/DO-PhD
+        </button>
+        <button type="button" class="btn btn-outline-primary btn-sm" style="margin: 3px; margin-left: 0px" disabled>
+            Mentorship
+        </button>
+        <button type="button" class="btn btn-outline-primary btn-sm" style="margin: 3px; margin-left: 0px" disabled>
+            International
+        </button>
+    </li>
+
+    <li class="list-group-item resource-item mddo mddophd qa">
+        <h4>Reddit: r/premed and r/mdphd</h4>
+        <p>
+            The <a href="https://www.reddit.com/r/premed/">r/premed</a> and <a href="https://www.reddit.com/r/mdphd/">r/mdphd</a>
+            subreddits are a helpful resource for learning about the application process and having questions answered.
+            However, please be careful as responses are frequently based on personal experience and outward comparison to
+            other applicants may not be productive or healthy.
+        </p>
+        <button type="button" class="btn btn-outline-primary btn-sm" style="margin: 3px; margin-left: 0px" disabled>
+            MD/DO
+        </button>
+        <button type="button" class="btn btn-outline-primary btn-sm" style="margin: 3px; margin-left: 0px" disabled>
+            MD/DO-PhD
+        </button>
+        <button type="button" class="btn btn-outline-primary btn-sm" style="margin: 3px; margin-left: 0px" disabled>
+            Q&A
+        </button>
+    </li>
+
+    <li class="list-group-item resource-item mddo mddophd qa">
+        <h4>Student Doctor Network</h4>
+        <p>
+            The <a href="https://www.studentdoctor.net/">Student Doctor Network</a> is a non-profit organization that
+            offers free resources for medical school applicants and a
+            <a href="https://forums.studentdoctor.net/forums/">forum</a> for receiving answers to application questions.
+            Please be careful when using the forums to not make outward comparisons to other applicants.
+        </p>
+        <button type="button" class="btn btn-outline-primary btn-sm" style="margin: 3px; margin-left: 0px" disabled>
+            MD/DO
+        </button>
+        <button type="button" class="btn btn-outline-primary btn-sm" style="margin: 3px; margin-left: 0px" disabled>
+            MD/DO-PhD
+        </button>
+        <button type="button" class="btn btn-outline-primary btn-sm" style="margin: 3px; margin-left: 0px" disabled>
+            Q&A
+        </button>
+    </li>
+</div>
+{% endblock %}

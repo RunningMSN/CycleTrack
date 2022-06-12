@@ -44,3 +44,7 @@ def lors():
     camd_schools = School_Profiles_Data.query.filter_by(md_or_do='MD', country='CAN').order_by(School_Profiles_Data.school).all()
     do_schools = School_Profiles_Data.query.filter_by(md_or_do='DO').order_by(School_Profiles_Data.school).all()
     return render_template('lors.html', user=current_user, usmd_schools=usmd_schools, camd_schools=camd_schools, do_schools=do_schools)
+
+@pages.route('/resources')
+def resources():
+    return render_template('resources.html', user=current_user)
