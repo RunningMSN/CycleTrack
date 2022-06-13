@@ -4,6 +4,7 @@ var mddophd = false;
 var mentorship = false;
 var lors = false;
 var mcat = false;
+var casper = false;
 var qa = false;
 var international = false;
 
@@ -22,6 +23,8 @@ function changeSetting(buttonId) {
         lors = !lors;
     } else if (buttonId == 'mcat_button') {
         mcat = !mcat;
+    } else if (buttonId == 'casper_button') {
+        casper = !casper;
     } else if (buttonId == 'qa_button') {
         qa = !qa;
     } else if (buttonId == 'international_button') {
@@ -42,7 +45,7 @@ function changeSetting(buttonId) {
 }
 
 function filterList() {
-    if (!mddo && !mddophd && !mentorship && !lors && !mcat && !mcat && !qa && !international) {
+    if (!mddo && !mddophd && !mentorship && !lors && !mcat && !casper && !qa && !international) {
         for (let i = 0; i < allItems.length; i++) {
             allItems[i].classList.remove('d-none');
         }
@@ -63,6 +66,9 @@ function filterList() {
                 remove = true;
             }
             if (mcat && !allItems[i].classList.contains('mcat')) {
+                remove = true;
+            }
+            if (casper && !allItems[i].classList.contains('casper')) {
                 remove = true;
             }
             if (qa && !allItems[i].classList.contains('qa')) {
