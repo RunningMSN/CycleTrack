@@ -228,7 +228,7 @@ function toggleCancel() {
 
         {% if cycle.schools|length > 0 %}
         {% for school, profile in schools %}
-        <li class="list-group-item school_entry type_{{ school.school_type }} {% if school.phd %}phd_true{% else %}phd_false{% endif %}
+        <li class="list-group-item border school_entry type_{{ school.school_type }} {% if school.phd %}phd_true{% else %}phd_false{% endif %}
             status_{%if school.acceptance %}acceptance
             {% elif school.withdrawn%}withdrawn
             {% elif school.rejection%}rejection
