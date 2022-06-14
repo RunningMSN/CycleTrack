@@ -893,7 +893,7 @@ def visualizations():
             elif vis_type.lower() == 'map':
                 graphJSON = map.generate(cycle_data, plot_title, stats, color=color_type.lower(),
                                          map_scope=map_type.lower(), custom_text=save_settings['custom_text'])
-            elif vis_type.lower() == 'horizontal bar':
+            elif vis_type.lower() == 'timeline':
                 graphJSON = horz_bar.generate(cycle_data, plot_title, stats, color=color_type.lower(),
                                         custom_text=save_settings['custom_text'])
         else:

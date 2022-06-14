@@ -39,7 +39,7 @@ STATE_OPTIONS = ["Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colo
                  "Canada", "International", "Other"]
 
 # Settings for visualizations page
-VIS_TYPES = ["Line", "Bar", "Dot","Horizontal Bar", "Sankey","Map"]
+VIS_TYPES = ["Line", "Bar", "Timeline", "Dot", "Sankey", "Map"]
 
 # Settings for color palettes
 COLOR_TYPES = ["Default","Okabe-Ito","Tol"]
