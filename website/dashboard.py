@@ -5,7 +5,7 @@ from .models import Cycle, School, School_Profiles_Data, Courses
 import json
 from datetime import datetime, date
 import re
-from .visualizations import dot, line, bar, sankey, map, gpa_graph
+from .visualizations import dot, line, bar, sankey, map, gpa_graph, horz_bar
 import pandas as pd
 from .helpers import import_list_funcs, categorize_stats, school_stats_calculators, gpa_calculators
 from flask_mail import Message
@@ -893,6 +893,9 @@ def visualizations():
             elif vis_type.lower() == 'map':
                 graphJSON = map.generate(cycle_data, plot_title, stats, color=color_type.lower(),
                                          map_scope=map_type.lower(), custom_text=save_settings['custom_text'])
+            elif vis_type.lower() == 'horizontal bar':
+                graphJSON = horz_bar.generate(cycle_data, plot_title, stats, color=color_type.lower(),
+                                        custom_text=save_settings['custom_text'])
         else:
             flash(f'Your selected school list for {cycle.cycle_year} does not have any dates yet!', category='error')
 

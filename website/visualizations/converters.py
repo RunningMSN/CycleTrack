@@ -136,3 +136,23 @@ def convert_map(data,color="default"):
     loc_df = school_df.merge(profiles, how="left", on="School")
 
     return loc_df
+
+def convert_horz_bar(data):
+    data['today'] = dt.date.today()
+    melted = data.melt(id_vars=data.columns[0], value_vars=data.columns[1:], var_name='Actions', value_name='date')
+    schools = melted["name"].unique()
+    dfs = []
+    for school in schools:
+        melt_copy = melted.copy()
+        melt_copy = melt_copy.dropna()
+        actions = melt_copy.loc[melted["name"]==school,"Actions"].unique()
+        for action1,action2 in zip(actions,actions[1:]):
+            df = data.loc[data["name"]==school,["name",action1,action2]]
+            df["label"] = action1
+            df["label2"] = action_names[action1]
+            df.columns = ["name","start","stop","Outcome","label2"]
+            dfs.append(df)
+    
+    concat_df = pd.concat(dfs)
+
+    return concat_df
