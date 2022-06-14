@@ -15,12 +15,19 @@ def generate(cycle_data, title, stats, color="default",custom_text=None):
     color="Outcome",
     custom_data=["label2"],
     color_discrete_map=converters.palette[color])
-        
+
+    est_height = len(df['name'].unique()) * 20
+
+    if est_height < 250:
+        wanted_height = 250
+    else:
+        wanted_height = est_height
 
     fig.update_layout(
-    title=title,
-    yaxis_type="category",
-    margin=dict(l=20, r=20, t=40, b=20))
+        height=wanted_height,
+        title=title,
+        yaxis_type="category",
+        margin=dict(l=20, r=20, t=40, b=20))
     
     # Label using more readable action names
     fig.for_each_trace(lambda t: t.update(name=converters.action_names[t.name],
