@@ -16,7 +16,7 @@ def generate(cycle_data, title, stats, color="default",custom_text=None):
     custom_data=["label2"],
     color_discrete_map=converters.palette[color])
 
-    est_height = len(df['name'].unique()) * 20
+    est_height = len(df['name'].unique()) * 17
 
     if est_height < 250:
         wanted_height = 250
@@ -40,7 +40,7 @@ def generate(cycle_data, title, stats, color="default",custom_text=None):
     fig.update_traces(marker=dict(line=dict(width=0)),legendgroup='group',
     hovertemplate="%{y}<br>%{customdata[0]}<br>Date: %{base|%m-%d-%Y} <extra></extra>")
 
-    fig.update_yaxes(title=None)
+    fig.update_yaxes(title=None, gridwidth=0.5)
 
     fig.add_layout_image(
             dict(
