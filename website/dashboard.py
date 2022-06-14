@@ -1,6 +1,5 @@
-from flask import Blueprint, render_template, request, flash, jsonify, redirect, url_for, Response
+from flask import Blueprint, render_template, request, flash, jsonify, redirect, url_for, Response, Markup
 from flask_login import current_user, login_required
-from tensorboard import summary
 from . import db, form_options, mail
 from .models import Cycle, School, School_Profiles_Data, Courses
 import json
@@ -10,7 +9,6 @@ from .visualizations import dot, line, bar, sankey, map, gpa_graph
 import pandas as pd
 from .helpers import import_list_funcs, categorize_stats, school_stats_calculators, gpa_calculators
 from flask_mail import Message
-from io import StringIO
 
 dashboard = Blueprint('dashboard', __name__)
 
@@ -28,7 +26,7 @@ def cycles():
             if cycle:
                 flash('You already have this cycle added.', category='error')
             else:
-                db.session.add(Cycle(cycle_year=int(add_cycle), user_id=current_user.id))
+                db.session.add(Cycle(cycle_year=int(add_cycle), user_id=current_user.id, mentoring_message=False))
                 db.session.commit()
         # Handle editing cycle profile
         cycle_id = request.form.get('cycle_id_edit')
@@ -471,6 +469,13 @@ def lists():
     if School.query.filter_by(cycle_id=cycle.id, school_type='DO', phd=False).first():
         program_types.append('DO')
 
+    # Check to display mentoring message
+    if (not cycle.mentoring_message) and (request.form.get('acceptance') or request.form.get("acceptance1-" + str(school_id))):
+        flash(Markup("Congrats on your successful application cycle! If you're interested in volunteering as a mentor for future"
+              " applicants, consider signing up with MD Collective <a href='https://mdcollective.io/app/amcas'>here</a>."), category='success')
+        cycle.mentoring_message = True
+        db.session.commit()
+
     return render_template('lists.html', user=current_user, cycle=cycle, schools=schools, phd_applicant=phd_applicant,
                            usmd_school_list=form_options.get_md_schools('USA'),
                            camd_school_list=form_options.get_md_schools('CAN'),
@@ -763,56 +768,6 @@ def delete_school():
             else:
                 school_stats_calculators.count_apps_reg(school.name)
             return jsonify({})
-
-
-
-@dashboard.route('/sankey', methods=['GET', 'POST'])
-@login_required
-def sankey():
-    # If GET request then did not provide a school
-    if request.method == 'GET':
-        if len(current_user.cycles) > 1:
-            flash('Please select a cycle before creating visualizations.', category='error')
-            return redirect(url_for('dashboard.cycles'))
-        elif len(current_user.cycles) == 0:
-            flash('Please add a cycle first.', category='error')
-            return redirect(url_for('dashboard.cycles'))
-        else:
-            cycle_id = current_user.cycles[0].id
-    # If POST then grab cycle ID
-    else:
-        cycle_id = request.form.get('cycle_id')
-
-    # Grab cycle and data
-    cycle = Cycle.query.filter_by(id=int(cycle_id)).first()
-    cycle_data = pd.read_sql(School.query.filter_by(cycle_id=cycle.id).statement, db.session.bind)
-    # Drop extra information
-    cycle_data = cycle_data.drop(['id', 'cycle_id', 'user_id', 'school_type', 'phd', 'note'], axis=1)
-    # Drop empty columns
-    cycle_data = cycle_data.dropna(axis=1, how='all')
-    cycle_data = cycle_data.drop('name', axis=1)
-    if 'interview_date' in cycle_data.columns:
-        cycle_data = cycle_data.drop('interview_date', axis=1)
-
-    list_df = pd.DataFrame()
-    cycle_data_t = cycle_data.T.reset_index()
-    cycle_data_t.columns = cycle_data_t.columns.astype(str)
-    t_cols = cycle_data_t.columns
-    for col in t_cols[1:]:
-        current_df = cycle_data_t[['index',col]]
-        current_df.dropna(inplace=True)
-        current_df.sort_values(by=col,inplace=True)
-        current_actions = current_df['index'].tolist()
-        for f,s in zip(current_actions,current_actions[1:]):
-            f = f.replace("_"," ").title()
-            s = s.replace("_"," ").title()
-            list_df = list_df.append({"source":f,"target":s},ignore_index=True)
-    summary_df = list_df.groupby(["source","target"]).size().reset_index(name="value").dropna()
-
-    cycle_as_string = summary_df.to_csv(index=False,header=False)[:-1]
-
-    return render_template('sankey.html', user=current_user,cycle_info=cycle_as_string)
-
 
 
 @dashboard.route('/visualizations', methods=['GET', 'POST'])
