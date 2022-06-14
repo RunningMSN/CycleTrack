@@ -27,13 +27,17 @@ def generate(cycle_data, title, stats, color="default",custom_text=None):
             ),
             label=df_nodes['label'],
             color=df_nodes['color'],
-            pad = 30
+            pad = 30,
+            
+            hovertemplate='%{label} <extra></extra> '
         ),
         link=dict(
             source=df_links['Source'],
+            label=df_links['Source'],
             target=df_links['Target'],
             value=df_links['size'],
             color=df_links['Link Color'],
+            hoverinfo="none",
         )
     )
 
