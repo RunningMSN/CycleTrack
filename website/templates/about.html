@@ -33,6 +33,24 @@
                 <center><div id="bar_graph"></div></center>
             </div>
         </div>
+        <a class="btn btn-primary" data-toggle="collapse" href="#timeline" role="button" aria-expanded="false"
+           aria-controls="bar" style="margin:1px">
+           Timeline
+        </a>
+        <div class="collapse" id="timeline">
+            <div class="card container" style="margin-top:10px; margin-bottom:10px">
+                <center><div id="timeline_graph"></div></center>
+            </div>
+        </div>
+        <a class="btn btn-primary" data-toggle="collapse" href="#dot" role="button" aria-expanded="false"
+           aria-controls="bar" style="margin:1px">
+           Dot
+        </a>
+        <div class="collapse" id="dot">
+            <div class="card container" style="margin-top:10px; margin-bottom:10px">
+                <center><div id="dot_graph"></div></center>
+            </div>
+        </div>
         <a class="btn btn-primary" data-toggle="collapse" href="#sankey" role="button" aria-expanded="false"
            aria-controls="sankey" style="margin:1px">
            Sankey
@@ -78,6 +96,20 @@
         .then(data => {
             data.config = {'responsive': true, 'displaylogo': false};
             Plotly.newPlot('bar_graph', data);
+        })
+        .catch(error => console.log(error));
+    fetch('{{ url_for('static', filename='sample_graphs/timeline.JSON') }}')
+        .then(response => response.json())
+        .then(data => {
+            data.config = {'responsive': true, 'displaylogo': false};
+            Plotly.newPlot('timeline_graph', data);
+        })
+        .catch(error => console.log(error));
+    fetch('{{ url_for('static', filename='sample_graphs/dot.JSON') }}')
+        .then(response => response.json())
+        .then(data => {
+            data.config = {'responsive': true, 'displaylogo': false};
+            Plotly.newPlot('dot_graph', data);
         })
         .catch(error => console.log(error));
     fetch('{{ url_for('static', filename='sample_graphs/sankey.JSON') }}')

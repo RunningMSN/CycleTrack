@@ -1,0 +1,1626 @@
+{
+  "data": [
+    {
+      "alignmentgroup": "True",
+      "base": [
+        "2021-06-25T00:00:00",
+        "2021-06-25T00:00:00",
+        "2021-06-25T00:00:00",
+        "2021-06-25T00:00:00",
+        "2021-06-25T00:00:00",
+        "2021-06-25T00:00:00",
+        "2021-06-25T00:00:00",
+        "2021-06-25T00:00:00",
+        "2021-06-25T00:00:00",
+        "2021-06-25T00:00:00",
+        "2021-06-25T00:00:00",
+        "2021-06-25T00:00:00",
+        "2021-06-25T00:00:00",
+        "2021-06-25T00:00:00",
+        "2021-06-25T00:00:00",
+        "2021-06-25T00:00:00",
+        "2021-06-25T00:00:00",
+        "2021-06-25T00:00:00"
+      ],
+      "customdata": [
+        [
+          "Primary Submitted"
+        ],
+        [
+          "Primary Submitted"
+        ],
+        [
+          "Primary Submitted"
+        ],
+        [
+          "Primary Submitted"
+        ],
+        [
+          "Primary Submitted"
+        ],
+        [
+          "Primary Submitted"
+        ],
+        [
+          "Primary Submitted"
+        ],
+        [
+          "Primary Submitted"
+        ],
+        [
+          "Primary Submitted"
+        ],
+        [
+          "Primary Submitted"
+        ],
+        [
+          "Primary Submitted"
+        ],
+        [
+          "Primary Submitted"
+        ],
+        [
+          "Primary Submitted"
+        ],
+        [
+          "Primary Submitted"
+        ],
+        [
+          "Primary Submitted"
+        ],
+        [
+          "Primary Submitted"
+        ],
+        [
+          "Primary Submitted"
+        ],
+        [
+          "Primary Submitted"
+        ]
+      ],
+      "hovertemplate": "%{y}<br>%{customdata[0]}<br>Date: %{base|%m-%d-%Y} <extra></extra>",
+      "legendgroup": "group",
+      "marker": {
+        "color": "#90e0ef",
+        "line": {
+          "width": 0
+        }
+      },
+      "name": "Primary Submitted",
+      "offsetgroup": "primary",
+      "orientation": "h",
+      "showlegend": true,
+      "textposition": "auto",
+      "x": [
+        950400000.0,
+        1468800000.0,
+        1728000000.0,
+        432000000.0,
+        604800000.0,
+        3024000000.0,
+        0.0,
+        1036800000.0,
+        518400000.0,
+        1209600000.0,
+        1468800000.0,
+        0.0,
+        1036800000.0,
+        1814400000.0,
+        0.0,
+        777600000.0,
+        259200000.0,
+        518400000.0
+      ],
+      "xaxis": "x",
+      "y": [
+        "Mount Sinai",
+        "University of Texas - San Antonio",
+        "Northwestern",
+        "Illinois",
+        "Carle Illinois",
+        "Yale",
+        "Quinnipiac",
+        "Case Western",
+        "Western Michigan",
+        "Wisconsin",
+        "Michigan",
+        "Ohio State",
+        "Pittsburgh",
+        "Iowa",
+        "Colorado",
+        "Cornell",
+        "Columbia",
+        "Stony Brook"
+      ],
+      "yaxis": "y",
+      "type": "bar"
+    },
+    {
+      "alignmentgroup": "True",
+      "base": [
+        "2021-07-06T00:00:00",
+        "2021-07-12T00:00:00",
+        "2021-07-15T00:00:00",
+        "2021-06-30T00:00:00",
+        "2021-07-02T00:00:00",
+        "2021-07-30T00:00:00",
+        "2021-06-25T00:00:00",
+        "2021-07-07T00:00:00",
+        "2021-07-01T00:00:00",
+        "2021-07-09T00:00:00",
+        "2021-07-12T00:00:00",
+        "2021-06-25T00:00:00",
+        "2021-07-07T00:00:00",
+        "2021-07-16T00:00:00",
+        "2021-06-25T00:00:00",
+        "2021-07-04T00:00:00",
+        "2021-06-28T00:00:00",
+        "2021-07-01T00:00:00"
+      ],
+      "customdata": [
+        [
+          "Secondary Received"
+        ],
+        [
+          "Secondary Received"
+        ],
+        [
+          "Secondary Received"
+        ],
+        [
+          "Secondary Received"
+        ],
+        [
+          "Secondary Received"
+        ],
+        [
+          "Secondary Received"
+        ],
+        [
+          "Secondary Received"
+        ],
+        [
+          "Secondary Received"
+        ],
+        [
+          "Secondary Received"
+        ],
+        [
+          "Secondary Received"
+        ],
+        [
+          "Secondary Received"
+        ],
+        [
+          "Secondary Received"
+        ],
+        [
+          "Secondary Received"
+        ],
+        [
+          "Secondary Received"
+        ],
+        [
+          "Secondary Received"
+        ],
+        [
+          "Secondary Received"
+        ],
+        [
+          "Secondary Received"
+        ],
+        [
+          "Secondary Received"
+        ]
+      ],
+      "hovertemplate": "%{y}<br>%{customdata[0]}<br>Date: %{base|%m-%d-%Y} <extra></extra>",
+      "legendgroup": "group",
+      "marker": {
+        "color": "#00b4d8",
+        "line": {
+          "width": 0
+        }
+      },
+      "name": "Secondary Received",
+      "offsetgroup": "secondary_received",
+      "orientation": "h",
+      "showlegend": true,
+      "textposition": "auto",
+      "x": [
+        432000000.0,
+        604800000.0,
+        777600000.0,
+        518400000.0,
+        518400000.0,
+        2505600000.0,
+        86400000.0,
+        604800000.0,
+        172800000.0,
+        691200000.0,
+        1209600000.0,
+        432000000.0,
+        432000000.0,
+        259200000.0,
+        345600000.0,
+        518400000.0,
+        345600000.0,
+        259200000.0
+      ],
+      "xaxis": "x",
+      "y": [
+        "Mount Sinai",
+        "University of Texas - San Antonio",
+        "Northwestern",
+        "Illinois",
+        "Carle Illinois",
+        "Yale",
+        "Quinnipiac",
+        "Case Western",
+        "Western Michigan",
+        "Wisconsin",
+        "Michigan",
+        "Ohio State",
+        "Pittsburgh",
+        "Iowa",
+        "Colorado",
+        "Cornell",
+        "Columbia",
+        "Stony Brook"
+      ],
+      "yaxis": "y",
+      "type": "bar"
+    },
+    {
+      "alignmentgroup": "True",
+      "base": [
+        "2021-07-11T00:00:00",
+        "2021-07-19T00:00:00",
+        "2021-07-24T00:00:00",
+        "2021-07-06T00:00:00",
+        "2021-07-08T00:00:00",
+        "2021-08-28T00:00:00",
+        "2021-06-26T00:00:00",
+        "2021-07-14T00:00:00",
+        "2021-07-03T00:00:00",
+        "2021-07-17T00:00:00",
+        "2021-07-26T00:00:00",
+        "2021-06-30T00:00:00",
+        "2021-07-12T00:00:00",
+        "2021-07-19T00:00:00",
+        "2021-06-29T00:00:00",
+        "2021-07-10T00:00:00",
+        "2021-07-02T00:00:00",
+        "2021-07-04T00:00:00"
+      ],
+      "customdata": [
+        [
+          "Application Complete"
+        ],
+        [
+          "Application Complete"
+        ],
+        [
+          "Application Complete"
+        ],
+        [
+          "Application Complete"
+        ],
+        [
+          "Application Complete"
+        ],
+        [
+          "Application Complete"
+        ],
+        [
+          "Application Complete"
+        ],
+        [
+          "Application Complete"
+        ],
+        [
+          "Application Complete"
+        ],
+        [
+          "Application Complete"
+        ],
+        [
+          "Application Complete"
+        ],
+        [
+          "Application Complete"
+        ],
+        [
+          "Application Complete"
+        ],
+        [
+          "Application Complete"
+        ],
+        [
+          "Application Complete"
+        ],
+        [
+          "Application Complete"
+        ],
+        [
+          "Application Complete"
+        ],
+        [
+          "Application Complete"
+        ]
+      ],
+      "hovertemplate": "%{y}<br>%{customdata[0]}<br>Date: %{base|%m-%d-%Y} <extra></extra>",
+      "legendgroup": "group",
+      "marker": {
+        "color": "#0077b6",
+        "line": {
+          "width": 0
+        }
+      },
+      "name": "Application Complete",
+      "offsetgroup": "application_complete",
+      "orientation": "h",
+      "showlegend": true,
+      "textposition": "auto",
+      "x": [
+        15811200000.0,
+        1209600000.0,
+        18489600000.0,
+        20044800000.0,
+        7862400000.0,
+        8294400000.0,
+        20217600000.0,
+        3801600000.0,
+        6912000000.0,
+        10022400000.0,
+        18921600000.0,
+        21168000000.0,
+        2160000000.0,
+        3196800000.0,
+        13996800000.0,
+        19008000000.0,
+        11232000000.0,
+        13392000000.0
+      ],
+      "xaxis": "x",
+      "y": [
+        "Mount Sinai",
+        "University of Texas - San Antonio",
+        "Northwestern",
+        "Illinois",
+        "Carle Illinois",
+        "Yale",
+        "Quinnipiac",
+        "Case Western",
+        "Western Michigan",
+        "Wisconsin",
+        "Michigan",
+        "Ohio State",
+        "Pittsburgh",
+        "Iowa",
+        "Colorado",
+        "Cornell",
+        "Columbia",
+        "Stony Brook"
+      ],
+      "yaxis": "y",
+      "type": "bar"
+    },
+    {
+      "alignmentgroup": "True",
+      "base": [
+        "2022-01-10T00:00:00",
+        "2022-03-02T00:00:00",
+        "2022-03-02T00:00:00"
+      ],
+      "customdata": [
+        [
+          "Withdrawn"
+        ],
+        [
+          "Withdrawn"
+        ],
+        [
+          "Withdrawn"
+        ]
+      ],
+      "hovertemplate": "%{y}<br>%{customdata[0]}<br>Date: %{base|%m-%d-%Y} <extra></extra>",
+      "legendgroup": "group",
+      "marker": {
+        "color": "#808080",
+        "line": {
+          "width": 0
+        }
+      },
+      "name": "Withdrawn",
+      "offsetgroup": "withdrawn",
+      "orientation": "h",
+      "showlegend": true,
+      "textposition": "auto",
+      "x": [
+        13392000000.0,
+        8985600000.0,
+        8985600000.0
+      ],
+      "xaxis": "x",
+      "y": [
+        "Mount Sinai",
+        "Michigan",
+        "Ohio State"
+      ],
+      "yaxis": "y",
+      "type": "bar"
+    },
+    {
+      "alignmentgroup": "True",
+      "base": [
+        "2021-08-02T00:00:00",
+        "2021-08-27T00:00:00",
+        "2021-09-21T00:00:00",
+        "2021-11-10T00:00:00",
+        "2021-08-25T00:00:00"
+      ],
+      "customdata": [
+        [
+          "Interview Received"
+        ],
+        [
+          "Interview Received"
+        ],
+        [
+          "Interview Received"
+        ],
+        [
+          "Interview Received"
+        ],
+        [
+          "Interview Received"
+        ]
+      ],
+      "hovertemplate": "%{y}<br>%{customdata[0]}<br>Date: %{base|%m-%d-%Y} <extra></extra>",
+      "legendgroup": "group",
+      "marker": {
+        "color": "#9932CC",
+        "line": {
+          "width": 0
+        }
+      },
+      "name": "Interview Received",
+      "offsetgroup": "interview_received",
+      "orientation": "h",
+      "showlegend": true,
+      "textposition": "auto",
+      "x": [
+        13564800000.0,
+        3542400000.0,
+        2592000000.0,
+        5184000000.0,
+        2419200000.0
+      ],
+      "xaxis": "x",
+      "y": [
+        "University of Texas - San Antonio",
+        "Case Western",
+        "Western Michigan",
+        "Wisconsin",
+        "Iowa"
+      ],
+      "yaxis": "y",
+      "type": "bar"
+    },
+    {
+      "alignmentgroup": "True",
+      "base": [
+        "2022-01-06T00:00:00",
+        "2021-10-07T00:00:00",
+        "2021-10-21T00:00:00",
+        "2022-01-09T00:00:00",
+        "2021-09-22T00:00:00"
+      ],
+      "customdata": [
+        [
+          "Interview Complete"
+        ],
+        [
+          "Interview Complete"
+        ],
+        [
+          "Interview Complete"
+        ],
+        [
+          "Interview Complete"
+        ],
+        [
+          "Interview Complete"
+        ]
+      ],
+      "hovertemplate": "%{y}<br>%{customdata[0]}<br>Date: %{base|%m-%d-%Y} <extra></extra>",
+      "legendgroup": "group",
+      "marker": {
+        "color": "#8B008B",
+        "line": {
+          "width": 0
+        }
+      },
+      "name": "Interview Complete",
+      "offsetgroup": "interview_date",
+      "orientation": "h",
+      "showlegend": true,
+      "textposition": "auto",
+      "x": [
+        345600000.0,
+        16416000000.0,
+        9244800000.0,
+        2764800000.0,
+        19094400000.0
+      ],
+      "xaxis": "x",
+      "y": [
+        "University of Texas - San Antonio",
+        "Case Western",
+        "Western Michigan",
+        "Wisconsin",
+        "Iowa"
+      ],
+      "yaxis": "y",
+      "type": "bar"
+    },
+    {
+      "alignmentgroup": "True",
+      "base": [
+        "2022-01-10T00:00:00",
+        "2022-01-07T00:00:00",
+        "2021-10-22T00:00:00"
+      ],
+      "customdata": [
+        [
+          "Waitlist"
+        ],
+        [
+          "Waitlist"
+        ],
+        [
+          "Waitlist"
+        ]
+      ],
+      "hovertemplate": "%{y}<br>%{customdata[0]}<br>Date: %{base|%m-%d-%Y} <extra></extra>",
+      "legendgroup": "group",
+      "marker": {
+        "color": "#FFA500",
+        "line": {
+          "width": 0
+        }
+      },
+      "name": "Waitlist",
+      "offsetgroup": "waitlist",
+      "orientation": "h",
+      "showlegend": true,
+      "textposition": "auto",
+      "x": [
+        3024000000.0,
+        13651200000.0,
+        20304000000.0
+      ],
+      "xaxis": "x",
+      "y": [
+        "University of Texas - San Antonio",
+        "Case Western",
+        "Iowa"
+      ],
+      "yaxis": "y",
+      "type": "bar"
+    },
+    {
+      "alignmentgroup": "True",
+      "base": [
+        "2022-02-14T00:00:00",
+        "2022-02-05T00:00:00"
+      ],
+      "customdata": [
+        [
+          "Acceptance"
+        ],
+        [
+          "Acceptance"
+        ]
+      ],
+      "hovertemplate": "%{y}<br>%{customdata[0]}<br>Date: %{base|%m-%d-%Y} <extra></extra>",
+      "legendgroup": "group",
+      "marker": {
+        "color": "#008000",
+        "line": {
+          "width": 0
+        }
+      },
+      "name": "Acceptance",
+      "offsetgroup": "acceptance",
+      "orientation": "h",
+      "showlegend": true,
+      "textposition": "auto",
+      "x": [
+        10368000000.0,
+        11145600000.0
+      ],
+      "xaxis": "x",
+      "y": [
+        "University of Texas - San Antonio",
+        "Western Michigan"
+      ],
+      "yaxis": "y",
+      "type": "bar"
+    },
+    {
+      "alignmentgroup": "True",
+      "base": [
+        "2022-02-23T00:00:00",
+        "2022-02-23T00:00:00",
+        "2021-10-07T00:00:00",
+        "2021-12-02T00:00:00",
+        "2022-02-15T00:00:00",
+        "2022-04-15T00:00:00",
+        "2022-02-10T00:00:00",
+        "2021-08-06T00:00:00",
+        "2022-05-01T00:00:00",
+        "2021-12-08T00:00:00",
+        "2022-02-15T00:00:00",
+        "2021-11-09T00:00:00",
+        "2021-12-06T00:00:00"
+      ],
+      "customdata": [
+        [
+          "Rejection"
+        ],
+        [
+          "Rejection"
+        ],
+        [
+          "Rejection"
+        ],
+        [
+          "Rejection"
+        ],
+        [
+          "Rejection"
+        ],
+        [
+          "Rejection"
+        ],
+        [
+          "Rejection"
+        ],
+        [
+          "Rejection"
+        ],
+        [
+          "Rejection"
+        ],
+        [
+          "Rejection"
+        ],
+        [
+          "Rejection"
+        ],
+        [
+          "Rejection"
+        ],
+        [
+          "Rejection"
+        ]
+      ],
+      "hovertemplate": "%{y}<br>%{customdata[0]}<br>Date: %{base|%m-%d-%Y} <extra></extra>",
+      "legendgroup": "group",
+      "marker": {
+        "color": "#FF0000",
+        "line": {
+          "width": 0
+        }
+      },
+      "name": "Rejection",
+      "offsetgroup": "rejection",
+      "orientation": "h",
+      "showlegend": true,
+      "textposition": "auto",
+      "x": [
+        9590400000.0,
+        9590400000.0,
+        21600000000.0,
+        16761600000.0,
+        10281600000.0,
+        -8467200000.0,
+        10713600000.0,
+        26956800000.0,
+        -16502400000.0,
+        16243200000.0,
+        10281600000.0,
+        18748800000.0,
+        16416000000.0
+      ],
+      "xaxis": "x",
+      "y": [
+        "Northwestern",
+        "Illinois",
+        "Carle Illinois",
+        "Yale",
+        "Quinnipiac",
+        "Case Western",
+        "Wisconsin",
+        "Pittsburgh",
+        "Iowa",
+        "Colorado",
+        "Cornell",
+        "Columbia",
+        "Stony Brook"
+      ],
+      "yaxis": "y",
+      "type": "bar"
+    }
+  ],
+  "layout": {
+    "template": {
+      "data": {
+        "bar": [
+          {
+            "error_x": {
+              "color": "#2a3f5f"
+            },
+            "error_y": {
+              "color": "#2a3f5f"
+            },
+            "marker": {
+              "line": {
+                "color": "#E5ECF6",
+                "width": 0.5
+              },
+              "pattern": {
+                "fillmode": "overlay",
+                "size": 10,
+                "solidity": 0.2
+              }
+            },
+            "type": "bar"
+          }
+        ],
+        "barpolar": [
+          {
+            "marker": {
+              "line": {
+                "color": "#E5ECF6",
+                "width": 0.5
+              },
+              "pattern": {
+                "fillmode": "overlay",
+                "size": 10,
+                "solidity": 0.2
+              }
+            },
+            "type": "barpolar"
+          }
+        ],
+        "carpet": [
+          {
+            "aaxis": {
+              "endlinecolor": "#2a3f5f",
+              "gridcolor": "white",
+              "linecolor": "white",
+              "minorgridcolor": "white",
+              "startlinecolor": "#2a3f5f"
+            },
+            "baxis": {
+              "endlinecolor": "#2a3f5f",
+              "gridcolor": "white",
+              "linecolor": "white",
+              "minorgridcolor": "white",
+              "startlinecolor": "#2a3f5f"
+            },
+            "type": "carpet"
+          }
+        ],
+        "choropleth": [
+          {
+            "colorbar": {
+              "outlinewidth": 0,
+              "ticks": ""
+            },
+            "type": "choropleth"
+          }
+        ],
+        "contour": [
+          {
+            "colorbar": {
+              "outlinewidth": 0,
+              "ticks": ""
+            },
+            "colorscale": [
+              [
+                0.0,
+                "#0d0887"
+              ],
+              [
+                0.1111111111111111,
+                "#46039f"
+              ],
+              [
+                0.2222222222222222,
+                "#7201a8"
+              ],
+              [
+                0.3333333333333333,
+                "#9c179e"
+              ],
+              [
+                0.4444444444444444,
+                "#bd3786"
+              ],
+              [
+                0.5555555555555556,
+                "#d8576b"
+              ],
+              [
+                0.6666666666666666,
+                "#ed7953"
+              ],
+              [
+                0.7777777777777778,
+                "#fb9f3a"
+              ],
+              [
+                0.8888888888888888,
+                "#fdca26"
+              ],
+              [
+                1.0,
+                "#f0f921"
+              ]
+            ],
+            "type": "contour"
+          }
+        ],
+        "contourcarpet": [
+          {
+            "colorbar": {
+              "outlinewidth": 0,
+              "ticks": ""
+            },
+            "type": "contourcarpet"
+          }
+        ],
+        "heatmap": [
+          {
+            "colorbar": {
+              "outlinewidth": 0,
+              "ticks": ""
+            },
+            "colorscale": [
+              [
+                0.0,
+                "#0d0887"
+              ],
+              [
+                0.1111111111111111,
+                "#46039f"
+              ],
+              [
+                0.2222222222222222,
+                "#7201a8"
+              ],
+              [
+                0.3333333333333333,
+                "#9c179e"
+              ],
+              [
+                0.4444444444444444,
+                "#bd3786"
+              ],
+              [
+                0.5555555555555556,
+                "#d8576b"
+              ],
+              [
+                0.6666666666666666,
+                "#ed7953"
+              ],
+              [
+                0.7777777777777778,
+                "#fb9f3a"
+              ],
+              [
+                0.8888888888888888,
+                "#fdca26"
+              ],
+              [
+                1.0,
+                "#f0f921"
+              ]
+            ],
+            "type": "heatmap"
+          }
+        ],
+        "heatmapgl": [
+          {
+            "colorbar": {
+              "outlinewidth": 0,
+              "ticks": ""
+            },
+            "colorscale": [
+              [
+                0.0,
+                "#0d0887"
+              ],
+              [
+                0.1111111111111111,
+                "#46039f"
+              ],
+              [
+                0.2222222222222222,
+                "#7201a8"
+              ],
+              [
+                0.3333333333333333,
+                "#9c179e"
+              ],
+              [
+                0.4444444444444444,
+                "#bd3786"
+              ],
+              [
+                0.5555555555555556,
+                "#d8576b"
+              ],
+              [
+                0.6666666666666666,
+                "#ed7953"
+              ],
+              [
+                0.7777777777777778,
+                "#fb9f3a"
+              ],
+              [
+                0.8888888888888888,
+                "#fdca26"
+              ],
+              [
+                1.0,
+                "#f0f921"
+              ]
+            ],
+            "type": "heatmapgl"
+          }
+        ],
+        "histogram": [
+          {
+            "marker": {
+              "pattern": {
+                "fillmode": "overlay",
+                "size": 10,
+                "solidity": 0.2
+              }
+            },
+            "type": "histogram"
+          }
+        ],
+        "histogram2d": [
+          {
+            "colorbar": {
+              "outlinewidth": 0,
+              "ticks": ""
+            },
+            "colorscale": [
+              [
+                0.0,
+                "#0d0887"
+              ],
+              [
+                0.1111111111111111,
+                "#46039f"
+              ],
+              [
+                0.2222222222222222,
+                "#7201a8"
+              ],
+              [
+                0.3333333333333333,
+                "#9c179e"
+              ],
+              [
+                0.4444444444444444,
+                "#bd3786"
+              ],
+              [
+                0.5555555555555556,
+                "#d8576b"
+              ],
+              [
+                0.6666666666666666,
+                "#ed7953"
+              ],
+              [
+                0.7777777777777778,
+                "#fb9f3a"
+              ],
+              [
+                0.8888888888888888,
+                "#fdca26"
+              ],
+              [
+                1.0,
+                "#f0f921"
+              ]
+            ],
+            "type": "histogram2d"
+          }
+        ],
+        "histogram2dcontour": [
+          {
+            "colorbar": {
+              "outlinewidth": 0,
+              "ticks": ""
+            },
+            "colorscale": [
+              [
+                0.0,
+                "#0d0887"
+              ],
+              [
+                0.1111111111111111,
+                "#46039f"
+              ],
+              [
+                0.2222222222222222,
+                "#7201a8"
+              ],
+              [
+                0.3333333333333333,
+                "#9c179e"
+              ],
+              [
+                0.4444444444444444,
+                "#bd3786"
+              ],
+              [
+                0.5555555555555556,
+                "#d8576b"
+              ],
+              [
+                0.6666666666666666,
+                "#ed7953"
+              ],
+              [
+                0.7777777777777778,
+                "#fb9f3a"
+              ],
+              [
+                0.8888888888888888,
+                "#fdca26"
+              ],
+              [
+                1.0,
+                "#f0f921"
+              ]
+            ],
+            "type": "histogram2dcontour"
+          }
+        ],
+        "mesh3d": [
+          {
+            "colorbar": {
+              "outlinewidth": 0,
+              "ticks": ""
+            },
+            "type": "mesh3d"
+          }
+        ],
+        "parcoords": [
+          {
+            "line": {
+              "colorbar": {
+                "outlinewidth": 0,
+                "ticks": ""
+              }
+            },
+            "type": "parcoords"
+          }
+        ],
+        "pie": [
+          {
+            "automargin": true,
+            "type": "pie"
+          }
+        ],
+        "scatter": [
+          {
+            "marker": {
+              "colorbar": {
+                "outlinewidth": 0,
+                "ticks": ""
+              }
+            },
+            "type": "scatter"
+          }
+        ],
+        "scatter3d": [
+          {
+            "line": {
+              "colorbar": {
+                "outlinewidth": 0,
+                "ticks": ""
+              }
+            },
+            "marker": {
+              "colorbar": {
+                "outlinewidth": 0,
+                "ticks": ""
+              }
+            },
+            "type": "scatter3d"
+          }
+        ],
+        "scattercarpet": [
+          {
+            "marker": {
+              "colorbar": {
+                "outlinewidth": 0,
+                "ticks": ""
+              }
+            },
+            "type": "scattercarpet"
+          }
+        ],
+        "scattergeo": [
+          {
+            "marker": {
+              "colorbar": {
+                "outlinewidth": 0,
+                "ticks": ""
+              }
+            },
+            "type": "scattergeo"
+          }
+        ],
+        "scattergl": [
+          {
+            "marker": {
+              "colorbar": {
+                "outlinewidth": 0,
+                "ticks": ""
+              }
+            },
+            "type": "scattergl"
+          }
+        ],
+        "scattermapbox": [
+          {
+            "marker": {
+              "colorbar": {
+                "outlinewidth": 0,
+                "ticks": ""
+              }
+            },
+            "type": "scattermapbox"
+          }
+        ],
+        "scatterpolar": [
+          {
+            "marker": {
+              "colorbar": {
+                "outlinewidth": 0,
+                "ticks": ""
+              }
+            },
+            "type": "scatterpolar"
+          }
+        ],
+        "scatterpolargl": [
+          {
+            "marker": {
+              "colorbar": {
+                "outlinewidth": 0,
+                "ticks": ""
+              }
+            },
+            "type": "scatterpolargl"
+          }
+        ],
+        "scatterternary": [
+          {
+            "marker": {
+              "colorbar": {
+                "outlinewidth": 0,
+                "ticks": ""
+              }
+            },
+            "type": "scatterternary"
+          }
+        ],
+        "surface": [
+          {
+            "colorbar": {
+              "outlinewidth": 0,
+              "ticks": ""
+            },
+            "colorscale": [
+              [
+                0.0,
+                "#0d0887"
+              ],
+              [
+                0.1111111111111111,
+                "#46039f"
+              ],
+              [
+                0.2222222222222222,
+                "#7201a8"
+              ],
+              [
+                0.3333333333333333,
+                "#9c179e"
+              ],
+              [
+                0.4444444444444444,
+                "#bd3786"
+              ],
+              [
+                0.5555555555555556,
+                "#d8576b"
+              ],
+              [
+                0.6666666666666666,
+                "#ed7953"
+              ],
+              [
+                0.7777777777777778,
+                "#fb9f3a"
+              ],
+              [
+                0.8888888888888888,
+                "#fdca26"
+              ],
+              [
+                1.0,
+                "#f0f921"
+              ]
+            ],
+            "type": "surface"
+          }
+        ],
+        "table": [
+          {
+            "cells": {
+              "fill": {
+                "color": "#EBF0F8"
+              },
+              "line": {
+                "color": "white"
+              }
+            },
+            "header": {
+              "fill": {
+                "color": "#C8D4E3"
+              },
+              "line": {
+                "color": "white"
+              }
+            },
+            "type": "table"
+          }
+        ]
+      },
+      "layout": {
+        "annotationdefaults": {
+          "arrowcolor": "#2a3f5f",
+          "arrowhead": 0,
+          "arrowwidth": 1
+        },
+        "autotypenumbers": "strict",
+        "coloraxis": {
+          "colorbar": {
+            "outlinewidth": 0,
+            "ticks": ""
+          }
+        },
+        "colorscale": {
+          "diverging": [
+            [
+              0,
+              "#8e0152"
+            ],
+            [
+              0.1,
+              "#c51b7d"
+            ],
+            [
+              0.2,
+              "#de77ae"
+            ],
+            [
+              0.3,
+              "#f1b6da"
+            ],
+            [
+              0.4,
+              "#fde0ef"
+            ],
+            [
+              0.5,
+              "#f7f7f7"
+            ],
+            [
+              0.6,
+              "#e6f5d0"
+            ],
+            [
+              0.7,
+              "#b8e186"
+            ],
+            [
+              0.8,
+              "#7fbc41"
+            ],
+            [
+              0.9,
+              "#4d9221"
+            ],
+            [
+              1,
+              "#276419"
+            ]
+          ],
+          "sequential": [
+            [
+              0.0,
+              "#0d0887"
+            ],
+            [
+              0.1111111111111111,
+              "#46039f"
+            ],
+            [
+              0.2222222222222222,
+              "#7201a8"
+            ],
+            [
+              0.3333333333333333,
+              "#9c179e"
+            ],
+            [
+              0.4444444444444444,
+              "#bd3786"
+            ],
+            [
+              0.5555555555555556,
+              "#d8576b"
+            ],
+            [
+              0.6666666666666666,
+              "#ed7953"
+            ],
+            [
+              0.7777777777777778,
+              "#fb9f3a"
+            ],
+            [
+              0.8888888888888888,
+              "#fdca26"
+            ],
+            [
+              1.0,
+              "#f0f921"
+            ]
+          ],
+          "sequentialminus": [
+            [
+              0.0,
+              "#0d0887"
+            ],
+            [
+              0.1111111111111111,
+              "#46039f"
+            ],
+            [
+              0.2222222222222222,
+              "#7201a8"
+            ],
+            [
+              0.3333333333333333,
+              "#9c179e"
+            ],
+            [
+              0.4444444444444444,
+              "#bd3786"
+            ],
+            [
+              0.5555555555555556,
+              "#d8576b"
+            ],
+            [
+              0.6666666666666666,
+              "#ed7953"
+            ],
+            [
+              0.7777777777777778,
+              "#fb9f3a"
+            ],
+            [
+              0.8888888888888888,
+              "#fdca26"
+            ],
+            [
+              1.0,
+              "#f0f921"
+            ]
+          ]
+        },
+        "colorway": [
+          "#636efa",
+          "#EF553B",
+          "#00cc96",
+          "#ab63fa",
+          "#FFA15A",
+          "#19d3f3",
+          "#FF6692",
+          "#B6E880",
+          "#FF97FF",
+          "#FECB52"
+        ],
+        "font": {
+          "color": "#2a3f5f"
+        },
+        "geo": {
+          "bgcolor": "white",
+          "lakecolor": "white",
+          "landcolor": "#E5ECF6",
+          "showlakes": true,
+          "showland": true,
+          "subunitcolor": "white"
+        },
+        "hoverlabel": {
+          "align": "left"
+        },
+        "hovermode": "closest",
+        "mapbox": {
+          "style": "light"
+        },
+        "paper_bgcolor": "white",
+        "plot_bgcolor": "#E5ECF6",
+        "polar": {
+          "angularaxis": {
+            "gridcolor": "white",
+            "linecolor": "white",
+            "ticks": ""
+          },
+          "bgcolor": "#E5ECF6",
+          "radialaxis": {
+            "gridcolor": "white",
+            "linecolor": "white",
+            "ticks": ""
+          }
+        },
+        "scene": {
+          "xaxis": {
+            "backgroundcolor": "#E5ECF6",
+            "gridcolor": "white",
+            "gridwidth": 2,
+            "linecolor": "white",
+            "showbackground": true,
+            "ticks": "",
+            "zerolinecolor": "white"
+          },
+          "yaxis": {
+            "backgroundcolor": "#E5ECF6",
+            "gridcolor": "white",
+            "gridwidth": 2,
+            "linecolor": "white",
+            "showbackground": true,
+            "ticks": "",
+            "zerolinecolor": "white"
+          },
+          "zaxis": {
+            "backgroundcolor": "#E5ECF6",
+            "gridcolor": "white",
+            "gridwidth": 2,
+            "linecolor": "white",
+            "showbackground": true,
+            "ticks": "",
+            "zerolinecolor": "white"
+          }
+        },
+        "shapedefaults": {
+          "line": {
+            "color": "#2a3f5f"
+          }
+        },
+        "ternary": {
+          "aaxis": {
+            "gridcolor": "white",
+            "linecolor": "white",
+            "ticks": ""
+          },
+          "baxis": {
+            "gridcolor": "white",
+            "linecolor": "white",
+            "ticks": ""
+          },
+          "bgcolor": "#E5ECF6",
+          "caxis": {
+            "gridcolor": "white",
+            "linecolor": "white",
+            "ticks": ""
+          }
+        },
+        "title": {
+          "x": 0.05
+        },
+        "xaxis": {
+          "automargin": true,
+          "gridcolor": "white",
+          "linecolor": "white",
+          "ticks": "",
+          "title": {
+            "standoff": 15
+          },
+          "zerolinecolor": "white",
+          "zerolinewidth": 2
+        },
+        "yaxis": {
+          "automargin": true,
+          "gridcolor": "white",
+          "linecolor": "white",
+          "ticks": "",
+          "title": {
+            "standoff": 15
+          },
+          "zerolinecolor": "white",
+          "zerolinewidth": 2
+        }
+      }
+    },
+    "xaxis": {
+      "anchor": "y",
+      "domain": [
+        0.0,
+        1.0
+      ],
+      "type": "date"
+    },
+    "yaxis": {
+      "anchor": "x",
+      "domain": [
+        0.0,
+        1.0
+      ],
+      "title": {},
+      "type": "category",
+      "gridwidth": 1
+    },
+    "legend": {
+      "title": {
+        "text": "Outcome"
+      },
+      "tracegroupgap": 0
+    },
+    "margin": {
+      "t": 40,
+      "l": 20,
+      "r": 20,
+      "b": 20
+    },
+    "barmode": "overlay",
+    "height": 360,
+    "title": {
+      "text": "My 2022 Application Cycle"
+    },
+    "width": 1000,
+    "height": 400,
+    "images": [
+      {
+        "sizex": 0.2,
+        "sizey": 0.2,
+        "source": "./static/images/CycleTrack_Plot_Watermark.png",
+        "x": 1,
+        "xanchor": "right",
+        "xref": "x domain",
+        "y": 1,
+        "yanchor": "bottom",
+        "yref": "y domain"
+      }
+    ]
+  }
+}

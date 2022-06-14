@@ -1,0 +1,1490 @@
+{
+  "data": [
+    {
+      "hoverinfo": "none",
+      "hovertemplate": "%{text}<br>%{x}<extra></extra>",
+      "marker": {
+        "color": "#90e0ef",
+        "size": 10
+      },
+      "mode": "markers",
+      "name": "Primary Submitted",
+      "text": [
+        "Mount Sinai<br>Primary Submitted",
+        "University of Texas - San Antonio<br>Primary Submitted",
+        "Northwestern<br>Primary Submitted",
+        "Illinois<br>Primary Submitted",
+        "Carle Illinois<br>Primary Submitted",
+        "Yale<br>Primary Submitted",
+        "Quinnipiac<br>Primary Submitted",
+        "Case Western<br>Primary Submitted",
+        "Western Michigan<br>Primary Submitted",
+        "Wisconsin<br>Primary Submitted",
+        "Michigan<br>Primary Submitted",
+        "Ohio State<br>Primary Submitted",
+        "Pittsburgh<br>Primary Submitted",
+        "Iowa<br>Primary Submitted",
+        "Colorado<br>Primary Submitted",
+        "Cornell<br>Primary Submitted",
+        "Columbia<br>Primary Submitted",
+        "Stony Brook<br>Primary Submitted"
+      ],
+      "x": [
+        "2021-06-25T00:00:00",
+        "2021-06-25T00:00:00",
+        "2021-06-25T00:00:00",
+        "2021-06-25T00:00:00",
+        "2021-06-25T00:00:00",
+        "2021-06-25T00:00:00",
+        "2021-06-25T00:00:00",
+        "2021-06-25T00:00:00",
+        "2021-06-25T00:00:00",
+        "2021-06-25T00:00:00",
+        "2021-06-25T00:00:00",
+        "2021-06-25T00:00:00",
+        "2021-06-25T00:00:00",
+        "2021-06-25T00:00:00",
+        "2021-06-25T00:00:00",
+        "2021-06-25T00:00:00",
+        "2021-06-25T00:00:00",
+        "2021-06-25T00:00:00"
+      ],
+      "y": [
+        "Mount Sinai",
+        "University of Texas - San Antonio",
+        "Northwestern",
+        "Illinois",
+        "Carle Illinois",
+        "Yale",
+        "Quinnipiac",
+        "Case Western",
+        "Western Michigan",
+        "Wisconsin",
+        "Michigan",
+        "Ohio State",
+        "Pittsburgh",
+        "Iowa",
+        "Colorado",
+        "Cornell",
+        "Columbia",
+        "Stony Brook"
+      ],
+      "type": "scatter"
+    },
+    {
+      "hoverinfo": "none",
+      "hovertemplate": "%{text}<br>%{x}<extra></extra>",
+      "marker": {
+        "color": "#00b4d8",
+        "size": 10
+      },
+      "mode": "markers",
+      "name": "Secondary Received",
+      "text": [
+        "Mount Sinai<br>Secondary Received",
+        "University of Texas - San Antonio<br>Secondary Received",
+        "Northwestern<br>Secondary Received",
+        "Illinois<br>Secondary Received",
+        "Carle Illinois<br>Secondary Received",
+        "Yale<br>Secondary Received",
+        "Quinnipiac<br>Secondary Received",
+        "Case Western<br>Secondary Received",
+        "Western Michigan<br>Secondary Received",
+        "Wisconsin<br>Secondary Received",
+        "Michigan<br>Secondary Received",
+        "Ohio State<br>Secondary Received",
+        "Pittsburgh<br>Secondary Received",
+        "Iowa<br>Secondary Received",
+        "Colorado<br>Secondary Received",
+        "Cornell<br>Secondary Received",
+        "Columbia<br>Secondary Received",
+        "Stony Brook<br>Secondary Received"
+      ],
+      "x": [
+        "2021-07-06T00:00:00",
+        "2021-07-12T00:00:00",
+        "2021-07-15T00:00:00",
+        "2021-06-30T00:00:00",
+        "2021-07-02T00:00:00",
+        "2021-07-30T00:00:00",
+        "2021-06-25T00:00:00",
+        "2021-07-07T00:00:00",
+        "2021-07-01T00:00:00",
+        "2021-07-09T00:00:00",
+        "2021-07-12T00:00:00",
+        "2021-06-25T00:00:00",
+        "2021-07-07T00:00:00",
+        "2021-07-16T00:00:00",
+        "2021-06-25T00:00:00",
+        "2021-07-04T00:00:00",
+        "2021-06-28T00:00:00",
+        "2021-07-01T00:00:00"
+      ],
+      "y": [
+        "Mount Sinai",
+        "University of Texas - San Antonio",
+        "Northwestern",
+        "Illinois",
+        "Carle Illinois",
+        "Yale",
+        "Quinnipiac",
+        "Case Western",
+        "Western Michigan",
+        "Wisconsin",
+        "Michigan",
+        "Ohio State",
+        "Pittsburgh",
+        "Iowa",
+        "Colorado",
+        "Cornell",
+        "Columbia",
+        "Stony Brook"
+      ],
+      "type": "scatter"
+    },
+    {
+      "hoverinfo": "none",
+      "hovertemplate": "%{text}<br>%{x}<extra></extra>",
+      "marker": {
+        "color": "#0077b6",
+        "size": 10
+      },
+      "mode": "markers",
+      "name": "Application Complete",
+      "text": [
+        "Mount Sinai<br>Application Complete",
+        "University of Texas - San Antonio<br>Application Complete",
+        "Northwestern<br>Application Complete",
+        "Illinois<br>Application Complete",
+        "Carle Illinois<br>Application Complete",
+        "Yale<br>Application Complete",
+        "Quinnipiac<br>Application Complete",
+        "Case Western<br>Application Complete",
+        "Western Michigan<br>Application Complete",
+        "Wisconsin<br>Application Complete",
+        "Michigan<br>Application Complete",
+        "Ohio State<br>Application Complete",
+        "Pittsburgh<br>Application Complete",
+        "Iowa<br>Application Complete",
+        "Colorado<br>Application Complete",
+        "Cornell<br>Application Complete",
+        "Columbia<br>Application Complete",
+        "Stony Brook<br>Application Complete"
+      ],
+      "x": [
+        "2021-07-11T00:00:00",
+        "2021-07-19T00:00:00",
+        "2021-07-24T00:00:00",
+        "2021-07-06T00:00:00",
+        "2021-07-08T00:00:00",
+        "2021-08-28T00:00:00",
+        "2021-06-26T00:00:00",
+        "2021-07-14T00:00:00",
+        "2021-07-03T00:00:00",
+        "2021-07-17T00:00:00",
+        "2021-07-26T00:00:00",
+        "2021-06-30T00:00:00",
+        "2021-07-12T00:00:00",
+        "2021-07-19T00:00:00",
+        "2021-06-29T00:00:00",
+        "2021-07-10T00:00:00",
+        "2021-07-02T00:00:00",
+        "2021-07-04T00:00:00"
+      ],
+      "y": [
+        "Mount Sinai",
+        "University of Texas - San Antonio",
+        "Northwestern",
+        "Illinois",
+        "Carle Illinois",
+        "Yale",
+        "Quinnipiac",
+        "Case Western",
+        "Western Michigan",
+        "Wisconsin",
+        "Michigan",
+        "Ohio State",
+        "Pittsburgh",
+        "Iowa",
+        "Colorado",
+        "Cornell",
+        "Columbia",
+        "Stony Brook"
+      ],
+      "type": "scatter"
+    },
+    {
+      "hoverinfo": "none",
+      "hovertemplate": "%{text}<br>%{x}<extra></extra>",
+      "marker": {
+        "color": "#9932CC",
+        "size": 10
+      },
+      "mode": "markers",
+      "name": "Interview Received",
+      "text": [
+        "Mount Sinai<br>Interview Received",
+        "University of Texas - San Antonio<br>Interview Received",
+        "Northwestern<br>Interview Received",
+        "Illinois<br>Interview Received",
+        "Carle Illinois<br>Interview Received",
+        "Yale<br>Interview Received",
+        "Quinnipiac<br>Interview Received",
+        "Case Western<br>Interview Received",
+        "Western Michigan<br>Interview Received",
+        "Wisconsin<br>Interview Received",
+        "Michigan<br>Interview Received",
+        "Ohio State<br>Interview Received",
+        "Pittsburgh<br>Interview Received",
+        "Iowa<br>Interview Received",
+        "Colorado<br>Interview Received",
+        "Cornell<br>Interview Received",
+        "Columbia<br>Interview Received",
+        "Stony Brook<br>Interview Received"
+      ],
+      "x": [
+        null,
+        "2021-08-02T00:00:00",
+        null,
+        null,
+        null,
+        null,
+        null,
+        "2021-08-27T00:00:00",
+        "2021-09-21T00:00:00",
+        "2021-11-10T00:00:00",
+        null,
+        null,
+        null,
+        "2021-08-25T00:00:00",
+        null,
+        null,
+        null,
+        null
+      ],
+      "y": [
+        "Mount Sinai",
+        "University of Texas - San Antonio",
+        "Northwestern",
+        "Illinois",
+        "Carle Illinois",
+        "Yale",
+        "Quinnipiac",
+        "Case Western",
+        "Western Michigan",
+        "Wisconsin",
+        "Michigan",
+        "Ohio State",
+        "Pittsburgh",
+        "Iowa",
+        "Colorado",
+        "Cornell",
+        "Columbia",
+        "Stony Brook"
+      ],
+      "type": "scatter"
+    },
+    {
+      "hoverinfo": "none",
+      "hovertemplate": "%{text}<br>%{x}<extra></extra>",
+      "marker": {
+        "color": "#8B008B",
+        "size": 10
+      },
+      "mode": "markers",
+      "name": "Interview Complete",
+      "text": [
+        "Mount Sinai<br>Interview Complete",
+        "University of Texas - San Antonio<br>Interview Complete",
+        "Northwestern<br>Interview Complete",
+        "Illinois<br>Interview Complete",
+        "Carle Illinois<br>Interview Complete",
+        "Yale<br>Interview Complete",
+        "Quinnipiac<br>Interview Complete",
+        "Case Western<br>Interview Complete",
+        "Western Michigan<br>Interview Complete",
+        "Wisconsin<br>Interview Complete",
+        "Michigan<br>Interview Complete",
+        "Ohio State<br>Interview Complete",
+        "Pittsburgh<br>Interview Complete",
+        "Iowa<br>Interview Complete",
+        "Colorado<br>Interview Complete",
+        "Cornell<br>Interview Complete",
+        "Columbia<br>Interview Complete",
+        "Stony Brook<br>Interview Complete"
+      ],
+      "x": [
+        null,
+        "2022-01-06T00:00:00",
+        null,
+        null,
+        null,
+        null,
+        null,
+        "2021-10-07T00:00:00",
+        "2021-10-21T00:00:00",
+        "2022-01-09T00:00:00",
+        null,
+        null,
+        null,
+        "2021-09-22T00:00:00",
+        null,
+        null,
+        null,
+        null
+      ],
+      "y": [
+        "Mount Sinai",
+        "University of Texas - San Antonio",
+        "Northwestern",
+        "Illinois",
+        "Carle Illinois",
+        "Yale",
+        "Quinnipiac",
+        "Case Western",
+        "Western Michigan",
+        "Wisconsin",
+        "Michigan",
+        "Ohio State",
+        "Pittsburgh",
+        "Iowa",
+        "Colorado",
+        "Cornell",
+        "Columbia",
+        "Stony Brook"
+      ],
+      "type": "scatter"
+    },
+    {
+      "hoverinfo": "none",
+      "hovertemplate": "%{text}<br>%{x}<extra></extra>",
+      "marker": {
+        "color": "#FF0000",
+        "size": 10
+      },
+      "mode": "markers",
+      "name": "Rejection",
+      "text": [
+        "Mount Sinai<br>Rejection",
+        "University of Texas - San Antonio<br>Rejection",
+        "Northwestern<br>Rejection",
+        "Illinois<br>Rejection",
+        "Carle Illinois<br>Rejection",
+        "Yale<br>Rejection",
+        "Quinnipiac<br>Rejection",
+        "Case Western<br>Rejection",
+        "Western Michigan<br>Rejection",
+        "Wisconsin<br>Rejection",
+        "Michigan<br>Rejection",
+        "Ohio State<br>Rejection",
+        "Pittsburgh<br>Rejection",
+        "Iowa<br>Rejection",
+        "Colorado<br>Rejection",
+        "Cornell<br>Rejection",
+        "Columbia<br>Rejection",
+        "Stony Brook<br>Rejection"
+      ],
+      "x": [
+        null,
+        null,
+        "2022-02-23T00:00:00",
+        "2022-02-23T00:00:00",
+        "2021-10-07T00:00:00",
+        "2021-12-02T00:00:00",
+        "2022-02-15T00:00:00",
+        "2022-04-15T00:00:00",
+        null,
+        "2022-02-10T00:00:00",
+        null,
+        null,
+        "2021-08-06T00:00:00",
+        "2022-05-01T00:00:00",
+        "2021-12-08T00:00:00",
+        "2022-02-15T00:00:00",
+        "2021-11-09T00:00:00",
+        "2021-12-06T00:00:00"
+      ],
+      "y": [
+        "Mount Sinai",
+        "University of Texas - San Antonio",
+        "Northwestern",
+        "Illinois",
+        "Carle Illinois",
+        "Yale",
+        "Quinnipiac",
+        "Case Western",
+        "Western Michigan",
+        "Wisconsin",
+        "Michigan",
+        "Ohio State",
+        "Pittsburgh",
+        "Iowa",
+        "Colorado",
+        "Cornell",
+        "Columbia",
+        "Stony Brook"
+      ],
+      "type": "scatter"
+    },
+    {
+      "hoverinfo": "none",
+      "hovertemplate": "%{text}<br>%{x}<extra></extra>",
+      "marker": {
+        "color": "#FFA500",
+        "size": 10
+      },
+      "mode": "markers",
+      "name": "Waitlist",
+      "text": [
+        "Mount Sinai<br>Waitlist",
+        "University of Texas - San Antonio<br>Waitlist",
+        "Northwestern<br>Waitlist",
+        "Illinois<br>Waitlist",
+        "Carle Illinois<br>Waitlist",
+        "Yale<br>Waitlist",
+        "Quinnipiac<br>Waitlist",
+        "Case Western<br>Waitlist",
+        "Western Michigan<br>Waitlist",
+        "Wisconsin<br>Waitlist",
+        "Michigan<br>Waitlist",
+        "Ohio State<br>Waitlist",
+        "Pittsburgh<br>Waitlist",
+        "Iowa<br>Waitlist",
+        "Colorado<br>Waitlist",
+        "Cornell<br>Waitlist",
+        "Columbia<br>Waitlist",
+        "Stony Brook<br>Waitlist"
+      ],
+      "x": [
+        null,
+        "2022-01-10T00:00:00",
+        null,
+        null,
+        null,
+        null,
+        null,
+        "2022-01-07T00:00:00",
+        null,
+        null,
+        null,
+        null,
+        null,
+        "2021-10-22T00:00:00",
+        null,
+        null,
+        null,
+        null
+      ],
+      "y": [
+        "Mount Sinai",
+        "University of Texas - San Antonio",
+        "Northwestern",
+        "Illinois",
+        "Carle Illinois",
+        "Yale",
+        "Quinnipiac",
+        "Case Western",
+        "Western Michigan",
+        "Wisconsin",
+        "Michigan",
+        "Ohio State",
+        "Pittsburgh",
+        "Iowa",
+        "Colorado",
+        "Cornell",
+        "Columbia",
+        "Stony Brook"
+      ],
+      "type": "scatter"
+    },
+    {
+      "hoverinfo": "none",
+      "hovertemplate": "%{text}<br>%{x}<extra></extra>",
+      "marker": {
+        "color": "#008000",
+        "size": 10
+      },
+      "mode": "markers",
+      "name": "Acceptance",
+      "text": [
+        "Mount Sinai<br>Acceptance",
+        "University of Texas - San Antonio<br>Acceptance",
+        "Northwestern<br>Acceptance",
+        "Illinois<br>Acceptance",
+        "Carle Illinois<br>Acceptance",
+        "Yale<br>Acceptance",
+        "Quinnipiac<br>Acceptance",
+        "Case Western<br>Acceptance",
+        "Western Michigan<br>Acceptance",
+        "Wisconsin<br>Acceptance",
+        "Michigan<br>Acceptance",
+        "Ohio State<br>Acceptance",
+        "Pittsburgh<br>Acceptance",
+        "Iowa<br>Acceptance",
+        "Colorado<br>Acceptance",
+        "Cornell<br>Acceptance",
+        "Columbia<br>Acceptance",
+        "Stony Brook<br>Acceptance"
+      ],
+      "x": [
+        null,
+        "2022-02-14T00:00:00",
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        "2022-02-05T00:00:00",
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "y": [
+        "Mount Sinai",
+        "University of Texas - San Antonio",
+        "Northwestern",
+        "Illinois",
+        "Carle Illinois",
+        "Yale",
+        "Quinnipiac",
+        "Case Western",
+        "Western Michigan",
+        "Wisconsin",
+        "Michigan",
+        "Ohio State",
+        "Pittsburgh",
+        "Iowa",
+        "Colorado",
+        "Cornell",
+        "Columbia",
+        "Stony Brook"
+      ],
+      "type": "scatter"
+    },
+    {
+      "hoverinfo": "none",
+      "hovertemplate": "%{text}<br>%{x}<extra></extra>",
+      "marker": {
+        "color": "#808080",
+        "size": 10
+      },
+      "mode": "markers",
+      "name": "Withdrawn",
+      "text": [
+        "Mount Sinai<br>Withdrawn",
+        "University of Texas - San Antonio<br>Withdrawn",
+        "Northwestern<br>Withdrawn",
+        "Illinois<br>Withdrawn",
+        "Carle Illinois<br>Withdrawn",
+        "Yale<br>Withdrawn",
+        "Quinnipiac<br>Withdrawn",
+        "Case Western<br>Withdrawn",
+        "Western Michigan<br>Withdrawn",
+        "Wisconsin<br>Withdrawn",
+        "Michigan<br>Withdrawn",
+        "Ohio State<br>Withdrawn",
+        "Pittsburgh<br>Withdrawn",
+        "Iowa<br>Withdrawn",
+        "Colorado<br>Withdrawn",
+        "Cornell<br>Withdrawn",
+        "Columbia<br>Withdrawn",
+        "Stony Brook<br>Withdrawn"
+      ],
+      "x": [
+        "2022-01-10T00:00:00",
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        "2022-03-02T00:00:00",
+        "2022-03-02T00:00:00",
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "y": [
+        "Mount Sinai",
+        "University of Texas - San Antonio",
+        "Northwestern",
+        "Illinois",
+        "Carle Illinois",
+        "Yale",
+        "Quinnipiac",
+        "Case Western",
+        "Western Michigan",
+        "Wisconsin",
+        "Michigan",
+        "Ohio State",
+        "Pittsburgh",
+        "Iowa",
+        "Colorado",
+        "Cornell",
+        "Columbia",
+        "Stony Brook"
+      ],
+      "type": "scatter"
+    }
+  ],
+  "layout": {
+    "template": {
+      "data": {
+        "bar": [
+          {
+            "error_x": {
+              "color": "#2a3f5f"
+            },
+            "error_y": {
+              "color": "#2a3f5f"
+            },
+            "marker": {
+              "line": {
+                "color": "#E5ECF6",
+                "width": 0.5
+              },
+              "pattern": {
+                "fillmode": "overlay",
+                "size": 10,
+                "solidity": 0.2
+              }
+            },
+            "type": "bar"
+          }
+        ],
+        "barpolar": [
+          {
+            "marker": {
+              "line": {
+                "color": "#E5ECF6",
+                "width": 0.5
+              },
+              "pattern": {
+                "fillmode": "overlay",
+                "size": 10,
+                "solidity": 0.2
+              }
+            },
+            "type": "barpolar"
+          }
+        ],
+        "carpet": [
+          {
+            "aaxis": {
+              "endlinecolor": "#2a3f5f",
+              "gridcolor": "white",
+              "linecolor": "white",
+              "minorgridcolor": "white",
+              "startlinecolor": "#2a3f5f"
+            },
+            "baxis": {
+              "endlinecolor": "#2a3f5f",
+              "gridcolor": "white",
+              "linecolor": "white",
+              "minorgridcolor": "white",
+              "startlinecolor": "#2a3f5f"
+            },
+            "type": "carpet"
+          }
+        ],
+        "choropleth": [
+          {
+            "colorbar": {
+              "outlinewidth": 0,
+              "ticks": ""
+            },
+            "type": "choropleth"
+          }
+        ],
+        "contour": [
+          {
+            "colorbar": {
+              "outlinewidth": 0,
+              "ticks": ""
+            },
+            "colorscale": [
+              [
+                0.0,
+                "#0d0887"
+              ],
+              [
+                0.1111111111111111,
+                "#46039f"
+              ],
+              [
+                0.2222222222222222,
+                "#7201a8"
+              ],
+              [
+                0.3333333333333333,
+                "#9c179e"
+              ],
+              [
+                0.4444444444444444,
+                "#bd3786"
+              ],
+              [
+                0.5555555555555556,
+                "#d8576b"
+              ],
+              [
+                0.6666666666666666,
+                "#ed7953"
+              ],
+              [
+                0.7777777777777778,
+                "#fb9f3a"
+              ],
+              [
+                0.8888888888888888,
+                "#fdca26"
+              ],
+              [
+                1.0,
+                "#f0f921"
+              ]
+            ],
+            "type": "contour"
+          }
+        ],
+        "contourcarpet": [
+          {
+            "colorbar": {
+              "outlinewidth": 0,
+              "ticks": ""
+            },
+            "type": "contourcarpet"
+          }
+        ],
+        "heatmap": [
+          {
+            "colorbar": {
+              "outlinewidth": 0,
+              "ticks": ""
+            },
+            "colorscale": [
+              [
+                0.0,
+                "#0d0887"
+              ],
+              [
+                0.1111111111111111,
+                "#46039f"
+              ],
+              [
+                0.2222222222222222,
+                "#7201a8"
+              ],
+              [
+                0.3333333333333333,
+                "#9c179e"
+              ],
+              [
+                0.4444444444444444,
+                "#bd3786"
+              ],
+              [
+                0.5555555555555556,
+                "#d8576b"
+              ],
+              [
+                0.6666666666666666,
+                "#ed7953"
+              ],
+              [
+                0.7777777777777778,
+                "#fb9f3a"
+              ],
+              [
+                0.8888888888888888,
+                "#fdca26"
+              ],
+              [
+                1.0,
+                "#f0f921"
+              ]
+            ],
+            "type": "heatmap"
+          }
+        ],
+        "heatmapgl": [
+          {
+            "colorbar": {
+              "outlinewidth": 0,
+              "ticks": ""
+            },
+            "colorscale": [
+              [
+                0.0,
+                "#0d0887"
+              ],
+              [
+                0.1111111111111111,
+                "#46039f"
+              ],
+              [
+                0.2222222222222222,
+                "#7201a8"
+              ],
+              [
+                0.3333333333333333,
+                "#9c179e"
+              ],
+              [
+                0.4444444444444444,
+                "#bd3786"
+              ],
+              [
+                0.5555555555555556,
+                "#d8576b"
+              ],
+              [
+                0.6666666666666666,
+                "#ed7953"
+              ],
+              [
+                0.7777777777777778,
+                "#fb9f3a"
+              ],
+              [
+                0.8888888888888888,
+                "#fdca26"
+              ],
+              [
+                1.0,
+                "#f0f921"
+              ]
+            ],
+            "type": "heatmapgl"
+          }
+        ],
+        "histogram": [
+          {
+            "marker": {
+              "pattern": {
+                "fillmode": "overlay",
+                "size": 10,
+                "solidity": 0.2
+              }
+            },
+            "type": "histogram"
+          }
+        ],
+        "histogram2d": [
+          {
+            "colorbar": {
+              "outlinewidth": 0,
+              "ticks": ""
+            },
+            "colorscale": [
+              [
+                0.0,
+                "#0d0887"
+              ],
+              [
+                0.1111111111111111,
+                "#46039f"
+              ],
+              [
+                0.2222222222222222,
+                "#7201a8"
+              ],
+              [
+                0.3333333333333333,
+                "#9c179e"
+              ],
+              [
+                0.4444444444444444,
+                "#bd3786"
+              ],
+              [
+                0.5555555555555556,
+                "#d8576b"
+              ],
+              [
+                0.6666666666666666,
+                "#ed7953"
+              ],
+              [
+                0.7777777777777778,
+                "#fb9f3a"
+              ],
+              [
+                0.8888888888888888,
+                "#fdca26"
+              ],
+              [
+                1.0,
+                "#f0f921"
+              ]
+            ],
+            "type": "histogram2d"
+          }
+        ],
+        "histogram2dcontour": [
+          {
+            "colorbar": {
+              "outlinewidth": 0,
+              "ticks": ""
+            },
+            "colorscale": [
+              [
+                0.0,
+                "#0d0887"
+              ],
+              [
+                0.1111111111111111,
+                "#46039f"
+              ],
+              [
+                0.2222222222222222,
+                "#7201a8"
+              ],
+              [
+                0.3333333333333333,
+                "#9c179e"
+              ],
+              [
+                0.4444444444444444,
+                "#bd3786"
+              ],
+              [
+                0.5555555555555556,
+                "#d8576b"
+              ],
+              [
+                0.6666666666666666,
+                "#ed7953"
+              ],
+              [
+                0.7777777777777778,
+                "#fb9f3a"
+              ],
+              [
+                0.8888888888888888,
+                "#fdca26"
+              ],
+              [
+                1.0,
+                "#f0f921"
+              ]
+            ],
+            "type": "histogram2dcontour"
+          }
+        ],
+        "mesh3d": [
+          {
+            "colorbar": {
+              "outlinewidth": 0,
+              "ticks": ""
+            },
+            "type": "mesh3d"
+          }
+        ],
+        "parcoords": [
+          {
+            "line": {
+              "colorbar": {
+                "outlinewidth": 0,
+                "ticks": ""
+              }
+            },
+            "type": "parcoords"
+          }
+        ],
+        "pie": [
+          {
+            "automargin": true,
+            "type": "pie"
+          }
+        ],
+        "scatter": [
+          {
+            "marker": {
+              "colorbar": {
+                "outlinewidth": 0,
+                "ticks": ""
+              }
+            },
+            "type": "scatter"
+          }
+        ],
+        "scatter3d": [
+          {
+            "line": {
+              "colorbar": {
+                "outlinewidth": 0,
+                "ticks": ""
+              }
+            },
+            "marker": {
+              "colorbar": {
+                "outlinewidth": 0,
+                "ticks": ""
+              }
+            },
+            "type": "scatter3d"
+          }
+        ],
+        "scattercarpet": [
+          {
+            "marker": {
+              "colorbar": {
+                "outlinewidth": 0,
+                "ticks": ""
+              }
+            },
+            "type": "scattercarpet"
+          }
+        ],
+        "scattergeo": [
+          {
+            "marker": {
+              "colorbar": {
+                "outlinewidth": 0,
+                "ticks": ""
+              }
+            },
+            "type": "scattergeo"
+          }
+        ],
+        "scattergl": [
+          {
+            "marker": {
+              "colorbar": {
+                "outlinewidth": 0,
+                "ticks": ""
+              }
+            },
+            "type": "scattergl"
+          }
+        ],
+        "scattermapbox": [
+          {
+            "marker": {
+              "colorbar": {
+                "outlinewidth": 0,
+                "ticks": ""
+              }
+            },
+            "type": "scattermapbox"
+          }
+        ],
+        "scatterpolar": [
+          {
+            "marker": {
+              "colorbar": {
+                "outlinewidth": 0,
+                "ticks": ""
+              }
+            },
+            "type": "scatterpolar"
+          }
+        ],
+        "scatterpolargl": [
+          {
+            "marker": {
+              "colorbar": {
+                "outlinewidth": 0,
+                "ticks": ""
+              }
+            },
+            "type": "scatterpolargl"
+          }
+        ],
+        "scatterternary": [
+          {
+            "marker": {
+              "colorbar": {
+                "outlinewidth": 0,
+                "ticks": ""
+              }
+            },
+            "type": "scatterternary"
+          }
+        ],
+        "surface": [
+          {
+            "colorbar": {
+              "outlinewidth": 0,
+              "ticks": ""
+            },
+            "colorscale": [
+              [
+                0.0,
+                "#0d0887"
+              ],
+              [
+                0.1111111111111111,
+                "#46039f"
+              ],
+              [
+                0.2222222222222222,
+                "#7201a8"
+              ],
+              [
+                0.3333333333333333,
+                "#9c179e"
+              ],
+              [
+                0.4444444444444444,
+                "#bd3786"
+              ],
+              [
+                0.5555555555555556,
+                "#d8576b"
+              ],
+              [
+                0.6666666666666666,
+                "#ed7953"
+              ],
+              [
+                0.7777777777777778,
+                "#fb9f3a"
+              ],
+              [
+                0.8888888888888888,
+                "#fdca26"
+              ],
+              [
+                1.0,
+                "#f0f921"
+              ]
+            ],
+            "type": "surface"
+          }
+        ],
+        "table": [
+          {
+            "cells": {
+              "fill": {
+                "color": "#EBF0F8"
+              },
+              "line": {
+                "color": "white"
+              }
+            },
+            "header": {
+              "fill": {
+                "color": "#C8D4E3"
+              },
+              "line": {
+                "color": "white"
+              }
+            },
+            "type": "table"
+          }
+        ]
+      },
+      "layout": {
+        "annotationdefaults": {
+          "arrowcolor": "#2a3f5f",
+          "arrowhead": 0,
+          "arrowwidth": 1
+        },
+        "autotypenumbers": "strict",
+        "coloraxis": {
+          "colorbar": {
+            "outlinewidth": 0,
+            "ticks": ""
+          }
+        },
+        "colorscale": {
+          "diverging": [
+            [
+              0,
+              "#8e0152"
+            ],
+            [
+              0.1,
+              "#c51b7d"
+            ],
+            [
+              0.2,
+              "#de77ae"
+            ],
+            [
+              0.3,
+              "#f1b6da"
+            ],
+            [
+              0.4,
+              "#fde0ef"
+            ],
+            [
+              0.5,
+              "#f7f7f7"
+            ],
+            [
+              0.6,
+              "#e6f5d0"
+            ],
+            [
+              0.7,
+              "#b8e186"
+            ],
+            [
+              0.8,
+              "#7fbc41"
+            ],
+            [
+              0.9,
+              "#4d9221"
+            ],
+            [
+              1,
+              "#276419"
+            ]
+          ],
+          "sequential": [
+            [
+              0.0,
+              "#0d0887"
+            ],
+            [
+              0.1111111111111111,
+              "#46039f"
+            ],
+            [
+              0.2222222222222222,
+              "#7201a8"
+            ],
+            [
+              0.3333333333333333,
+              "#9c179e"
+            ],
+            [
+              0.4444444444444444,
+              "#bd3786"
+            ],
+            [
+              0.5555555555555556,
+              "#d8576b"
+            ],
+            [
+              0.6666666666666666,
+              "#ed7953"
+            ],
+            [
+              0.7777777777777778,
+              "#fb9f3a"
+            ],
+            [
+              0.8888888888888888,
+              "#fdca26"
+            ],
+            [
+              1.0,
+              "#f0f921"
+            ]
+          ],
+          "sequentialminus": [
+            [
+              0.0,
+              "#0d0887"
+            ],
+            [
+              0.1111111111111111,
+              "#46039f"
+            ],
+            [
+              0.2222222222222222,
+              "#7201a8"
+            ],
+            [
+              0.3333333333333333,
+              "#9c179e"
+            ],
+            [
+              0.4444444444444444,
+              "#bd3786"
+            ],
+            [
+              0.5555555555555556,
+              "#d8576b"
+            ],
+            [
+              0.6666666666666666,
+              "#ed7953"
+            ],
+            [
+              0.7777777777777778,
+              "#fb9f3a"
+            ],
+            [
+              0.8888888888888888,
+              "#fdca26"
+            ],
+            [
+              1.0,
+              "#f0f921"
+            ]
+          ]
+        },
+        "colorway": [
+          "#636efa",
+          "#EF553B",
+          "#00cc96",
+          "#ab63fa",
+          "#FFA15A",
+          "#19d3f3",
+          "#FF6692",
+          "#B6E880",
+          "#FF97FF",
+          "#FECB52"
+        ],
+        "font": {
+          "color": "#2a3f5f"
+        },
+        "geo": {
+          "bgcolor": "white",
+          "lakecolor": "white",
+          "landcolor": "#E5ECF6",
+          "showlakes": true,
+          "showland": true,
+          "subunitcolor": "white"
+        },
+        "hoverlabel": {
+          "align": "left"
+        },
+        "hovermode": "closest",
+        "mapbox": {
+          "style": "light"
+        },
+        "paper_bgcolor": "white",
+        "plot_bgcolor": "#E5ECF6",
+        "polar": {
+          "angularaxis": {
+            "gridcolor": "white",
+            "linecolor": "white",
+            "ticks": ""
+          },
+          "bgcolor": "#E5ECF6",
+          "radialaxis": {
+            "gridcolor": "white",
+            "linecolor": "white",
+            "ticks": ""
+          }
+        },
+        "scene": {
+          "xaxis": {
+            "backgroundcolor": "#E5ECF6",
+            "gridcolor": "white",
+            "gridwidth": 2,
+            "linecolor": "white",
+            "showbackground": true,
+            "ticks": "",
+            "zerolinecolor": "white"
+          },
+          "yaxis": {
+            "backgroundcolor": "#E5ECF6",
+            "gridcolor": "white",
+            "gridwidth": 2,
+            "linecolor": "white",
+            "showbackground": true,
+            "ticks": "",
+            "zerolinecolor": "white"
+          },
+          "zaxis": {
+            "backgroundcolor": "#E5ECF6",
+            "gridcolor": "white",
+            "gridwidth": 2,
+            "linecolor": "white",
+            "showbackground": true,
+            "ticks": "",
+            "zerolinecolor": "white"
+          }
+        },
+        "shapedefaults": {
+          "line": {
+            "color": "#2a3f5f"
+          }
+        },
+        "ternary": {
+          "aaxis": {
+            "gridcolor": "white",
+            "linecolor": "white",
+            "ticks": ""
+          },
+          "baxis": {
+            "gridcolor": "white",
+            "linecolor": "white",
+            "ticks": ""
+          },
+          "bgcolor": "#E5ECF6",
+          "caxis": {
+            "gridcolor": "white",
+            "linecolor": "white",
+            "ticks": ""
+          }
+        },
+        "title": {
+          "x": 0.05
+        },
+        "xaxis": {
+          "automargin": true,
+          "gridcolor": "white",
+          "linecolor": "white",
+          "ticks": "",
+          "title": {
+            "standoff": 15
+          },
+          "zerolinecolor": "white",
+          "zerolinewidth": 2
+        },
+        "yaxis": {
+          "automargin": true,
+          "gridcolor": "white",
+          "linecolor": "white",
+          "ticks": "",
+          "title": {
+            "standoff": 15
+          },
+          "zerolinecolor": "white",
+          "zerolinewidth": 2
+        }
+      }
+    },
+    "yaxis": {
+      "type": "category"
+    },
+    "margin": {
+      "l": 20,
+      "r": 20,
+      "t": 40,
+      "b": 20
+    },
+    "height": 360,
+    "title": {
+      "text": "My 2022 Application Cycle"
+    },
+    "width": 850,
+    "height": 400,
+    "images": [
+      {
+        "sizex": 0.2,
+        "sizey": 0.2,
+        "source": "./static/images/CycleTrack_Plot_Watermark.png",
+        "x": 1,
+        "xanchor": "right",
+        "xref": "x domain",
+        "y": 1,
+        "yanchor": "bottom",
+        "yref": "y domain"
+      }
+    ]
+  }
+}
