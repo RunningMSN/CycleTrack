@@ -15,7 +15,7 @@ def generate(cycle_data, title, stats, color="default",custom_text=None):
     custom_data=["label2"],
     color_discrete_map=converters.palette[color])
 
-    est_height = len(df['name'].unique()) * 17
+    est_height = len(df['name'].unique()) * 20
 
     if est_height < 250:
         wanted_height = 250
