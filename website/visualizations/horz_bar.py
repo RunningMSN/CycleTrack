@@ -33,6 +33,8 @@ def generate(cycle_data, title, stats, color="default",custom_text=None):
     fig.update_traces(marker=dict(line=dict(width=0)),legendgroup='group',
     hovertemplate="%{y}<br>%{customdata[0]}<br>Date: %{base|%m-%d-%Y} <extra></extra>")
 
+    fig.update_yaxes(title=None)
+
     fig.add_layout_image(
             dict(
             source="./static/images/CycleTrack_Plot_Watermark.png",
