@@ -73,9 +73,16 @@
                 <!-- MD/DO INFO -->
                 <div class="tab-pane fade show active" id="md" role="tabpanel" aria-labelledby="md-tab">
                     <div style="padding:10px;">
-                        <h5>Current Cycle Status</h5>
+                        <h5>{{ valid_cycles[0] }} Cycle Status</h5>
                         {% if reg_info['cycle_status_json'] %}
                         <center><div id="reg_status"></div></center>
+                        {% else %}
+                        <p>We currently do not have enough data points to display the current cycle status. Please invite other
+                        applicants to track their cycles for this graph to appear.</p>
+                        {% endif %}
+                        <h5>{{ valid_cycles[1] }} Cycle Status</h5>
+                        {% if reg_info['cycle_status_json_prev'] %}
+                        <center><div id="reg_status_prev"></div></center>
                         {% else %}
                         <p>We currently do not have enough data points to display the current cycle status. Please invite other
                         applicants to track their cycles for this graph to appear.</p>
@@ -187,9 +194,16 @@
                 <!-- MD/DO-PhD INFO -->
                 <div class="tab-pane fade" id="mdphd" role="tabpanel" aria-labelledby="mdphd-tab">
                     <div style="padding:10px;">
-                        <h5>Current Cycle Status</h5>
+                        <h5>{{ valid_cycles[0] }} Cycle Status</h5>
                         {% if phd_info['cycle_status_json'] %}
                         <center><div id="phd_status"></div></center>
+                        {% else %}
+                        <p>We currently do not have enough data points to display the current cycle status. Please invite other
+                        applicants to track their cycles for this graph to appear.</p>
+                        {% endif %}
+                        <h5>{{ valid_cycles[1] }} Cycle Status</h5>
+                        {% if phd_info['cycle_status_json_prev'] %}
+                        <center><div id="phd_status_prev"></div></center>
                         {% else %}
                         <p>We currently do not have enough data points to display the current cycle status. Please invite other
                         applicants to track their cycles for this graph to appear.</p>
@@ -319,11 +333,25 @@
     Plotly.newPlot('reg_status', reg_graph);
     </script>
 {% endif %}
+{% if reg_info['cycle_status_json_prev'] %}
+    <script>
+    var reg_graph_prev = {{ reg_info['cycle_status_json_prev'] | safe }};
+    reg_graph_prev.config = {'responsive': true, 'displaylogo': false}
+    Plotly.newPlot('reg_status_prev', reg_graph_prev);
+    </script>
+{% endif %}
 {% if phd_info['cycle_status_json'] %}
     <script>
     var phd_graph = {{ phd_info['cycle_status_json'] | safe }};
     phd_graph.config = {'responsive': true, 'displaylogo': false}
     Plotly.newPlot('phd_status', phd_graph);
+    </script>
+{% endif %}
+{% if phd_info['cycle_status_json_prev'] %}
+    <script>
+    var phd_graph_prev = {{ phd_info['cycle_status_json_prev'] | safe }};
+    phd_graph_prev.config = {'responsive': true, 'displaylogo': false}
+    Plotly.newPlot('phd_status_prev', phd_graph_prev);
     </script>
 {% endif %}
 {% if reg_info['interview_graph'] %}

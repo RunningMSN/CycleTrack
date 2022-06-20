@@ -5,6 +5,7 @@ from .models import Cycle, School, School_Profiles_Data
 from .visualizations import school_graphs
 import pandas as pd
 from .helpers import school_info_calcs, school_stats_calculators
+from .form_options import VALID_CYCLES
 
 explorer = Blueprint('explorer', __name__)
 
@@ -65,16 +66,14 @@ def explore_school(school_name):
     phd_data = pd.read_sql(query.filter(School.phd == True).statement, db.session.bind)
 
     # Dictionaries with all information about the school
-    reg_info = {'cycle_status_json': school_graphs.cycle_progress(reg_data),
+    reg_info = {'cycle_status_json': school_graphs.cycle_progress(reg_data[reg_data['cycle_year'] == VALID_CYCLES[0]]),
+                'cycle_status_json_prev': school_graphs.cycle_progress(reg_data[reg_data['cycle_year'] == VALID_CYCLES[1]]),
                 'interview_graph': school_graphs.interview_acceptance_histogram(reg_data, 'interview_received'),
                 'acceptance_graph': school_graphs.interview_acceptance_histogram(reg_data, 'acceptance')}
-    phd_info = {'cycle_status_json': school_graphs.cycle_progress(phd_data),
+    phd_info = {'cycle_status_json': school_graphs.cycle_progress(phd_data[phd_data['cycle_year'] == VALID_CYCLES[0]]),
+                'cycle_status_json_prev': school_graphs.cycle_progress(phd_data[phd_data['cycle_year'] == VALID_CYCLES[1]]),
                 'interview_graph': school_graphs.interview_acceptance_histogram(phd_data, 'interview_received'),
                 'acceptance_graph': school_graphs.interview_acceptance_histogram(phd_data, 'acceptance')}
-
-    # Get current cycle status graph
-    cycle_status_reg_json = school_graphs.cycle_progress(reg_data)
-    cycle_status_phd_json = school_graphs.cycle_progress(phd_data)
 
     # Calculate interview information
     school_info_calcs.interview_calculations(reg_data, reg_info)
@@ -84,7 +83,8 @@ def explore_school(school_name):
     school_info_calcs.acceptance_calculations(reg_data, reg_info)
     school_info_calcs.acceptance_calculations(phd_data, phd_info)
 
-    return render_template('school_template.html', user=current_user, school_info=school_info, reg_info=reg_info, phd_info=phd_info)
+    return render_template('school_template.html', user=current_user, school_info=school_info, reg_info=reg_info,
+                           phd_info=phd_info, valid_cycles=VALID_CYCLES)
 
 @explorer.route('/update_all')
 def update_all():
