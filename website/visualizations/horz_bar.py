@@ -4,7 +4,7 @@ import json
 import textwrap
 from . import converters
 
-def generate(cycle_data, title, stats, color="default",custom_text=None):
+def generate(cycle_data, title, stats, color="default",custom_text=None,hide_school_names=False):
     df = converters.convert_horz_bar(cycle_data)
 
     fig = px.timeline(df, 
@@ -27,6 +27,9 @@ def generate(cycle_data, title, stats, color="default",custom_text=None):
         title=title,
         yaxis_type="category",
         margin=dict(l=20, r=20, t=40, b=20))
+    
+    if hide_school_names:
+        fig.update_yaxes(title='y', visible=False, showticklabels=False)
     
     # Label using more readable action names
     fig.for_each_trace(lambda t: t.update(name=converters.action_names[t.name],

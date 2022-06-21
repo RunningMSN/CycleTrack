@@ -163,6 +163,20 @@
                 </div>
                 <div class="row">
                     <div class="col-auto">
+                        <strong class="align-middle">Hide school names</strong>
+                        <br/>
+                        <p>(Dot and Timeline only)</p>
+                    </div>
+                    
+                    <div class="col-auto">
+                        <label style="padding-right:10px">
+                            <input type="checkbox" name="hide_names" value="true" {% if
+                                save_settings['hide_names'] %} checked {% endif %}> Yes
+                        </label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-auto">
                         <strong class="align-middle">Custom Text: </strong>
                         <br/>
                         (Max 100 Char)

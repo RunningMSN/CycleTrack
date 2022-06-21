@@ -18,7 +18,7 @@ symbol_map = {
     'withdrawn': 'star'
     }
 
-def generate(cycle_data, title, stats, color="default",custom_text=None):
+def generate(cycle_data, title, stats, color="default",custom_text=None,hide_school_names=False):
     melted = cycle_data.melt(id_vars=cycle_data.columns[0], value_vars=cycle_data.columns[1:], var_name='Actions', value_name='date')
     
     actions = melted["Actions"].unique()
@@ -40,6 +40,9 @@ def generate(cycle_data, title, stats, color="default",custom_text=None):
             text = df["name"]+"<br>"+ converters.action_names[action],
             hovertemplate = "%{text}"+"<br>%{x}<extra></extra>",
         ))
+
+    if hide_school_names:
+        fig.update_yaxes(title='y', visible=False, showticklabels=False)
     
     est_height = len(melted['name'].unique())*20
 

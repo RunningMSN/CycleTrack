@@ -807,7 +807,7 @@ def visualizations():
     vis_type = request.form.get('vis_type')
     # Default to no graph and no settings saved
     save_settings = {'vis_type': None, 'app_type': None, 'color_type': None, 'plot_title': None, 'filters': None,
-                     'map_type': None, 'demographics': None, 'anonymize_demographics': None, 'custom_text': None}
+                     'map_type': None, 'demographics': None, 'anonymize_demographics': None, 'custom_text': None, 'hide_names': None}
     graphJSON = None
     if vis_type:
         # Grab Settings
@@ -821,6 +821,7 @@ def visualizations():
         demographics = request.form.get("demographics")
         anonymize_demographics = request.form.get("anonymize_demographics")
         custom_text = request.form.get("custom_text")
+        hide_names = request.form.get("hide_names")
         # Default to no stats
         if demographics and not anonymize_demographics:
             if not cycle.mcat_total and not cycle.cgpa and not cycle.sgpa and not cycle.home_state:
@@ -845,7 +846,7 @@ def visualizations():
         # Save Settings
         save_settings = {'vis_type': vis_type, 'app_type': app_type, 'color_type': color_type, 'plot_title': plot_title,
                          'map_type': map_type, 'demographics': demographics,
-                         'anonymize_demographics': anonymize_demographics, 'filters': {}, 'custom_text': custom_text}
+                         'anonymize_demographics': anonymize_demographics, 'filters': {}, 'custom_text': custom_text, 'hide_names':hide_names}
 
         # Grab filters
         filter_types = {'primary': None, 'secondary_received': None, 'application_complete': None,
@@ -880,7 +881,7 @@ def visualizations():
         if len(cycle_data.columns) > 1:
             if vis_type.lower() == 'dot':
                 graphJSON = dot.generate(cycle_data, plot_title, stats, color=color_type.lower(),
-                                         custom_text=save_settings['custom_text'])
+                                         custom_text=save_settings['custom_text'],hide_school_names=hide_names)
             elif vis_type.lower() == 'line':
                 graphJSON = line.generate(cycle_data, plot_title, stats, color=color_type.lower(),
                                           custom_text=save_settings['custom_text'])
@@ -895,7 +896,7 @@ def visualizations():
                                          map_scope=map_type.lower(), custom_text=save_settings['custom_text'])
             elif vis_type.lower() == 'timeline':
                 graphJSON = horz_bar.generate(cycle_data, plot_title, stats, color=color_type.lower(),
-                                        custom_text=save_settings['custom_text'])
+                                        custom_text=save_settings['custom_text'],hide_school_names=hide_names)
         else:
             flash(f'Your selected school list for {cycle.cycle_year} does not have any dates yet!', category='error')
 
