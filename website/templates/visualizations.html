@@ -161,14 +161,13 @@
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-auto">
-                        <strong class="align-middle">Hide school names</strong>
-                        <br/>
-                        <p>(Dot and Timeline only)</p>
+                <!-- HIDE NAMES ON DOT/TIMELINE -->
+                <div name="hideNames" id="hideNames" class="row row-cols-auto {% if not (save_settings['vis_type'] == 'Timeline' or save_settings['vis_type'] == 'Dot') %}d-none{% endif %}">
+                    <div class="col">
+                        <strong class="align-middle">Hide School Names:</strong>
                     </div>
                     
-                    <div class="col-auto">
+                    <div class="col">
                         <label style="padding-right:10px">
                             <input type="checkbox" name="hide_names" value="true" {% if
                                 save_settings['hide_names'] %} checked {% endif %}> Yes
