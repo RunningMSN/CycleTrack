@@ -25,11 +25,13 @@ def create_app():
     from .authentication import authentication
     from .dashboard import dashboard
     from .explorer import explorer
+    from .profile import profile
 
     app.register_blueprint(pages, url_prefix = '/')
     app.register_blueprint(authentication, url_prefix='/')
     app.register_blueprint(dashboard, url_prefix='/')
     app.register_blueprint(explorer, url_prefix='/')
+    app.register_blueprint(profile, url_prefix='/')
 
     from .models import User
 

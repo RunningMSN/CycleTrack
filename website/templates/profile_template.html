@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block title %} Public Profile {% endblock %}
+{% block additional_js %}
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+{% endblock %}
+{% block content %}
+<div class="container" style="padding-top:10px">
+
+    <div id="phd_bar_graph"></div>
+  <div id="phd_timeline_graph"></div>
+
+  <div id="reg_bar_graph"></div>
+  <div id="reg_timeline_graph"></div>
+</div>
+
+
+<script>
+var reg_graph = {{ reg_info['bar_json'] | safe }};
+reg_graph.config = {'responsive': true, 'displaylogo': false}
+Plotly.newPlot('reg_bar_graph', reg_graph);
+</script>
+
+
+<script>
+var reg_graph = {{ reg_info['timeline_json'] | safe }};
+reg_graph.config = {'responsive': true, 'displaylogo': false}
+Plotly.newPlot('reg_timeline_graph', reg_graph);
+</script>
+
+
+<script>
+    var phd_graph = {{ phd_info['bar_json'] | safe }};
+    reg_graph.config = {'responsive': true, 'displaylogo': false}
+    Plotly.newPlot('phd_bar_graph', phd_graph);
+    </script>
+    
+    
+    <script>
+    var phd_graph = {{ phd_info['timeline_json'] | safe }};
+    reg_graph.config = {'responsive': true, 'displaylogo': false}
+    Plotly.newPlot('phd_timeline_graph', phd_graph);
+    </script>
+
+{% endblock %}
+
