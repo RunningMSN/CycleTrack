@@ -23,7 +23,6 @@ def profile_home():
         db.session.add(User_Profiles(url_hash=url,user_id=userid,public_profile=False,block_type=None,cycle_id=None,
         vis_type=None,app_type=None,color=None,anonymize=False,hide_names=False))
         db.session.commit()'''
-    
     userid = current_user.get_id()
     user = User.query.filter_by(id=userid).first()
     user_email = user.email.split("@")[0]

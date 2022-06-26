@@ -28,9 +28,9 @@
         
         <li>yes</li>
     {% endif%}
+</div>
 
 
-    <!-- ADD BLOCK MENU -->
 <div class="modal fade" id="add-block-modal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -42,7 +42,7 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="order">Block Order</label>
-                        <select id="block_order" class="btn-sm form-control" >
+                        <select id="block_order" name="block_order" class="btn-sm form-control" >
                             {% for num in range(profile.block_order|length + 1) %}
                         <option value="{{ num + 1 }}">{{ num + 1 }}</option>
                         {% endfor %}
@@ -50,7 +50,7 @@
                     </div>
                     <div class="form-group">
                         <label for="type">Block Type</label>
-                        <select id="block_type" class="btn-sm form-control">
+                        <select id="block_type" name="block_type" class="btn-sm form-control">
                             {% for block_type in block_types%}
                             <option value="{{ block_type }}">{{ block_type }}</option>
                             {% endfor %}
@@ -58,7 +58,7 @@
                     </div>
                     <div class="form-group">
                         <label for="type">Visualization Type</label>
-                        <select id="vis_type" class="btn-sm form-control">
+                        <select id="vis_type" name="vis_type" class="btn-sm form-control">
                             {% for vis_type in vis_types %}
                             <option value="{{ vis_type }}">{{ vis_type }}</option>
                             {% endfor %}
@@ -66,7 +66,7 @@
                     </div>
                     <div class="form-group">
                         <label for="years">Cycle Years</label>
-                        <select id="cycle_year" class="btn-sm form-control">
+                        <select id="cycle_year" name="cycle_year" class="btn-sm form-control">
                             {% for year in cycle_years %}
                             <option value="{{ year }}">{{ year }}</option>
                             {% endfor %}
@@ -74,7 +74,7 @@
                     </div>
                     <div class="form-group">
                         <label for="type">App Type</label>
-                        <select id="app-type"  class="btn-sm form-control">
+                        <select id="app_type" name="app_type" class="btn-sm form-control">
                             {% for app_type in app_types %}
                             <option value="{{ app_type }}">{{ app_type }}</option>
                             {% endfor %}
@@ -82,7 +82,7 @@
                     </div>
                     <div class="form-group">
                         <label for="type">Map Type</label>
-                        <select id="map-type"  class="btn-sm form-control">
+                        <select id="map_type" name="map_type" class="btn-sm form-control">
                             {% for map_type in map_types %}
                             <option value="{{ map_type }}">{{ map_type }}</option>
                             {% endfor %}
@@ -90,7 +90,7 @@
                     </div>
                     <div class="form-group">
                         <label for="type">Color Type</label>
-                        <select id="color-type"  class="btn-sm form-control">
+                        <select id="color_type" name="color_type" class="btn-sm form-control">
                             {% for color_type in color_types %}
                             <option value="{{ color_type }}">{{ color_type }}</option>
                             {% endfor %}
@@ -108,6 +108,5 @@
             </form>
         </div>
     </div>
-</div>
 </div>
 {% endblock%}
