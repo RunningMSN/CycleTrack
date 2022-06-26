@@ -1,4 +1,113 @@
 {% extends 'base.html' %}
 {% block title %} User Profile {% endblock %}
+{% block content%}
+<div class="container">
+    <h2>My Profile Settings</h2>
+</div>
+<div id="general-profile-settings" class="container" style="padding: top 10px;">
+    <p>General settings</p>
+    <div class="row">
+        <div class="col-auto">
+            <select name="public_private" id="public_private" class="btn-sm form-control align-middle" style="width: 120px">
+                <option selected="Private">Private</option> <!--Change this to use jinja & profile options-->
+                <option value="Public">Public</option>
+            </select>
+        </div>
+        <div class="col-auto">
+            <button type="button" class="btn btn-primary rounded normal_list" data-toggle="modal" data-target="#add-block-modal" style="margin: 3px; margin-left: 0px">
+                Add Block
+            </button>
+        </div>
+        <div class="col-auto">
+            
+        </div>
+    </div>
+    <p>All block settings</p>
+    <p>Block List</p>
+    {% if profile.block_order|length > 0%}
+        
+        <li>yes</li>
+    {% endif%}
 
 
+    <!-- ADD BLOCK MENU -->
+<div class="modal fade" id="add-block-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form method="POST">
+                <div class="modal-header">
+                    <h5 class="modal-title">New Block</h5>
+                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="order">Block Order</label>
+                        <select id="block_order" class="btn-sm form-control" >
+                            {% for num in range(profile.block_order|length + 1) %}
+                        <option value="{{ num + 1 }}">{{ num + 1 }}</option>
+                        {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="type">Block Type</label>
+                        <select id="block_type" class="btn-sm form-control">
+                            {% for block_type in block_types%}
+                            <option value="{{ block_type }}">{{ block_type }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="type">Visualization Type</label>
+                        <select id="vis_type" class="btn-sm form-control">
+                            {% for vis_type in vis_types %}
+                            <option value="{{ vis_type }}">{{ vis_type }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="years">Cycle Years</label>
+                        <select id="cycle_year" class="btn-sm form-control">
+                            {% for year in cycle_years %}
+                            <option value="{{ year }}">{{ year }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="type">App Type</label>
+                        <select id="app-type"  class="btn-sm form-control">
+                            {% for app_type in app_types %}
+                            <option value="{{ app_type }}">{{ app_type }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="type">Map Type</label>
+                        <select id="map-type"  class="btn-sm form-control">
+                            {% for map_type in map_types %}
+                            <option value="{{ map_type }}">{{ map_type }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="type">Color Type</label>
+                        <select id="color-type"  class="btn-sm form-control">
+                            {% for color_type in color_types %}
+                            <option value="{{ color_type }}">{{ color_type }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <input type="checkbox" id="hide_names" name="hide_names" value="true">
+                        <label for="hide_names">Hide names</label><br>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Add Block</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</div>
+{% endblock%}

@@ -47,6 +47,10 @@ COLOR_TYPES = ["Default","Okabe-Ito","Tol"]
 # Settings for map scopes
 MAP_TYPES = ["USA", "North America"]
 
+# Settings for user profile
+PROFILE_TYPES = ["Public", "Private"]
+BLOCK_TYPES = ["Graph","Text"]
+
 # School list import column types
 COLUMN_TYPES = ["School Name", "Primary Submitted/Verified", "Secondary Received",
                 "Application Complete", "Interview Received", "Interview Date", "Rejected", "Waitlisted", "Accepted",

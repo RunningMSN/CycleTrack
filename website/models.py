@@ -7,9 +7,6 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(150))
     cycles = db.relationship('Cycle')
     email_verified = db.Column(db.Boolean, default=False)
-    url_hash = db.Column(db.String(150))
-    public_profile = db.Column(db.Boolean, default=False)
-
 
 class Cycle(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -81,3 +78,20 @@ class Courses(db.Model):
     tmdsas_science = db.Column(db.Boolean)
     program_type = db.Column(db.String(150))
     quarter = db.Column(db.Boolean)
+
+class User_Profiles(db.Model):
+    id = db.Column(db.Integer,primary_key=True)
+    user_id = db.Column(db.Integer,db.ForeignKey('user.id'))
+    url_hash = db.Column(db.String(150))
+    public_profile = db.Column(db.Boolean, default=False)
+    block_order = db.Column(db.Integer,nullable=True)
+    block_type = db.Column(db.String(20), nullable=True)
+    cycle_id = db.Column(db.Integer, nullable=True)
+    vis_type = db.Column(db.String(20), nullable=True)
+    plot_title = db.Column(db.Text,nullable=True)
+    app_type = db.Column(db.String(20), nullable=True)
+    map_type = db.Column(db.String(20), nullable=True)
+    color = db.Column(db.String(20), nullable=True)
+    filter_values = db.Column(db.Text,nullable=True)
+    hide_names = db.Column(db.Boolean, default=False)
+    text = db.Column(db.Text, nullable=True)
