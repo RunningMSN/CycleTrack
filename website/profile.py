@@ -1,13 +1,12 @@
 from flask_login import current_user, login_required
 from .form_options import VALID_CYCLES
 from flask import Blueprint, render_template, request, flash, jsonify, redirect, url_for, Response, Markup
-from . import db, form_options, mail
-from .models import User,Cycle, School, School_Profiles_Data, Courses, User_Profiles
-from datetime import datetime, date
+from . import db, form_options
+from .models import User,Cycle, School, User_Profiles
 import pandas as pd
-from .helpers import import_list_funcs, categorize_stats, school_stats_calculators, gpa_calculators
 from .visualizations import public_graphs
 import hashlib
+import json
 
 profile = Blueprint('profile', __name__)
 
@@ -28,12 +27,15 @@ def profile_home():
     user_email = user.email.split("@")[0]
     url = hashlib.sha1(f"{userid}{user_email}".encode()).hexdigest()
     
-    profile = User_Profiles.query.filter_by(user_id = userid)
+    user_profile = db.session.query(User_Profiles,User).filter(User_Profiles.user_id==userid) \
+        .join(User, User.id == User_Profiles.user_id)
+
+    blocks = [x[1] for x in user_profile]
 
     cycle_ids = current_user.cycles
     cycle_years = [Cycle.query.filter_by(id=x.id).first().cycle_year for x in cycle_ids]
     
-    public_private = (request.form.get('public_private')=='Public')
+    public_private = request.form.get('public_private')
 
     cycle_data = pd.read_sql(School.query.filter_by(user_id=userid).statement, db.session.bind)
 
@@ -49,12 +51,11 @@ def profile_home():
     else:
         app_types = list(cycle_data['school_type'].unique())
         if 'MD' in app_types and 'DO' in app_types: app_types.insert(0, 'MD or DO')
-    print(request.form)
+
     #add block
     block_order = request.form.get('block_order')
     block_type = request.form.get('block_type')
     if block_type:
-        print(block_type)
         if block_type.lower() == "graph":
             selected_cycle_year = request.form.get('cycle_year')
             cycle_id = Cycle.query.filter_by(cycle_year=selected_cycle_year).first().id
@@ -72,22 +73,72 @@ def profile_home():
             app_type = request.form.get("app_type")
             map_type = request.form.get("map_type")
             color_type = request.form.get("color_type")
-            filter_values = request.form.get("filter_values")
+            filter_values = ", ".join(request.form.getlist("filter_values"))
             hide_names = request.form.get("hide_names")
             db.session.add(
                 User_Profiles(user_id = userid,url_hash = url, public_profile = public_private,
-                    block_order=block_order,block_type=block_type,
+                    block_order=block_order,block_type=block_type,cycle_id=cycle_id,cycle_year=selected_cycle_year,
                     vis_type=vis_type,plot_title=plot_title,app_type=app_type,map_type=map_type,
                     color=color_type,filter_values=filter_values,hide_names=hide_names))
+            profile = User_Profiles.query.filter_by(user_id=userid).first()
+            profile.public_profile = public_private
             db.session.commit()
         elif block_type.lower() == "textbox":
             text = request.form.get("textbox")
             db.session.add(
                 User_Profiles(user_id = userid,url_hash = url, public_profile = public_private,
                     block_order=block_order,block_type=block_type,text=text))
+    #edit blocks
+    block_id = request.form.get("edit_block")
+    if block_id:
+        #print(block_id)
+        block = User_Profiles.query.get(block_id)
+        print(pd.read_sql(User_Profiles.query.filter_by(id=block_id).statement,db.session.bind))
+        block_order = request.form.get('block_order')
+        block_type = request.form.get('block_type')
+        
+        if block_type.lower() == "graph":
+            selected_cycle_year = request.form.get('cycle_year')
+            if selected_cycle_year:
+                block.cycle_year = selected_cycle_year
+                block.cycle_id = Cycle.query.filter_by(cycle_year=selected_cycle_year).first().id
+            else:
+                block.cycle_year = None
+                block.cycle_id = None
+            vis_type = request.form.get('vis_type')
+            if vis_type:
+                block.vis_type = vis_type
+            plot_title = request.form.get('plot_title')
+            if plot_title:                
+                block.plot_title = plot_title
+            app_type = request.form.get("app_type")
+            if app_type:
+                block.app_type = app_type
+            map_type = request.form.get("map_type")
+            if map_type:
+                block.map_type = map_type
+            color_type = request.form.get("color_type")
+            if color_type:
+                block.color = color_type
+            filter_values = ", ".join(request.form.getlist("filter_values"))
+            if filter_values:
+                block.filter_values = filter_values
+            hide_names = request.form.get("hide_names")
+            if hide_names:
+                block.hide_names = hide_names
+        elif block_type.lower() == "text":
+            text = request.form.get("textbox")
+            if text:
+                block.text = text
+        
+        #all_blocks = User_Profiles.query.filter_by(user_id = userid).first()
+        #public_profile = request.form.get('public_private')
+        #all_blocks.public_profile = public_profile
+        db.session.commit()
 
-    return render_template('profile.html',user=current_user,profile=profile,app_types=app_types,vis_types=form_options.VIS_TYPES, 
-    color_types=form_options.COLOR_TYPES, map_types=form_options.MAP_TYPES,block_types=form_options.BLOCK_TYPES,cycle_years=cycle_years)
+    return render_template('profile.html',user=current_user,profile=user_profile,blocks=blocks,public_private=public_private,app_types=app_types,
+    vis_types=form_options.VIS_TYPES, color_types=form_options.COLOR_TYPES, profile_types=form_options.PROFILE_TYPES,filter_options=form_options.FILTER_OPTIONS,
+    map_types=form_options.MAP_TYPES,block_types=form_options.BLOCK_TYPES,cycle_years=cycle_years)
 
 @profile.route('/profile/<userurl>')
 def profile_page(userurl):
@@ -117,3 +168,13 @@ def profile_page(userurl):
         return render_template('profile_template.html', user=current_user, user_info=user,phd_info=phd_info,
                             reg_info=reg_info, valid_cycles=VALID_CYCLES)
 
+@profile.route('/delete-block',methods=["POST"])
+def delete_block():
+    block = json.loads(request.data)
+    blockId = block['blockId']
+    block = User_Profiles.query.get(blockId)
+    if block:
+        if block.user_id == current_user.id:
+            db.session.delete(block)
+            db.session.commit()
+        return jsonify({})

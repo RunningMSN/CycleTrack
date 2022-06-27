@@ -27,3 +27,15 @@ function deleteClass(courseId) {
     window.location.href = "/gpa";
   });
 }
+
+function deleteBlock(blockId) {
+  fetch("/delete-block", {
+    method: "POST",
+    body: JSON.stringify({ blockId: blockId }),
+  }).then((_res) => {
+    let form = '<form method="POST" action = "/profile"><input type="hidden" name="block_id" id="block_id" value=' + blockId + '></form>';
+    let formElement = $(form);
+    $('body').append(formElement);
+    $(formElement).submit()
+  });
+}
