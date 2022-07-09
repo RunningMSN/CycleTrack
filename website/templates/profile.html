@@ -8,28 +8,117 @@
     <p>General settings</p>
     <div class="row">
         <div class="col-auto">
-            <select name="public_private" id="public_private" class="btn-sm form-control align-middle" style="width: 120px">
-                <option selected="Private">Private</option> <!--Change this to use jinja & profile options-->
-                <option value="Public">Public</option>
-            </select>
+            
         </div>
+    </div>
+    <div class="row">
         <div class="col-auto">
             <button type="button" class="btn btn-primary rounded normal_list" data-toggle="modal" data-target="#add-block-modal" style="margin: 3px; margin-left: 0px">
                 Add Block
             </button>
         </div>
+        {% if current_publicity %}
         <div class="col-auto">
-            
+            <form method="post">
+                <button class="btn btn-primary rounded normal_list"  type="submit" name="submit_public_change" value="true" style="margin: 3px; margin-left: 0px">
+                    Make {% if  current_publicity == "Public" %}Public{% else %}Private{% endif %}
+                </button>
+            </form>
         </div>
-    </div>
-    <p>All block settings</p>
-    <p>Block List</p>
-    {% if profile.block_order|length > 0%}
-        
-        <li>yes</li>
-    {% endif%}
-</div>
 
+        {% endif %}
+    </div>
+    <p>Block List</p>
+    {% for block in blocks %}
+        <li class="list-group-item border block_entry"> 
+            <div class="row rows-cols-2">
+                <div class="col-lg-1">
+                    <div class="row">
+                        <strong>Block #</strong><br>
+                        <p>{{block.block_order}}</p>
+                    </div>
+                    <div class="row">
+                        <!-- ICONS -->
+                        <div style="padding-top:5px">
+                            <button type="button" class="btn btn-link" data-toggle="modal" data-target="#{{ block.id }}-modal" style="padding: 1px">
+                                <i class="bi bi-pencil-square"></i>
+                            </button>
+    
+                            <button type="button" class="btn btn-link" data-toggle="modal" data-target="#{{ block.id }}-delete" style="padding: 1px">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg">
+                    <div class="row" style="padding-bottom: 10px">
+                        <div class="col-lg-2">
+                            <strong>Type</strong><br>
+                            {{block.block_type}}
+                        </div>
+                        {% if block.block_type=="Graph"%}
+                            <div class="col-lg-2">
+                                <strong>Graph Type</strong><br>
+                                {{block.vis_type}}
+                            </div>
+                            <div class="col-lg-2">
+                                <strong>Plot Title</strong><br>
+                                {% if block.plot_title %}
+                                    {{block.plot_title}}
+                                {% else %}
+                                -
+                                {% endif%}
+                            </div>
+                            <div class="col-lg-2">
+                                <strong>Application Type</strong><br>
+                                {{block.app_type}}
+                            </div>
+                            {% if block.vis_type == "map"%}
+                            <div class="col-lg-2">
+                                <strong>Map Type</strong><br>
+                                {{block.map_type}}
+                            
+                            </div>
+                            {% endif%}
+                            <div class="col-lg-2">
+                                <strong>Color Palette</strong><br>
+                                {{block.color}}
+                            </div>
+                            <div class="col-lg-2">
+                                <strong>Filtered values</strong><br>
+                                {% if block.filter_values %}
+                                    {{block.filter_values}}
+                                {% else %}
+                                -
+                                {% endif %}
+                            </div>
+                            {% if block.vis_type.lower() == "timeline" or block.vis_type.lower() == "dot" %}
+                            <div class="col-lg-2">
+                                <strong>School names</strong><br>
+                                {% if block.hide_names%}
+                                    Hidden
+                                {% else %}
+                                    Not hidden
+                                {% endif %}
+                            </div>
+                            {% endif %}
+
+                        {% endif%}
+                        {% if block.block_type=="Text" %}
+                        <div class="col-lg-2">
+                            <strong>Text</strong><br>
+                            {{block.text}}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+                
+            
+        </li>
+    {% endfor%}
+    
+</div>
 
 <div class="modal fade" id="add-block-modal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -41,11 +130,13 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
+                        <input type="hidden" name="add_block" value="true">
                         <label for="order">Block Order</label>
                         <select id="block_order" name="block_order" class="btn-sm form-control" >
-                            {% for num in range(profile.block_order|length + 1) %}
-                        <option value="{{ num + 1 }}">{{ num + 1 }}</option>
-                        {% endfor %}
+                            <option selected value="{{ blocks|length + 1 }}">{{ blocks|length + 1 }}</option>
+                            {% for num in range(blocks|length) %}
+                                <option value="{{ num + 1 }}">{{ num + 1 }}</option>
+                            {% endfor %}
                         </select>
                     </div>
                     <div class="form-group">
@@ -65,10 +156,14 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="years">Cycle Years</label>
+                        <label for="years">Cycle Year</label>
                         <select id="cycle_year" name="cycle_year" class="btn-sm form-control">
                             {% for year in cycle_years %}
-                            <option value="{{ year }}">{{ year }}</option>
+                                {% if year == cycle_years|min %}
+                                <option selected value="{{ year }}">{{ year }}</option>
+                                {% else %}
+                                <option value="{{ year }}">{{ year }}</option>
+                                {% endif %}
                             {% endfor %}
                         </select>
                     </div>
@@ -91,14 +186,33 @@
                     <div class="form-group">
                         <label for="type">Color Type</label>
                         <select id="color_type" name="color_type" class="btn-sm form-control">
+                            <option selected value="Default">Default</option>
                             {% for color_type in color_types %}
-                            <option value="{{ color_type }}">{{ color_type }}</option>
+                                {% if color_type != "Default" %}
+                                    <option value="{{ color_type }}">{{ color_type }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="plot_title"> Plot Title</label>
+                        <input id="plot_title" name="plot_title" type="text" class="btn-sm form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="type">Filter Data (select multiple to remove)</label>
+                        <select id="filter_values" name="filter_values" class="btn-sm form-control" multiple>
+                            {% for filter in filter_options %}
+                            <option value="{{ filter }}">{{ filter }}</option>
                             {% endfor %}
                         </select>
                     </div>
                     <div class="form-group">
                         <input type="checkbox" id="hide_names" name="hide_names" value="true">
                         <label for="hide_names">Hide names</label><br>
+                    </div>
+                    <div class="form-group">
+                        <label for="textbox">Text</label>
+                        <textarea class="form-control" id="textbox" name="textbox" rows="3"></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -109,4 +223,157 @@
         </div>
     </div>
 </div>
+
+{% for block in blocks %}
+<div class="modal fade" id="{{block.id}}-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form method="POST">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Block #{{block.block_order}}: {{block.block_type}}</h5>
+                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="edit_block_modal" name="edit_block" value="{{block.id}}">
+                    <input type="hidden" id="block_type" name="block_type" value="{{block.block_type}}">
+                    <div sytle="padding-top:5px">
+                        <label for="order">Block Order</label>
+                        <select id="block_order" name="block_order" class="btn-sm form-control" >
+                            <option selected value="{{ block.block_order }}">{{ block.block_order }}</option>
+                            {% for num in range(1,blocks|length+2) %}
+                                {% if num != block.block_order %}
+                                    <option value="{{ num }}">{{ num }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                    {% if block.block_type == "Graph" %}
+                        <div class="form-group">
+                            <label for="type">Visualization Type</label>
+                            <select id="vis_type" name="vis_type" class="btn-sm form-control">
+                                <option selected value="{{block.vis_type}}">{{block.vis_type}}</option>
+                                {% for vis_type in vis_types %}
+                                    {% if vis_type != block.vis_type %}
+                                        <option value="{{ vis_type }}">{{ vis_type }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="years">Cycle Year</label>
+                            <select id="cycle_year" name="cycle_year" class="btn-sm form-control">
+                                <option selected value="{{block.cycle_year}}">{{block.cycle_year}}</option>
+                                {% for year in cycle_years %}
+                                    {% if year != block.cycle_year %}
+                                        <option value="{{ year }}">{{ year }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="type">App Type</label>
+                            <select id="app_type" name="app_type" class="btn-sm form-control">
+                                <option value="{{block.app_type}}">{{block.app_type}}</option>
+                                {% for app_type in app_types %}
+                                    {% if app_type != block.app_type%}
+                                        <option value="{{ app_type }}">{{ app_type }}</option>
+                                    {% endif%}
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="type">Map Type</label>
+                            <select id="map_type" name="map_type" class="btn-sm form-control">
+                                <option selected value="{{block.map_type}}">{{block.map_type}}</option>
+                                {% for map_type in map_types %}
+                                    {% if map_type != block.map_type %}
+                                    <option value="{{ map_type }}">{{ map_type }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="type">Color Type</label>
+                            <select id="color_type" name="color_type" class="btn-sm form-control">
+                                <option selected value="{{block.color}}">{{block.color}}</option>
+                                {% for color_type in color_types %}
+                                    {% if color_type != block.color %}
+                                        <option value="{{ color_type }}">{{ color_type }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="plot_title"> Plot Title</label>
+                            <input id="plot_title" name="plot_title" type="text" class="btn-sm form-control" value="{{block.plot_title}}">
+                        </div>
+                        <div class="form-group">
+                            <label for="type">Filter Data (select multiple to remove)</label>
+                            <select id="filter_values" name="filter_values" class="btn-sm form-control" multiple>
+                                {% if block.filter_values %}
+                                    {% for filter in filter_options %}
+                                        {% if filter in block.filter_values.split(", ") %}
+                                            <option selected value="{{ filter }}">{{ filter }}</option>
+                                        {% else %}
+                                            <option value="{{ filter }}">{{ filter }}</option>
+                                        {% endif%}
+                                    {% endfor %}
+                                {% else %}
+                                    {% for filter in filter_options %}
+                                        <option value="{{ filter }}">{{ filter }}</option>
+                                    {% endfor %}
+                                {% endif %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <input type="checkbox" id="hide_names" name="hide_names" value="true" {% if block.hide_names=="true" %} checked {% endif %}>
+                            <label for="hide_names">Hide names</label><br>
+                        </div>
+                    {% else %}
+                        <div class="form-group">
+                            <label for="textbox">Text</label>
+                            <textarea class="form-control" id="textbox" name="textbox" rows="3" value="{{block.textbox}}"></textarea>
+                        </div>
+                    {% endif %}
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                    <button type="button" class="btn btn-danger"
+                            onclick="deleteBlock({{ block.id }})">Delete Block
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="{{block.id}}-delete" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form method="POST">
+                <div class="modal-header">
+                    <h5 class="modal-title">Remove Block #{{ block.block_order }}</h5>
+                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                        <input type="hidden" id="delete_block_modal" name="delete_block" value="{{block.id}}">
+                        
+                        <div style="padding: 10px;">
+                            Are you sure you want to delete this block? Deleting the block will permanently delete any
+                            information associated with it and remove it from your profile page.
+                        </div>
+                    </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" type="submit" class="btn btn-danger"
+                            onclick="deleteBlock({{ block.id }})">Delete Block
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
 {% endblock%}

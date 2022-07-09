@@ -50,6 +50,7 @@ MAP_TYPES = ["USA", "North America"]
 # Settings for user profile
 PROFILE_TYPES = ["Public", "Private"]
 BLOCK_TYPES = ["Graph","Text"]
+FILTER_OPTIONS=["Primary Submitted","Secondary Recieved","Application Complete","Interview Recieved","Interview Complete","Rejection","Waitlist","Acceptance","Withdrawn"]
 
 # School list import column types
 COLUMN_TYPES = ["School Name", "Primary Submitted/Verified", "Secondary Received",

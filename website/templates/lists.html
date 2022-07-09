@@ -496,7 +496,7 @@ function toggleCancel() {
                     <input type="hidden" id="cycle_id_modal" name="cycle_id" value="{{ cycle.id }}">
                     <input type="hidden" id="school_id" name="school_id" value="{{ school.id }}">
                     <input type="hidden" id="id" name="id" value="{{ school.id }}">
-                    <div style="">
+                    <div style="padding-top:5px">
                         <label for="primary">Primary Application Submitted/Verified Date</label>
                         <input type="date" class="form-control" id="primary" name="primary"
                                value="{% if school.primary %}{{ school.primary.strftime('%Y-%m-%d') }}{% endif %}"
