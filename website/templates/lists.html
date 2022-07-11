@@ -142,6 +142,7 @@ function toggleCancel() {
     location.reload(true);
 }
 </script>
+<script src="{{ url_for('static', filename='/js/list_bulk_add.js') }}"></script>
 {% endblock %}
 {% block dash_content %}
 
@@ -282,6 +283,11 @@ function toggleCancel() {
                             <button type="button" class="btn btn-link" data-toggle="modal" data-target="#{{ school.name }}-{{ school.phd }}-delete" style="padding: 1px">
                                 <i class="bi bi-trash"></i>
                             </button>
+                        </div>
+                        <div style="padding-top:5px">
+                            {% if school.secondary_received %}
+                            <span style="font-size: 1.25rem">Test</span>
+                            {% endif %}
                         </div>
                     </center>
                 </div>
@@ -446,7 +452,7 @@ function toggleCancel() {
         <div class="modal-content">
             <form method="POST">
                 <div class="modal-header">
-                    <h5 class="modal-title">New School</h5>
+                    <h5 class="modal-title">Add Schools</h5>
                     <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -470,10 +476,14 @@ function toggleCancel() {
                         <label for="md_phd_check"> I am applying MD/DO-PhD</label><br>
                     </div>
                     <input type="hidden" name="cycle_id" id="cycle_id_md" value="{{ cycle.id }}">
+                    <button class="btn btn-primary" type="button" onclick="addSchool()">Add School</button>
+                    <input type="hidden" name="school_names" id="school_names" value="">
+                    <input type="hidden" name="phd_values" id="phd_values" value="">
                 </div>
+                <div id="add_schools_list"></div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Add School</button>
+                    <button type="submit" class="btn btn-primary">Submit</button>
                 </div>
             </form>
         </div>
@@ -569,7 +579,6 @@ function toggleCancel() {
 </div>
 
 <!-- SETUP DELETION WARNINGS -->
-<!-- ADD SCHOOL MENU -->
 <div class="modal fade" id="{{ school.name }}-{{ school.phd }}-delete" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">

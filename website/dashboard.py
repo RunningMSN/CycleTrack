@@ -187,33 +187,30 @@ def lists():
                                                                            School.withdrawn.asc(),
                                                                            School.acceptance.asc(), School.name.asc())
 
-    # Handle adding school
-    add_school_name = request.form.get('add_school')
-    if add_school_name and len(add_school_name) > 0:
-        if request.form.get('phd'):
-            dual_degree_phd = True
-        else:
-            dual_degree_phd = False
- 
-        school_type = School_Profiles_Data.query.filter_by(school=add_school_name).first().md_or_do
+    # Handle adding schools
+    if request.form.get('school_names'):
+        schools_add = request.form.get('school_names').split('<>')
+        phds_add = request.form.get('phd_values').split('<>')
 
-        # Check if school already exists
-        school = School.query.filter_by(name=add_school_name, cycle_id=cycle.id, phd=dual_degree_phd).first()
-        if school:
-            flash('You cannot add the same program twice.', category='error')
-        else:
-            db.session.add(
-                School(name=add_school_name, cycle_id=cycle.id, user_id=current_user.id, phd=dual_degree_phd,
-                       school_type=school_type))
-            db.session.commit()
+        for i in range(0, len(schools_add)):
+            school_type = School_Profiles_Data.query.filter_by(school=schools_add[i]).first().md_or_do
 
+            # Check if school already exists
+            if phds_add[i] == 'true':
+                dual_degree_phd=True
+            else:
+                dual_degree_phd = False
+            school = School.query.filter_by(name=schools_add[i], cycle_id=cycle.id, phd=dual_degree_phd).first()
+            if(not school):
+                db.session.add(
+                    School(name=schools_add[i], cycle_id=cycle.id, user_id=current_user.id, phd=dual_degree_phd,
+                           school_type=school_type))
+                db.session.commit()
             # Update the application counter
             if dual_degree_phd:
-                school_stats_calculators.count_apps_phd(add_school_name)
+                school_stats_calculators.count_apps_phd(schools_add[i])
             else:
-                school_stats_calculators.count_apps_reg(add_school_name)
-            school_stats_calculators.update_all_schools()
-
+                school_stats_calculators.count_apps_reg(schools_add[i])
     # Handle editing schools
     school_id = request.form.get('school_id')
     if school_id:
