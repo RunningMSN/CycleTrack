@@ -17,12 +17,6 @@ def login():
     now = datetime.now()
     # If user already logged in, redirect
     if current_user.is_authenticated:
-        userid = current_user.get_id()
-        user = User.query.filter_by(id=userid).first()
-        user.last_login = now
-        print("already in"+now)
-        print(user.last_login)
-        db.session.commit()
         return redirect(url_for('dashboard.cycles'))
 
     if request.method == 'POST':
@@ -33,9 +27,7 @@ def login():
         if user:
             if check_password_hash(user.password, password):
                 user.last_login = now
-                print("now: "+str(now))
                 db.session.commit()
-                print("lastin: "+str(User.query.filter_by(email=email).first().last_login))
                 login_user(user, remember=True)
                 return redirect(url_for('dashboard.cycles'))
             else:
@@ -157,7 +149,6 @@ def reset_password(token):
 @authentication.route('settings', methods=['GET', 'POST'])
 @login_required
 def settings():
-    print("lastin: "+str(User.query.get(current_user.get_id()).last_login))
     if request.method == "POST":
         # Start with any account deletion
         if request.form.get('del_password'):
