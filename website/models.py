@@ -8,7 +8,7 @@ class User(db.Model, UserMixin):
     cycles = db.relationship('Cycle')
     email_verified = db.Column(db.Boolean, default=False)
     create_date = db.Column(db.DateTime(timezone=True), nullable=True)
-    last_login = db.Column(db.DateTime(timezone=True), nullable=True)
+    last_visited = db.Column(db.DateTime(timezone=True), nullable=True)
 
 class Cycle(db.Model):
     id = db.Column(db.Integer, primary_key=True)

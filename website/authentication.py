@@ -12,9 +12,14 @@ from datetime import datetime
 authentication = Blueprint('authentication', __name__)
 s = URLSafeTimedSerializer(site_settings.SECRET_KEY)
 
+@authentication.before_app_request
+def last_visit():
+    if current_user.is_authenticated:
+        current_user.last_visited = datetime.now()
+        db.session.commit()
+
 @authentication.route('/login', methods=['GET', 'POST'])
 def login():
-    now = datetime.now()
     # If user already logged in, redirect
     if current_user.is_authenticated:
         return redirect(url_for('dashboard.cycles'))
@@ -26,8 +31,6 @@ def login():
         user = User.query.filter_by(email=email).first()
         if user:
             if check_password_hash(user.password, password):
-                user.last_login = now
-                db.session.commit()
                 login_user(user, remember=True)
                 return redirect(url_for('dashboard.cycles'))
             else:
