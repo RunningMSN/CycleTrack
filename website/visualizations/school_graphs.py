@@ -1,3 +1,4 @@
+import pandas as pd
 import plotly
 import plotly.graph_objects as go
 import json
@@ -5,10 +6,18 @@ from . import converters
 from ..form_options import VALID_CYCLES, CURRENT_CYCLE
 
 
-def cycle_progress(data):
+def cycle_progress(data, cycle_year):
     # Select relevant columns and drop any empty rows
     data = data[['secondary_received', 'interview_received', 'acceptance']]
     data = data.dropna(axis=0, how='all')
+
+    min = pd.to_datetime(str(cycle_year-1) + "-05-01")
+    max = pd.to_datetime(str(cycle_year) + "-08-31")
+
+    # Make sure data is in range
+    for column in data.columns:
+        data = data.mask(data[column] < min)
+        data = data.mask(data[column] > max)
 
     # No data to display
     if len(data) == 0:

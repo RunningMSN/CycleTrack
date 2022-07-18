@@ -66,12 +66,12 @@ def explore_school(school_name):
     phd_data = pd.read_sql(query.filter(School.phd == True).statement, db.session.bind)
 
     # Dictionaries with all information about the school
-    reg_info = {'cycle_status_json': school_graphs.cycle_progress(reg_data[reg_data['cycle_year'] == VALID_CYCLES[0]]),
-                'cycle_status_json_prev': school_graphs.cycle_progress(reg_data[reg_data['cycle_year'] == VALID_CYCLES[1]]),
+    reg_info = {'cycle_status_json': school_graphs.cycle_progress(reg_data[reg_data['cycle_year'] == VALID_CYCLES[0]], VALID_CYCLES[0]),
+                'cycle_status_json_prev': school_graphs.cycle_progress(reg_data[reg_data['cycle_year'] == VALID_CYCLES[1]], VALID_CYCLES[1]),
                 'interview_graph': school_graphs.interview_acceptance_histogram(reg_data, 'interview_received'),
                 'acceptance_graph': school_graphs.interview_acceptance_histogram(reg_data, 'acceptance')}
-    phd_info = {'cycle_status_json': school_graphs.cycle_progress(phd_data[phd_data['cycle_year'] == VALID_CYCLES[0]]),
-                'cycle_status_json_prev': school_graphs.cycle_progress(phd_data[phd_data['cycle_year'] == VALID_CYCLES[1]]),
+    phd_info = {'cycle_status_json': school_graphs.cycle_progress(phd_data[phd_data['cycle_year'] == VALID_CYCLES[0]], VALID_CYCLES[0]),
+                'cycle_status_json_prev': school_graphs.cycle_progress(phd_data[phd_data['cycle_year'] == VALID_CYCLES[1]], VALID_CYCLES[1]),
                 'interview_graph': school_graphs.interview_acceptance_histogram(phd_data, 'interview_received'),
                 'acceptance_graph': school_graphs.interview_acceptance_histogram(phd_data, 'acceptance')}
 
