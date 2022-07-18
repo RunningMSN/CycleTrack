@@ -3,7 +3,7 @@ from flask import Blueprint, render_template, request, flash, redirect, url_for
 from .models import User
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import db, site_settings, mail
-from flask_login import login_user, login_required, logout_user, current_user
+from flask_login import login_user, logout_user
 from itsdangerous import URLSafeTimedSerializer, BadTimeSignature
 from flask_mail import Message
 from flask_login import current_user, login_required
