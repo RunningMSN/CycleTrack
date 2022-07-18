@@ -529,7 +529,6 @@ def import_list():
                         flash('Your spreadsheet contains dates before the beginning of the ' + str(cycle.cycle_year) +
                               ' cycle. Please check your dates and make sure that all dates are entered in the "MM/DD/YYYY" format.',
                               category='error')
-                        print(cycle_data[column].dropna())
                         return redirect(url_for('dashboard.cycles'))
                     # Check maximum date
                     if pd.Series(pd.to_datetime(cycle_data[column].dropna()) > pd.to_datetime(
@@ -537,7 +536,6 @@ def import_list():
                         flash('Your spreadsheet contains dates beyond the end of the ' + str(cycle.cycle_year) +
                               ' cycle. Please check your dates and make sure that all dates are entered in the "MM/DD/YYYY" format.',
                               category='error')
-                        print(cycle_data[column].dropna())
                         return redirect(url_for('dashboard.cycles'))
                     # Check for future dates
                     if pd.Series(pd.to_datetime(cycle_data[column].dropna()) > datetime.today()).any():
@@ -564,14 +562,12 @@ def import_list():
                         flash('Your spreadsheet contains dates before the beginning of the ' + str(cycle.cycle_year) +
                               ' cycle. Please check your dates and make sure that all dates are entered in the "MM/DD/YYYY" format.',
                               category='error')
-                        print(cycle_data[column].dropna())
                         return redirect(url_for('dashboard.cycles'))
                     # Check maximum date
                     if pd.Series(pd.to_datetime(cycle_data[column].dropna()) > pd.to_datetime(str(cycle.cycle_year) + '-08-31')).any():
                         flash('Your spreadsheet contains dates beyond the end of the ' + str(cycle.cycle_year) +
                               ' cycle. Please check your dates and make sure that all dates are entered in the "MM/DD/YYYY" format.',
                               category='error')
-                        print(cycle_data[column].dropna())
                         return redirect(url_for('dashboard.cycles'))
                     # Check for future dates
                     if pd.Series(pd.to_datetime(cycle_data[column].dropna()) > datetime.today()).any():
