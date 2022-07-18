@@ -520,6 +520,31 @@ def import_list():
                 cycle_data = cycle_data.dropna(axis=1, how='all')
                 cycle_data = import_list_funcs.convert_columns_date(cycle_data)
                 colnames = cycle_data.columns
+
+                # Check to make sure dates are in range
+                for column in cycle_data.columns[1:len(cycle_data.columns)]:
+                    # Check minimum date
+                    if pd.Series(pd.to_datetime(cycle_data[column].dropna()) < pd.to_datetime(
+                            str(cycle.cycle_year - 1) + '-05-01')).any():
+                        flash('Your spreadsheet contains dates before the beginning of the ' + str(cycle.cycle_year) +
+                              ' cycle. Please check your dates and make sure that all dates are entered in the "MM/DD/YYYY" format.',
+                              category='error')
+                        print(cycle_data[column].dropna())
+                        return redirect(url_for('dashboard.cycles'))
+                    # Check maximum date
+                    if pd.Series(pd.to_datetime(cycle_data[column].dropna()) > pd.to_datetime(
+                            str(cycle.cycle_year) + '-08-31')).any():
+                        flash('Your spreadsheet contains dates beyond the end of the ' + str(cycle.cycle_year) +
+                              ' cycle. Please check your dates and make sure that all dates are entered in the "MM/DD/YYYY" format.',
+                              category='error')
+                        print(cycle_data[column].dropna())
+                        return redirect(url_for('dashboard.cycles'))
+                    # Check for future dates
+                    if pd.Series(pd.to_datetime(cycle_data[column].dropna()) > datetime.today()).any():
+                        flash('Your spreadsheet contains future dates. Please remove them and try again.',
+                              category='error')
+                        return redirect(url_for('dashboard.cycles'))
+
                 tableJSON = cycle_data.to_json()
                 return render_template('import-list.html', user=current_user, cycle=cycle, tableJSON=tableJSON,
                                        colnames=colnames, column_types=form_options.COLUMN_TYPES)
@@ -531,6 +556,29 @@ def import_list():
                 cycle_data = cycle_data.dropna(axis=0, how='all')
                 cycle_data = cycle_data.dropna(axis=1, how='all')
                 colnames = cycle_data.columns
+
+                # Check to make sure dates are in range
+                for column in cycle_data.columns[1:len(cycle_data.columns)]:
+                    # Check minimum date
+                    if pd.Series(pd.to_datetime(cycle_data[column].dropna()) < pd.to_datetime(str(cycle.cycle_year-1) + '-05-01')).any():
+                        flash('Your spreadsheet contains dates before the beginning of the ' + str(cycle.cycle_year) +
+                              ' cycle. Please check your dates and make sure that all dates are entered in the "MM/DD/YYYY" format.',
+                              category='error')
+                        print(cycle_data[column].dropna())
+                        return redirect(url_for('dashboard.cycles'))
+                    # Check maximum date
+                    if pd.Series(pd.to_datetime(cycle_data[column].dropna()) > pd.to_datetime(str(cycle.cycle_year) + '-08-31')).any():
+                        flash('Your spreadsheet contains dates beyond the end of the ' + str(cycle.cycle_year) +
+                              ' cycle. Please check your dates and make sure that all dates are entered in the "MM/DD/YYYY" format.',
+                              category='error')
+                        print(cycle_data[column].dropna())
+                        return redirect(url_for('dashboard.cycles'))
+                    # Check for future dates
+                    if pd.Series(pd.to_datetime(cycle_data[column].dropna()) > datetime.today()).any():
+                        flash('Your spreadsheet contains future dates. Please remove them and try again.',
+                              category='error')
+                        return redirect(url_for('dashboard.cycles'))
+
                 tableJSON = cycle_data.to_json()
                 return render_template('import-list.html', user=current_user, cycle=cycle, tableJSON=tableJSON,
                                        colnames=colnames, column_types=form_options.COLUMN_TYPES)
@@ -1047,3 +1095,9 @@ def delete_class():
         db.session.delete(course)
         db.session.commit()
         return jsonify({})
+
+
+@dashboard.route('essays', methods=['GET', 'POST'])
+@login_required
+def essays():
+    return render_template('essays.html', user=current_user, cycles=current_user.cycles)
