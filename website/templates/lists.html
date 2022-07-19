@@ -284,9 +284,10 @@ function toggleCancel() {
                                 <i class="bi bi-trash"></i>
                             </button>
                         </div>
-                        <div style="padding-top:5px">
-                            {% if school.secondary_received %}
-                            <span style="font-size: 1.25rem">Test</span>
+                        <div>
+                            {% if (school.secondary_received and not school.application_complete) %}
+                            {% set delay = (today - school.secondary_received)|format_days %}
+                            <a href="#" data-toggle="tooltip" title="Days since secondary received." style="color:black;text-decoration-style:dotted;font-size: 1.25rem">{{ delay }}</a>
                             {% endif %}
                         </div>
                     </center>

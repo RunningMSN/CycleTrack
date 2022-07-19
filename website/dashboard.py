@@ -476,7 +476,7 @@ def lists():
     return render_template('lists.html', user=current_user, cycle=cycle, schools=schools, phd_applicant=phd_applicant,
                            usmd_school_list=form_options.get_md_schools('USA'),
                            camd_school_list=form_options.get_md_schools('CAN'),
-                           do_school_list=form_options.get_do_schools(), program_types=program_types)
+                           do_school_list=form_options.get_do_schools(), program_types=program_types, today=datetime.today())
 
 
 @dashboard.route('/import-list', methods=["GET", "POST"])
