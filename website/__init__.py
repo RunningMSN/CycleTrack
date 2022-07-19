@@ -26,12 +26,14 @@ def create_app():
     from .dashboard import dashboard
     from .explorer import explorer
     from .profile import profile
+    from .jinja_templates import jinja_templates
 
     app.register_blueprint(pages, url_prefix = '/')
     app.register_blueprint(authentication, url_prefix='/')
     app.register_blueprint(dashboard, url_prefix='/')
     app.register_blueprint(explorer, url_prefix='/')
     app.register_blueprint(profile, url_prefix='/')
+    app.register_blueprint(jinja_templates, url_prefix='/')
 
     from .models import User
 
