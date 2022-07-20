@@ -12,6 +12,7 @@
                 <img src="{{ url_for('static', filename='images/school_logos/' + school_info.logo_file_name) }}" style="max-width:150px;max-height:150px" width="100%" height="auto">
             </center>
             </div>
+
         <div class="col-10">
             <h2>{{ school_info.school }}</h2>
             <strong>Location: </strong> <a href="https://www.google.com/maps/search/?api=1&query={{ school_info.lat }},{{ school_info.long }}" target="_blank">{{ school_info.city }}, {{ school_info.state }}</a>
@@ -25,7 +26,7 @@
             {% if school_info.phd_website %}
             | <a href="{{ school_info.phd_website }}" target="_blank">{{ school_info.md_or_do }}-PhD</a>
             {% endif %}
-            | <a href="{{school_info.msar_choosedo_link}}" target="_blank">{% if school_info.md_or_do == 'MD' %}MSAR{% else %}Choose DO Explorer{% endif %}</a>
+            | {% if school_info.msar_choosedo_link|length > 0 %}<a href="{{ school_info.msar_choosedo_link }}" target="_blank">{% else %} <a href="#" data-toggle="tooltip" title="Currently unavailable." style="color:gray;text-decoration-style:dotted">{% if school_info.md_or_do == 'MD' %}MSAR{% else %}Choose DO Explorer{% endif %}</a>{% endif %}
             <br />
             <strong>Letters of Recommendation: </strong>
             {% if school_info.lor_reg_link == 'unk' %}
