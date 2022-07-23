@@ -5,7 +5,7 @@
 <div class="p-5 mb-4" style="background: #ebebeb">
     <div class="container-fluid py-5">
         <div class="container">
-            <h1 class="display-4">{{ app_count }} Applications. {{ school_count }} Med Schools. {{ user_count }} Future Doctors.</h1>
+            <h1 class="display-4">{{ app_count|format_integers_comma }} Applications. {{ school_count }} Med Schools. {{ user_count|format_integers_comma }} Future Doctors.</h1>
             <p class="lead">CycleTrack is a simple system for tracking and visualizing your medical school applications
             while crowdsourcing data to make the application process more transparent and less stressful.</p>
             <a href="{{ url_for('pages.about') }}"><button class="btn btn-primary">Learn More</button></a>
