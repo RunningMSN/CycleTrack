@@ -5,7 +5,7 @@ from flask import Blueprint, render_template, request, flash, jsonify, redirect,
 from . import db, form_options
 from .models import User,Cycle, School, User_Profiles
 import pandas as pd
-from .visualizations import public_graphs
+from .visualizations import dot, line, bar, sankey, map, horz_bar
 import hashlib
 import json
 
@@ -22,12 +22,11 @@ def profile_home():
     user_profile = db.session.query(User_Profiles,User).filter(User_Profiles.user_id==userid) \
         .join(User, User.id == User_Profiles.user_id)
 
-    blocks = [x[0] for x in user_profile.order_by(User_Profiles.block_order.asc())]
-     
-    if user_profile.count()>0:
+    if user_profile.first():
         current_publicity = user_profile.first()[0].public_profile
     else:
-        current_publicity = "Private"
+        #set default to public for now
+        current_publicity = "Public"
 
     cycle_ids = current_user.cycles
     cycle_years = [Cycle.query.filter_by(id=x.id).first().cycle_year for x in cycle_ids]
@@ -59,7 +58,8 @@ def profile_home():
             selected_cycle_year = request.form.get('cycle_year')
             if selected_cycle_year:
                 block.cycle_year = selected_cycle_year
-                block.cycle_id = Cycle.query.filter_by(cycle_year=selected_cycle_year).first().id
+                block.cycle_id = Cycle.query.filter_by(user_id=userid).first().id
+                print(block.cycle_id)
             else:
                 block.cycle_year = None
                 block.cycle_id = None
@@ -83,33 +83,24 @@ def profile_home():
                 block.filter_values = filter_values
             hide_names = request.form.get("hide_names")
             if hide_names:
-                block.hide_names = hide_names
+                block.hide_names = (hide_names == 'true')
         elif block_type.lower() == "text":
             text = request.form.get("textbox")
             if text:
                 block.text = text
         db.session.commit()
-        #reindex the profile's block order
-        '''profile = User_Profiles.query.filter_by(user_id=userid).order_by(User_Profiles.block_order.asc())
-        print(profile)
-        for x,row in enumerate(profile):
-            row.block_order = x+1
-        db.session.commit()
-        print(pd.read_sql((User_Profiles.query.filter_by(user_id=userid)).statement,db.session.bind))'''
+
     elif request.form.get("add_block"):
-        print("adding block")
-         #add block
+        #add block
         block_order = request.form.get('block_order')
         block_type = request.form.get('block_type')
         if block_type:
             if block_type.lower() == "graph":
                 selected_cycle_year = request.form.get('cycle_year')
-                cycle_id = Cycle.query.filter_by(cycle_year=selected_cycle_year).first().id
-                #cycle = Cycle.query.filter_by(id=int(cycle_id)).first()
-                cycle_data = pd.read_sql(School.query.filter_by(cycle_id=cycle_id).statement, db.session.bind)
+                cycle_id = Cycle.query.filter_by(user_id=userid).first().id
+                #cycle_data = pd.read_sql(School.query.filter_by(cycle_id=cycle_id).statement, db.session.bind)
                 # Vis Generation
                 vis_type = request.form.get('vis_type')
-
                 # Grab Settings
                 if request.form.get('plot_title'):
                     plot_title = request.form.get('plot_title')
@@ -119,7 +110,7 @@ def profile_home():
                 map_type = request.form.get("map_type")
                 color_type = request.form.get("color_type")
                 filter_values = ", ".join(request.form.getlist("filter_values"))
-                hide_names = request.form.get("hide_names")
+                hide_names = (request.form.get("hide_names") == 'true')
                 db.session.add(
                     User_Profiles(user_id = userid,url_hash = url, public_profile=current_publicity,
                         block_order=block_order,block_type=block_type,cycle_id=cycle_id,cycle_year=selected_cycle_year,
@@ -131,14 +122,13 @@ def profile_home():
                 db.session.add(
                     User_Profiles(user_id = userid,url_hash = url, public_profile=current_publicity,
                         block_order=block_order,block_type=block_type,text=text))
-
                 db.session.commit()
     elif request.form.get("delete_block"):
         #reindex the profile
         profile = User_Profiles.query.filter_by(user_id=userid).order_by(User_Profiles.block_order)
-        profile.update({profile.block_order: range(1,profile.count()+1)})
+        for x,row in enumerate(profile):
+            row.block_order = x+1
         db.session.commit()
-        print(pd.read_sql((User_Profiles.query.filter_by(user_id=userid)).statement,db.session.bind))
     
     public_switch = request.form.get("submit_public_change")
     if public_switch:
@@ -148,77 +138,111 @@ def profile_home():
             new_public = "Private"
         User_Profiles.query.filter_by(user_id=userid).update({User_Profiles.public_profile: new_public})
         db.session.commit()
-        print(pd.read_sql((User_Profiles.query.filter_by(user_id=userid)).statement,db.session.bind))
 
-    return render_template('profile.html',user=current_user,profile=user_profile,blocks=blocks,app_types=app_types, current_publicity= current_publicity,
+    blocks = [x[0] for x in user_profile.order_by(User_Profiles.block_order.asc())]
+    if user_profile.first():
+        current_publicity = user_profile.first()[0].public_profile
+
+    return render_template('profile.html',user=current_user,profile=user_profile,blocks=blocks,app_types=app_types, current_publicity= current_publicity, hashurl=url,
     vis_types=form_options.VIS_TYPES, color_types=form_options.COLOR_TYPES, profile_types=form_options.PROFILE_TYPES,filter_options=form_options.FILTER_OPTIONS,
     map_types=form_options.MAP_TYPES,block_types=form_options.BLOCK_TYPES,cycle_years=cycle_years)
 
 @profile.route('/profile/<userurl>')
 def profile_page(userurl):
 
-    user = User.query.filter_by(url_hash=userurl).first()
-    userid = user.id
+    user = User_Profiles.query.filter_by(url_hash=userurl).first()
 
-    user_profile = db.session.query(User_Profiles,User).filter(User_Profiles.user_id==userid) \
-        .join(User, User.id == User_Profiles.user_id)
+    if user:
+        blank=False
+        userid = user.user_id
 
-    
-    blocks = [x[0] for x in user_profile.order_by(User_Profiles.block_order.asc())]
-    graphs = []
-    for block in blocks:
-        #block type
-        block_type = block.block_type
-        if block_type == "Graph":
-            graphJSON = None
-            #cycle data
-            cycle_id = block.cycle_id
-            cycle_data = pd.read_sql(School.query.filter_by(cycle_id=cycle_id).statement, db.session.bind)
-            #app type
-            app_type = block.app_type
-            #vis type
-            vis_type = block.vis_type
-            #plot title
-            plot_title = block.plot_title
-            
-            map_type = block.map_type
+        user_profile = db.session.query(User_Profiles,User).filter(User_Profiles.user_id==userid) \
+            .join(User, User.id == User_Profiles.user_id)
 
-            demographics = False
 
-            color_type = block.color
+        blocks = [x[0] for x in user_profile.order_by(User_Profiles.block_order.asc())]
+        types = []
+        graphs = []
+        ids = []
+        for block in blocks:
+            ids.append(block.block_order)
+            #block type
+            block_type = block.block_type
+            if block_type == "Graph":
+                types.append("graph")
+                graphJSON = None
+                #cycle data
+                cycle_id = block.cycle_id
+                cycle_data = pd.read_sql(School.query.filter_by(cycle_id=cycle_id).statement, db.session.bind)
+                print(cycle_data)
+                #app type
+                app_type = block.app_type
+                #vis type
+                vis_type = block.vis_type
+                #plot title
+                plot_title = block.plot_title
+                
+                map_type = block.map_type
 
-            hide_names = block.hide_names
+                color_type = block.color
 
-            if block.filter_values:
-                filter_list = block.filter_values.split(", ")
-                filter_types = {'primary': None, 'secondary_received': None, 'application_complete': None,
-                        'interview_received': None, 'interview_date': None, 'rejection': None, 'waitlist': None,
-                        'acceptance': None, 'withdrawn': None}
-                filter_replacement = {"Primary Submitted":"primary", "Secondary Recieved":"secondary_received",
-                "Application Complete":"application_complete", "Interview Recieved":"interview_received", "Interview Complete":"interview_date",
-                "Rejection":"rejection","Waitlist":"waitlist","Acceptance":"acceptance","Withdrawn":"withdrawn"}
-                replaced_filters = [x if x not in filter_replacement else filter_replacement[x] for x in filter_list]
-                for x in replaced_filters:
-                    cycle_data.drop([x],axis=1)
-            
-            # Filter by PhD
-            if app_type == 'Dual Degree':
-                cycle_data = cycle_data[cycle_data['phd'] == True]
-            else:
-                cycle_data = cycle_data[cycle_data['phd'] == False]
+                hide_names = block.hide_names
 
-            # Filter MD or DO
-            if app_type == 'MD' or app_type == 'MD Only':
-                cycle_data = cycle_data[cycle_data['school_type'] == 'MD']
-            elif app_type == 'DO' or app_type == 'DO Only':
-                cycle_data = cycle_data[cycle_data['school_type'] == 'DO']
-            # Drop extra information
-            cycle_data = cycle_data.drop(['id', 'cycle_id', 'user_id', 'school_type', 'phd', 'note'], axis=1)
-            # Drop empty columns
-            cycle_data = cycle_data.dropna(axis=1, how='all')
-        elif block_type == "Text":
-            graphs.append(block.text)
-    return render_template('profile_template.html', user=current_user,privacy=user_profile.public_profile)
+                if block.filter_values:
+                    filter_list = block.filter_values.split(", ")
+                    filter_types = {'primary': None, 'secondary_received': None, 'application_complete': None,
+                            'interview_received': None, 'interview_date': None, 'rejection': None, 'waitlist': None,
+                            'acceptance': None, 'withdrawn': None}
+                    filter_replacement = {"Primary Submitted":"primary", "Secondary Recieved":"secondary_received",
+                    "Application Complete":"application_complete", "Interview Recieved":"interview_received", "Interview Complete":"interview_date",
+                    "Rejection":"rejection","Waitlist":"waitlist","Acceptance":"acceptance","Withdrawn":"withdrawn"}
+                    replaced_filters = [x if x not in filter_replacement else filter_replacement[x] for x in filter_list]
+                    for x in replaced_filters:
+                        cycle_data.drop([x],axis=1)
+                
+                # Filter by PhD
+                if app_type == 'Dual Degree':
+                    cycle_data = cycle_data[cycle_data['phd'] == True]
+                else:
+                    cycle_data = cycle_data[cycle_data['phd'] == False]
+
+                # Filter MD or DO
+                if app_type == 'MD' or app_type == 'MD Only':
+                    cycle_data = cycle_data[cycle_data['school_type'] == 'MD']
+                elif app_type == 'DO' or app_type == 'DO Only':
+                    cycle_data = cycle_data[cycle_data['school_type'] == 'DO']
+                # Drop extra information
+                cycle_data = cycle_data.drop(['id', 'cycle_id', 'user_id', 'school_type', 'phd', 'note'], axis=1)
+                # Drop empty columns
+                cycle_data = cycle_data.dropna(axis=1, how='all')
+
+                if len(cycle_data.columns) > 1:
+                    if vis_type.lower() == 'dot':
+                        graphJSON = dot.generate(cycle_data, plot_title,stats=False,color=color_type.lower(),
+                                                hide_school_names=hide_names)
+                    elif vis_type.lower() == 'line':
+                        graphJSON = line.generate(cycle_data, plot_title,stats=False, color=color_type.lower())
+                    elif vis_type.lower() == 'bar':
+                        graphJSON = bar.generate(cycle_data, plot_title,stats=False, color=color_type.lower())
+                    elif vis_type.lower() == 'sankey':
+                        graphJSON = sankey.generate(cycle_data, plot_title,stats=False, color=color_type.lower())
+                    elif vis_type.lower() == 'map':
+                        graphJSON = map.generate(cycle_data, plot_title,stats=False, color=color_type.lower(),
+                                                map_scope=map_type.lower())
+                    elif vis_type.lower() == 'timeline':
+                        graphJSON = horz_bar.generate(cycle_data, plot_title,stats=False, color=color_type.lower(),
+                                                hide_school_names=hide_names)
+                    graphs.append(graphJSON)
+                else:
+                    graphJSON = None
+            elif block_type == "Text":
+                types.append("text")
+                graphs.append(block.text)
+    else:
+        blank = True
+        types = []
+        graphs = []
+    return render_template('profile_template.html', user=current_user,blank=blank,blocks_data=zip(ids,types,graphs))
 
 @profile.route('/delete-block',methods=["POST"])
 def delete_block():

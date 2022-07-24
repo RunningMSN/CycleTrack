@@ -1,11 +1,38 @@
 {% extends 'base.html' %}
 {% block title %} User Profile {% endblock %}
+{% block additional_js %}
+    <script type="text/javascript">
+        function ChangeGraphDropdowns(value){
+            if(value=="Graph"){
+                document.getElementById('text_div').style.display='none';
+                document.getElementById('add_vis_div').style.display='block';
+                document.getElementById('add_year_div').style.display='block';
+                document.getElementById('app_type_div').style.display='block';
+                document.getElementById('map_type_div').style.display='block';
+                document.getElementById('color_div').style.display='block';
+                document.getElementById('title_div').style.display='block';
+                document.getElementById('filter_div').style.display='block';
+                document.getElementById('hide_name_div').style.display='block';
+
+            }else if(value=="Text"){
+                document.getElementById('text_div').style.display='block';
+                document.getElementById('add_vis_div').style.display='none';
+                document.getElementById('add_year_div').style.display='none';
+                document.getElementById('app_type_div').style.display='none';
+                document.getElementById('map_type_div').style.display='none';
+                document.getElementById('color_div').style.display='none';
+                document.getElementById('title_div').style.display='none';
+                document.getElementById('filter_div').style.display='none';
+                document.getElementById('hide_name_div').style.display='none';
+            }
+        }
+    </script>
+{% endblock %}
 {% block content%}
 <div class="container">
     <h2>My Profile Settings</h2>
 </div>
 <div id="general-profile-settings" class="container" style="padding: top 10px;">
-    <p>General settings</p>
     <div class="row">
         <div class="col-auto">
             
@@ -17,7 +44,8 @@
                 Add Block
             </button>
         </div>
-        {% if current_publicity %}
+        <!--
+            {% if current_publicity %}
         <div class="col-auto">
             <form method="post">
                 <button class="btn btn-primary rounded normal_list"  type="submit" name="submit_public_change" value="true" style="margin: 3px; margin-left: 0px">
@@ -25,10 +53,15 @@
                 </button>
             </form>
         </div>
-
         {% endif %}
+        -->
+        
+        <div class="col-auto" >
+            <a href="{{ url_for('profile.profile_home') }}/{{ hashurl }} " target="_blank" type="button" class="btn btn-primary rounded normal_list" style="margin: 3px; margin-left: 0px">
+                View my page
+            </a>
+        </div>
     </div>
-    <p>Block List</p>
     {% for block in blocks %}
         <li class="list-group-item border block_entry"> 
             <div class="row rows-cols-2">
@@ -141,13 +174,14 @@
                     </div>
                     <div class="form-group">
                         <label for="type">Block Type</label>
-                        <select id="block_type" name="block_type" class="btn-sm form-control">
+                        <select id="block_type" name="block_type" class="btn-sm form-control" onchange="ChangeGraphDropdowns(this.value);">
+                            <option disabled selected value> -- select an option -- </option>
                             {% for block_type in block_types%}
                             <option value="{{ block_type }}">{{ block_type }}</option>
                             {% endfor %}
                         </select>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" id="add_vis_div" style="display:none">
                         <label for="type">Visualization Type</label>
                         <select id="vis_type" name="vis_type" class="btn-sm form-control">
                             {% for vis_type in vis_types %}
@@ -155,7 +189,7 @@
                             {% endfor %}
                         </select>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" id="add_year_div" style="display:none">
                         <label for="years">Cycle Year</label>
                         <select id="cycle_year" name="cycle_year" class="btn-sm form-control">
                             {% for year in cycle_years %}
@@ -167,7 +201,7 @@
                             {% endfor %}
                         </select>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" id="app_type_div" style="display:none">
                         <label for="type">App Type</label>
                         <select id="app_type" name="app_type" class="btn-sm form-control">
                             {% for app_type in app_types %}
@@ -175,7 +209,7 @@
                             {% endfor %}
                         </select>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" id="map_type_div" style="display:none">
                         <label for="type">Map Type</label>
                         <select id="map_type" name="map_type" class="btn-sm form-control">
                             {% for map_type in map_types %}
@@ -183,7 +217,7 @@
                             {% endfor %}
                         </select>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" id="color_div" style="display:none">
                         <label for="type">Color Type</label>
                         <select id="color_type" name="color_type" class="btn-sm form-control">
                             <option selected value="Default">Default</option>
@@ -194,11 +228,11 @@
                             {% endfor %}
                         </select>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" id="title_div" style="display:none">
                         <label for="plot_title"> Plot Title</label>
                         <input id="plot_title" name="plot_title" type="text" class="btn-sm form-control">
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" id="filter_div" style="display:none">
                         <label for="type">Filter Data (select multiple to remove)</label>
                         <select id="filter_values" name="filter_values" class="btn-sm form-control" multiple>
                             {% for filter in filter_options %}
@@ -206,12 +240,12 @@
                             {% endfor %}
                         </select>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" id="hide_name_div" style="display:none">
                         <input type="checkbox" id="hide_names" name="hide_names" value="true">
                         <label for="hide_names">Hide names</label><br>
                     </div>
-                    <div class="form-group">
-                        <label for="textbox">Text</label>
+                    <div class="form-group" id="text_div" style="display:none">
+                        <label for="textbox" id="textbox">Text</label>
                         <textarea class="form-control" id="textbox" name="textbox" rows="3"></textarea>
                     </div>
                 </div>
@@ -222,7 +256,10 @@
             </form>
         </div>
     </div>
+
 </div>
+
+
 
 {% for block in blocks %}
 <div class="modal fade" id="{{block.id}}-modal" tabindex="-1" role="dialog" aria-hidden="true">
@@ -236,16 +273,10 @@
                 <div class="modal-body">
                     <input type="hidden" id="edit_block_modal" name="edit_block" value="{{block.id}}">
                     <input type="hidden" id="block_type" name="block_type" value="{{block.block_type}}">
-                    <div sytle="padding-top:5px">
-                        <label for="order">Block Order</label>
-                        <select id="block_order" name="block_order" class="btn-sm form-control" >
-                            <option selected value="{{ block.block_order }}">{{ block.block_order }}</option>
-                            {% for num in range(1,blocks|length+2) %}
-                                {% if num != block.block_order %}
-                                    <option value="{{ num }}">{{ num }}</option>
-                                {% endif %}
-                            {% endfor %}
-                        </select>
+                    <input type="hidden" id="block_type" name="block_order" value="{{block.block_order}}">
+                    <div style="padding-top:5px">
+                        Block Order <br>
+                        {{ block.block_order }}
                     </div>
                     {% if block.block_type == "Graph" %}
                         <div class="form-group">
@@ -332,7 +363,7 @@
                     {% else %}
                         <div class="form-group">
                             <label for="textbox">Text</label>
-                            <textarea class="form-control" id="textbox" name="textbox" rows="3" value="{{block.textbox}}"></textarea>
+                            <textarea class="form-control" id="textbox" name="textbox" rows="3">{{block.text}}</textarea>
                         </div>
                     {% endif %}
                     
