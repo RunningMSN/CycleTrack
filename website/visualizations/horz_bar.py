@@ -28,9 +28,6 @@ def generate(cycle_data, title, stats, color="default",custom_text=None,hide_sch
         yaxis_type="category",
         margin=dict(l=20, r=20, t=40, b=20))
     
-    if hide_school_names:
-        fig.update_yaxes(title='y', visible=False, showticklabels=False)
-    
     # Label using more readable action names
     fig.for_each_trace(lambda t: t.update(name=converters.action_names[t.name],
                                           legendgroup=converters.action_names[t.name],
@@ -38,9 +35,15 @@ def generate(cycle_data, title, stats, color="default",custom_text=None,hide_sch
                                           )
                        )
 
+    
+
     # Remove outlines
     fig.update_traces(marker=dict(line=dict(width=0)),legendgroup='group',
     hovertemplate="%{y}<br>%{customdata[0]}<br>Date: %{base|%m-%d-%Y} <extra></extra>")
+
+    if hide_school_names:
+        fig.update_yaxes(title='y', visible=False, showticklabels=False)
+        fig.update_traces(hovertemplate="%{customdata[0]}<br>Date: %{base|%m-%d-%Y} <extra></extra>")
 
     fig.update_yaxes(title=None, gridwidth=1)
 
