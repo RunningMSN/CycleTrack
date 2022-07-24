@@ -43,6 +43,7 @@ def generate(cycle_data, title, stats, color="default",custom_text=None,hide_sch
 
     if hide_school_names:
         fig.update_yaxes(title='y', visible=False, showticklabels=False)
+        fig.update_traces(hovertemplate = "<br>%{x}<extra></extra>")
     
     est_height = len(melted['name'].unique())*20
 
