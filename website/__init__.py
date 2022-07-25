@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from os import path
 from flask_login import LoginManager
@@ -10,6 +10,7 @@ DB_NAME = site_settings.DB_NAME
 mail = Mail()
 
 def create_app():
+    # Site settings
     app = Flask(__name__)
     app.config['SECRET_KEY'] = site_settings.SECRET_KEY
     app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
@@ -21,6 +22,7 @@ def create_app():
     db.init_app(app)
     mail.init_app(app)
 
+    # Load blueprints
     from .pages import pages
     from .authentication import authentication
     from .dashboard import dashboard
@@ -46,6 +48,10 @@ def create_app():
     @login_manager.user_loader
     def load_user(id):
         return User.query.get(int(id))
+
+    # Load error handlers
+    from .error_handlers import page_not_found
+    app.register_error_handler(404, page_not_found)
 
     return app
 
