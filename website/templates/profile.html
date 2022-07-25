@@ -39,14 +39,14 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-auto">
+        <div class="col-auto" id="addblock">
             <button type="button" class="btn btn-primary rounded normal_list" data-toggle="modal" data-target="#add-block-modal" style="margin: 3px; margin-left: 0px">
                 Add Block
             </button>
         </div>
         <!--
             {% if current_publicity %}
-        <div class="col-auto">
+        <div class="col-auto" id="publicity">
             <form method="post">
                 <button class="btn btn-primary rounded normal_list"  type="submit" name="submit_public_change" value="true" style="margin: 3px; margin-left: 0px">
                     Make {% if  current_publicity == "Public" %}Public{% else %}Private{% endif %}
@@ -55,20 +55,35 @@
         </div>
         {% endif %}
         -->
-        
-        <div class="col-auto" >
+        {%if blocks %}
+        <div class="col-auto" id="to-profile">
             <a href="{{ url_for('profile.profile_home') }}/{{ hashurl }} " target="_blank" type="button" class="btn btn-primary rounded normal_list" style="margin: 3px; margin-left: 0px">
                 View my page
             </a>
         </div>
+        {% endif %}
+        <div class="col-auto" id="reorder" style="display:none">
+            <button type="button" class="btn btn-primary rounded normal_list" style="margin: 3px; margin-left: 0px">Reorder</button>
+        </div>
     </div>
-    {% for block in blocks %}
+
+    <ul>
+        {% for block in blocks %}
         <li class="list-group-item border block_entry"> 
-            <div class="row rows-cols-2">
+            <div class="row rows-cols-3">
+                <div class="col col-sm-auto">
+                    <div class="row">
+                        <button type="button" class="btn btn-light" onclick="reorderBlock({{ block.id }},{{block.block_order}},'up')"><i class="bi bi-caret-up-fill"></i></button>
+                    </div>
+                    <div class="row">
+                        <button type="button" class="btn btn-light" onclick="reorderBlock({{ block.id }},{{block.block_order}},'down')"><i class="bi bi-caret-down-fill"></i></button>
+                    </div>
+                </div>
                 <div class="col-lg-1">
                     <div class="row">
                         <strong>Block #</strong><br>
                         <p>{{block.block_order}}</p>
+                        <input type="hidden" name="block-id-hidden" value="{{block.block_order}}">
                     </div>
                     <div class="row">
                         <!-- ICONS -->
@@ -146,10 +161,10 @@
                     </div>
                 </div>
             </div>
-                
-            
         </li>
     {% endfor%}
+    </ul>
+    
     
 </div>
 
@@ -167,9 +182,6 @@
                         <label for="order">Block Order</label>
                         <select id="block_order" name="block_order" class="btn-sm form-control" >
                             <option selected value="{{ blocks|length + 1 }}">{{ blocks|length + 1 }}</option>
-                            {% for num in range(blocks|length) %}
-                                <option value="{{ num + 1 }}">{{ num + 1 }}</option>
-                            {% endfor %}
                         </select>
                     </div>
                     <div class="form-group">

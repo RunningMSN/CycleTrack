@@ -17,7 +17,7 @@
 {% for num,type, graph in blocks_data %}
     {%if type == "text" %}
     <div class="container">
-        {{graph}}
+        {{graph | safe}}
     </div>
     {% elif type=="graph"%}
     <div class="container" style="background:white; padding:10px">

@@ -1,13 +1,14 @@
 from flask_login import current_user, login_required
-from rsa import PublicKey
+from numpy import number
 from .form_options import VALID_CYCLES
 from flask import Blueprint, render_template, request, flash, jsonify, redirect, url_for, Response, Markup
 from . import db, form_options
 from .models import User,Cycle, School, User_Profiles
 import pandas as pd
 from .visualizations import dot, line, bar, sankey, map, horz_bar
-import hashlib
 import json
+import uuid
+import markdown
 
 profile = Blueprint('profile', __name__)
 
@@ -16,17 +17,18 @@ profile = Blueprint('profile', __name__)
 def profile_home():
     userid = current_user.get_id()
     user = User.query.filter_by(id=userid).first()
-    user_email = user.email.split("@")[0]
-    url = hashlib.sha1(f"{userid}{user_email}".encode()).hexdigest()
+    
     
     user_profile = db.session.query(User_Profiles,User).filter(User_Profiles.user_id==userid) \
         .join(User, User.id == User_Profiles.user_id)
 
     if user_profile.first():
         current_publicity = user_profile.first()[0].public_profile
+        url = user_profile.first()[0].url_hash
     else:
         #set default to public for now
         current_publicity = "Public"
+        url = str(uuid.uuid5(uuid.NAMESPACE_URL, userid))
 
     cycle_ids = current_user.cycles
     cycle_years = [Cycle.query.filter_by(id=x.id).first().cycle_year for x in cycle_ids]
@@ -59,7 +61,6 @@ def profile_home():
             if selected_cycle_year:
                 block.cycle_year = selected_cycle_year
                 block.cycle_id = Cycle.query.filter_by(user_id=userid).first().id
-                print(block.cycle_id)
             else:
                 block.cycle_year = None
                 block.cycle_id = None
@@ -174,7 +175,6 @@ def profile_page(userurl):
                 #cycle data
                 cycle_id = block.cycle_id
                 cycle_data = pd.read_sql(School.query.filter_by(cycle_id=cycle_id).statement, db.session.bind)
-                print(cycle_data)
                 #app type
                 app_type = block.app_type
                 #vis type
@@ -237,7 +237,8 @@ def profile_page(userurl):
                     graphJSON = None
             elif block_type == "Text":
                 types.append("text")
-                graphs.append(block.text)
+                converted_markdown = markdown.markdown(block.text)
+                graphs.append(converted_markdown)
     else:
         blank = True
         types = []
@@ -254,3 +255,35 @@ def delete_block():
             db.session.delete(block)
             db.session.commit()
         return jsonify({})
+
+@profile.route('/reorder-block',methods=["POST"])
+def reorder_block():
+    block = json.loads(request.data)
+    blockId = block['blockId']
+    block_old_order = block['blockOrder']
+    direction = block['direction']
+
+    print(block_old_order)
+
+    number_of_blocks = User_Profiles.query.filter_by(user_id=current_user.id).count()
+    print(number_of_blocks)
+
+    block = User_Profiles.query.get(blockId)
+    
+    if block:
+        if block.user_id == current_user.id:
+            if direction == "up":
+                if block_old_order > 1:  
+                    block.block_order -= 1
+                    print(block.block_order)
+                    above_block = User_Profiles.query.filter_by(user_id=current_user.id,block_order=block_old_order-1).first()
+                    above_block.block_order += 1
+                    db.session.commit()
+            elif direction == "down":
+                if block_old_order <= number_of_blocks:
+                    block.block_order += 1
+                    below_block = User_Profiles.query.filter_by(user_id=current_user.id,block_order=block_old_order+1).first()
+                    below_block.block_order -= 1
+                    db.session.commit()
+    return jsonify({})
+                

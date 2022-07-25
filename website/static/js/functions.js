@@ -39,3 +39,15 @@ function deleteBlock(blockId) {
     $(formElement).submit()
   });
 }
+
+function reorderBlock(blockId,blockOrder,direction){
+  fetch("/reorder-block", {
+    method: "POST",
+    body: JSON.stringify({ blockId: blockId , blockOrder:blockOrder,direction:direction}),
+  }).then((_res) => {
+    let form = '<form method="POST" action = "/profile"><input type="hidden" name="block_id" id="block_id" value=' + blockId + '> <input type="hidden" name="reorder_block" value='+ blockOrder +'><input type="hidden" name="reorder_direction" value='+ direction +'></form>';
+    let formElement = $(form);
+    $('body').append(formElement);
+    $(formElement).submit()
+  });
+}
