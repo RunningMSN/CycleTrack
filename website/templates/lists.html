@@ -306,6 +306,7 @@ function toggleCancel() {
                         <h5>{{ school.name }} ({{ school.school_type }}{% if school.phd %}-PhD{% endif %})</h5>
                     </a>
                     <div class="row" style="padding-bottom: 10px">
+                        {% if not profile.country == 'CAN' %}
                         <div class="col-lg-2">
                             <strong>Primary Submitted:</strong><br>
                             <span class="normal_list">
@@ -334,6 +335,7 @@ function toggleCancel() {
                                 <input class="datepicker" type="text" data-cycle="{{cycle.cycle_year}}" value="{%- if school.secondary_received -%}{{ school.secondary_received.strftime('%Y-%m-%d') }}{%- endif -%}" name="secondary_received1-{{school.id}}">
                             </span>
                         </div>
+                        {% endif %}
                         <div class="col-lg-2">
                             <strong>Application Complete:</strong><br>
                             <span class="normal_list">
@@ -499,7 +501,7 @@ function toggleCancel() {
 
 
 <!-- SETUP MODAL FOR EDITING EACH SCHOOL -->
-{% for school in cycle.schools %}
+{% for school, profile in schools %}
 <div class="modal fade" id="{{ school.name }}-{{ school.phd }}-modal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -513,6 +515,7 @@ function toggleCancel() {
                     <input type="hidden" id="cycle_id_modal" name="cycle_id" value="{{ cycle.id }}">
                     <input type="hidden" id="school_id" name="school_id" value="{{ school.id }}">
                     <input type="hidden" id="id" name="id" value="{{ school.id }}">
+                    {% if not profile.country == 'CAN' %}
                     <div style="padding-top:5px">
                         <label for="primary">Primary Application Submitted/Verified Date</label>
                         <input type="date" class="form-control" id="primary" name="primary"
@@ -525,6 +528,7 @@ function toggleCancel() {
                                value="{% if school.secondary_received %}{{ school.secondary_received.strftime('%Y-%m-%d') }}{% endif %}"
                                min="{{ cycle.cycle_year - 1 }}-05-01" max="{{ cycle.cycle_year }}-08-31" />
                     </div>
+                    {% endif %}
                     <div style="padding-top:5px">
                         <label for="primary">Application Complete Date</label>
                         <input type="date" class="form-control" id="application_complete" name="application_complete"
