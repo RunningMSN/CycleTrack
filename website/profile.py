@@ -254,42 +254,36 @@ def profile_page(userurl):
 @profile.route('/delete-block',methods=["POST"])
 def delete_block():
     block = json.loads(request.data)
-    blockId = block['blockId']
-    block = User_Profiles.query.get(blockId)
+    block_id = block['blockId']
+    block = User_Profiles.query.get(block_id)
     if block:
         if block.user_id == current_user.id:
             db.session.delete(block)
             db.session.commit()
-        return jsonify({})
+    return jsonify({})
 
 @profile.route('/reorder-block',methods=["POST"])
 def reorder_block():
     block = json.loads(request.data)
-    blockId = block['blockId']
-    block_old_order = block['blockOrder']
+    block_id = block['blockId']
     direction = block['direction']
 
-    print(block_old_order)
+    this_block = User_Profiles.query.filter_by(id=block_id).first()
+    total_blocks = User_Profiles.query.filter_by(user_id=current_user.id).count()
 
-    number_of_blocks = User_Profiles.query.filter_by(user_id=current_user.id).count()
-    print(number_of_blocks)
-
-    block = User_Profiles.query.get(blockId)
-    
-    if block:
-        if block.user_id == current_user.id:
-            if direction == "up":
-                if block_old_order > 1:  
-                    block.block_order -= 1
-                    print(block.block_order)
-                    above_block = User_Profiles.query.filter_by(user_id=current_user.id,block_order=block_old_order-1).first()
-                    above_block.block_order += 1
-                    db.session.commit()
-            elif direction == "down":
-                if block_old_order <= number_of_blocks:
-                    block.block_order += 1
-                    below_block = User_Profiles.query.filter_by(user_id=current_user.id,block_order=block_old_order+1).first()
-                    below_block.block_order -= 1
-                    db.session.commit()
+    # Check to make sure operation is in bounds, if it is, perform swap
+    if direction == 'up':
+        if not this_block.block_order == 1:
+            other_block = User_Profiles.query.filter_by(user_id=current_user.id,
+                                                        block_order = this_block.block_order - 1).first()
+            this_block.block_order = this_block.block_order - 1
+            other_block.block_order = other_block.block_order + 1
+    elif direction == 'down':
+        if not this_block.block_order == total_blocks:
+            other_block = User_Profiles.query.filter_by(user_id=current_user.id,
+                                                        block_order=this_block.block_order + 1).first()
+            this_block.block_order = this_block.block_order + 1
+            other_block.block_order = other_block.block_order - 1
+    db.session.commit()
     return jsonify({})
                 
