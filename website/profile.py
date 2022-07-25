@@ -9,6 +9,12 @@ from .visualizations import dot, line, bar, sankey, map, horz_bar
 import json
 import uuid
 import markdown
+from markdown.extensions import Extension
+
+class EscapeHtml(Extension):
+    def extendMarkdown(self, md, md_globals):
+        del md.preprocessors['html_block']
+        del md.inlinePatterns['html']
 
 profile = Blueprint('profile', __name__)
 
@@ -146,7 +152,7 @@ def profile_home():
 
     return render_template('profile.html',user=current_user,profile=user_profile,blocks=blocks,app_types=app_types, current_publicity= current_publicity, hashurl=url,
     vis_types=form_options.VIS_TYPES, color_types=form_options.COLOR_TYPES, profile_types=form_options.PROFILE_TYPES,filter_options=form_options.FILTER_OPTIONS,
-    map_types=form_options.MAP_TYPES,block_types=form_options.BLOCK_TYPES,cycle_years=cycle_years)
+    map_types=form_options.MAP_TYPES,block_types=form_options.BLOCK_TYPES,cycle_years=cycle_years,markdown=markdown.markdown,EscapeHtml=EscapeHtml)
 
 @profile.route('/profile/<userurl>')
 def profile_page(userurl):
@@ -237,7 +243,7 @@ def profile_page(userurl):
                     graphJSON = None
             elif block_type == "Text":
                 types.append("text")
-                converted_markdown = markdown.markdown(block.text)
+                converted_markdown = markdown.markdown(block.text, extensions=[EscapeHtml()])
                 graphs.append(converted_markdown)
     else:
         blank = True
