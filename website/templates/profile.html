@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'dashboard.html' %}
 {% block title %} User Profile {% endblock %}
 {% block additional_js %}
     <script type="text/javascript">
@@ -13,7 +13,6 @@
                 document.getElementById('title_div').style.display='block';
                 document.getElementById('filter_div').style.display='block';
                 document.getElementById('hide_name_div').style.display='block';
-
             }else if(value=="Text"){
                 document.getElementById('text_div').style.display='block';
                 document.getElementById('add_vis_div').style.display='none';
@@ -28,26 +27,26 @@
         }
     </script>
 {% endblock %}
-{% block content%}
+{% block dash_content%}
 <div class="container">
     <h2>My Profile Settings</h2>
 </div>
 <div id="general-profile-settings" class="container" style="padding: top 10px;">
-    <div class="row">
-        <div class="col-auto">
-            
-        </div>
-    </div>
     <div class="row">
         <div class="col-auto" id="addblock">
             <button type="button" class="btn btn-primary rounded normal_list" data-toggle="modal" data-target="#add-block-modal" style="margin: 3px; margin-left: 0px">
                 Add Block
             </button>
         </div>
+        <div class="col-auto" id="publishsettings">
+            <button type="button" class="btn btn-primary rounded normal_list" data-toggle="modal" data-target="#publish-settings-modal" style="margin: 3px; margin-left: 0px">
+                Publish Settings
+            </button>
+        </div>
         {%if blocks %}
         <div class="col-auto" id="to-profile">
             <a href="{{ url_for('profile.profile_home') }}/{{ hashurl }} " target="_blank" type="button" class="btn btn-primary rounded normal_list" style="margin: 3px; margin-left: 0px">
-                View my page
+                View My Profile
             </a>
         </div>
         {% endif %}
@@ -59,10 +58,10 @@
                 <div class="row rows-cols-3">
                     <div class="col col-sm-auto">
                         <div class="row">
-                            <button type="button" class="btn btn-light" onclick="reorderBlock({{ block.id }},{{block.block_order}},'up')"><i class="bi bi-caret-up-fill"></i></button>
+                            <button type="button" class="btn btn-light rounded-0" onclick="reorderBlock({{ block.id }},{{block.block_order}},'up')"><i class="bi bi-caret-up-fill"></i></button>
                         </div>
                         <div class="row">
-                            <button type="button" class="btn btn-light" onclick="reorderBlock({{ block.id }},{{block.block_order}},'down')"><i class="bi bi-caret-down-fill"></i></button>
+                            <button type="button" class="btn btn-light rounded-0" onclick="reorderBlock({{ block.id }},{{block.block_order}},'down')"><i class="bi bi-caret-down-fill"></i></button>
                         </div>
                     </div>
                     <div class="col-lg-1">
@@ -160,18 +159,13 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <form method="POST">
+                <input type="hidden" name="add_block" value="true">
+                <input type="hidden" name="block_order" value="{{ blocks|length + 1 }}">
                 <div class="modal-header">
                     <h5 class="modal-title">New Block</h5>
                     <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="form-group">
-                        <input type="hidden" name="add_block" value="true">
-                        <label for="order">Block Order</label>
-                        <select id="block_order" name="block_order" class="btn-sm form-control" >
-                            <option selected value="{{ blocks|length + 1 }}">{{ blocks|length + 1 }}</option>
-                        </select>
-                    </div>
                     <div class="form-group">
                         <label for="type">Block Type</label>
                         <select id="block_type" name="block_type" class="btn-sm form-control" onchange="ChangeGraphDropdowns(this.value);">
@@ -245,7 +239,7 @@
                         <label for="hide_names">Hide names</label><br>
                     </div>
                     <div class="form-group" id="text_div" style="display:none">
-                        <label for="textbox" id="textbox">Text</label>
+                        You can use <a href="https://www.markdownguide.org/cheat-sheet/" target="_blank">markdown</a> to format your text. HTML is not supported.
                         <textarea class="form-control" id="textbox" name="textbox" rows="3"></textarea>
                     </div>
                 </div>
@@ -274,10 +268,6 @@
                     <input type="hidden" id="edit_block_modal" name="edit_block" value="{{block.id}}">
                     <input type="hidden" id="block_type" name="block_type" value="{{block.block_type}}">
                     <input type="hidden" id="block_type" name="block_order" value="{{block.block_order}}">
-                    <div style="padding-top:5px">
-                        Block Order <br>
-                        {{ block.block_order }}
-                    </div>
                     {% if block.block_type == "Graph" %}
                         <div class="form-group">
                             <label for="type">Visualization Type</label>
