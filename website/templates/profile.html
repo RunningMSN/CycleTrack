@@ -425,7 +425,7 @@
                     using the menu below. This will prevent visitors from viewing it.
                     {% endif %}
 
-                    <div class="input-group">
+                    <div class="input-group mb-3">
                         <select class="form-control border" name="profile_publish_setting" id="profile_publish_setting">
                             <option value="0" {% if not user.public_profile %} selected {% endif %}>Private</option>
                             <option value="1" {% if user.public_profile %} selected {% endif %}>Public</option>
