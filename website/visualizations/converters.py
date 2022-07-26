@@ -1,22 +1,23 @@
 import pandas as pd
 import datetime as dt
+import numpy as np
 
 palette = {
     "default" : {'primary': '#90e0ef', 'secondary_received': '#00b4d8', 'application_complete': '#0077b6',
                   'interview_received': '#9932CC', 'interview_date': '#8B008B', 'rejection': '#FF0000',
-                  'waitlist': '#FFA500', 'acceptance': '#008000', 'withdrawn': '#808080'},
+                  'waitlist': '#FFA500', 'acceptance': '#008000', 'withdrawn': '#808080','other':'rgba(0,0,0,0)'},
     "okabe-ito" : {'primary': '#F0E442', 'secondary_received': '#56B4E9', 'application_complete': '#0072B2',
                   'interview_received': '#E69F00', 'interview_date': '#CC79A7', 'rejection': '#7a7a7a',
-                  'waitlist': '#de91ff', 'acceptance': '#009E73', 'withdrawn': '#000000'},
+                  'waitlist': '#de91ff', 'acceptance': '#009E73', 'withdrawn': '#000000','other':'rgba(0,0,0,0)'},
     "tol" : {"primary":"#ddcc77","secondary_received":"#88ccee","application_complete":"#331888",
                 "interview_received":"#882255","interview_date":"#117733","rejection":"#aa4499",
-                "waitlist":"#cc6677","acceptance":"#44aa99","withdrawn":"#000000"}
+                "waitlist":"#cc6677","acceptance":"#44aa99","withdrawn":"#000000",'other':'rgba(0,0,0,0)'}
 }
 
 
 action_names = {'primary': 'Primary Submitted', 'secondary_received': 'Secondary Received', 'application_complete': 'Application Complete',
                   'interview_received': 'Interview Received', 'interview_date': 'Interview Complete', 'rejection': 'Rejection',
-                  'waitlist': 'Waitlist', 'acceptance': 'Acceptance', 'withdrawn': 'Withdrawn'}
+                  'waitlist': 'Waitlist', 'acceptance': 'Acceptance', 'withdrawn': 'Withdrawn','other':'other'}
 
 def convert_sums(data):
     # Store numbers of each action on each date
@@ -81,13 +82,16 @@ def convert_bar_df(data):
 def sankey_build_frames(cycle_data,color="default"):
     df_nodes = {'label': cycle_data.columns}
     df_nodes = pd.DataFrame(df_nodes)
+    df_nodes = df_nodes.append(pd.DataFrame({'label':['other']}),ignore_index=True)
     ids = {}
     fig_colors = palette[color]
-    for i in range(0, len(df_nodes['label'])):
+    max_nodes = len(df_nodes['label'])
+    for i in range(0, max_nodes):
         ids[df_nodes['label'][i]] = i
     df_nodes['color'] = df_nodes.apply(lambda row: fig_colors[row.label], axis=1)
     df_nodes['label'] = df_nodes.apply(lambda row: action_names[row.label], axis=1)
     out = {'Source': [], 'Target': [], 'Link Color': []}
+    node_dict = {'Source': [], 'Target': [],'Link Color':[]}
     for index, row in cycle_data.iterrows():
         row_sorted = row.dropna().sort_values()
         for i in range(0, len(row_sorted)):
@@ -102,17 +106,48 @@ def sankey_build_frames(cycle_data,color="default"):
                 col.append(0.5)
                 col = tuple(col)
                 out['Link Color'].append(f'rgba{col}')
+        row_undropped = row.sort_values()
+        for i in range(0, len(row_undropped)):
+            if i == len(row_undropped) - 1:
+                break
+            else:
+                val_1 = ids[row_undropped.index[i]]
+                val_2 = ids[row_undropped.index[i + 1]]
+                if not pd.isnull((row_undropped[i])):
+                    node_dict['Source'].append(val_1)
+                else:
+                    node_dict['Source'].append(max_nodes-1)
+                if not pd.isnull((row_undropped[i+1])):
+                    node_dict['Target'].append(val_2)
+                    h = fig_colors[row_undropped.index[i + 1]].lstrip('#')
+                    col = tuple(int(h[i:i + 2], 16) for i in (0, 2, 4))
+                    col = list(col)
+                    col.append(0.5)
+                    col = tuple(col)
+                    node_dict['Link Color'].append(f'rgba{col}')
+                else:
+                    node_dict['Target'].append(max_nodes-1)
+                    col = [0,0,0,0]
+                    col = tuple(col)
+                    node_dict['Link Color'].append(f'rgba{col}')
+                
     df_links = pd.DataFrame(out)
     df_links = df_links.groupby(df_links.columns.tolist(), as_index=False).size()
+    df_for_nodes = pd.DataFrame(node_dict)
+    df_for_nodes = df_for_nodes.groupby(df_for_nodes.columns.tolist(),as_index=False,dropna=False).size()
 
     full_labels = []
     for key, value in ids.items():
         if key == cycle_data.columns[0]:
-            full_labels.append(f'{action_names[key]}: {str(sum(df_links[df_links["Source"] == value]["size"]))}')
+            full_labels.append(f'{action_names[key]}: {str(sum(df_for_nodes[df_for_nodes["Source"] == value]["size"]))}')
         else:
-            full_labels.append(f'{action_names[key]}: {str(sum(df_links[df_links["Target"] == value]["size"]))}')
+            full_labels.append(f'{action_names[key]}: {str(sum(df_for_nodes[df_for_nodes["Target"] == value]["size"]))}')
     df_nodes['label'] = full_labels
-    return df_nodes, df_links
+
+    print(df_nodes)
+    print(df_for_nodes)
+    return df_nodes, df_for_nodes
+
 
 
 def convert_map(data,color="default"):

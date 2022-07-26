@@ -26,9 +26,8 @@ def generate(cycle_data, title, stats, color="default",custom_text=None):
                 width=0
             ),
             label=df_nodes['label'],
-            color=df_nodes['color'],
+            color = df_nodes['color'],
             pad = 30,
-            
             hovertemplate='%{label} <extra></extra> '
         ),
         link=dict(
