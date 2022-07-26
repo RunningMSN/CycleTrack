@@ -45,7 +45,7 @@
         </div>
         {%if blocks %}
         <div class="col-auto" id="to-profile">
-            <a href="{{ url_for('profile.profile_home') }}/{{ hashurl }} " target="_blank" type="button" class="btn btn-primary rounded normal_list" style="margin: 3px; margin-left: 0px">
+            <a href="{{ url_for('profile.profile_home') }}/{{ hashurl }}" target="_blank" type="button" class="btn btn-primary rounded normal_list" style="margin: 3px; margin-left: 0px">
                 View My Profile
             </a>
         </div>
@@ -397,4 +397,48 @@
 </div>
 {% endfor %}
 
+
+<div class="modal fade" id="publish-settings-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <form method="POST">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Publish Settings</h5>
+                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    {% if not user.public_profile %}
+                    Your profile is currently private. Only you can view it. You can open your
+                    profile to visitors by choosing public from the menu below.
+                    {% else %}
+                    Your profile is currently public. Anyone with the link can view it. You can make your profile
+                    private
+                    using the menu below. This will prevent visitors from viewing it.
+                    {% endif %}
+
+                    <div class="input-group">
+                        <select class="form-control border" name="profile_publish_setting" id="profile_publish_setting">
+                            <option value="0" {% if not user.public_profile %} selected {% endif %}>Private</option>
+                            <option value="1" {% if user.public_profile %} selected {% endif %}>Public</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        Your profile can be accessed at the following link.
+                        <div class="input-group mb-3">
+                            <button class="btn border input-group-text" id="inputGroup-sizing-default"><i
+                                    class="bi bi-clipboard" style="font-size: 1rem"></i></button>
+                            <input type="text" class="form-control border"
+                                   value="https://cycletrack.org{{ url_for('profile.profile_home') }}/{{ hashurl }}"/>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
 {% endblock%}

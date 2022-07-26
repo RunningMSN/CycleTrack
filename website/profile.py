@@ -41,6 +41,14 @@ def profile_home():
 
     cycle_data = pd.read_sql(School.query.filter_by(user_id=userid).statement, db.session.bind)
 
+    # Handle editing publish settings
+    if request.form.get('profile_publish_setting'):
+        if request.form.get('profile_publish_setting') == '1':
+            current_user.public_profile = True
+        else:
+            current_user.public_profile = False
+        db.session.commit()
+
     # Get application types
     # Dual Degree Types
     if any(cycle_data['phd']):
@@ -156,16 +164,12 @@ def profile_home():
 
 @profile.route('/profile/<userurl>')
 def profile_page(userurl):
-
     user = User_Profiles.query.filter_by(url_hash=userurl).first()
-
     if user:
-        blank=False
         userid = user.user_id
 
-        user_profile = db.session.query(User_Profiles,User).filter(User_Profiles.user_id==userid) \
+        user_profile = db.session.query(User_Profiles, User).filter(User_Profiles.user_id == userid) \
             .join(User, User.id == User_Profiles.user_id)
-
 
         blocks = [x[0] for x in user_profile.order_by(User_Profiles.block_order.asc())]
         types = []
@@ -173,21 +177,21 @@ def profile_page(userurl):
         ids = []
         for block in blocks:
             ids.append(block.block_order)
-            #block type
+            # block type
             block_type = block.block_type
             if block_type == "Graph":
                 types.append("graph")
                 graphJSON = None
-                #cycle data
+                # cycle data
                 cycle_id = block.cycle_id
                 cycle_data = pd.read_sql(School.query.filter_by(cycle_id=cycle_id).statement, db.session.bind)
-                #app type
+                # app type
                 app_type = block.app_type
-                #vis type
+                # vis type
                 vis_type = block.vis_type
-                #plot title
+                # plot title
                 plot_title = block.plot_title
-                
+
                 map_type = block.map_type
 
                 color_type = block.color
@@ -197,15 +201,20 @@ def profile_page(userurl):
                 if block.filter_values:
                     filter_list = block.filter_values.split(", ")
                     filter_types = {'primary': None, 'secondary_received': None, 'application_complete': None,
-                            'interview_received': None, 'interview_date': None, 'rejection': None, 'waitlist': None,
-                            'acceptance': None, 'withdrawn': None}
-                    filter_replacement = {"Primary Submitted":"primary", "Secondary Recieved":"secondary_received",
-                    "Application Complete":"application_complete", "Interview Recieved":"interview_received", "Interview Complete":"interview_date",
-                    "Rejection":"rejection","Waitlist":"waitlist","Acceptance":"acceptance","Withdrawn":"withdrawn"}
-                    replaced_filters = [x if x not in filter_replacement else filter_replacement[x] for x in filter_list]
+                                    'interview_received': None, 'interview_date': None, 'rejection': None,
+                                    'waitlist': None,
+                                    'acceptance': None, 'withdrawn': None}
+                    filter_replacement = {"Primary Submitted": "primary", "Secondary Recieved": "secondary_received",
+                                          "Application Complete": "application_complete",
+                                          "Interview Recieved": "interview_received",
+                                          "Interview Complete": "interview_date",
+                                          "Rejection": "rejection", "Waitlist": "waitlist", "Acceptance": "acceptance",
+                                          "Withdrawn": "withdrawn"}
+                    replaced_filters = [x if x not in filter_replacement else filter_replacement[x] for x in
+                                        filter_list]
                     for x in replaced_filters:
-                        cycle_data.drop([x],axis=1)
-                
+                        cycle_data.drop([x], axis=1)
+
                 # Filter by PhD
                 if app_type == 'Dual Degree':
                     cycle_data = cycle_data[cycle_data['phd'] == True]
@@ -224,20 +233,20 @@ def profile_page(userurl):
 
                 if len(cycle_data.columns) > 1:
                     if vis_type.lower() == 'dot':
-                        graphJSON = dot.generate(cycle_data, plot_title,stats=False,color=color_type.lower(),
-                                                hide_school_names=hide_names)
+                        graphJSON = dot.generate(cycle_data, plot_title, stats=False, color=color_type.lower(),
+                                                 hide_school_names=hide_names)
                     elif vis_type.lower() == 'line':
-                        graphJSON = line.generate(cycle_data, plot_title,stats=False, color=color_type.lower())
+                        graphJSON = line.generate(cycle_data, plot_title, stats=False, color=color_type.lower())
                     elif vis_type.lower() == 'bar':
-                        graphJSON = bar.generate(cycle_data, plot_title,stats=False, color=color_type.lower())
+                        graphJSON = bar.generate(cycle_data, plot_title, stats=False, color=color_type.lower())
                     elif vis_type.lower() == 'sankey':
-                        graphJSON = sankey.generate(cycle_data, plot_title,stats=False, color=color_type.lower())
+                        graphJSON = sankey.generate(cycle_data, plot_title, stats=False, color=color_type.lower())
                     elif vis_type.lower() == 'map':
-                        graphJSON = map.generate(cycle_data, plot_title,stats=False, color=color_type.lower(),
-                                                map_scope=map_type.lower())
+                        graphJSON = map.generate(cycle_data, plot_title, stats=False, color=color_type.lower(),
+                                                 map_scope=map_type.lower())
                     elif vis_type.lower() == 'timeline':
-                        graphJSON = horz_bar.generate(cycle_data, plot_title,stats=False, color=color_type.lower(),
-                                                hide_school_names=hide_names)
+                        graphJSON = horz_bar.generate(cycle_data, plot_title, stats=False, color=color_type.lower(),
+                                                      hide_school_names=hide_names)
                     graphs.append(graphJSON)
                 else:
                     graphJSON = None
@@ -245,11 +254,11 @@ def profile_page(userurl):
                 types.append("text")
                 converted_markdown = markdown.markdown(block.text, extensions=[EscapeHtml()])
                 graphs.append(converted_markdown)
+        return render_template('profile_template.html', user=current_user, public_setting=user.public_profile,
+                               profile_user_id = user.user_id, blocks_data=zip(ids,types,graphs))
     else:
-        blank = True
-        types = []
-        graphs = []
-    return render_template('profile_template.html', user=current_user,blank=blank,blocks_data=zip(ids,types,graphs))
+        return render_template('profile_template.html', user=current_user, public_setting=False,
+                               profile_user_id=-1)
 
 @profile.route('/delete-block',methods=["POST"])
 def delete_block():
