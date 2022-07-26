@@ -41,6 +41,9 @@ def profile_home():
 
     cycle_data = pd.read_sql(School.query.filter_by(user_id=userid).statement, db.session.bind)
 
+    number_of_graph_blocks = User_Profiles.query.filter_by(user_id=userid,block_type="Graph").count()
+    number_of_text_blocks = User_Profiles.query.filter_by(user_id=userid,block_type="Text").count()
+
     # Handle editing publish settings
     if request.form.get('profile_publish_setting'):
         if request.form.get('profile_publish_setting') == '1':
@@ -102,38 +105,45 @@ def profile_home():
         db.session.commit()
 
     elif request.form.get("add_block"):
+        
         #add block
         block_order = request.form.get('block_order')
         block_type = request.form.get('block_type')
         if block_type:
             if block_type.lower() == "graph":
-                selected_cycle_year = request.form.get('cycle_year')
-                cycle_id = Cycle.query.filter_by(user_id=userid).first().id
-                #cycle_data = pd.read_sql(School.query.filter_by(cycle_id=cycle_id).statement, db.session.bind)
-                # Vis Generation
-                vis_type = request.form.get('vis_type')
-                # Grab Settings
-                if request.form.get('plot_title'):
-                    plot_title = request.form.get('plot_title')
+                if number_of_graph_blocks == 6:
+                    flash("You have reached the limit on the number of graphs that can be on your profile")
                 else:
-                    plot_title = ""
-                app_type = request.form.get("app_type")
-                map_type = request.form.get("map_type")
-                color_type = request.form.get("color_type")
-                filter_values = ", ".join(request.form.getlist("filter_values"))
-                hide_names = (request.form.get("hide_names") == 'true')
-                db.session.add(
-                    User_Profiles(user_id = userid,url_hash = url, public_profile=current_publicity,
-                        block_order=block_order,block_type=block_type,cycle_id=cycle_id,cycle_year=selected_cycle_year,
-                        vis_type=vis_type,plot_title=plot_title,app_type=app_type,map_type=map_type,
-                        color=color_type,filter_values=filter_values,hide_names=hide_names))
-                db.session.commit()
+                    selected_cycle_year = request.form.get('cycle_year')
+                    cycle_id = Cycle.query.filter_by(user_id=userid).first().id
+                    #cycle_data = pd.read_sql(School.query.filter_by(cycle_id=cycle_id).statement, db.session.bind)
+                    # Vis Generation
+                    vis_type = request.form.get('vis_type')
+                    # Grab Settings
+                    if request.form.get('plot_title'):
+                        plot_title = request.form.get('plot_title')
+                    else:
+                        plot_title = ""
+                    app_type = request.form.get("app_type")
+                    map_type = request.form.get("map_type")
+                    color_type = request.form.get("color_type")
+                    filter_values = ", ".join(request.form.getlist("filter_values"))
+                    hide_names = (request.form.get("hide_names") == 'true')
+                    db.session.add(
+                        User_Profiles(user_id = userid,url_hash = url, public_profile=current_publicity,
+                            block_order=block_order,block_type=block_type,cycle_id=cycle_id,cycle_year=selected_cycle_year,
+                            vis_type=vis_type,plot_title=plot_title,app_type=app_type,map_type=map_type,
+                            color=color_type,filter_values=filter_values,hide_names=hide_names))
+                    db.session.commit()
             elif block_type.lower() == "text":
-                text = request.form.get("textbox")
-                db.session.add(
-                    User_Profiles(user_id = userid,url_hash = url, public_profile=current_publicity,
-                        block_order=block_order,block_type=block_type,text=text))
-                db.session.commit()
+                if number_of_text_blocks == 10:
+                    flash("You have reached the limit on the number of text blocks that can be on your profile.")
+                else:
+                    text = request.form.get("textbox")
+                    db.session.add(
+                        User_Profiles(user_id = userid,url_hash = url, public_profile=current_publicity,
+                            block_order=block_order,block_type=block_type,text=text))
+                    db.session.commit()
     elif request.form.get("delete_block"):
         #reindex the profile
         profile = User_Profiles.query.filter_by(user_id=userid).order_by(User_Profiles.block_order)
@@ -156,7 +166,8 @@ def profile_home():
 
     return render_template('profile.html',user=current_user,profile=user_profile,blocks=blocks,app_types=app_types, current_publicity= current_publicity, hashurl=url,
     vis_types=form_options.VIS_TYPES, color_types=form_options.COLOR_TYPES, profile_types=form_options.PROFILE_TYPES,filter_options=form_options.FILTER_OPTIONS,
-    map_types=form_options.MAP_TYPES,block_types=form_options.BLOCK_TYPES,cycle_years=cycle_years,markdown=markdown.markdown,EscapeHtml=EscapeHtml)
+    map_types=form_options.MAP_TYPES,block_types=form_options.BLOCK_TYPES,cycle_years=cycle_years,markdown=markdown.markdown,EscapeHtml=EscapeHtml,
+    number_of_graph_blocks=number_of_graph_blocks,number_of_text_blocks=number_of_text_blocks)
 
 @profile.route('/profile/<userurl>')
 def profile_page(userurl):

@@ -179,9 +179,18 @@
                         <label for="type">Block Type</label>
                         <select id="block_type" name="block_type" class="btn-sm form-control" onchange="ChangeGraphDropdowns(this.value);">
                             <option disabled selected value> -- select an option -- </option>
-                            {% for block_type in block_types%}
-                            <option value="{{ block_type }}">{{ block_type }}</option>
-                            {% endfor %}
+                            {%if number_of_graph_blocks == 6%}
+                            <option disabled value="Graph">Graph</option>
+                            {% else %}
+                            <option value="Graph">Graph</option>
+                            {% endif %}
+
+                            {% if number_of_text_blocks == 10%}
+                            <option disabled value="Text">Text</option>
+                            {% else %}
+                            <option value="Text">Text</option>
+                            {% endif %}
+
                         </select>
                     </div>
                     <div class="form-group" id="add_vis_div" style="display:none">
