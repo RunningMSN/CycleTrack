@@ -82,8 +82,7 @@ def profile_home():
             if vis_type:
                 block.vis_type = vis_type
             plot_title = request.form.get('plot_title')
-            if plot_title:                
-                block.plot_title = plot_title
+            block.plot_title = plot_title
             app_type = request.form.get("app_type")
             if app_type:
                 block.app_type = app_type
@@ -94,15 +93,12 @@ def profile_home():
             if color_type:
                 block.color = color_type
             filter_values = ", ".join(request.form.getlist("filter_values"))
-            if filter_values:
-                block.filter_values = filter_values
+            block.filter_values = filter_values
             hide_names = request.form.get("hide_names")
-            if hide_names:
-                block.hide_names = (hide_names == 'true')
+            block.hide_names = (hide_names == 'true')
         elif block_type.lower() == "text":
             text = request.form.get("textbox")
-            if text:
-                block.text = text
+            block.text = text
         db.session.commit()
 
     elif request.form.get("add_block"):
@@ -200,10 +196,6 @@ def profile_page(userurl):
 
                 if block.filter_values:
                     filter_list = block.filter_values.split(", ")
-                    filter_types = {'primary': None, 'secondary_received': None, 'application_complete': None,
-                                    'interview_received': None, 'interview_date': None, 'rejection': None,
-                                    'waitlist': None,
-                                    'acceptance': None, 'withdrawn': None}
                     filter_replacement = {"Primary Submitted": "primary", "Secondary Recieved": "secondary_received",
                                           "Application Complete": "application_complete",
                                           "Interview Recieved": "interview_received",
@@ -213,7 +205,7 @@ def profile_page(userurl):
                     replaced_filters = [x if x not in filter_replacement else filter_replacement[x] for x in
                                         filter_list]
                     for x in replaced_filters:
-                        cycle_data.drop([x], axis=1)
+                        cycle_data = cycle_data.drop([x],axis=1)
 
                 # Filter by PhD
                 if app_type == 'Dual Degree':
