@@ -36,23 +36,27 @@
         }
     </script>
 {% endblock %}
-{% block dash_content%}
-<div class="container">
+{% block dash_content %}
+<div id="profile_settings" class="container" style="padding-top:10px">
     <h2>My Profile Settings</h2>
-</div>
-<div id="general-profile-settings" class="container" style="padding: top 10px;">
-    <div class="row">
+
+    <div class="mb-2">
+        Profiles are a canvas for you to build custom pages and/or share your application cycle with the world. Customize
+        your profile by adding blocks on this page.
+    </div>
+
+    <div class="row mb-2">
         <div class="col-auto" id="addblock">
             <button type="button" class="btn btn-primary rounded normal_list" data-toggle="modal" data-target="#add-block-modal" style="margin: 3px; margin-left: 0px">
                 Add Block
             </button>
         </div>
+        {%if blocks %}
         <div class="col-auto" id="publishsettings">
             <button type="button" class="btn btn-primary rounded normal_list" data-toggle="modal" data-target="#publish-settings-modal" style="margin: 3px; margin-left: 0px">
                 Publish Settings
             </button>
         </div>
-        {%if blocks %}
         <div class="col-auto" id="to-profile">
             <a href="{{ url_for('profile.profile_home') }}/{{ hashurl }}" target="_blank" type="button" class="btn btn-primary rounded normal_list" style="margin: 3px; margin-left: 0px">
                 Visit My Profile
@@ -60,108 +64,89 @@
         </div>
         {% endif %}
     </div>
-    <div class="row">
-        <ul>
-            {% for block in blocks %}
-            <li class="list-group-item border block_entry"> 
-                <div class="row rows-cols-3">
-                    <div class="col col-sm-auto">
+
+    {% for block in blocks %}
+    <li class="list-group-item border">
+        <div class="row">
+            <div class="col col-sm-auto d-flex align-items-center">
+                <span class="align-middle" style="font-size: 1.5rem; width: 2ch; text-align: center">{{ block.block_order }}</span>
+            </div>
+            <div class="col col-sm-auto d-flex align-items-center">
+                <div class="btn-group-vertical">
+                    <button type="button" class="btn btn-light rounded-0" onclick="reorderBlock({{ block.id }},{{block.block_order}},'up')"><i class="bi bi-caret-up-fill"></i></button>
+                    <button type="button" class="btn btn-light rounded-0" onclick="reorderBlock({{ block.id }},{{block.block_order}},'down')"><i class="bi bi-caret-down-fill"></i></button>
+                </div>
+            </div>
+            <div class="col">
+                <div class="row container">
+                    {% if block.block_type == "Text" %}
+                        {{ markdown(block.text, extensions=[EscapeHtml()]) |safe }}
+                    {% elif block.block_type == "Graph" %}
                         <div class="row">
-                            <button type="button" class="btn btn-light rounded-0" onclick="reorderBlock({{ block.id }},{{block.block_order}},'up')"><i class="bi bi-caret-up-fill"></i></button>
-                        </div>
-                        <div class="row">
-                            <button type="button" class="btn btn-light rounded-0" onclick="reorderBlock({{ block.id }},{{block.block_order}},'down')"><i class="bi bi-caret-down-fill"></i></button>
-                        </div>
-                    </div>
-                    <div class="col-lg-1">
-                        <div class="row">
-                            <strong>Block #</strong><br>
-                            <p>{{block.block_order}}</p>
-                            <input type="hidden" name="block-id-hidden" value="{{block.block_order}}">
-                        </div>
-                        <div class="row">
-                            <!-- ICONS -->
-                            <div style="padding-top:5px">
-                                <button type="button" class="btn btn-link" data-toggle="modal" data-target="#{{ block.id }}-modal" style="padding: 1px">
-                                    <i class="bi bi-pencil-square"></i>
-                                </button>
-        
-                                <button type="button" class="btn btn-link" data-toggle="modal" data-target="#{{ block.id }}-delete" style="padding: 1px">
-                                    <i class="bi bi-trash"></i>
-                                </button>
+                            <div class="col col-sm-auto">
+                                <h4>{{block.vis_type}} Graph</h4>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-lg">
-                        <div class="row" style="padding-bottom: 10px">
-                            <div class="col-lg-2">
-                                <strong>Type</strong><br>
-                                {{block.block_type}}
-                            </div>
-                            {% if block.block_type=="Graph"%}
-                                <div class="col-lg-2">
-                                    <strong>Graph Type</strong><br>
-                                    {{block.vis_type}}
-                                </div>
-                                <div class="col-lg-2">
-                                    <strong>Plot Title</strong><br>
-                                    {% if block.plot_title %}
-                                        {{block.plot_title}}
-                                    {% else %}
-                                    -
-                                    {% endif%}
-                                </div>
-                                <div class="col-lg-2">
-                                    <strong>Application Type</strong><br>
-                                    {{block.app_type}}
-                                </div>
-                                {% if block.vis_type == "map"%}
-                                <div class="col-lg-2">
-                                    <strong>Map Type</strong><br>
-                                    {{block.map_type}}
-                                
-                                </div>
-                                {% endif%}
-                                <div class="col-lg-2">
-                                    <strong>Color Palette</strong><br>
-                                    {{block.color}}
-                                </div>
-                                <div class="col-lg-2">
-                                    <strong>Filtered values</strong><br>
-                                    {% if block.filter_values %}
-                                        {{block.filter_values}}
-                                    {% else %}
-                                    -
-                                    {% endif %}
-                                </div>
-                                {% if block.vis_type.lower() == "timeline" or block.vis_type.lower() == "dot" %}
-                                <div class="col-lg-2">
-                                    <strong>School names</strong><br>
-                                    {% if block.hide_names%}
-                                        Hidden
-                                    {% else %}
-                                        Not hidden
-                                    {% endif %}
-                                </div>
-                                {% endif %}
-    
+                    <div class="row">
+                        <div class="col-lg-2">
+                            <strong>Plot Title</strong><br>
+                            {% if block.plot_title %}
+                            {{block.plot_title}}
+                            {% else %}
+                            -
                             {% endif%}
-                            {% if block.block_type=="Text" %}
-                            <div class="col col-lg">
-                                <strong>Text</strong><br>
-                                {{markdown(block.text, extensions=[EscapeHtml()]) |safe }}
-                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <strong>Application Type</strong><br>
+                            {{block.app_type}}
+                        </div>
+                        {% if block.vis_type == "map"%}
+                        <div class="col-lg-2">
+                            <strong>Map Type</strong><br>
+                            {{block.map_type}}
+
+                        </div>
+                        {% endif%}
+                        <div class="col-lg-2">
+                            <strong>Color Palette</strong><br>
+                            {{block.color}}
+                        </div>
+                        <div class="col-lg-2">
+                            <strong>Filtered values</strong><br>
+                            {% if block.filter_values %}
+                            {{block.filter_values}}
+                            {% else %}
+                            -
                             {% endif %}
                         </div>
-                        
+                        {% if block.vis_type.lower() == "timeline" or block.vis_type.lower() == "dot" %}
+                        <div class="col-lg-2">
+                            <strong>School names</strong><br>
+                            {% if block.hide_names%}
+                            Hidden
+                            {% else %}
+                            Not hidden
+                            {% endif %}
+                        </div>
+                        {% endif %}
                     </div>
+                    {% endif %}
                 </div>
-            </li>
-        {% endfor%}
-        </ul>
-    </div>
-    
-    
+                <div class="row container">
+                    <p>
+                        <button type="button" class="btn btn-link" data-toggle="modal"
+                                data-target="#{{ block.id }}-modal"
+                                style="margin: 0px; padding: 0px; margin-right: 5px">Edit {{ block.block_type }}
+                        </button>
+                        <button type="button" class="btn btn-link" data-toggle="modal"
+                                data-target="#{{ block.id }}-delete" style="margin: 0px; padding: 0px">Delete
+                        </button>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </li>
+    {% endfor %}
 </div>
 
 <div class="modal fade" id="add-block-modal" tabindex="-1" role="dialog" aria-hidden="true">
@@ -179,9 +164,18 @@
                         <label for="type">Block Type</label>
                         <select id="block_type" name="block_type" class="btn-sm form-control" onchange="ChangeGraphDropdowns(this.value);">
                             <option disabled selected value> -- select an option -- </option>
-                            {% for block_type in block_types%}
-                            <option value="{{ block_type }}">{{ block_type }}</option>
-                            {% endfor %}
+                            {%if number_of_graph_blocks >= 6%}
+                            <option disabled value="Graph">Graph</option>
+                            {% else %}
+                            <option value="Graph">Graph</option>
+                            {% endif %}
+
+                            {% if number_of_text_blocks >= 10%}
+                            <option disabled value="Text">Text</option>
+                            {% else %}
+                            <option value="Text">Text</option>
+                            {% endif %}
+
                         </select>
                     </div>
                     <div class="form-group" id="add_vis_div" style="display:none">
@@ -270,7 +264,7 @@
         <div class="modal-content">
             <form method="POST">
                 <div class="modal-header">
-                    <h5 class="modal-title">Edit Block #{{block.block_order}}: {{block.block_type}}</h5>
+                    <h5 class="modal-title">Edit Block {{block.block_order}}: {{block.block_type}}</h5>
                     <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -383,7 +377,7 @@
         <div class="modal-content">
             <form method="POST">
                 <div class="modal-header">
-                    <h5 class="modal-title">Remove Block #{{ block.block_order }}</h5>
+                    <h5 class="modal-title">Remove Block {{ block.block_order }}</h5>
                     <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
