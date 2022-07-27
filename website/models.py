@@ -86,7 +86,6 @@ class User_Profiles(db.Model):
     id = db.Column(db.Integer,primary_key=True)
     user_id = db.Column(db.Integer,db.ForeignKey('user.id'))
     url_hash = db.Column(db.String(150))
-    public_profile = db.Column(db.String(20))
     block_order = db.Column(db.Integer,nullable=True)
     block_type = db.Column(db.String(20), nullable=True)
     cycle_id = db.Column(db.Integer, db.ForeignKey('cycle.id'), nullable=True)

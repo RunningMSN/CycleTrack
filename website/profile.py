@@ -29,11 +29,8 @@ def profile_home():
         .join(User, User.id == User_Profiles.user_id)
 
     if user_profile.first():
-        current_publicity = user_profile.first()[0].public_profile
         url = user_profile.first()[0].url_hash
     else:
-        #set default to public for now
-        current_publicity = "Public"
         url = str(uuid.uuid5(uuid.NAMESPACE_URL, userid))
 
     cycle_ids = current_user.cycles
@@ -126,7 +123,7 @@ def profile_home():
                     filter_values = ", ".join(request.form.getlist("filter_values"))
                     hide_names = (request.form.get("hide_names") == 'true')
                     db.session.add(
-                        User_Profiles(user_id = userid,url_hash = url, public_profile=current_publicity,
+                        User_Profiles(user_id = userid,url_hash = url,
                             block_order=block_order,block_type=block_type,cycle_id=cycle_id,cycle_year=selected_cycle_year,
                             vis_type=vis_type,plot_title=plot_title,app_type=app_type,map_type=map_type,
                             color=color_type,filter_values=filter_values,hide_names=hide_names))
@@ -137,7 +134,7 @@ def profile_home():
                 else:
                     text = request.form.get("textbox")
                     db.session.add(
-                        User_Profiles(user_id = userid,url_hash = url, public_profile=current_publicity,
+                        User_Profiles(user_id = userid,url_hash = url,
                             block_order=block_order,block_type=block_type,text=text))
                     db.session.commit()
     elif request.form.get("delete_block"):
@@ -146,28 +143,18 @@ def profile_home():
         for x,row in enumerate(profile):
             row.block_order = x+1
         db.session.commit()
-    
-    public_switch = request.form.get("submit_public_change")
-    if public_switch:
-        if current_publicity == "Private":
-            new_public = "Public"
-        else:
-            new_public = "Private"
-        User_Profiles.query.filter_by(user_id=userid).update({User_Profiles.public_profile: new_public})
-        db.session.commit()
 
     blocks = [x[0] for x in user_profile.order_by(User_Profiles.block_order.asc())]
-    if user_profile.first():
-        current_publicity = user_profile.first()[0].public_profile
 
     return render_template('profile.html',user=current_user,profile=user_profile,blocks=blocks,app_types=app_types,
-                           current_publicity= current_publicity, hashurl=url, vis_types=form_options.VIS_TYPES,
+                           hashurl=url, vis_types=form_options.VIS_TYPES,
                            color_types=form_options.COLOR_TYPES, profile_types=form_options.PROFILE_TYPES,
                            filter_options=form_options.FILTER_OPTIONS,
                            map_types=form_options.MAP_TYPES, block_types=form_options.BLOCK_TYPES,
                            cycle_years=cycle_years, markdown=markdown.markdown, EscapeHtml=EscapeHtml,
                            number_of_graph_blocks=User_Profiles.query.filter_by(user_id=userid, block_type="Graph").count(),
                            number_of_text_blocks=User_Profiles.query.filter_by(user_id=userid, block_type="Text").count())
+
 @profile.route('/profile/<userurl>')
 def profile_page(userurl):
     user = User_Profiles.query.filter_by(url_hash=userurl).first()
