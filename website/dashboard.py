@@ -754,8 +754,8 @@ def suggestions():
                 # Send email to us with suggestion
                 email = Message(f'{form_type} on {date.today().strftime("%B %d, %Y")}',
                                 sender=(f'CycleTrack {form_type}',
-                                        f'admin@docs2be.org'),
-                                recipients=['admin@docs2be.org'])
+                                        f'admin@cycletrack.org'),
+                                recipients=['admin@cycletrack.org'])
                 email.body = f'Form Type: {form_type}\n\nAllow Contact: {contact}\n\nEmail: {current_user.email}' \
                              f'\n\nMessage:\n{content}'
                 mail.send(email)
