@@ -9,6 +9,7 @@ class User(db.Model, UserMixin):
     email_verified = db.Column(db.Boolean, default=False)
     create_date = db.Column(db.DateTime(timezone=True), nullable=True)
     last_visited = db.Column(db.DateTime(timezone=True), nullable=True)
+    public_profile = db.Column(db.Boolean, default=False)
 
 class Cycle(db.Model):
     id = db.Column(db.Integer, primary_key=True)
