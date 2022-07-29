@@ -29,13 +29,11 @@
             |
             {% if school_info.msar_choosedo_link|length > 0 %}
             <a href="{{ school_info.msar_choosedo_link }}" target="_blank">
-                {% if school_info.md_or_do == 'MD' %}MSAR{% else %}Choose DO Explorer{% endif %}
-            </a>
             {% else %}
             <a href="#" data-toggle="tooltip" title="Currently unavailable." style="color:gray;text-decoration-style:dotted">
-                {% if school_info.md_or_do == 'MD' %}MSAR{% else %}Choose DO Explorer{% endif %}
-            </a>
             {% endif %}
+            {% if school_info.md_or_do == 'MD' %}MSAR{% else %}Choose DO Explorer{% endif %}
+            </a>
             <br />
             <strong>Letters of Recommendation: </strong>
             {% if school_info.lor_reg_link == 'unk' %}
