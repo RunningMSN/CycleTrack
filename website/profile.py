@@ -28,10 +28,14 @@ def profile_home():
     user_profile = db.session.query(User_Profiles,User).filter(User_Profiles.user_id==userid) \
         .join(User, User.id == User_Profiles.user_id)
 
-    if user_profile.first():
-        url = user_profile.first()[0].url_hash
-    else:
+    #create the URL for the user if it doesn't already exist
+    if current_user.url_hash is None:
         url = str(uuid.uuid5(uuid.NAMESPACE_URL, userid))
+        current_user.url_hash = url
+        db.session.commit()
+    else:
+        url = current_user.url_hash
+    
 
     cycle_ids = current_user.cycles
     cycle_years = [Cycle.query.filter_by(id=x.id).first().cycle_year for x in cycle_ids]
@@ -99,6 +103,9 @@ def profile_home():
         db.session.commit()
 
     elif request.form.get("add_block"):
+        #create a private publicity setting if there isn't one already
+        if current_user.public_profile is None:
+            current_user.public_profile = False
         #add block
         block_order = request.form.get('block_order')
         block_type = request.form.get('block_type')
@@ -123,7 +130,7 @@ def profile_home():
                     filter_values = ", ".join(request.form.getlist("filter_values"))
                     hide_names = (request.form.get("hide_names") == 'true')
                     db.session.add(
-                        User_Profiles(user_id = userid,url_hash = url,
+                        User_Profiles(user_id = userid,
                             block_order=block_order,block_type=block_type,cycle_id=cycle_id,cycle_year=selected_cycle_year,
                             vis_type=vis_type,plot_title=plot_title,app_type=app_type,map_type=map_type,
                             color=color_type,filter_values=filter_values,hide_names=hide_names))
@@ -134,7 +141,7 @@ def profile_home():
                 else:
                     text = request.form.get("textbox")
                     db.session.add(
-                        User_Profiles(user_id = userid,url_hash = url,
+                        User_Profiles(user_id = userid,
                             block_order=block_order,block_type=block_type,text=text))
                     db.session.commit()
     elif request.form.get("delete_block"):
@@ -157,9 +164,9 @@ def profile_home():
 
 @profile.route('/profile/<userurl>')
 def profile_page(userurl):
-    user = User_Profiles.query.filter_by(url_hash=userurl).first()
+    user = User.query.filter_by(url_hash=userurl).first()
     if user:
-        userid = user.user_id
+        userid = user.id
 
         user_profile = db.session.query(User_Profiles, User).filter(User_Profiles.user_id == userid) \
             .join(User, User.id == User_Profiles.user_id)
@@ -244,7 +251,7 @@ def profile_page(userurl):
                 converted_markdown = markdown.markdown(block.text, extensions=[EscapeHtml()])
                 graphs.append(converted_markdown)
         return render_template('profile_template.html', user=current_user, public_setting=user.public_profile,
-                               profile_user_id = user.user_id, blocks_data=zip(ids,types,graphs))
+                               profile_user_id = user.id, blocks_data=zip(ids,types,graphs))
     else:
         return render_template('profile_template.html', user=current_user, public_setting=False,
                                profile_user_id=-1)
