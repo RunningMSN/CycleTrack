@@ -10,6 +10,7 @@ class User(db.Model, UserMixin):
     create_date = db.Column(db.DateTime(timezone=True), nullable=True)
     last_visited = db.Column(db.DateTime(timezone=True), nullable=True)
     public_profile = db.Column(db.Boolean, default=False)
+    url_hash = db.Column(db.String(150))
 
 class Cycle(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -85,7 +86,6 @@ class Courses(db.Model):
 class User_Profiles(db.Model):
     id = db.Column(db.Integer,primary_key=True)
     user_id = db.Column(db.Integer,db.ForeignKey('user.id'))
-    url_hash = db.Column(db.String(150))
     block_order = db.Column(db.Integer,nullable=True)
     block_type = db.Column(db.String(20), nullable=True)
     cycle_id = db.Column(db.Integer, db.ForeignKey('cycle.id'), nullable=True)
