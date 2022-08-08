@@ -17,12 +17,25 @@
                 document.getElementById('add_vis_div').style.display='block';
                 document.getElementById('add_year_div').style.display='block';
                 document.getElementById('app_type_div').style.display='block';
-                document.getElementById('map_type_div').style.display='block';
+                document.getElementById('map_type_div').style.display='none';
                 document.getElementById('color_div').style.display='block';
                 document.getElementById('title_div').style.display='block';
                 document.getElementById('filter_div').style.display='block';
+                document.getElementById('hide_name_div').style.display='none';
+            }
+            else if(value=="Map"){
+                document.getElementById('map_type_div').style.display='block';
+                document.getElementById('hide_name_div').style.display='none';
+            }
+            else if(value=="Timeline"){
                 document.getElementById('hide_name_div').style.display='block';
-            }else if(value=="Text"){
+                document.getElementById('map_type_div').style.display='none';
+            }
+            else if(value=="Dot"){
+                document.getElementById('hide_name_div').style.display='block';
+                document.getElementById('map_type_div').style.display='none';
+            }
+            else if(value=="Text"){
                 document.getElementById('text_div').style.display='block';
                 document.getElementById('add_vis_div').style.display='none';
                 document.getElementById('add_year_div').style.display='none';
@@ -32,6 +45,24 @@
                 document.getElementById('title_div').style.display='none';
                 document.getElementById('filter_div').style.display='none';
                 document.getElementById('hide_name_div').style.display='none';
+            }
+        }
+        function ChangeEdithDropdowns(value){
+            if(value=="Map"){
+                document.getElementById('map_edit_div').style.display='block';
+                document.getElementById('hide_name_edit_div').style.display='none';
+            }
+            else if(value=="Timeline"){
+                document.getElementById('hide_name_edit_div').style.display='block';
+                document.getElementById('map_edit_div').style.display='none';
+            }
+            else if(value=="Dot"){
+                document.getElementById('hide_name_edit_div').style.display='block';
+                document.getElementById('map_edit_div').style.display='none';
+            }
+            else{
+                document.getElementById('map_edit_div').style.display='none';
+                document.getElementById('hide_name_edit_div').style.display='none';
             }
         }
     </script>
@@ -180,57 +211,59 @@
                     </div>
                     <div class="form-group" id="add_vis_div" style="display:none">
                         <label for="type">Visualization Type</label>
-                        <select id="vis_type" name="vis_type" class="btn-sm form-control">
+                        <select id="vis_type" name="vis_type" class="btn-sm form-control" onchange="ChangeGraphDropdowns(this.value);">
                             {% for vis_type in vis_types %}
                             <option value="{{ vis_type }}">{{ vis_type }}</option>
                             {% endfor %}
                         </select>
                     </div>
-                    <div class="form-group" id="add_year_div" style="display:none">
-                        <label for="years">Cycle Year</label>
-                        <select id="cycle_year" name="cycle_year" class="btn-sm form-control">
-                            {% for year in cycle_years %}
-                                {% if year == cycle_years|min %}
-                                <option selected value="{{ year }}">{{ year }}</option>
-                                {% else %}
-                                <option value="{{ year }}">{{ year }}</option>
-                                {% endif %}
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <div class="form-group" id="app_type_div" style="display:none">
-                        <label for="type">App Type</label>
-                        <select id="app_type" name="app_type" class="btn-sm form-control">
-                            {% for app_type in app_types %}
-                            <option value="{{ app_type }}">{{ app_type }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <div class="form-group" id="map_type_div" style="display:none">
-                        <label for="type">Map Type</label>
-                        <select id="map_type" name="map_type" class="btn-sm form-control">
-                            {% for map_type in map_types %}
-                            <option value="{{ map_type }}">{{ map_type }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <div class="form-group" id="color_div" style="display:none">
-                        <label for="type">Color Type</label>
-                        <select id="color_type" name="color_type" class="btn-sm form-control">
-                            <option selected value="Default">Default</option>
-                            {% for color_type in color_types %}
-                                {% if color_type != "Default" %}
-                                    <option value="{{ color_type }}">{{ color_type }}</option>
-                                {% endif %}
-                            {% endfor %}
-                        </select>
+                    <div class="row">
+                        <div class="form-group col-auto" id="add_year_div" style="display:none">
+                            <label for="years">Cycle Year</label>
+                            <select id="cycle_year" name="cycle_year" class="btn-sm form-control">
+                                {% for year in cycle_years %}
+                                    {% if year == cycle_years|min %}
+                                    <option selected value="{{ year }}">{{ year }}</option>
+                                    {% else %}
+                                    <option value="{{ year }}">{{ year }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group col-auto" id="app_type_div" style="display:none">
+                            <label for="type">App Type</label>
+                            <select id="app_type" name="app_type" class="btn-sm form-control">
+                                {% for app_type in app_types %}
+                                <option value="{{ app_type }}">{{ app_type }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group col-auto" id="map_type_div" style="display:none">
+                            <label for="type">Map Type</label>
+                            <select id="map_type" name="map_type" class="btn-sm form-control">
+                                {% for map_type in map_types %}
+                                <option value="{{ map_type }}">{{ map_type }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group col-auto" id="color_div" style="display:none">
+                            <label for="type">Color Type</label>
+                            <select id="color_type" name="color_type" class="btn-sm form-control">
+                                <option selected value="Default">Default</option>
+                                {% for color_type in color_types %}
+                                    {% if color_type != "Default" %}
+                                        <option value="{{ color_type }}">{{ color_type }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
                     </div>
                     <div class="form-group" id="title_div" style="display:none">
                         <label for="plot_title"> Plot Title</label>
                         <input id="plot_title" name="plot_title" type="text" class="btn-sm form-control">
                     </div>
                     <div class="form-group" id="filter_div" style="display:none">
-                        <label for="type">Filter Data (select multiple to remove)</label>
+                        <label for="type">Filter Data (can select multiple to remove from plot)</label>
                         <select id="filter_values" name="filter_values" class="btn-sm form-control" multiple>
                             {% for filter in filter_options %}
                             <option value="{{ filter }}">{{ filter }}</option>
@@ -274,7 +307,7 @@
                     {% if block.block_type == "Graph" %}
                         <div class="form-group">
                             <label for="type">Visualization Type</label>
-                            <select id="vis_type" name="vis_type" class="btn-sm form-control">
+                            <select id="vis_type" name="vis_type" class="btn-sm form-control" onchange="ChangeEditDropdowns(this.value);">
                                 <option selected value="{{block.vis_type}}">{{block.vis_type}}</option>
                                 {% for vis_type in vis_types %}
                                     {% if vis_type != block.vis_type %}
@@ -283,49 +316,52 @@
                                 {% endfor %}
                             </select>
                         </div>
-                        <div class="form-group">
-                            <label for="years">Cycle Year</label>
-                            <select id="cycle_year" name="cycle_year" class="btn-sm form-control">
-                                <option selected value="{{block.cycle_year}}">{{block.cycle_year}}</option>
-                                {% for year in cycle_years %}
-                                    {% if year != block.cycle_year %}
-                                        <option value="{{ year }}">{{ year }}</option>
-                                    {% endif %}
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="type">App Type</label>
-                            <select id="app_type" name="app_type" class="btn-sm form-control">
-                                <option value="{{block.app_type}}">{{block.app_type}}</option>
-                                {% for app_type in app_types %}
-                                    {% if app_type != block.app_type%}
-                                        <option value="{{ app_type }}">{{ app_type }}</option>
-                                    {% endif%}
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="type">Map Type</label>
-                            <select id="map_type" name="map_type" class="btn-sm form-control">
-                                <option selected value="{{block.map_type}}">{{block.map_type}}</option>
-                                {% for map_type in map_types %}
-                                    {% if map_type != block.map_type %}
-                                    <option value="{{ map_type }}">{{ map_type }}</option>
-                                    {% endif %}
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="type">Color Type</label>
-                            <select id="color_type" name="color_type" class="btn-sm form-control">
-                                <option selected value="{{block.color}}">{{block.color}}</option>
-                                {% for color_type in color_types %}
-                                    {% if color_type != block.color %}
-                                        <option value="{{ color_type }}">{{ color_type }}</option>
-                                    {% endif %}
-                                {% endfor %}
-                            </select>
+                        <div class="row">
+                            <div class="form-group col-auto">
+                                <label for="years">Cycle Year</label>
+                                <select id="cycle_year" name="cycle_year" class="btn-sm form-control">
+                                    <option selected value="{{block.cycle_year}}">{{block.cycle_year}}</option>
+                                    {% for year in cycle_years %}
+                                        {% if year != block.cycle_year %}
+                                            <option value="{{ year }}">{{ year }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group col-auto">
+                                <label for="type">App Type</label>
+                                <select id="app_type" name="app_type" class="btn-sm form-control">
+                                    <option value="{{block.app_type}}">{{block.app_type}}</option>
+                                    {% for app_type in app_types %}
+                                        {% if app_type != block.app_type%}
+                                            <option value="{{ app_type }}">{{ app_type }}</option>
+                                        {% endif%}
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            
+                            <div class="form-group col-auto" id="map_edit_div" {% if block.vis_type != "Map" %} style="display:none"{% endif %}>
+                                <label for="type">Map Type</label>
+                                <select id="map_type" name="map_type" class="btn-sm form-control">
+                                    <option selected value="{{block.map_type}}">{{block.map_type}}</option>
+                                    {% for map_type in map_types %}
+                                        {% if map_type != block.map_type %}
+                                        <option value="{{ map_type }}">{{ map_type }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group col-auto">
+                                <label for="type">Color Type</label>
+                                <select id="color_type" name="color_type" class="btn-sm form-control">
+                                    <option selected value="{{block.color}}">{{block.color}}</option>
+                                    {% for color_type in color_types %}
+                                        {% if color_type != block.color %}
+                                            <option value="{{ color_type }}">{{ color_type }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label for="plot_title"> Plot Title</label>
@@ -349,7 +385,7 @@
                                 {% endif %}
                             </select>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group" id="hide_name_edit_div" {% if block.vis_type == "Timeline" %} style="display:block"{% elif block.vis_type == "Dot" %}style="display:block"{% else %}style="display:none"{% endif %}>
                             <input type="checkbox" id="hide_names" name="hide_names" value="true" {% if block.hide_names=="true" %} checked {% endif %}>
                             <label for="hide_names">Hide names</label><br>
                         </div>
