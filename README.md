@@ -30,6 +30,12 @@ Visualizations are generated from data inserted into the school list. Current vi
 </details>
 
 <details>
+<summary>Timeline Graph: The timeline graph shows the best admissions outcome for each school throughout the cycle.</summary>
+
+![](/github_assets/sample_timeline_graph.png)
+</details>
+
+<details>
 <summary>Bar Graph: The bar graph also displays running totals of admission actions over time, but makes it easier to
 visualize what proportion of all actions each action makes up.</summary>
 
