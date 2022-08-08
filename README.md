@@ -30,7 +30,7 @@ Visualizations are generated from data inserted into the school list. Current vi
 </details>
 
 <details>
-<summary>Timeline Graph: The timeline graph shows the best admissions outcome for each school throughout the cycle.</summary>
+<summary>Timeline Graph: The timeline graph shows the current admissions status for each school throughout the cycle.</summary>
 
 ![](/github_assets/sample_timeline_graph.png)
 </details>
