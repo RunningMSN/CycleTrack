@@ -12,9 +12,9 @@ def generate(cycle_data,title,stats,color="default",map_scope="usa",custom_text=
     for outcome in outcomes:
         outcome_df = loc_df.loc[loc_df["Best Outcome"] == outcome]
         fig.add_trace(go.Scattergeo(
-            lon=outcome_df["Long"],
-            lat = outcome_df["Lat"],
-            text = outcome_df["School"]+"<br>Status: " + converters.action_names[outcome],
+            lon=outcome_df["long"],
+            lat = outcome_df["lat"],
+            text = outcome_df["school"]+"<br>Status: " + converters.action_names[outcome],
             hoverinfo="text",
             marker = dict(size = 10),
             marker_color=outcome_df["color"],
