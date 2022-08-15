@@ -1,5 +1,6 @@
 import pandas as pd
 import datetime as dt
+import numpy as np
 from ..models import School_Profiles_Data
 from .. import db
 
@@ -148,6 +149,7 @@ def convert_horz_bar(data):
         last_date = dt.date(cycle_year,8,31)
     else:
         last_date = today
+    after_last = temp_melt["date"].max() + dt.timedelta(days=1)
     data['today'] = last_date
     melted = data.melt(id_vars=data.columns[0], value_vars=data.columns[1:], var_name='Actions', value_name='date')
     schools = melted["name"].unique()
@@ -157,6 +159,13 @@ def convert_horz_bar(data):
         melt_copy = melted.copy()
         melt_copy = melt_copy.dropna()
         actions = melt_copy.loc[melted["name"]==school,"Actions"].unique()
+        
+        #if there are dates in the future, allow it for only 1 school
+        if actions[-1] != "today":
+            actions = np.delete(actions, np.argwhere(actions == "today"))
+            data['after_last'] = after_last
+            actions = np.append(actions,'after_last')
+
         for action1,action2 in zip(actions,actions[1:]):
             df = data.loc[data["name"]==school,["name",action1,action2]]
             df["label"] = action1
