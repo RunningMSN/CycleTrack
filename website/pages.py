@@ -30,6 +30,10 @@ def about():
 def privacy():
     return render_template('privacy.html', user=current_user)
 
+@pages.route('/privacyamendment')
+def privacyamendment():
+    return render_template('privacyamendment.html', user=current_user)
+
 @pages.route('/terms')
 def terms():
     return render_template('terms.html', user=current_user)
