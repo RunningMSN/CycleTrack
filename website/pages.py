@@ -9,10 +9,11 @@ pages = Blueprint('pages', __name__)
 
 @pages.before_app_request
 def privacy_announcement():
-    if current_user.privacy_announce == False:
-        flash(Markup('Our privacy policy is changing on 9/9/2022. You can review our new policy <a href="https://cycletrack.org/privacy">here</a>.'), category='warning')
-        current_user.privacy_announce = True
-        db.session.commit()
+    if current_user.is_authenticated:
+        if current_user.privacy_announce == False:
+            flash(Markup('Our privacy policy is changing on 9/9/2022. You can review our new policy <a href="https://cycletrack.org/privacy">here</a>.'), category='warning')
+            current_user.privacy_announce = True
+            db.session.commit()
 
 @pages.route('/')
 def index():
