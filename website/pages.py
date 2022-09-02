@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, flash, Markup
 from flask_login import current_user
 from . import db
 from .models import User, School, School_Profiles_Data
@@ -6,6 +6,13 @@ from .visualizations import agg_map
 import pandas as pd
 
 pages = Blueprint('pages', __name__)
+
+@pages.before_app_request
+def privacy_announcement():
+    if current_user.privacy_announce == False:
+        flash(Markup('Our privacy policy is changing on 9/9/2022. You can review our new policy <a href="https://cycletrack.org/privacy">here</a>.'), category='warning')
+        current_user.privacy_announce = True
+        db.session.commit()
 
 @pages.route('/')
 def index():
@@ -29,10 +36,6 @@ def about():
 @pages.route('/privacy')
 def privacy():
     return render_template('privacy.html', user=current_user)
-
-@pages.route('/privacyamendment')
-def privacyamendment():
-    return render_template('privacyamendment.html', user=current_user)
 
 @pages.route('/terms')
 def terms():

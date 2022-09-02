@@ -11,6 +11,7 @@ class User(db.Model, UserMixin):
     last_visited = db.Column(db.DateTime(timezone=True), nullable=True)
     public_profile = db.Column(db.Boolean, default=False)
     url_hash = db.Column(db.String(150))
+    privacy_announce = db.Column(db.Boolean, default=False)
 
 class Cycle(db.Model):
     id = db.Column(db.Integer, primary_key=True)
