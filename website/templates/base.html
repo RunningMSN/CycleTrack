@@ -88,6 +88,13 @@
         <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close" style="float: right"></button>
     </div>
 </div>
+{% elif category == 'warning' %}
+<div class="alert alert-warning alert-dismissable fade show" role="alert" style="margin: 0;">
+    <div class="container">
+        {{ message }}
+        <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close" style="float: right"></button>
+    </div>
+</div>
 {% else %}
 <div class="alert alert-success alert-dismissable fade show" role="alert" style="margin: 0;">
     <div class="container">
