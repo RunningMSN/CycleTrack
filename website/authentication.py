@@ -1,6 +1,6 @@
 import itsdangerous
 from flask import Blueprint, render_template, request, flash, redirect, url_for
-from .models import User
+from .models import User, User_Profiles
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import db, site_settings, mail
 from flask_login import login_user, logout_user
@@ -165,6 +165,8 @@ def settings():
                     for school in cycle.schools:
                         db.session.delete(school)
                     db.session.delete(cycle)
+                for profile_item in User_Profiles.query.filter_by(user_id=current_user.id).all():
+                    db.session.delete(profile_item)
                 db.session.delete(current_user)
                 db.session.commit()
                 logout_user()
