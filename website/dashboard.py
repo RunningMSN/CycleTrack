@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, flash, jsonify, redirect, url_for, Response, Markup
 from flask_login import current_user, login_required
 from . import db, form_options, mail
-from .models import Cycle, School, School_Profiles_Data, Courses
+from .models import Cycle, School, School_Profiles_Data, Courses, User_Profiles
 import json
 from datetime import datetime, date
 import re
@@ -789,6 +789,8 @@ def delete_cycle():
                     school_stats_calculators.count_apps_phd(school.name)
                 else:
                     school_stats_calculators.count_apps_reg(school.name)
+            for profile_item in User_Profiles.query.filter_by(cycle_id=cycle.id).all():
+                db.session.delete(profile_item)
             db.session.delete(cycle)
             db.session.commit()
             return jsonify({})
