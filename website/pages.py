@@ -11,7 +11,7 @@ pages = Blueprint('pages', __name__)
 def privacy_announcement():
     if current_user.is_authenticated:
         if current_user.privacy_announce == False:
-            flash(Markup('Our privacy policy is changing on 9/9/2022. You can review our new policy <a href="https://cycletrack.org/privacy">here</a>.'), category='warning')
+            flash(Markup('Our privacy policy has changed as of 9/9/2022. You can review our new policy <a href="https://cycletrack.org/privacy">here</a>.'), category='warning')
             current_user.privacy_announce = True
             db.session.commit()
 

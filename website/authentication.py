@@ -71,7 +71,8 @@ def register():
         else:
             # add user to database
             now = datetime.now()
-            new_user = User(email=email, password=generate_password_hash(password1, method='sha256'),create_date=now)
+            new_user = User(email=email, password=generate_password_hash(password1, method='sha256'),create_date=now,
+                            privacy_announce=True)
             db.session.add(new_user)
             db.session.commit()
 
