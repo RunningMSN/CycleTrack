@@ -10,6 +10,12 @@
         This profile is either private or does not exist.
     </div>
 {% else %}
+    {% if not public_profile %}
+    <div class="container bg-warning" style="margin-top: 10px; margin-bottom: 10px">
+        This profile is currently private and only visible to you. To make this page publicly accessible, visit the
+        <a href="{{ url_for('profile.profile_home') }}">profile settings page</a>, and click the "Publish Settings" menu.
+    </div>
+    {% endif %}
     {% for num,type, graph in blocks_data %}
         {%if type == "text" %}
             <div class="container">
