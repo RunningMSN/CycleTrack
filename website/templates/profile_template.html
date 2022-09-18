@@ -5,12 +5,12 @@
 {% endblock %}
 {% block content %}
 <!-- Check privacy settings -->
-{% if not (public_profile or user.id == profile_user_id) %}
+{% if not (public_setting or user.id == profile_user_id) %}
     <div class="container" style="padding-top:10px">
         This profile is either private or does not exist.
     </div>
 {% else %}
-    {% if not public_profile %}
+    {% if not public_setting %}
     <div class="container bg-warning" style="margin-top: 10px; margin-bottom: 10px">
         This profile is currently private and only visible to you. To make this page publicly accessible, visit the
         <a href="{{ url_for('profile.profile_home') }}">profile settings page</a>, and click the "Publish Settings" menu.
