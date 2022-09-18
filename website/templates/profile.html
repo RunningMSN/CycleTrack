@@ -386,7 +386,7 @@
                             </select>
                         </div>
                         <div class="form-group" id="hide_name_edit_div" {% if block.vis_type == "Timeline" %} style="display:block"{% elif block.vis_type == "Dot" %}style="display:block"{% else %}style="display:none"{% endif %}>
-                            <input type="checkbox" id="hide_names" name="hide_names" value="true" {% if block.hide_names=="true" %} checked {% endif %}>
+                            <input type="checkbox" id="hide_names" name="hide_names" value="true" {% if block.hide_names== 1 %} checked {% endif %}>
                             <label for="hide_names">Hide names</label><br>
                         </div>
                     {% else %}
