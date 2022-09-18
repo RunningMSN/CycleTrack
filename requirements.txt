@@ -9,3 +9,4 @@ beautifulsoup4
 requests
 jellyfish
 Flask-Mail
+markdown
