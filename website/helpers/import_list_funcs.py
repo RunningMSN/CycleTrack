@@ -39,7 +39,9 @@ def convert_columns_date(df):
     temp_df[cols[0]] = df[cols[0]]
     '''Converts imported spreadsheet data frames into datetime.'''
     for col in cols[1:]:
-        temp_df[col] = pd.to_datetime(df[col],unit='ms', errors="coerce")
+        print(df[col])
+        temp_df[col] = pd.to_datetime(df[col], errors="coerce")
+        print(temp_df[col])
     return temp_df
 
 
