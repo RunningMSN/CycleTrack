@@ -34,21 +34,13 @@ def read_google(link):
         flash('Please make sure your google sheet has been published to the web.', category='error')
 
 def convert_columns_date(df):
+    temp_df = pd.DataFrame()
+    cols = list(df.columns)
+    temp_df[cols[0]] = df[cols[0]]
     '''Converts imported spreadsheet data frames into datetime.'''
-    for index, row in df.iterrows():
-        for item in row.keys()[1:]:
-            if type(row[item]) is str:
-                if len(row[item]) == 0:
-                    row[item] = None
-                else:
-                    row[item] = dateutil.parser.parse(row[item])
-            else:
-                if not pd.isnull(row[item]):
-                    row[item] = pd.to_datetime(row[item], unit='ms')
-                else:
-                    row[item] = None
-        df.loc[index] = row
-    return df
+    for col in cols[1:]:
+        temp_df[col] = pd.to_datetime(df[col],unit='ms', errors="coerce")
+    return temp_df
 
 
 def best_match(input_string, match_list, cutoff):
