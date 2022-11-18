@@ -8,7 +8,7 @@ from ..form_options import VALID_CYCLES, CURRENT_CYCLE
 
 def cycle_progress(data, cycle_year):
     # Select relevant columns and drop any empty rows
-    data = data[['secondary_received', 'interview_received', 'acceptance']]
+    data = data[['secondary_received', 'interview_received', 'acceptance','rejection']]
     data = data.dropna(axis=0, how='all')
 
     min = pd.to_datetime(str(cycle_year-1) + "-05-01")
@@ -30,19 +30,29 @@ def cycle_progress(data, cycle_year):
                                xbins=dict(size=86400000),
                                autobinx=False,
                                marker_color = converters.palette["default"]["secondary_received"],
-                               opacity=0.75))
+                               opacity=0.75,
+                               hovertemplate = "%{x}<br>%{y}<extra></extra>",))
+    fig.add_trace(go.Histogram(x=data.rejection,
+                               name='Rejection',
+                               xbins=dict(size=86400000),
+                               autobinx=False,
+                               marker_color = converters.palette["default"]["rejection"],
+                               opacity=0.75,
+                               hovertemplate = "%{x}<br>%{y}<extra></extra>",))
     fig.add_trace(go.Histogram(x=data.interview_received,
                                name='Interview Received',
                                xbins=dict(size=86400000),
                                autobinx=False,
                                marker_color = converters.palette["default"]["interview_received"],
-                               opacity=0.75))
+                               opacity=0.75,
+                               hovertemplate = "%{x}<br>%{y}<extra></extra>",))
     fig.add_trace(go.Histogram(x=data.acceptance,
                                name='Acceptance Received',
                                xbins=dict(size=86400000),
                                autobinx=False,
                                marker_color = converters.palette["default"]["acceptance"],
-                               opacity=0.75))
+                               opacity=0.75,
+                               hovertemplate = "%{x}<br>%{y}<extra></extra>",))
 
     # Overlay both histograms
     fig.update_layout(barmode='overlay', bargap=0, margin=dict(l=0, r=0, t=0, b=0), height=200, autosize=True)
