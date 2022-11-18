@@ -17,6 +17,17 @@ symbol_map = {
     'acceptance': 'hourglass', 
     'withdrawn': 'star'
     }
+action_weight = {
+    'primary': 0,
+    'secondary_received': 1, 
+    'application_complete': 2,
+    'interview_received':3, 
+    'interview_date': 4, 
+    'rejection': 5,
+    'waitlist': 6,
+    'acceptance': 7, 
+    'withdrawn': 8
+}
 
 def generate(cycle_data, title, stats, color="default",custom_text=None,hide_school_names=False):
     melted = cycle_data.melt(id_vars=cycle_data.columns[0], value_vars=cycle_data.columns[1:], var_name='Actions', value_name='date')
@@ -26,6 +37,7 @@ def generate(cycle_data, title, stats, color="default",custom_text=None,hide_sch
     fig = go.Figure()
     for action in actions:
         df = melted.loc[melted["Actions"]==action]
+        df = df.sort_values(by=['Actions'], key=lambda x: x.map(action_weight))
         fig.add_trace(go.Scatter(
             x = df["date"],
             y = df["name"],

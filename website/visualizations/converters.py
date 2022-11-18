@@ -21,6 +21,19 @@ action_names = {'primary': 'Primary Submitted', 'secondary_received': 'Secondary
                   'interview_received': 'Interview Received', 'interview_date': 'Interview Complete', 'rejection': 'Rejection',
                   'waitlist': 'Waitlist', 'acceptance': 'Acceptance', 'withdrawn': 'Withdrawn'}
 
+                  
+action_weight = {
+    'primary': 0,
+    'secondary_received': 1, 
+    'application_complete': 2,
+    'interview_received':3, 
+    'interview_date': 4, 
+    'rejection': 5,
+    'waitlist': 6,
+    'acceptance': 7, 
+    'withdrawn': 8
+}
+
 def convert_sums(data):
     # Store numbers of each action on each date
     dicts = []
@@ -129,8 +142,6 @@ def convert_map(data,color="default"):
             data = data.drop(index=ind)
     #get best outcome: column with greatest date in each row
     nameless = data[data.columns.difference(["name"])]
-    #reverse order to account for same dates
-    nameless = nameless[nameless.columns[::-1]]
     data["Best Outcome"] = nameless.idxmax(axis=1)
     data["color"] = data["Best Outcome"].map(fig_colors)
     #merge with school locations
