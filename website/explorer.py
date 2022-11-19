@@ -75,6 +75,11 @@ def explore_school(school_name):
                 'interview_graph': school_graphs.interview_acceptance_histogram(phd_data, 'interview_received'),
                 'acceptance_graph': school_graphs.interview_acceptance_histogram(phd_data, 'acceptance')}
 
+    reg_time_info = {}            
+    #Calculate application timing info
+    school_info_calcs.timing_calculations(reg_data, reg_time_info)
+
+
     # Calculate interview information
     school_info_calcs.interview_calculations(reg_data, reg_info)
     school_info_calcs.interview_calculations(phd_data, phd_info)
@@ -84,7 +89,7 @@ def explore_school(school_name):
     school_info_calcs.acceptance_calculations(phd_data, phd_info)
 
     return render_template('school_template.html', user=current_user, school_info=school_info, reg_info=reg_info,
-                           phd_info=phd_info, valid_cycles=VALID_CYCLES)
+                           phd_info=phd_info, reg_time_info = reg_time_info, valid_cycles=VALID_CYCLES)
 
 @explorer.route('/update_all')
 def update_all():

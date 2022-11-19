@@ -144,6 +144,27 @@
                                 <a href="#" data-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">XXX.X</a>
                                 {% endif %}
                                 <br />
+                                <strong>Days between secondary and II</strong>:
+                                {% if reg_time_info["n_interview_received"]%}
+                                {{reg_time_info["interview_timing"]}}
+                                {% else %}
+                                <a href="#" data-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">XX.XX</a>
+                                {% endif %}
+                                <br />
+                                <strong>Days between interview and waitlist: </strong>
+                                {% if reg_time_info["n_interview_received"]%}
+                                {{reg_time_info["waitlist_after_interview"]}}
+                                {% else %}
+                                <a href="#" data-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">XX.XX</a>
+                                {% endif %}
+                                <br />
+                                <strong>Days between interview and rejection: </strong>
+                                {% if reg_time_info["n_interview_received"]%}
+                                {{reg_time_info["rejection_after_interview"]}}
+                                {% else %}
+                                <a href="#" data-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">XX.XX</a>
+                                {% endif %}
+                                <br />
                                 <strong>Interview Invites Over Time: </strong><br />
                                 {% if reg_info['interview_graph'] %}
                                 <center><div id="reg_interviews_graph"></div></center>
@@ -186,6 +207,20 @@
                                 {{ reg_info['accepted_mcat'] }}, (n={{ reg_info['n_accepted_mcat'] }})
                                 {% else %}
                                 <a href="#" data-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">XXX.X</a>
+                                {% endif %}
+                                <br />
+                                <strong>Days between interview and acceptance: </strong>
+                                {% if reg_time_info["n_interview_received"]%}
+                                {{reg_time_info["acceptance_after_interview"]}}
+                                {% else %}
+                                <a href="#" data-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">XX.XX</a>
+                                {% endif %}
+                                <br />
+                                <strong>Days between waitlist and acceptance: </strong>
+                                {% if reg_time_info["n_interview_received"]%}
+                                {{reg_time_info["acceptance_after_waitlist"]}}
+                                {% else %}
+                                <a href="#" data-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">XX.XX</a>
                                 {% endif %}
                                 <br />
                                 <strong>Acceptance Offers Over Time: </strong><br />

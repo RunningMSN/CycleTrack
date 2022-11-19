@@ -1,4 +1,48 @@
 import statistics
+import pandas as pd
+
+def timing_calculations(df,output_dict):
+    df['secondary_received'] = pd.to_datetime(df['secondary_received'])
+    df['interview_received'] = pd.to_datetime(df['interview_received'])
+    df['interview_date'] = pd.to_datetime(df['interview_date'])
+    df['waitlist'] = pd.to_datetime(df['waitlist'])
+    df['acceptance'] = pd.to_datetime(df['acceptance'])
+    df['rejection'] = pd.to_datetime(df['rejection'])
+    #timing of secondary to interview in days
+    secondary_to_interview = (df['interview_received']- df['secondary_received']).dropna().dt.days.tolist()
+    output_dict["n_interview_received"] = len(secondary_to_interview)
+    if len(secondary_to_interview) > 0:
+        output_dict["interview_timing"] = f'{statistics.median(secondary_to_interview):.2f} ({min(secondary_to_interview):.2f} - {max(secondary_to_interview):.2f}, n={len(secondary_to_interview)})'
+    else:
+        output_dict["interview_timing"] = None
+    #timing of interview to waitlist
+    int_to_wl = (df['waitlist']- df['interview_date']).dropna().dt.days.tolist()
+    print(int_to_wl)
+    if len(int_to_wl) > 0:
+        output_dict["waitlist_after_interview"] = f'{statistics.median(int_to_wl):.2f} ({min(int_to_wl)} - {max(int_to_wl)}, n={len(int_to_wl)})'
+    else:
+        output_dict["waitlist_after_interview"] = None
+    #timing of interview to rejection
+    int_to_r = (df['rejection']- df['interview_date']).dropna().dt.days.tolist()
+    if len(int_to_r) > 0:
+        output_dict["rejection_after_interview"] = f'{statistics.median(int_to_r):.2f} ({min(int_to_r)} - {max(int_to_r)}, n={len(int_to_r)})'
+    else:
+        output_dict["rejection_after_interview"] = None
+    #timing of interview to acceptance (includes waitlisted)
+    int_to_a = (df['acceptance']- df['interview_date']).dropna().dt.days.tolist()
+    if len(int_to_a) > 0:
+        output_dict["acceptance_after_interview"] = f'{statistics.median(int_to_a):.2f} ({min(int_to_a)} - {max(int_to_a)}, n={len(int_to_a)})'
+    else:
+        output_dict["acceptance_after_interview"] = None
+    #timing of waitlist to acceptance
+    wl_to_a = int_to_a = (df['acceptance']- df['waitlist']).dropna().dt.days.tolist()
+    if len(int_to_a) > 0:
+        output_dict["acceptance_after_waitlist"] = f'{statistics.median(wl_to_a):.2f} ({min(wl_to_a)} - {max(wl_to_a)}, n={len(wl_to_a)})'
+    else:
+        output_dict["acceptance_after_waitlist"] = None
+
+
+
 
 def interview_calculations(df, output_dict):
     # Interview Count
