@@ -1,85 +1,339 @@
 {% extends 'base.html' %}
 {% block title %}About CycleTrack{% endblock %}
 {% block additional_js %}
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 {% endblock %}
 {% block content %}
 <div class="container">
-    <h1 style="padding-top: 10px">CycleTrack does a lot of stuff.</h1>
-    <h4>1. Application Tracking</h4>
-    <p>For each application cycle you apply, you can create a list of schools. You can generate your school list inside
-        CycleTrack or import an existing one from a spreadsheet. Throughout the cycle, keep track of your
-        applications by entering dates into the application tracker. In the near future, we hope to use the crowdsourced
-        data to help future applicants generate their school lists using machine learning.</p>
-    <h4>2. Cycle Visualizing</h4>
-    <p>Creating beautiful visualizations of your cycle progress has never been easier. All of our graphs are interactive
-        to help you explore your application cycle. Click the buttons to check out some examples.</p>
+    <h1 style="padding-top: 10px">CycleTrack is your application companion</h1>
+    <p>We are a <strong>free</strong> platform designed to help you keep track of your med school applications,
+        visualize your data, and make the application process more transparent and accessible.</p>
+    <h4>Application Tracking</h4>
+    <p>
+        For any cycle you apply, generate your school list or import one from a spreadsheet. Throughout the cycle, keep
+        track of your applications by entering dates of actions such as submission of secondary applications or
+        interviews. Your data will anonymously join that of other applicants in the
+        <a href="{{ url_for('explorer.explorer_home') }}">school explorer</a> where you can see a real-time summary of
+        application actions or school statistics.
+    </p>
+    <div style="padding-bottom:10px">
+        <a class="btn btn-primary" data-toggle="collapse" href="#sample_schools" role="button" aria-expanded="true"
+           aria-controls="sample_schools" style="margin:1px">
+            Sample List
+        </a>
+        <div class="collapse" id="sample_schools" style="margin-top: 10px">
+            <li class="list-group-item border">
+                <div class="row rows-cols-2">
+                    <!-- SCHOOL LOGO AREA ON LEFT -->
+                    <div class="col-lg-1">
+                        <!-- LOGO -->
+                        <center>
+                            <div class="row">
+                                <a href="/explorer/Northwestern" class="normal_list">
+                                    <img src="/static/images/school_logos/northwestern.webp"
+                                         style="max-width:100px;max-height:100px" width="100%" height="auto">
+                                </a>
+                                <a class="bulk_list d-none">
+                                    <img src="/static/images/school_logos/northwestern.webp"
+                                         style="max-width:100px;max-height:100px" width="100%" height="auto">
+                                </a>
+                            </div>
+                            <div class="row" style="margin-top: 5px">
+                                <div class="text-center rounded" style="margin-top: 3px; background-color: #6af799">
+                                    Accepted
+                                </div>
+                            </div>
+                            <!-- ICONS -->
+                            <div style="padding-top:5px">
+                                <button type="button" class="btn btn-link" data-toggle="modal"
+                                        data-target="#Northwestern-True-modal" style="padding: 1px">
+                                    <i class="bi bi-pencil-square"></i>
+                                </button>
+                                <a href="/explorer/Northwestern" class="btn btn-link" style="padding: 1px">
+                                    <i class="bi bi-search"></i>
+                                </a>
+                                <button type="button" class="btn btn-link" data-toggle="modal"
+                                        data-target="#Northwestern-True-delete" style="padding: 1px">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
+                            <div>
+
+                            </div>
+                        </center>
+                    </div>
+                    <!-- SCHOOL TEXT AREA ON RIGHT -->
+                    <div class="col-lg">
+                        <a class="normal_list" href="/explorer/Northwestern" style="color:black;text-decoration: none">
+                            <h5>Northwestern (MD-PhD)</h5>
+                        </a>
+                        <div class="row" style="padding-bottom: 10px">
+                            <div class="col-lg-2">
+                                <strong>Primary Submitted:</strong><br>
+                                <span class="normal_list">
+                            06/28/2021
+                            </span>
+                            </div>
+                            <div class="col-lg-2">
+                                <strong>Secondary Received:</strong><br>
+                                <span class="normal_list">
+                            07/20/2021
+                            </span>
+                            </div>
+                            <div class="col-lg-2">
+                                <strong>Application Complete:</strong><br>
+                                <span class="normal_list">
+                            08/09/2021
+                            </span>
+                            </div>
+                            <div class="col-lg-2">
+                                <strong>Interview Received:</strong><br>
+                                <span class="normal_list">
+                            09/28/2021
+                            </span>
+                            </div>
+                            <div class="col-lg-2">
+                                <strong>Interview Date:</strong><br>
+                                <span class="normal_list">
+                            11/10/2021
+                            </span>
+                            </div>
+                            <div class="col-lg-2">
+                                <strong>Rejected:</strong><br>
+                                <span class="normal_list">
+                            -
+                            </span>
+                            </div>
+                            <div class="col-lg-2">
+                                <strong>Waitlisted:</strong><br>
+                                <span class="normal_list">
+                            -
+                            </span>
+                            </div>
+                            <div class="col-lg-2">
+                                <strong>Accepted:</strong><br>
+                                <span class="normal_list">
+                            2/22/2021
+                            </span>
+                            </div>
+                            <div class="col-lg-2">
+                                <strong>Withdrawn:</strong><br>
+                                <span class="normal_list">
+                                -
+                            </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li class="list-group-item border school_entry type_MD phd_false
+            status_rejection
+            ">
+                <div class="row rows-cols-2">
+                    <!-- SCHOOL LOGO AREA ON LEFT -->
+                    <div class="col-lg-1">
+                        <!-- LOGO -->
+                        <center>
+                            <div class="row">
+                                <a href="/explorer/Iowa" class="normal_list">
+                                    <img src="/static/images/school_logos/iowa.webp"
+                                         style="max-width:100px;max-height:100px" width="100%" height="auto">
+                                </a>
+                                <a class="bulk_list d-none">
+                                    <img src="/static/images/school_logos/iowa.webp"
+                                         style="max-width:100px;max-height:100px" width="100%" height="auto">
+                                </a>
+                            </div>
+                            <div class="row" style="margin-top: 5px">
+
+                                <div class="text-center rounded"
+                                     style="1px; margin-top: 3px; background-color: #ff8282">
+                                    Rejected
+                                </div>
+
+                            </div>
+                            <!-- ICONS -->
+                            <div style="padding-top:5px">
+                                <button type="button" class="btn btn-link" data-toggle="modal"
+                                        data-target="#Iowa-False-modal" style="padding: 1px">
+                                    <i class="bi bi-pencil-square"></i>
+                                </button>
+                                <a href="/explorer/Iowa" class="btn btn-link" style="padding: 1px">
+                                    <i class="bi bi-search"></i>
+                                </a>
+                                <button type="button" class="btn btn-link" data-toggle="modal"
+                                        data-target="#Iowa-False-delete" style="padding: 1px">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
+                            <div>
+
+                            </div>
+                        </center>
+                    </div>
+
+                    <!-- SCHOOL TEXT AREA ON RIGHT -->
+                    <div class="col-lg">
+                        <a class="normal_list" href="/explorer/Iowa" style="color:black;text-decoration: none">
+                            <h5>Iowa (MD)</h5>
+                        </a>
+                        <a class="bulk_list d-none" style="color:black;text-decoration: none">
+                            <h5>Iowa (MD)</h5>
+                        </a>
+                        <div class="row" style="padding-bottom: 10px">
+                            <div class="col-lg-2">
+                                <strong>Primary Submitted:</strong><br>
+                                <span class="normal_list">
+                            06/25/2021
+                            </span>
+                            </div>
+                            <div class="col-lg-2">
+                                <strong>Secondary Received:</strong><br>
+                                <span class="normal_list">
+                            07/06/2021
+                            </span>
+                            </div>
+                            <div class="col-lg-2">
+                                <strong>Application Complete:</strong><br>
+                                <span class="normal_list">
+                            08/12/2021
+                            </span>
+                            </div>
+                            <div class="col-lg-2">
+                                <strong>Interview Received:</strong><br>
+                                <span class="normal_list">
+                            11/10/2021
+                            </span>
+                            </div>
+                            <div class="col-lg-2">
+                                <strong>Interview Date:</strong><br>
+                                <span class="normal_list">
+                            12/22/2021
+                            </span>
+                            </div>
+                            <div class="col-lg-2">
+                                <strong>Rejected:</strong><br>
+                                <span class="normal_list">
+                            02/11/2022
+                            </span>
+                            </div>
+                            <div class="col-lg-2">
+                                <strong>Waitlisted:</strong><br>
+                                <span class="normal_list">
+                            -
+                            </span>
+                            </div>
+                            <div class="col-lg-2">
+                                <strong>Accepted:</strong><br>
+                                <span class="normal_list">
+                            -
+                            </span>
+                            </div>
+                            <div class="col-lg-2">
+                                <strong>Withdrawn:</strong><br>
+                                <span class="normal_list">
+                                -
+                            </span>
+                            </div>
+                        </div>
+                        <div class="row" style="padding-top: 10px">
+                            <details open="">
+                                <summary><strong>Notes:</strong></summary>
+                                <p style="white-space:pre-wrap; word-wrap:break-word">Update letter sent: 10/14/2021</p>
+                            </details>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </div>
+    </div>
+    <h4>Making Your Data Beautiful</h4>
+    <p>
+        Visualizing your cycle progress has never been easier. Use the visualization tool to quickly generate interactive
+        graphs of the data entered into your school list. Click the buttons below to see some examples.
+    </p>
     <div style="padding-bottom:10px">
         <a class="btn btn-primary" data-toggle="collapse" href="#line" role="button" aria-expanded="true"
            aria-controls="line" style="margin:1px">
-           Line
+            Line
         </a>
         <div class="collapse" id="line">
             <div class="card container" style="margin-top:10px; margin-bottom:10px">
-                <center><div id="line_graph"></div></center>
+                <center>
+                    <div id="line_graph"></div>
+                </center>
             </div>
         </div>
         <a class="btn btn-primary" data-toggle="collapse" href="#bar" role="button" aria-expanded="false"
            aria-controls="bar" style="margin:1px">
-           Bar
+            Bar
         </a>
         <div class="collapse" id="bar">
             <div class="card container" style="margin-top:10px; margin-bottom:10px">
-                <center><div id="bar_graph"></div></center>
+                <center>
+                    <div id="bar_graph"></div>
+                </center>
             </div>
         </div>
         <a class="btn btn-primary" data-toggle="collapse" href="#timeline" role="button" aria-expanded="false"
            aria-controls="bar" style="margin:1px">
-           Timeline
+            Timeline
         </a>
         <div class="collapse" id="timeline">
             <div class="card container" style="margin-top:10px; margin-bottom:10px">
-                <center><div id="timeline_graph"></div></center>
+                <center>
+                    <div id="timeline_graph"></div>
+                </center>
             </div>
         </div>
         <a class="btn btn-primary" data-toggle="collapse" href="#dot" role="button" aria-expanded="false"
            aria-controls="bar" style="margin:1px">
-           Dot
+            Dot
         </a>
         <div class="collapse" id="dot">
             <div class="card container" style="margin-top:10px; margin-bottom:10px">
-                <center><div id="dot_graph"></div></center>
+                <center>
+                    <div id="dot_graph"></div>
+                </center>
             </div>
         </div>
         <a class="btn btn-primary" data-toggle="collapse" href="#sankey" role="button" aria-expanded="false"
            aria-controls="sankey" style="margin:1px">
-           Sankey
+            Sankey
         </a>
         <div class="collapse" id="sankey">
             <div class="card container" style="margin-top:10px; margin-bottom:10px">
-                <center><div id="sankey_graph"></div></center>
+                <center>
+                    <div id="sankey_graph"></div>
+                </center>
             </div>
         </div>
         <a class="btn btn-primary" data-toggle="collapse" href="#map" role="button" aria-expanded="false"
            aria-controls="map" style="margin:1px">
-           Map
+            Map
         </a>
         <div class="collapse" id="map">
             <div class="card container" style="margin-top:10px; margin-bottom:10px">
-                <center><div id="map_plot"></div></center>
+                <center>
+                    <div id="map_plot"></div>
+                </center>
             </div>
         </div>
     </div>
 
-    <h4>3. Data Crowdsourcing</h4>
-    <p>Data entered into CycleTrack is used to help make the application cycle more transparent. We have created the
-    <a href="{{ url_for('explorer.explorer_home') }}">school explorer</a> which presents aggregated data about the admissions
-    process for individual medical schools. Additionally, data is used for research about medical school applications.
-    Applicant information is always de-identified to maintain privacy.</p>
+    <h4>Crowdsourcing Data</h4>
+    <p>
+        Data entered into CycleTrack is used to make applications more transparent and more accessible. The
+        <a href="{{ url_for('explorer.explorer_home') }}">school explorer</a> presents aggregated de-identified data about
+        the progress and statistics of individual medical schools. Additionally, data may be used for research about
+        the medical school application process. We always de-identify all applicant information to maintain privacy.
+    </p>
 
-    <h4>4. Other Tools</h4>
-    <p>We currently offer a GPA calculator to calculate cumulative/science/non-science GPA using criteria specified by
-    AMCAS, AACOMAS and TMDSAS.</p>
+    <h4>Other Tools</h4>
+    <p>
+        We currently offer a GPA calculator for calculating cumulative/science/non-science GPA using criteria specified by
+        AMCAS, AACOMAS and TMDSAS.
+    </p>
 </div>
 
 <!-- GENERATE GRAPHS -->
@@ -126,5 +380,6 @@
             Plotly.newPlot('map_plot', data);
         })
         .catch(error => console.log(error));
+
 </script>
 {% endblock %}
