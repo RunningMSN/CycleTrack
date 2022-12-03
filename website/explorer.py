@@ -21,6 +21,11 @@ def explorer_home():
         # Grab number of applications
         reg_num = school.reg_apps_count
         phd_num = school.phd_apps_count
+        if not reg_num:
+            reg_num = 0
+        if not phd_num:
+            phd_num =0
+
         # Skip the school if no applications
         if reg_num > 0 or phd_num > 0:
             build_df['reg_apps'].append(reg_num)
