@@ -67,6 +67,10 @@ def convert_sums(data):
     return cleaned_data
 
 def convert_bar_df(data):
+    # Remove potentially future interview dates if withdrawn
+    data["interview_date"] = data.apply(
+        lambda row: row["interview_date"] if row["interview_date"] <= row["withdrawn"] else np.nan, axis=1)
+
     # Obtain a range of all dates
     melted = data.melt(id_vars=data.columns[0], value_vars=data.columns[1:], var_name='actions', value_name='date')
     start_dates = min(melted['date'].dropna())
