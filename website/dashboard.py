@@ -938,7 +938,7 @@ def visualizations():
                 graphJSON = map.generate(cycle_data, plot_title, stats, color=color_type.lower(),
                                          map_scope=map_type.lower(), custom_text=save_settings['custom_text'])
             elif vis_type.lower() == 'timeline':
-                graphJSON = horz_bar.generate(cycle_data, plot_title, stats, color=color_type.lower(),
+                graphJSON = horz_bar.generate(cycle_data, cycle.cycle_year, plot_title, stats, color=color_type.lower(),
                                         custom_text=save_settings['custom_text'],hide_school_names=hide_names)
         else:
             flash(f'Your selected school list for {cycle.cycle_year} does not have any dates yet!', category='error')

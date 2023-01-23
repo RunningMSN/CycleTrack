@@ -17,7 +17,6 @@ def timing_calculations(df,output_dict):
         output_dict["interview_timing"] = None
     #timing of interview to waitlist
     int_to_wl = (df['waitlist']- df['interview_date']).dropna().dt.days.tolist()
-    print(int_to_wl)
     if len(int_to_wl) > 0:
         output_dict["waitlist_after_interview"] = f'{statistics.median(int_to_wl):.2f} ({min(int_to_wl)} - {max(int_to_wl)}, n={len(int_to_wl)})'
     else:

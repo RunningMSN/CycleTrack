@@ -4,8 +4,8 @@ import json
 import textwrap
 from . import converters
 
-def generate(cycle_data, title, stats, color="default",custom_text=None,hide_school_names=False):
-    df = converters.convert_horz_bar(cycle_data)
+def generate(cycle_data, cycleyear, title, stats, color="default",custom_text=None,hide_school_names=False):
+    df = converters.convert_horz_bar(cycle_data,cycleyear)
 
     fig = px.timeline(df, 
     x_start="start",
