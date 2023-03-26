@@ -157,8 +157,7 @@ def convert_map(data,color="default"):
     return loc_df
 
 def convert_horz_bar(data,cycleyear):
-    print(data['secondary_received'])
-    data['secondary_received'] = data['secondary_received'] + dt.timedelta(seconds = 1)
+    data['secondary_received'] = data['secondary_received'] + dt.timedelta(seconds=1)
     data['application_complete'] = data['application_complete'] + dt.timedelta(seconds=2)
     temp_melt = data.melt(id_vars=data.columns[0], value_vars=data.columns[1:], var_name='Actions', value_name='date')
     cycle_max = temp_melt["date"].max()
