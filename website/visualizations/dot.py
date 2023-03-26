@@ -28,11 +28,22 @@ action_weight = {
     'acceptance': 7, 
     'withdrawn': 8
 }
+action_best = {
+    'primary': 0,
+    'secondary_received': 1,
+    'application_complete': 2,
+    'withdrawn': 3,
+    'interview_received': 4,
+    'interview_date': 5,
+    'rejection': 6,
+    'waitlist': 7,
+    'acceptance': 8
+}
 
 def generate(cycle_data, title, stats, color="default",custom_text=None,hide_school_names=False, organize=None):
     melted = cycle_data.melt(id_vars=cycle_data.columns[0], value_vars=cycle_data.columns[1:], var_name='Actions', value_name='date')
     actions = melted["Actions"].unique()
-    
+
     fig = go.Figure()
     for action in actions:
         df = melted.loc[melted["Actions"]==action]
@@ -58,6 +69,15 @@ def generate(cycle_data, title, stats, color="default",custom_text=None,hide_sch
 
     if organize == "Alphabetical":
         fig.update_yaxes(categoryorder='category descending')
+    elif organize == 'Status':
+        # Create a dataframe with proper order of results
+        df_best_results = melted.dropna()
+        df_best_results['order'] = df_best_results['Actions'].apply(
+            lambda x: action_best[x] if x in action_best else None)
+        df_best_results = df_best_results.loc[df_best_results.groupby(['name'])['order'].idxmax()][['name', 'Actions', 'date', 'order']]
+        df_best_results = df_best_results.sort_values(by=['order', 'name'], ascending=[False, True])
+        # Use correctly ordered numbers to generate graph
+        fig.update_yaxes(categoryorder='array', categoryarray=df_best_results['name'], autorange='reversed')
     
     est_height = len(melted['name'].unique())*20
 
