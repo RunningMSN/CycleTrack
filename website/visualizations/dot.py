@@ -29,9 +29,8 @@ action_weight = {
     'withdrawn': 8
 }
 
-def generate(cycle_data, title, stats, color="default",custom_text=None,hide_school_names=False):
+def generate(cycle_data, title, stats, color="default",custom_text=None,hide_school_names=False, organize=None):
     melted = cycle_data.melt(id_vars=cycle_data.columns[0], value_vars=cycle_data.columns[1:], var_name='Actions', value_name='date')
-    
     actions = melted["Actions"].unique()
     
     fig = go.Figure()
@@ -56,6 +55,9 @@ def generate(cycle_data, title, stats, color="default",custom_text=None,hide_sch
     if hide_school_names:
         fig.update_yaxes(title='y', visible=False, showticklabels=False)
         fig.update_traces(hovertemplate = "<br>%{x}<extra></extra>")
+
+    if organize == "Alphabetical":
+        fig.update_yaxes(categoryorder='category descending')
     
     est_height = len(melted['name'].unique())*20
 

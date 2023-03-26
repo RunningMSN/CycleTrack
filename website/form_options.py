@@ -47,6 +47,9 @@ COLOR_TYPES = ["Default","Okabe-Ito","Tol"]
 # Settings for map scopes
 MAP_TYPES = ["USA", "North America"]
 
+# Settings for organizing Y axis on timeline and dot plots
+ORGANIZE_Y_OPTIONS = ["Alphabetical"]
+
 # Settings for user profile
 PROFILE_TYPES = ["Public", "Private"]
 BLOCK_TYPES = ["Graph","Text"]

@@ -4,7 +4,8 @@ import json
 import textwrap
 from . import converters
 
-def generate(cycle_data, cycleyear, title, stats, color="default",custom_text=None,hide_school_names=False):
+def generate(cycle_data, cycleyear, title, stats, color="default",custom_text=None,hide_school_names=False,
+             organize=None):
     df = converters.convert_horz_bar(cycle_data,cycleyear)
 
     fig = px.timeline(df, 
@@ -44,6 +45,9 @@ def generate(cycle_data, cycleyear, title, stats, color="default",custom_text=No
     if hide_school_names:
         fig.update_yaxes(title='y', visible=False, showticklabels=False)
         fig.update_traces(hovertemplate="%{customdata[0]}<br>Date: %{base|%m-%d-%Y} <extra></extra>")
+
+    if organize == "Alphabetical":
+        fig.update_yaxes(categoryorder='category descending')
 
     fig.update_yaxes(title=None, gridwidth=1)
 

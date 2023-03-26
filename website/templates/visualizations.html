@@ -120,6 +120,31 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- ORGANIZE Y-AXIS FOR TIMELINE/DOT -->
+                <div class="col {% if not (save_settings['vis_type'] == 'Timeline' or save_settings['vis_type'] == 'Dot') %}d-none{% endif %}" style="min-width: 300px"
+                     id="organizeY">
+                    <div class="row" style="margin-bottom:5px">
+                        <div class="col-auto">
+                            <strong class="align-middle">Y-Axis Order: </strong>
+                        </div>
+                        <div class="col-auto">
+                            <select name="organize_y" id="organize_y" class="btn-sm form-control" style="width: 120px">
+                                {% if save_settings['organize_y'] %}
+                                <option selected="{{ save_settings['organize_y'] }}">{{ save_settings['organize_y'] }}
+                                </option>
+                                {% endif %}
+                                {% for organize_option in organize_y_options %}
+                                {% if organize_option!= save_settings['organize_y'] %}
+                                <option value="{{ organize_option }}">{{ organize_option }}</option>
+                                {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+
             </div>
             <div class="row row-cols-auto">
                 <div class="col" style="margin-bottom: 5px">
