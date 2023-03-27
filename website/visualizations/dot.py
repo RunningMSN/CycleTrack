@@ -67,17 +67,7 @@ def generate(cycle_data, title, stats, color="default",custom_text=None,hide_sch
         fig.update_yaxes(title='y', visible=False, showticklabels=False)
         fig.update_traces(hovertemplate = "<br>%{x}<extra></extra>")
 
-    if organize == "Alphabetical":
-        fig.update_yaxes(categoryorder='category descending')
-    elif organize == 'Status':
-        # Create a dataframe with proper order of results
-        df_best_results = melted.dropna()
-        df_best_results['order'] = df_best_results['Actions'].apply(
-            lambda x: action_best[x] if x in action_best else None)
-        df_best_results = df_best_results.loc[df_best_results.groupby(['name'])['order'].idxmax()][['name', 'Actions', 'date', 'order']]
-        df_best_results = df_best_results.sort_values(by=['order', 'name'], ascending=[False, True])
-        # Use correctly ordered numbers to generate graph
-        fig.update_yaxes(categoryorder='array', categoryarray=df_best_results['name'], autorange='reversed')
+    fig.update_yaxes(categoryorder='array', categoryarray=converters.organize_y_axis(organize, cycle_data), autorange='reversed')
     
     est_height = len(melted['name'].unique())*20
 

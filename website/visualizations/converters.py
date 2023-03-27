@@ -193,3 +193,34 @@ def convert_horz_bar(data,cycleyear):
     concat_df = pd.concat(dfs)
 
     return concat_df
+
+def organize_y_axis(order, cycle_data):
+    # Dictionary to assign priority weights of actions
+    action_best = {
+        'primary': 0,
+        'secondary_received': 1,
+        'application_complete': 2,
+        'withdrawn': 3,
+        'interview_received': 4,
+        'interview_date': 5,
+        'rejection': 6,
+        'waitlist': 7,
+        'acceptance': 8
+    }
+
+    melted = cycle_data.melt(id_vars=cycle_data.columns[0], value_vars=cycle_data.columns[1:], var_name='Actions',
+                             value_name='date')
+
+    if order == "Alphabetical":
+        return np.sort(melted["name"].unique())
+    elif order == "Status":
+        # Create a dataframe with proper order of results
+        df_best_results = cycle_data.melt(id_vars=cycle_data.columns[0], value_vars=cycle_data.columns[1:],
+                                          var_name='Actions',
+                                          value_name='date').dropna()
+        df_best_results['order'] = df_best_results['Actions'].apply(
+            lambda x: action_best[x] if x in action_best else None)
+        df_best_results = df_best_results.loc[df_best_results.groupby(['name'])['order'].idxmax()][
+            ['name', 'Actions', 'date', 'order']]
+        df_best_results = df_best_results.sort_values(by=['order', 'name'], ascending=[False, True])
+        return df_best_results['name']
