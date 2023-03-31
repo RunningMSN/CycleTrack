@@ -68,17 +68,18 @@ def convert_sums(data):
 
 def convert_bar_df(data):
     # Remove potentially future interview dates if withdrawn
-    data["interview_date"] = data.apply(
-        lambda row: row["interview_date"] if row["interview_date"] <= row["withdrawn"] else np.nan, axis=1)
+    if "withdrawn" in data.columns.tolist():
+        data["interview_date"] = data.apply(
+            lambda row: row["interview_date"] if row["interview_date"] <= row["withdrawn"] else np.nan, axis=1)
 
     # Obtain a range of all dates
-    melted = data.melt(id_vars=data.columns[0], value_vars=data.columns[1:], var_name='actions', value_name='date')
-    start_dates = min(melted['date'].dropna())
-    end_dates = max(melted['date'].dropna())
+    melted = data.melt(id_vars=data.columns[0], value_vars=data.columns[1:], var_name='actions', value_name='date').dropna()
+    start_dates = min(melted['date'])
+    end_dates = max(melted['date'])
     all_dates = pd.date_range(start=start_dates, end=end_dates)
 
-    # Remove names
-    names_removed = data.drop('name', axis=1)
+    # Remove names and columns with all NaT
+    names_removed = data.drop('name', axis=1).dropna(axis=1, how='all')
     # Reverse order of columns for cases of 2 equal dates
     names_removed = names_removed[names_removed.columns[::-1]]
 
@@ -95,7 +96,6 @@ def convert_bar_df(data):
 
     # Get counts for all dates
     output = output.groupby(['Date', 'Best Outcome']).size().reset_index(name='Count')
-
     return output
 
 def sankey_build_frames(cycle_data,color="default"):
