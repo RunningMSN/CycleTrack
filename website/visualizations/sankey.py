@@ -5,7 +5,7 @@ import textwrap
 import plotly.graph_objects as go
 
 def generate(cycle_data, title, stats, color="default",custom_text=None):
-    '''Returns JSON for plotly line graph of the application cycle.'''
+    '''Returns JSON for plotly Sankey graph of the application cycle.'''
     # Drop names and interview days
     cycle_data = cycle_data.drop('name', axis=1)
     if 'interview_date' in cycle_data.columns:
