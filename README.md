@@ -1,7 +1,7 @@
 # CycleTrack
 
 CycleTrack is a medical school application tracking system available publicly and for free
-[here](https://cycletrack.docs2be.org). We aim to fulfill the following objectives:
+[here](https://cycletrack.org). We aim to fulfill the following objectives:
 1. Provide an organizational tool for keeping track of the status of each application.
 2. Allow applicants to easily visualize their own application cycle through graphs and maps that they can also download 
 and share with friends. This is an expansion of our previous project, 
@@ -60,7 +60,7 @@ current time point in the application cycle.</summary>
 </details>
 
 ## Data Crowdsourcing
-Data collected from school lists is displayed via the [school explorer](https://cycletrack.docs2be.org/explorer). The
+Data collected from school lists is displayed via the [school explorer](https://cycletrack.org/explorer). The
 main page displays all schools for which data has been tracked along with basic information about them. Clicking a
 school within the explorer will display an individual school page. Each school page presents more detailed information
 about the school such as the state of admissions actions over the current application cycle as well as historic
