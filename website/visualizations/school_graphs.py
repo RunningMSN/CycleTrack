@@ -95,5 +95,8 @@ def interview_acceptance_histogram(df, column_name):
     # Overlay both histograms
     fig.update_layout(barmode='overlay', bargap=0, margin=dict(l=0, r=0, t=0, b=0), height=200, autosize=True)
 
+    # center legend vertically
+    fig.update_layout(legend=dict(y=0.5))
+
     graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
     return graphJSON
