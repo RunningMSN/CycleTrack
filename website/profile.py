@@ -95,7 +95,7 @@ def profile_home():
             block.hide_names = (hide_names == 'true')
         elif block_type.lower() == "text":
             text = request.form.get("textbox")
-            block.text = text
+            block.text = escape(text)
         db.session.commit()
 
     elif request.form.get("add_block"):
@@ -149,6 +149,9 @@ def profile_home():
         db.session.commit()
 
     blocks = [x[0] for x in user_profile.order_by(User_Profiles.block_order.asc())]
+    for block in blocks:
+        if block.text != None:
+            block.text = escape(block.text)
 
     return render_template('profile.html',user=current_user,profile=user_profile,blocks=blocks,app_types=app_types,
                            hashurl=url, vis_types=form_options.VIS_TYPES,
