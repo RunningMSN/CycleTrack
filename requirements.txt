@@ -2,7 +2,7 @@ flask
 flask-login
 flask-sqlalchemy
 plotly
-plotly-express
+plotly_express
 pandas
 openpyxl
 beautifulsoup4
