@@ -11,10 +11,6 @@ import uuid
 import markdown
 from markdown.extensions import Extension
 
-class EscapeHtml(Extension):
-    def extendMarkdown(self, md, md_globals):
-        del md.preprocessors['html_block']
-        del md.inlinePatterns['html']
 
 profile = Blueprint('profile', __name__)
 
@@ -158,7 +154,7 @@ def profile_home():
                            color_types=form_options.COLOR_TYPES, profile_types=form_options.PROFILE_TYPES,
                            filter_options=form_options.FILTER_OPTIONS,
                            map_types=form_options.MAP_TYPES, block_types=form_options.BLOCK_TYPES,
-                           cycle_years=cycle_years, markdown=markdown.markdown, EscapeHtml=EscapeHtml,
+                           cycle_years=cycle_years, markdown=markdown.markdown,
                            number_of_graph_blocks=User_Profiles.query.filter_by(user_id=userid, block_type="Graph").count(),
                            number_of_text_blocks=User_Profiles.query.filter_by(user_id=userid, block_type="Text").count())
 
@@ -191,6 +187,11 @@ def profile_page(userurl):
                 vis_type = block.vis_type
                 # plot title
                 plot_title = block.plot_title
+                # cycle year
+                cycle_year = block.cycle_year
+
+
+                
 
                 map_type = block.map_type
 
@@ -241,14 +242,14 @@ def profile_page(userurl):
                         graphJSON = map.generate(cycle_data, plot_title, stats=False, color=color_type.lower(),
                                                  map_scope=map_type.lower())
                     elif vis_type.lower() == 'timeline':
-                        graphJSON = horz_bar.generate(cycle_data, plot_title, stats=False, color=color_type.lower(),
+                        graphJSON = horz_bar.generate(cycle_data, cycle_year, plot_title, stats=False, color=color_type.lower(),
                                                       hide_school_names=hide_names)
                     graphs.append(graphJSON)
                 else:
                     graphJSON = None
             elif block_type == "Text":
                 types.append("text")
-                converted_markdown = markdown.markdown(block.text, extensions=[EscapeHtml()])
+                converted_markdown = markdown.markdown(block.text)
                 graphs.append(converted_markdown)
         return render_template('profile_template.html', user=current_user, public_setting=user.public_profile,
                                profile_user_id = user.id, blocks_data=zip(ids,types,graphs))

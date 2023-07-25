@@ -111,7 +111,7 @@
             <div class="col">
                 <div class="row container">
                     {% if block.block_type == "Text" %}
-                        {{ markdown(block.text, extensions=[EscapeHtml()]) |safe }}
+                        {{ markdown(block.text)|safe }}
                     {% elif block.block_type == "Graph" %}
                         <div class="row">
                             <div class="col col-sm-auto">
