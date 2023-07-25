@@ -1,7 +1,7 @@
 from flask_login import current_user, login_required
 from numpy import number
 from .form_options import VALID_CYCLES
-from flask import Blueprint, render_template, request, flash, jsonify, redirect, url_for, Response, Markup
+from flask import Blueprint, render_template, request, flash, jsonify, redirect, url_for, Response, Markup, escape
 from . import db, form_options
 from .models import User,Cycle, School, User_Profiles
 import pandas as pd
@@ -9,7 +9,7 @@ from .visualizations import dot, line, bar, sankey, map, horz_bar
 import json
 import uuid
 import markdown
-from markdown.extensions import Extension
+
 
 
 profile = Blueprint('profile', __name__)
@@ -136,9 +136,10 @@ def profile_home():
                     flash("You have reached the limit on the number of text blocks that can be on your profile.", category='error')
                 else:
                     text = request.form.get("textbox")
+                    sanitized_text = escape(text)
                     db.session.add(
                         User_Profiles(user_id = userid,
-                            block_order=block_order,block_type=block_type,text=text))
+                            block_order=block_order,block_type=block_type,text=sanitized_text))
                     db.session.commit()
     elif request.form.get("delete_block"):
         #reindex the profile
@@ -189,9 +190,6 @@ def profile_page(userurl):
                 plot_title = block.plot_title
                 # cycle year
                 cycle_year = block.cycle_year
-
-
-                
 
                 map_type = block.map_type
 
@@ -249,7 +247,7 @@ def profile_page(userurl):
                     graphJSON = None
             elif block_type == "Text":
                 types.append("text")
-                converted_markdown = markdown.markdown(block.text)
+                converted_markdown = markdown.markdown(escape(block.text))
                 graphs.append(converted_markdown)
         return render_template('profile_template.html', user=current_user, public_setting=user.public_profile,
                                profile_user_id = user.id, blocks_data=zip(ids,types,graphs))
