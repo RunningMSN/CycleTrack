@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, flash, jsonify, redirect, url_for, Response, Markup
+from flask import Blueprint, render_template, request, flash, jsonify, redirect, url_for, Response, Markup, escape
 from flask_login import current_user, login_required
 from . import db, form_options, mail
 from .models import Cycle, School, School_Profiles_Data, Courses, User_Profiles
@@ -262,7 +262,7 @@ def lists():
             school.withdrawn = None
         note = request.form.get('note')
         if note:
-            school.note = note
+            school.note = escape(note)
         else:
             school.note = None
         db.session.commit()
@@ -440,6 +440,24 @@ def lists():
                         withdrawn_update = None
                     school = School.query.filter_by(id=int(school_id)).first()
                     school.withdrawn = withdrawn_update
+            elif key.startswith("note1"):
+                note_pre = request.form.get("note0-" + school_id)
+                if note_pre == "":
+                    note_pre = ""
+                else:
+                    note_pre = request.form.get("note0-" + school_id)
+                note_post = request.form.get("note1-" + school_id)
+                if note_post == "":
+                    note_post = ""
+                else:
+                    note_post = request.form.get("note1-" + school_id)
+                if note_post != note_pre:
+                    if note_post != "":
+                        note_update = note_post
+                    else:
+                        note_update = None
+                    school = School.query.filter_by(id=int(school_id)).first()
+                    school.note = escape(note_update)
             elif key.startswith("delete"):
                 school = School.query.get(school_id)
                 if school:
