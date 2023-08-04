@@ -7,7 +7,7 @@ from datetime import datetime, date
 import re
 from .visualizations import dot, line, bar, sankey, map, gpa_graph, horz_bar
 import pandas as pd
-from .helpers import import_list_funcs, categorize_stats, school_stats_calculators, gpa_calculators
+from .helpers import import_list_funcs, categorize_stats, school_stats_calculators, gpa_calculators, combine_app_types
 from flask_mail import Message
 
 dashboard = Blueprint('dashboard', __name__)
@@ -864,6 +864,8 @@ def visualizations():
         app_types = list(cycle_data['school_type'].unique())
         if 'MD' in app_types and 'DO' in app_types: app_types.insert(0, 'MD or DO')
 
+    app_types.append("All")
+
     # Vis Generation
     vis_type = request.form.get('vis_type')
     # Default to no graph and no settings saved
@@ -925,22 +927,31 @@ def visualizations():
             else:
                 save_settings['filters'][filter] = False
 
+
+        # Combine all application types (aka rename the schools with a suffix)
+        
+        
         # Filter by PhD
-        if app_type == 'Dual Degree':
+        if app_type == "All":
+            cycle_data = cycle_data
+        elif app_type == 'Dual Degree':
             cycle_data = cycle_data[cycle_data['phd'] == True]
         else:
             cycle_data = cycle_data[cycle_data['phd'] == False]
 
         # Filter MD or DO
-        if app_type == 'MD' or app_type == 'MD Only':
+        if app_type == "All":
+            cycle_data = combine_app_types.combine(cycle_data)
+        elif app_type == 'MD' or app_type == 'MD Only':
             cycle_data = cycle_data[cycle_data['school_type'] == 'MD']
         elif app_type == 'DO' or app_type == 'DO Only':
             cycle_data = cycle_data[cycle_data['school_type'] == 'DO']
 
         # Drop extra information
-        cycle_data = cycle_data.drop(['id', 'cycle_id', 'user_id', 'school_type', 'phd', 'note'], axis=1)
+        cycle_data.drop(['id', 'cycle_id', 'user_id', 'school_type', 'phd', 'note'], axis=1, inplace=True)
         # Drop empty columns
         cycle_data = cycle_data.dropna(axis=1, how='all')
+
         # Get visualization JSON
         if len(cycle_data.columns) > 1:
             if vis_type.lower() == 'dot':

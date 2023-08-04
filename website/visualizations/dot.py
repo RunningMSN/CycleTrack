@@ -41,6 +41,8 @@ action_best = {
 }
 
 def generate(cycle_data, title, stats, color="default",custom_text=None,hide_school_names=False, organize=None):
+    cycle_data["name"] = cycle_data["name"].str.replace("_"," ")
+
     melted = cycle_data.melt(id_vars=cycle_data.columns[0], value_vars=cycle_data.columns[1:], var_name='Actions', value_name='date')
     actions = melted["Actions"].unique()
 

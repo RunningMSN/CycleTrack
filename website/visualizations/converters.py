@@ -139,6 +139,10 @@ def convert_map(data,color="default"):
     fig_colors = palette[color]
     #merge schools so that the most recent decision for a school counts
     #(aka MD + MD/PhD don't get put in twice)
+
+    #remove the MD, DO, MD/PhD monikers
+    data["name"] = data["name"].str.split('_').str[0]
+
     cols = (data.columns[::-1]).tolist()
     data = data.sort_values(by=cols).groupby("name",as_index=False).last()
     for ind,row in data[data.columns.difference(["name"])].iterrows():
@@ -157,6 +161,7 @@ def convert_map(data,color="default"):
     return loc_df
 
 def convert_horz_bar(data,cycleyear):
+    data["name"] = data["name"].str.replace("_"," ")
     data['secondary_received'] = data['secondary_received'] + dt.timedelta(seconds=1)
     data['application_complete'] = data['application_complete'] + dt.timedelta(seconds=2)
     temp_melt = data.melt(id_vars=data.columns[0], value_vars=data.columns[1:], var_name='Actions', value_name='date')
