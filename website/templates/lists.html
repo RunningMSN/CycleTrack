@@ -317,8 +317,7 @@ function toggleCancel() {
                             {% endif %}
                             </span>
                             <span class="bulk_list d-none">
-                                <input type="hidden" value="{%- if school.primary -%}{{ school.primary.strftime('%Y-%m-%d') }}{%- endif -%}" name="primary0-{{school.id}}">
-                                <input class="datepicker" type="text" data-cycle="{{cycle.cycle_year}}" value="{%- if school.primary -%}{{ school.primary.strftime('%Y-%m-%d') }}{%- endif -%}" name="primary1-{{school.id}}">
+                                <input class="datepicker" type="text" data-cycle="{{cycle.cycle_year}}" value="{%- if school.primary -%}{{ school.primary.strftime('%Y-%m-%d') }}{%- endif -%}" name="primary-{{school.id}}">
                             </span>
                         </div>
                         <div class="col-lg-2">
@@ -331,8 +330,7 @@ function toggleCancel() {
                             {% endif %}
                             </span>
                             <span class="bulk_list d-none">
-                                <input type="hidden" value="{%- if school.secondary_received -%}{{ school.secondary_received.strftime('%Y-%m-%d') }}{%- endif -%}" name="secondary_received0-{{school.id}}">
-                                <input class="datepicker" type="text" data-cycle="{{cycle.cycle_year}}" value="{%- if school.secondary_received -%}{{ school.secondary_received.strftime('%Y-%m-%d') }}{%- endif -%}" name="secondary_received1-{{school.id}}">
+                                <input class="datepicker" type="text" data-cycle="{{cycle.cycle_year}}" value="{%- if school.secondary_received -%}{{ school.secondary_received.strftime('%Y-%m-%d') }}{%- endif -%}" name="secondary_received-{{school.id}}">
                             </span>
                         </div>
                         {% endif %}
@@ -346,8 +344,7 @@ function toggleCancel() {
                             {% endif %}
                             </span>
                             <span class="bulk_list d-none">
-                                <input type="hidden" value="{%- if school.application_complete-%}{{ school.application_complete.strftime('%Y-%m-%d') }}{%- endif -%}" name="application_complete0-{{school.id}}">
-                                <input class="datepicker" type="text" data-cycle="{{cycle.cycle_year}}" value="{%- if school.application_complete-%}{{ school.application_complete.strftime('%Y-%m-%d') }}{%- endif -%}" name="application_complete1-{{school.id}}">
+                                <input class="datepicker" type="text" data-cycle="{{cycle.cycle_year}}" value="{%- if school.application_complete-%}{{ school.application_complete.strftime('%Y-%m-%d') }}{%- endif -%}" name="application_complete-{{school.id}}">
                             </span>
                         </div>
                         <div class="col-lg-2">
@@ -360,8 +357,7 @@ function toggleCancel() {
                             {% endif %}
                             </span>
                             <span class="bulk_list d-none">
-                                <input type="hidden" value="{%- if school.interview_received -%}{{ school.interview_received.strftime('%Y-%m-%d') }}{%- endif -%}" name="interview_received0-{{school.id}}">
-                                <input class="datepicker" type="text" data-cycle="{{cycle.cycle_year}}" value="{%- if school.interview_received -%}{{ school.interview_received.strftime('%Y-%m-%d') }}{%- endif -%}" name="interview_received1-{{school.id}}">
+                                <input class="datepicker" type="text" data-cycle="{{cycle.cycle_year}}" value="{%- if school.interview_received -%}{{ school.interview_received.strftime('%Y-%m-%d') }}{%- endif -%}" name="interview_received-{{school.id}}">
                             </span>
                         </div>
                         <div class="col-lg-2">
@@ -374,8 +370,7 @@ function toggleCancel() {
                             {% endif %}
                             </span>
                             <span class="bulk_list d-none">
-                                <input type="hidden" value="{%- if school.interview_date -%}{{ school.interview_date.strftime('%Y-%m-%d') }}{%- endif -%}" name="interview_date0-{{school.id}}">
-                                <input class="datepicker" type="text" data-cycle="{{cycle.cycle_year}}" value="{%- if school.interview_date -%}{{ school.interview_date.strftime('%Y-%m-%d') }}{%- endif -%}" name="interview_date1-{{school.id}}">
+                                <input class="datepicker" type="text" data-cycle="{{cycle.cycle_year}}" value="{%- if school.interview_date -%}{{ school.interview_date.strftime('%Y-%m-%d') }}{%- endif -%}" name="interview_date-{{school.id}}">
                             </span>
                         </div>
                         <div class="col-lg-2">
@@ -388,8 +383,7 @@ function toggleCancel() {
                             {% endif %}
                             </span>
                             <span class="bulk_list d-none">
-                                <input type="hidden" value="{%- if school.rejection -%}{{ school.rejection.strftime('%Y-%m-%d') }}{%- endif -%}" name="rejection0-{{school.id}}">
-                                <input class="datepicker" type="text" data-cycle="{{cycle.cycle_year}}" value="{%- if school.rejection -%}{{ school.rejection.strftime('%Y-%m-%d') }}{%- endif -%}" name="rejection1-{{school.id}}">
+                                <input class="datepicker" type="text" data-cycle="{{cycle.cycle_year}}" value="{%- if school.rejection -%}{{ school.rejection.strftime('%Y-%m-%d') }}{%- endif -%}" name="rejection-{{school.id}}">
                             </span>
                         </div>
                         <div class="col-lg-2">
@@ -402,8 +396,7 @@ function toggleCancel() {
                             {% endif %}
                             </span>
                             <span class="bulk_list d-none">
-                                <input type="hidden" value="{%- if school.waitlist -%}{{ school.waitlist.strftime('%Y-%m-%d') }}{%- endif -%}" name="waitlist0-{{school.id}}">
-                                <input class="datepicker" type="text" data-cycle="{{cycle.cycle_year}}" value="{%- if school.waitlist -%}{{ school.waitlist.strftime('%Y-%m-%d') }}{%- endif -%}" name="waitlist1-{{school.id}}">
+                                <input class="datepicker" type="text" data-cycle="{{cycle.cycle_year}}" value="{%- if school.waitlist -%}{{ school.waitlist.strftime('%Y-%m-%d') }}{%- endif -%}" name="waitlist-{{school.id}}">
                             </span>
                         </div>
                         <div class="col-lg-2">
@@ -416,8 +409,7 @@ function toggleCancel() {
                             {% endif %}
                             </span>
                             <span class="bulk_list d-none">
-                                <input type="hidden" value="{%- if school.acceptance -%}{{ school.acceptance.strftime('%Y-%m-%d') }}{%- endif -%}" name="acceptance0-{{school.id}}">
-                                <input class="datepicker" type="text" data-cycle="{{cycle.cycle_year}}" value="{%- if school.acceptance -%}{{ school.acceptance.strftime('%Y-%m-%d') }}{%- endif -%}" name="acceptance1-{{school.id}}">
+                                <input class="datepicker" type="text" data-cycle="{{cycle.cycle_year}}" value="{%- if school.acceptance -%}{{ school.acceptance.strftime('%Y-%m-%d') }}{%- endif -%}" name="acceptance-{{school.id}}">
                             </span>
                         </div>
                         <div class="col-lg-2">
@@ -430,8 +422,7 @@ function toggleCancel() {
                                 {% endif %}
                             </span>
                             <span class="bulk_list d-none">
-                                <input type="hidden" value="{%- if school.withdrawn -%}{{ school.withdrawn.strftime('%Y-%m-%d') }}{%- endif -%}" name="withdrawn0-{{school.id}}">
-                                <input class="datepicker" type="text" data-cycle="{{cycle.cycle_year}}" value="{%- if school.withdrawn -%}{{ school.withdrawn.strftime('%Y-%m-%d') }}{%- endif -%}" name="withdrawn1-{{school.id}}">
+                                <input class="datepicker" type="text" data-cycle="{{cycle.cycle_year}}" value="{%- if school.withdrawn -%}{{ school.withdrawn.strftime('%Y-%m-%d') }}{%- endif -%}" name="withdrawn-{{school.id}}">
                             </span>
                         </div>
                     </div>
@@ -450,8 +441,7 @@ function toggleCancel() {
                     <div class="row" style="padding-top: 10px">
                     <span class="bulk_list d-none">
                         <strong>Note:</strong>
-                        <input type="hidden" value="{%- if school.note -%}{{ school.note }}{%- endif -%}" name="note0-{{school.id}}">
-                        <input class="form-control" type="text" data-cycle="{{cycle.cycle_year}}" value="{%- if school.note -%}{{ school.note }}{%- endif -%}" name="note1-{{school.id}}">
+                        <input class="form-control" type="text" data-cycle="{{cycle.cycle_year}}" value="{%- if school.note -%}{{ school.note }}{%- endif -%}" name="note-{{school.id}}">
                     </span>
                     </div>
             </div>
