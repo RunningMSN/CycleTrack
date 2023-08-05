@@ -521,6 +521,10 @@ function toggleCancel() {
                     <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
+                    <div class="bg-warning container" style="padding: 10px; margin-top: 10px; margin-bottom:10px">
+                       This menu will be gone soon! Try clicking the multi-edit button at the top of the page to edit
+                        all of your schools at once!
+                    </div>
                     <input type="hidden" id="cycle_id_modal" name="cycle_id" value="{{ cycle.id }}">
                     <input type="hidden" id="school_id" name="school_id" value="{{ school.id }}">
                     <input type="hidden" id="id" name="id" value="{{ school.id }}">
