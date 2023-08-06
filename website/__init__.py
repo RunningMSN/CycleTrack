@@ -29,6 +29,7 @@ def create_app():
     from .explorer import explorer
     from .profile import profile
     from .jinja_templates import jinja_templates
+    from .summary import summary
 
     app.register_blueprint(pages, url_prefix = '/')
     app.register_blueprint(authentication, url_prefix='/')
@@ -36,6 +37,7 @@ def create_app():
     app.register_blueprint(explorer, url_prefix='/')
     app.register_blueprint(profile, url_prefix='/')
     app.register_blueprint(jinja_templates, url_prefix='/')
+    app.register_blueprint(summary, url_prefix='/')
 
     from .models import User
 

@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block title %} Cycle Summaries {% endblock %}
+
+{% block content%}
+<div class="container">
+    <h2>Summary</h2>
+    {% for cycle in years %}
+    <a href="{{ url_for('summary.summary_home') }}/{{ cycle }}">{{cycle}} summary</a>
+    {% endfor %}
+</div>
+
+{% endblock %}
