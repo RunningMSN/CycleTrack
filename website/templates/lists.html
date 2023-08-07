@@ -5,6 +5,10 @@
 var status = 'all';
 var program = 'all';
 
+$(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+  })
+
 $(document).ready(function() {
     // Setup datepicker for bulk edit
     $(".datepicker").each(function(){
@@ -311,6 +315,9 @@ function toggleCancel() {
                             <strong>Primary Submitted:</strong><br>
                             <span class="normal_list">
                             {% if school.primary %}
+                                {% if school.primary.date() > today.date() %}
+                                <i class="bi bi-exclamation-circle-fill text-warning" data-toggle="tooltip" data-placement="top" title="This date is in the future"></i>
+                                {% endif %}
                             {{ school.primary.strftime('%m/%d/%Y') }}
                             {% else %}
                             -
@@ -324,6 +331,9 @@ function toggleCancel() {
                             <strong>Secondary Received:</strong><br>
                             <span class="normal_list">
                             {% if school.secondary_received %}
+                                {% if school.secondary_received.date() > today.date() %}
+                                <i class="bi bi-exclamation-circle-fill text-warning" data-toggle="tooltip" data-placement="top" title="This date is in the future"></i>
+                                {% endif %}
                             {{ school.secondary_received.strftime('%m/%d/%Y') }}
                             {% else %}
                             -
@@ -338,6 +348,9 @@ function toggleCancel() {
                             <strong>Application Complete:</strong><br>
                             <span class="normal_list">
                             {% if school.application_complete %}
+                                {% if school.application_complete.date() > today.date() %}
+                                <i class="bi bi-exclamation-circle-fill text-warning" data-toggle="tooltip" data-placement="top" title="This date is in the future"></i>
+                                {% endif %}
                             {{ school.application_complete.strftime('%m/%d/%Y') }}
                             {% else %}
                             -
@@ -351,6 +364,9 @@ function toggleCancel() {
                             <strong>Interview Received:</strong><br>
                             <span class="normal_list">
                             {% if school.interview_received %}
+                                {% if school.interview_received.date() > today.date() %}
+                                <i class="bi bi-exclamation-circle-fill text-warning" data-toggle="tooltip" data-placement="top" title="This date is in the future"></i>
+                                {% endif %}
                             {{ school.interview_received.strftime('%m/%d/%Y') }}
                             {% else %}
                             -
@@ -364,6 +380,9 @@ function toggleCancel() {
                             <strong>Interview Date:</strong><br>
                             <span class="normal_list">
                             {% if school.interview_date %}
+                                {% if school.interview_date.date() > today.date() %}
+                                <i class="bi bi-exclamation-circle-fill text-warning" data-toggle="tooltip" data-placement="top" title="This date is in the future"></i>
+                                {% endif %}
                             {{ school.interview_date.strftime('%m/%d/%Y') }}
                             {% else %}
                             -
@@ -377,6 +396,9 @@ function toggleCancel() {
                             <strong>Rejected:</strong><br>
                             <span class="normal_list">
                             {% if school.rejection %}
+                                {% if school.rejection.date() > today.date() %}
+                                <i class="bi bi-exclamation-circle-fill text-warning" data-toggle="tooltip" data-placement="top" title="This date is in the future"></i>
+                                {% endif %}
                             {{ school.rejection.strftime('%m/%d/%Y') }}
                             {% else %}
                             -
@@ -390,6 +412,9 @@ function toggleCancel() {
                             <strong>Waitlisted:</strong><br>
                             <span class="normal_list">
                             {% if school.waitlist %}
+                                {% if school.waitlist.date() > today.date() %}
+                                <i class="bi bi-exclamation-circle-fill text-warning" data-toggle="tooltip" data-placement="top" title="This date is in the future"></i>
+                                {% endif %}
                             {{ school.waitlist.strftime('%m/%d/%Y') }}
                             {% else %}
                             -
@@ -403,6 +428,9 @@ function toggleCancel() {
                             <strong>Accepted:</strong><br>
                             <span class="normal_list">
                             {% if school.acceptance %}
+                                {% if school.acceptance.date() > today.date() %}
+                                <i class="bi bi-exclamation-circle-fill text-warning" data-toggle="tooltip" data-placement="top" title="This date is in the future"></i>
+                                {% endif %}
                             {{ school.acceptance.strftime('%m/%d/%Y') }}
                             {% else %}
                             -
@@ -416,6 +444,9 @@ function toggleCancel() {
                             <strong>Withdrawn:</strong><br>
                             <span class="normal_list">
                                 {% if school.withdrawn %}
+                                    {% if school.withdrawn.date() > today.date() %}
+                                    <i class="bi bi-exclamation-circle-fill text-warning" data-toggle="tooltip" data-placement="top" title="This date is in the future"></i>
+                                    {% endif %}
                                 {{ school.withdrawn.strftime('%m/%d/%Y') }}
                                 {% else %}
                                 -
