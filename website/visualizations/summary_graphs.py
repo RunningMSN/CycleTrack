@@ -6,7 +6,7 @@ import json
 from . import converters
 from ..form_options import VALID_CYCLES, CURRENT_CYCLE
 
-def convert_summary_bar_df(data):
+def convert_summary_bar_df(data,year):
     # Remove potentially future interview dates if withdrawn
     if "withdrawn" in data.columns.tolist():
         data["interview_date"] = data.apply(
@@ -37,11 +37,12 @@ def convert_summary_bar_df(data):
 
     # Get counts for all dates
     output = output.groupby(['Date', 'Best Outcome']).size().reset_index(name='Count')
+    output.to_csv(f'{year}.csv')
     return output
 
-def generate_bar(cycle_data, title, stats, color="default",custom_text=None):
+def generate_bar(cycle_data, title, year,color="default"):
     # Generate dataframe for plotly
-    cycle_data = convert_summary_bar_df(cycle_data)
+    cycle_data = convert_summary_bar_df(cycle_data,year=year)
     fig = px.bar(cycle_data,
                  x='Date',
                  y='Count',
@@ -74,5 +75,8 @@ def generate_bar(cycle_data, title, stats, color="default",custom_text=None):
     return graphJSON
 
 
-#what is the distribution of time between secondary completion and interview invitation?
+#what is the distribution of time between secondary completion and interview invitation? INCOMPLETE
 def convert_summary_sec_to_ii(data):
+    data = data[["secondary_complete","interview_invitation"]]
+
+    return data

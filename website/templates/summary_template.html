@@ -1,17 +1,21 @@
 {% extends 'base.html' %}
 {% block title %} {{cycle_year}} Cycle {% endblock %}
 
+{% block additional_js %}
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+{% endblock %}
+
 {% block content%}
 {% if reg_info['cycle_bar_json'] %}
     <center><div id="reg_status_bar"></div></center>
-    <p>hi</p>
-    {% else %}
+{% else %}
     <p>no info</p>
 {% endif %}
 
+
 {% if reg_info['cycle_bar_json'] %}
     <script>
-    var reg_graph = {{ reg_info['cycle_status_json'] | safe }};
+    var reg_graph = {{ reg_info['cycle_bar_json'] | safe }};
     reg_graph.config = {'responsive': true, 'displaylogo': false}
     Plotly.newPlot('reg_status_bar', reg_graph);
     </script>
