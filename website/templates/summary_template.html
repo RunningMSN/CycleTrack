@@ -6,11 +6,20 @@
 {% endblock %}
 
 {% block content%}
-{% if reg_info['cycle_bar_json'] %}
+<div class="container" style="padding-top:10px">
+    {% if reg_info['cycle_bar_json'] %}
     <center><div id="reg_status_bar"></div></center>
-{% else %}
-    <p>no info</p>
-{% endif %}
+    {% else %}
+        <p>no info</p>
+    {% endif %}
+
+    {% if reg_info['cycle_sec_to_ii_json'] %}
+        <center><div id="reg_secii"></div></center>
+    {% else %}
+        <p>no info</p>
+    {% endif %}
+</div>
+
 
 
 {% if reg_info['cycle_bar_json'] %}
@@ -18,6 +27,14 @@
     var reg_graph = {{ reg_info['cycle_bar_json'] | safe }};
     reg_graph.config = {'responsive': true, 'displaylogo': false}
     Plotly.newPlot('reg_status_bar', reg_graph);
+    </script>
+{% endif %}
+
+{% if reg_info['cycle_sec_to_ii_json'] %}
+    <script>
+    var reg_graph = {{ reg_info['cycle_sec_to_ii_json'] | safe }};
+    reg_graph.config = {'responsive': true, 'displaylogo': false}
+    Plotly.newPlot('reg_secii', reg_graph);
     </script>
 {% endif %}
 {% endblock %}

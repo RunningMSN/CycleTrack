@@ -34,7 +34,8 @@ def summary_df(year):
 def summary_page(cycle_year):
     school_info = summary_df(cycle_year)
 
-    reg_info = {'cycle_bar_json': summary_graphs.generate_bar(school_info,"Bar",year=cycle_year)}
+    reg_info = {'cycle_bar_json': summary_graphs.generate_bar(school_info,"Bar",year=cycle_year),
+                'cycle_sec_to_ii_json':summary_graphs.generate_sec_to_ii(school_info)}
 
     return render_template('summary_template.html', user=current_user,cycle_year = cycle_year, reg_info=reg_info)
 
