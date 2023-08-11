@@ -75,6 +75,10 @@ def interview_calculations(df, output_dict):
         output_dict['interviewed_mcat'] = f'{statistics.median(interviewed_mcat):.1f} ({min(interviewed_mcat):.1f} - {max(interviewed_mcat):.1f})'
     else:
         output_dict['interviewed_mcat'] = None
+    #first interview received date
+    output_dict['first_ii'] = (df['interview_received'].dropna()).sort_values()[0]
+    #most recent interview received date
+    output_dict['last_ii'] = (df['interview_received'].dropna()).sort_values()[-1]
 
 def acceptance_calculations(df, output_dict):
     # Acceptance Count
@@ -115,3 +119,7 @@ def acceptance_calculations(df, output_dict):
         output_dict['accepted_mcat'] = f'{statistics.median(accepted_mcat):.1f} ({min(accepted_mcat):.1f} - {max(accepted_mcat):.1f})'
     else:
         output_dict['accepted_mcat'] = None
+    #first acceptace received date
+    output_dict['first_a'] = (df['interview_received'].dropna()).sort_values()[0]
+    #most recent interview received date
+    output_dict['last_a'] = (df['acceptance'].dropna()).sort_values()[-1]
