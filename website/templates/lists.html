@@ -5,10 +5,6 @@
 var status = 'all';
 var program = 'all';
 
-$(function () {
-    $('[data-toggle="tooltip"]').tooltip()
-  })
-
 $(document).ready(function() {
     // Setup datepicker for bulk edit
     $(".datepicker").each(function(){
@@ -146,6 +142,11 @@ function toggleCancel() {
     location.reload(true);
 }
 </script>
+<script>
+        $(function () {
+          $('[data-toggle="tooltip"]').tooltip()
+        })
+</script>
 <script src="{{ url_for('static', filename='/js/list_bulk_add.js') }}"></script>
 {% endblock %}
 {% block dash_content %}
@@ -171,7 +172,7 @@ function toggleCancel() {
             </button>
             {% if cycle.schools|length > 0 %}
             <button class="btn btn-primary rounded normal_list" type="button" onclick="toggleBulkEdit()" style="margin: 3px;">
-                Multi-Edit
+                Edit
             </button>
             {% endif %}
             <form method="POST" action="{{ url_for('dashboard.import_list') }}" style="position: relative; display:inline;">
@@ -281,9 +282,9 @@ function toggleCancel() {
                         </div>
                         <!-- ICONS -->
                         <div style="padding-top:5px">
-                            <button type="button" class="btn btn-link" data-toggle="modal" data-target="#{{ school.name }}-{{ school.phd }}-modal" style="padding: 1px">
+                            <!--<button type="button" class="btn btn-link" data-toggle="modal" data-target="#{{ school.name }}-{{ school.phd }}-modal" style="padding: 1px">
                                 <i class="bi bi-pencil-square"></i>
-                            </button>
+                            </button>-->
                                 <a href="{{ url_for('explorer.explorer_home') }}/{{ school.name }}" class="btn btn-link" style="padding: 1px">
                                     <i class="bi bi-search"></i>
                                 </a>
@@ -532,7 +533,7 @@ function toggleCancel() {
 
 <!-- SETUP MODAL FOR EDITING EACH SCHOOL -->
 {% for school, profile in schools %}
-<div class="modal fade" id="{{ school.name }}-{{ school.phd }}-modal" tabindex="-1" role="dialog" aria-hidden="true">
+<!--<div class="modal fade" id="{{ school.name }}-{{ school.phd }}-modal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <form method="POST">
@@ -621,7 +622,7 @@ function toggleCancel() {
             </form>
         </div>
     </div>
-</div>
+</div>-->
 
 <!-- SETUP DELETION WARNINGS -->
 <div class="modal fade" id="{{ school.name }}-{{ school.phd }}-delete" tabindex="-1" role="dialog" aria-hidden="true">

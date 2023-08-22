@@ -1,6 +1,9 @@
 {% extends 'dashboard.html' %}
 {% block title %} Visualizations {% endblock %}
 {% block additional_js %}
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script src="{{ url_for('static', filename='/js/vis_menu.js') }}"></script>
 {% endblock %}

@@ -212,60 +212,60 @@ def lists():
             else:
                 school_stats_calculators.count_apps_reg(schools_add[i])
     # Handle editing schools
-    school_id = request.form.get('school_id')
-    if school_id:
-        school = School.query.filter_by(id=int(school_id)).first()
-        primary = request.form.get('primary')
-        if primary:
-            school.primary = datetime.strptime(primary, '%Y-%m-%d')
-        else:
-            school.primary = None
-        secondary_received = request.form.get('secondary_received')
-        if secondary_received:
-            school.secondary_received = datetime.strptime(secondary_received, '%Y-%m-%d')
-        else:
-            school.secondary_received = None
-        application_complete = request.form.get('application_complete')
-        if application_complete:
-            school.application_complete = datetime.strptime(application_complete, '%Y-%m-%d')
-        else:
-            school.application_complete = None
-        interview_received = request.form.get('interview_received')
-        if interview_received:
-            school.interview_received = datetime.strptime(interview_received, '%Y-%m-%d')
-        else:
-            school.interview_received = None
-        interview_date = request.form.get('interview_date')
-        if interview_date:
-            school.interview_date = datetime.strptime(interview_date, '%Y-%m-%d')
-        else:
-            school.interview_date = None
-        rejection = request.form.get('rejection')
-        if rejection:
-            school.rejection = datetime.strptime(rejection, '%Y-%m-%d')
-        else:
-            school.rejection = None
-        waitlist = request.form.get('waitlist')
-        if waitlist:
-            school.waitlist = datetime.strptime(waitlist, '%Y-%m-%d')
-        else:
-            school.waitlist = None
-        acceptance = request.form.get('acceptance')
-        if acceptance:
-            school.acceptance = datetime.strptime(acceptance, '%Y-%m-%d')
-        else:
-            school.acceptance = None
-        withdrawn = request.form.get('withdrawn')
-        if withdrawn:
-            school.withdrawn = datetime.strptime(withdrawn, '%Y-%m-%d')
-        else:
-            school.withdrawn = None
-        note = request.form.get('note')
-        if note:
-            school.note = escape(note)
-        else:
-            school.note = None
-        db.session.commit()
+    # school_id = request.form.get('school_id')
+    # if school_id:
+    #     school = School.query.filter_by(id=int(school_id)).first()
+    #     primary = request.form.get('primary')
+    #     if primary:
+    #         school.primary = datetime.strptime(primary, '%Y-%m-%d')
+    #     else:
+    #         school.primary = None
+    #     secondary_received = request.form.get('secondary_received')
+    #     if secondary_received:
+    #         school.secondary_received = datetime.strptime(secondary_received, '%Y-%m-%d')
+    #     else:
+    #         school.secondary_received = None
+    #     application_complete = request.form.get('application_complete')
+    #     if application_complete:
+    #         school.application_complete = datetime.strptime(application_complete, '%Y-%m-%d')
+    #     else:
+    #         school.application_complete = None
+    #     interview_received = request.form.get('interview_received')
+    #     if interview_received:
+    #         school.interview_received = datetime.strptime(interview_received, '%Y-%m-%d')
+    #     else:
+    #         school.interview_received = None
+    #     interview_date = request.form.get('interview_date')
+    #     if interview_date:
+    #         school.interview_date = datetime.strptime(interview_date, '%Y-%m-%d')
+    #     else:
+    #         school.interview_date = None
+    #     rejection = request.form.get('rejection')
+    #     if rejection:
+    #         school.rejection = datetime.strptime(rejection, '%Y-%m-%d')
+    #     else:
+    #         school.rejection = None
+    #     waitlist = request.form.get('waitlist')
+    #     if waitlist:
+    #         school.waitlist = datetime.strptime(waitlist, '%Y-%m-%d')
+    #     else:
+    #         school.waitlist = None
+    #     acceptance = request.form.get('acceptance')
+    #     if acceptance:
+    #         school.acceptance = datetime.strptime(acceptance, '%Y-%m-%d')
+    #     else:
+    #         school.acceptance = None
+    #     withdrawn = request.form.get('withdrawn')
+    #     if withdrawn:
+    #         school.withdrawn = datetime.strptime(withdrawn, '%Y-%m-%d')
+    #     else:
+    #         school.withdrawn = None
+    #     note = request.form.get('note')
+    #     if note:
+    #         school.note = escape(note)
+    #     else:
+    #         school.note = None
+    #     db.session.commit()
 
     # Handle bulk edit
     if request.form.get('bulk_edit'):
@@ -276,47 +276,47 @@ def lists():
             school = School.query.filter_by(id=int(school_id)).first()
             primary = request.form.get("primary-" + school_id)
             if primary:
-                school.primary = datetime.strptime(primary, '%m/%d/%y')
+                school.primary = datetime.strptime(primary, '%Y-%m-%d')
             else:
                 school.primary = None
             secondary_received = request.form.get("secondary_received-" + school_id)
             if secondary_received:
-                school.secondary_received = datetime.strptime(secondary_received, '%m/%d/%y')
+                school.secondary_received = datetime.strptime(secondary_received, '%Y-%m-%d')
             else:
                 school.secondary_received = None
             application_complete = request.form.get("application_complete-" + school_id)
             if application_complete:
-                school.application_complete = datetime.strptime(application_complete, '%m/%d/%y')
+                school.application_complete = datetime.strptime(application_complete, '%Y-%m-%d')
             else:
                 school.application_complete = None
             interview_received = request.form.get("interview_received-" + school_id)
             if interview_received:
-                school.interview_received = datetime.strptime(interview_received, '%m/%d/%y')
+                school.interview_received = datetime.strptime(interview_received, '%Y-%m-%d')
             else:
                 school.interview_received = None
             interview_date = request.form.get("interview_date-" + school_id)
             if interview_date:
-                school.interview_date = datetime.strptime(interview_date, '%m/%d/%y')
+                school.interview_date = datetime.strptime(interview_date, '%Y-%m-%d')
             else:
                 school.interview_date = None
             rejection = request.form.get("rejection-" + school_id)
             if rejection:
-                school.rejection = datetime.strptime(rejection, '%m/%d/%y')
+                school.rejection = datetime.strptime(rejection, '%Y-%m-%d')
             else:
                 school.rejection = None
             waitlist = request.form.get("waitlist-" + school_id)
             if waitlist:
-                school.waitlist = datetime.strptime(waitlist, '%m/%d/%y')
+                school.waitlist = datetime.strptime(waitlist, '%Y-%m-%d')
             else:
                 school.waitlist = None
             acceptance = request.form.get("acceptance-" + school_id)
             if acceptance:
-                school.acceptance = datetime.strptime(acceptance, '%m/%d/%y')
+                school.acceptance = datetime.strptime(acceptance, '%Y-%m-%d')
             else:
                 school.acceptance = None
             withdrawn = request.form.get("withdrawn-" + school_id)
             if withdrawn:
-                school.withdrawn = datetime.strptime(withdrawn, '%m/%d/%y')
+                school.withdrawn = datetime.strptime(withdrawn, '%Y-%m-%d')
             else:
                 school.withdrawn = None
             note = request.form.get("note-" + school_id)

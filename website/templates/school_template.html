@@ -2,6 +2,11 @@
 {% block title %} {{ school_info.school }} {% endblock %}
 {% block additional_js %}
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script>
+        $(function () {
+          $('[data-toggle="tooltip"]').tooltip()
+        })
+    </script>
 {% endblock %}
 {% block content %}
 <div class="container" style="padding-top:10px">
