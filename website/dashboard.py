@@ -4,6 +4,7 @@ from . import db, form_options, mail
 from .models import Cycle, School, School_Profiles_Data, Courses, User_Profiles
 import json
 from datetime import datetime, date
+import dateutil.parser
 import re
 from .visualizations import dot, line, bar, sankey, map, gpa_graph, horz_bar
 import pandas as pd
@@ -276,47 +277,47 @@ def lists():
             school = School.query.filter_by(id=int(school_id)).first()
             primary = request.form.get("primary-" + school_id)
             if primary:
-                school.primary = datetime.strptime(primary, '%Y-%m-%d')
+                school.primary = dateutil.parser.parse(primary)
             else:
                 school.primary = None
             secondary_received = request.form.get("secondary_received-" + school_id)
             if secondary_received:
-                school.secondary_received = datetime.strptime(secondary_received, '%Y-%m-%d')
+                school.secondary_received = dateutil.parser.parse(secondary_received)
             else:
                 school.secondary_received = None
             application_complete = request.form.get("application_complete-" + school_id)
             if application_complete:
-                school.application_complete = datetime.strptime(application_complete, '%Y-%m-%d')
+                school.application_complete = dateutil.parser.parse(application_complete)
             else:
                 school.application_complete = None
             interview_received = request.form.get("interview_received-" + school_id)
             if interview_received:
-                school.interview_received = datetime.strptime(interview_received, '%Y-%m-%d')
+                school.interview_received = dateutil.parser.parse(interview_received)
             else:
                 school.interview_received = None
             interview_date = request.form.get("interview_date-" + school_id)
             if interview_date:
-                school.interview_date = datetime.strptime(interview_date, '%Y-%m-%d')
+                school.interview_date = dateutil.parser.parse(interview_date)
             else:
                 school.interview_date = None
             rejection = request.form.get("rejection-" + school_id)
             if rejection:
-                school.rejection = datetime.strptime(rejection, '%Y-%m-%d')
+                school.rejection = dateutil.parser.parse(rejection)
             else:
                 school.rejection = None
             waitlist = request.form.get("waitlist-" + school_id)
             if waitlist:
-                school.waitlist = datetime.strptime(waitlist, '%Y-%m-%d')
+                school.waitlist = dateutil.parser.parse(waitlist)
             else:
                 school.waitlist = None
             acceptance = request.form.get("acceptance-" + school_id)
             if acceptance:
-                school.acceptance = datetime.strptime(acceptance, '%Y-%m-%d')
+                school.acceptance = dateutil.parser.parse(acceptance)
             else:
                 school.acceptance = None
             withdrawn = request.form.get("withdrawn-" + school_id)
             if withdrawn:
-                school.withdrawn = datetime.strptime(withdrawn, '%Y-%m-%d')
+                school.withdrawn = dateutil.parser.parse(withdrawn)
             else:
                 school.withdrawn = None
             note = request.form.get("note-" + school_id)
@@ -343,13 +344,6 @@ def lists():
         program_types.append('MD')
     if School.query.filter_by(cycle_id=cycle.id, school_type='DO', phd=False).first():
         program_types.append('DO')
-
-    # Check to display mentoring message
-    if (not cycle.mentoring_message) and (request.form.get('acceptance') or request.form.get("acceptance1-" + str(school_id))):
-    #     flash(Markup("Congrats on your successful application cycle! If you're interested in volunteering as a mentor for future"
-    #           " applicants, consider signing up with MD Collective <a href='https://mdcollective.io/app/amcas'>here</a>."), category='success')
-        cycle.mentoring_message = True
-        db.session.commit()
 
     return render_template('lists.html', user=current_user, cycle=cycle, schools=schools, phd_applicant=phd_applicant,
                            usmd_school_list=form_options.get_md_schools('USA'),
