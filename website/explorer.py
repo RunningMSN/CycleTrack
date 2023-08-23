@@ -167,8 +167,10 @@ def explore_school(school_name):
                 'wl_to_a_range': school_stats.phd_med_days_waitlist_accepted_range,
                 'wl_to_a_n': school_stats.phd_med_days_waitlist_accepted_n}
 
+    last_updated = school_stats.last_updated.strftime("%H:%M CST")
+
     return render_template('school_template.html', user=current_user, school_info=school_info, reg_info=reg_info,
-                           phd_info=phd_info, valid_cycles=VALID_CYCLES)
+                           phd_info=phd_info, valid_cycles=VALID_CYCLES, last_updated=last_updated)
 
 @explorer.route('/update_all')
 def update_all():
