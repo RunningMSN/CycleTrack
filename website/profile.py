@@ -55,11 +55,11 @@ def profile_home():
         if not all(cycle_data['phd']):
             for type in cycle_data['school_type'].unique():
                 app_types.append(f'{type} Only')
+        app_types.append("All")
     # MD/DO Only
     else:
         app_types = list(cycle_data['school_type'].unique())
         if 'MD' in app_types and 'DO' in app_types: app_types.insert(0, 'MD or DO')
-    app_types.append("All")
 
     #edit blocks
     block_id = request.form.get("edit_block")
