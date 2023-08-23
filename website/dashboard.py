@@ -822,7 +822,7 @@ def visualizations():
                 graphJSON = sankey.generate(cycle_data, plot_title, stats, color=color_type.lower(),
                                             custom_text=save_settings['custom_text'])
             elif vis_type.lower() == 'map':
-                graphJSON = map.generate(cycle_data, plot_title, stats, color=color_type.lower(),
+                graphJSON = map.generate(cycle_data, plot_title, stats, app_type=app_type.lower(), color=color_type.lower(),
                                          map_scope=map_type.lower(), custom_text=save_settings['custom_text'])
             elif vis_type.lower() == 'timeline':
                 graphJSON = horz_bar.generate(cycle_data, cycle.cycle_year, plot_title, stats, color=color_type.lower(),

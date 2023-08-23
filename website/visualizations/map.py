@@ -4,8 +4,8 @@ import json
 import textwrap
 from . import converters
 
-def generate(cycle_data,title,stats,color="default",map_scope="usa",custom_text=None):
-    loc_df = converters.convert_map(cycle_data,color=color)
+def generate(cycle_data,title,stats,app_type,color="default",map_scope="usa",custom_text=None,):
+    loc_df = converters.convert_map(cycle_data,app_type,color=color)
     fig = go.Figure()
 
     outcomes = list(loc_df["Best Outcome"].unique())

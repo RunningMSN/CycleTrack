@@ -135,19 +135,24 @@ def sankey_build_frames(cycle_data,color="default"):
     return df_nodes, df_links
 
 
-def convert_map(data,color="default"):
+def convert_map(data,app_type,color="default"):
     fig_colors = palette[color]
-    #merge schools so that the most recent decision for a school counts
-    #(aka MD + MD/PhD don't get put in twice)
-
+    
     #remove the MD, DO, MD/PhD monikers
     data["name"] = data["name"].str.split('_').str[0]
 
+    if app_type == "all":
+        data["name"] = data["name"].str.split('(', n=1).str[0].str.strip()
+    
+    #merge schools so that the most recent decision for a school counts
+    #(aka MD + MD/PhD don't get put in twice)
+    #sort by date and remove duplicates
     cols = (data.columns[::-1]).tolist()
     data = data.sort_values(by=cols).groupby("name",as_index=False).last()
     for ind,row in data[data.columns.difference(["name"])].iterrows():
         if row.isnull().all():
             data = data.drop(index=ind)
+
     #get best outcome: column with greatest date in each row
     nameless = data[data.columns.difference(["name"])]
     data["Best Outcome"] = nameless.idxmax(axis=1)
@@ -158,6 +163,7 @@ def convert_map(data,color="default"):
     profiles = pd.read_sql(School_Profiles_Data.query.statement, db.session.bind)
     profiles['school'] = profiles['school'].apply(lambda x: x.replace("'","’")) #very dumb bug where Queen's has differnt apostrophes
     loc_df = school_df.merge(profiles, how="left", on="school")
+    print(loc_df)
 
     return loc_df
 
