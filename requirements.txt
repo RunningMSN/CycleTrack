@@ -10,3 +10,4 @@ requests
 jellyfish
 Flask-Mail
 markdown
+flask-apscheduler

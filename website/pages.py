@@ -22,8 +22,6 @@ def index():
     school_count = db.session.query(School).group_by(School.name).count()
     # map_data = pd.read_sql(School.query.statement, db.session.bind).drop(['id','cycle_id','user_id','school_type','phd'], axis=1)
 
-
-
     # Drop empty columns
     # map_data = map_data.dropna(axis=1, how='all')
     # if len(map_data) > 0:

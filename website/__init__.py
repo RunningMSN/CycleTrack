@@ -1,9 +1,11 @@
-from flask import Flask, redirect, url_for
+from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from flask_apscheduler import APScheduler
 from os import path
 from flask_login import LoginManager
 from flask_mail import Mail
 from . import site_settings
+from website.helpers import jobs
 
 db = SQLAlchemy()
 DB_NAME = site_settings.DB_NAME
@@ -19,6 +21,7 @@ def create_app():
     app.config['MAIL_PASSWORD'] = site_settings.MAIL_PASSWORD
     app.config['MAIL_PORT'] = site_settings.MAIL_PORT
     app.config['MAIL_USE_SSL'] = site_settings.MAIL_USE_SSL
+    app.config['SCHEDULER_API_ENABLED'] = True
     db.init_app(app)
     mail.init_app(app)
 
@@ -52,6 +55,17 @@ def create_app():
     # Load error handlers
     from .error_handlers import page_not_found
     app.register_error_handler(404, page_not_found)
+
+    # Create scheduler for background calculations
+    scheduler = APScheduler()
+    scheduler.init_app(app)
+    @scheduler.task('interval', id='stats_updater', seconds=5)
+    def update_stats():
+        jobs.update_stats(app)
+
+    scheduler.start()
+    # Run calculations on startup if needed
+    # jobs.update_stats(app)
 
     return app
 
