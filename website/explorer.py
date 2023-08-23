@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask_login import current_user
 from . import db, form_options
-from .models import Cycle, School, School_Profiles_Data
+from .models import Cycle, School, School_Profiles_Data, School_Stats
 from .visualizations import school_graphs
 import pandas as pd
 from .helpers import school_info_calcs, school_stats_calculators
@@ -14,13 +14,15 @@ def explorer_home():
     # Get info about all available schools
     all_schools = School_Profiles_Data.query.all()
 
-    build_df = {'name': [], 'type': [], 'reg_apps': [], 'reg_med_mcat': [], 'reg_med_gpa': [],
+    build_df = {'name': [], 'type': [], 'reg_apps': [],
                 'phd_apps': [], 'logo_link': [], 'city': [], 'state': [], 'country': [], 'envt': [], 'pub_pri': []}
 
     for school in all_schools:
+        school_stats = School_Stats.query.filter_by(school_id=school.school_id).first()
+
         # Grab number of applications
-        reg_num = school.reg_apps_count
-        phd_num = school.phd_apps_count
+        reg_num = school_stats.reg_apps_count
+        phd_num = school_stats.phd_apps_count
         if not reg_num:
             reg_num = 0
         if not phd_num:
@@ -41,10 +43,6 @@ def explorer_home():
             build_df['envt'].append(school.envt_type)
             build_df['pub_pri'].append(school.private_public)
 
-            # TODO: Eventually add this back in
-            build_df['reg_med_mcat'].append(0)
-            build_df['reg_med_gpa'].append(0)
-
     # Generate dataframe
     df = pd.DataFrame(build_df).sort_values('name')
 
@@ -64,37 +62,113 @@ def explore_school(school_name):
 
     # Grab school information
     school_info = School_Profiles_Data.query.filter_by(school=school_name).first()
+    school_stats = School_Stats.query.filter_by(school_id=school_info.school_id).first()
 
+    #TODO: Remove this entirely with saved graphs
     # Query info about the school
     query = db.session.query(School, Cycle).filter(School.name == school_name).join(Cycle, School.cycle_id == Cycle.id)
     reg_data = pd.read_sql(query.filter(School.phd == False).statement, db.session.bind)
     phd_data = pd.read_sql(query.filter(School.phd == True).statement, db.session.bind)
 
     # Dictionaries with all information about the school
-    reg_info = {'cycle_status_json': school_graphs.cycle_progress(reg_data[reg_data['cycle_year'] == VALID_CYCLES[0]], VALID_CYCLES[0]),
-                'cycle_status_json_prev': school_graphs.cycle_progress(reg_data[reg_data['cycle_year'] == VALID_CYCLES[1]], VALID_CYCLES[1]),
+    reg_info = {'cycle_status_json': school_graphs.cycle_progress(reg_data[reg_data['cycle_year'] == VALID_CYCLES[0]],
+                                                                  VALID_CYCLES[0]),
+                'cycle_status_json_prev': school_graphs.cycle_progress(
+                    reg_data[reg_data['cycle_year'] == VALID_CYCLES[1]], VALID_CYCLES[1]),
                 'interview_graph': school_graphs.interview_acceptance_histogram(reg_data, 'interview_received'),
-                'acceptance_graph': school_graphs.interview_acceptance_histogram(reg_data, 'acceptance')}
-    phd_info = {'cycle_status_json': school_graphs.cycle_progress(phd_data[phd_data['cycle_year'] == VALID_CYCLES[0]], VALID_CYCLES[0]),
-                'cycle_status_json_prev': school_graphs.cycle_progress(phd_data[phd_data['cycle_year'] == VALID_CYCLES[1]], VALID_CYCLES[1]),
+                'acceptance_graph': school_graphs.interview_acceptance_histogram(reg_data, 'acceptance'),
+                'interview_count': school_stats.reg_interviews_count,
+                'n_percent_interviewed': school_stats.reg_perc_interviewed_n,
+                'percent_interviewed': school_stats.reg_perc_interviewed,
+                'n_interviewed_cgpa': school_stats.reg_med_interviewed_cgpa_n,
+                'interviewed_cgpa': school_stats.reg_med_interviewed_cgpa,
+                'interviewed_cgpa_range': school_stats.reg_med_interviewed_cgpa_range,
+                'n_interviewed_sgpa': school_stats.reg_med_interviewed_sgpa_n,
+                'interviewed_sgpa': school_stats.reg_med_interviewed_sgpa,
+                'interviewed_sgpa_range': school_stats.reg_med_interviewed_sgpa_range,
+                'n_interviewed_mcat': school_stats.reg_med_interviewed_mcat_n,
+                'interviewed_mcat': school_stats.reg_med_interviewed_mcat,
+                'interviewed_mcat_range': school_stats.reg_med_interviewed_mcat_range,
+                'secondary_to_ii': school_stats.reg_med_days_secondary_ii,
+                'secondary_to_ii_n': school_stats.reg_med_days_secondary_ii_n,
+                'secondary_to_ii_range': school_stats.reg_med_days_secondary_ii_range,
+                'interview_to_wl': school_stats.reg_med_days_interview_waitlist,
+                'interview_to_wl_n': school_stats.reg_med_days_interview_waitlist_n,
+                'interview_to_wl_range': school_stats.reg_med_days_interview_waitlist_range,
+                'interview_to_r': school_stats.reg_med_days_interview_rejection,
+                'interview_to_r_range': school_stats.reg_med_days_interview_rejection_range,
+                'interview_to_r_n': school_stats.reg_med_days_interview_rejection_n,
+                'acceptance_count': school_stats.reg_acceptance_count,
+                'n_percent_interview_accepted': school_stats.reg_perc_accepted_interviewed_n,
+                'percent_interview_accepted': school_stats.reg_perc_accepted_interviewed,
+                'n_percent_waitlist_accepted': school_stats.reg_perc_accepted_waitlist_n,
+                'percent_waitlist_accepted': school_stats.reg_perc_accepted_waitlist,
+                'n_accepted_cgpa': school_stats.reg_med_accepted_cgpa_n,
+                'accepted_cgpa': school_stats.reg_med_accepted_cgpa,
+                'accepted_cgpa_range': school_stats.reg_med_accepted_cgpa_range,
+                'n_accepted_sgpa': school_stats.reg_med_accepted_sgpa_n,
+                'accepted_sgpa': school_stats.reg_med_accepted_sgpa,
+                'accepted_sgpa_range': school_stats.reg_med_accepted_sgpa_range,
+                'n_accepted_mcat': school_stats.reg_med_accepted_mcat_n,
+                'accepted_mcat': school_stats.reg_med_accepted_mcat,
+                'accepted_mcat_range': school_stats.reg_med_accepted_mcat_range,
+                'interview_to_a': school_stats.reg_med_days_interview_accepted,
+                'interview_to_a_range': school_stats.reg_med_days_interview_accepted_range,
+                'interview_to_a_n': school_stats.reg_med_days_interview_accepted_n,
+                'wl_to_a': school_stats.reg_med_days_waitlist_accepted,
+                'wl_to_a_range': school_stats.reg_med_days_waitlist_accepted_range,
+                'wl_to_a_n': school_stats.reg_med_days_waitlist_accepted_n}
+
+    phd_info = {'cycle_status_json': school_graphs.cycle_progress(phd_data[phd_data['cycle_year'] == VALID_CYCLES[0]],
+                                                                  VALID_CYCLES[0]),
+                'cycle_status_json_prev': school_graphs.cycle_progress(
+                    phd_data[phd_data['cycle_year'] == VALID_CYCLES[1]], VALID_CYCLES[1]),
                 'interview_graph': school_graphs.interview_acceptance_histogram(phd_data, 'interview_received'),
-                'acceptance_graph': school_graphs.interview_acceptance_histogram(phd_data, 'acceptance')}
-
-    reg_time_info = {}            
-    #Calculate application timing info
-    school_info_calcs.timing_calculations(reg_data, reg_time_info)
-
-
-    # Calculate interview information
-    school_info_calcs.interview_calculations(reg_data, reg_info)
-    school_info_calcs.interview_calculations(phd_data, phd_info)
-
-    # Calculate acceptance information
-    school_info_calcs.acceptance_calculations(reg_data, reg_info)
-    school_info_calcs.acceptance_calculations(phd_data, phd_info)
+                'acceptance_graph': school_graphs.interview_acceptance_histogram(phd_data, 'acceptance'),
+                'interview_count': school_stats.phd_interviews_count,
+                'n_percent_interviewed': school_stats.phd_perc_interviewed_n,
+                'percent_interviewed': school_stats.phd_perc_interviewed,
+                'n_interviewed_cgpa': school_stats.phd_med_interviewed_cgpa_n,
+                'interviewed_cgpa': school_stats.phd_med_interviewed_cgpa,
+                'interviewed_cgpa_range': school_stats.phd_med_interviewed_cgpa_range,
+                'n_interviewed_sgpa': school_stats.phd_med_interviewed_sgpa_n,
+                'interviewed_sgpa': school_stats.phd_med_interviewed_sgpa,
+                'interviewed_sgpa_range': school_stats.phd_med_interviewed_sgpa_range,
+                'n_interviewed_mcat': school_stats.phd_med_interviewed_mcat_n,
+                'interviewed_mcat': school_stats.phd_med_interviewed_mcat,
+                'interviewed_mcat_range': school_stats.phd_med_interviewed_mcat_range,
+                'secondary_to_ii': school_stats.phd_med_days_secondary_ii,
+                'secondary_to_ii_n': school_stats.phd_med_days_secondary_ii_n,
+                'secondary_to_ii_range': school_stats.phd_med_days_secondary_ii_range,
+                'interview_to_wl': school_stats.phd_med_days_interview_waitlist,
+                'interview_to_wl_n': school_stats.phd_med_days_interview_waitlist_n,
+                'interview_to_wl_range': school_stats.phd_med_days_interview_waitlist_range,
+                'interview_to_r': school_stats.phd_med_days_interview_rejection,
+                'interview_to_r_range': school_stats.phd_med_days_interview_rejection_range,
+                'interview_to_r_n': school_stats.phd_med_days_interview_rejection_n,
+                'acceptance_count': school_stats.phd_acceptance_count,
+                'n_percent_interview_accepted': school_stats.phd_perc_accepted_interviewed_n,
+                'percent_interview_accepted': school_stats.phd_perc_accepted_interviewed,
+                'n_percent_waitlist_accepted': school_stats.phd_perc_accepted_waitlist_n,
+                'percent_waitlist_accepted': school_stats.phd_perc_accepted_waitlist,
+                'n_accepted_cgpa': school_stats.phd_med_accepted_cgpa_n,
+                'accepted_cgpa': school_stats.phd_med_accepted_cgpa,
+                'accepted_cgpa_range': school_stats.phd_med_accepted_cgpa_range,
+                'n_accepted_sgpa': school_stats.phd_med_accepted_sgpa_n,
+                'accepted_sgpa': school_stats.phd_med_accepted_sgpa,
+                'accepted_sgpa_range': school_stats.phd_med_accepted_sgpa_range,
+                'n_accepted_mcat': school_stats.phd_med_accepted_mcat_n,
+                'accepted_mcat': school_stats.phd_med_accepted_mcat,
+                'accepted_mcat_range': school_stats.phd_med_accepted_mcat_range,
+                'interview_to_a': school_stats.phd_med_days_interview_accepted,
+                'interview_to_a_range': school_stats.phd_med_days_interview_accepted_range,
+                'interview_to_a_n': school_stats.phd_med_days_interview_accepted_n,
+                'wl_to_a': school_stats.phd_med_days_waitlist_accepted,
+                'wl_to_a_range': school_stats.phd_med_days_waitlist_accepted_range,
+                'wl_to_a_n': school_stats.phd_med_days_waitlist_accepted_n}
 
     return render_template('school_template.html', user=current_user, school_info=school_info, reg_info=reg_info,
-                           phd_info=phd_info, reg_time_info = reg_time_info, valid_cycles=VALID_CYCLES)
+                           phd_info=phd_info, valid_cycles=VALID_CYCLES)
 
 @explorer.route('/update_all')
 def update_all():
