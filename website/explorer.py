@@ -4,7 +4,7 @@ from . import db, form_options
 from .models import Cycle, School, School_Profiles_Data, School_Stats
 from .visualizations import school_graphs
 import pandas as pd
-from .helpers import school_info_calcs, school_stats_calculators
+from .helpers import school_stats_calculators
 from .form_options import VALID_CYCLES
 
 explorer = Blueprint('explorer', __name__)
