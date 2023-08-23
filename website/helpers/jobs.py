@@ -37,13 +37,13 @@ def update_stats(app):
                 reg_data)
             school_stats_entry.reg_med_days_secondary_ii, school_stats_entry.reg_med_days_secondary_ii_range, school_stats_entry.reg_med_days_secondary_ii_n = secondary_to_ii(
                 reg_data)
-            school_stats_entry.reg_med_days_interview_waitlist, school_stats_entry.reg_med_days_interview_waitlist_range, school_stats_entry.reg_med_days_interview_waitlist_n = secondary_to_ii(
+            school_stats_entry.reg_med_days_interview_waitlist, school_stats_entry.reg_med_days_interview_waitlist_range, school_stats_entry.reg_med_days_interview_waitlist_n = interview_to_waitlist(
                 reg_data)
-            school_stats_entry.reg_med_days_interview_rejection, school_stats_entry.reg_med_days_interview_rejection_range, school_stats_entry.reg_med_days_interview_rejection_n = secondary_to_ii(
+            school_stats_entry.reg_med_days_interview_rejection, school_stats_entry.reg_med_days_interview_rejection_range, school_stats_entry.reg_med_days_interview_rejection_n = interview_to_rejection(
                 reg_data)
-            school_stats_entry.reg_med_days_interview_accepted, school_stats_entry.reg_med_days_interview_accepted_range, school_stats_entry.reg_med_days_interview_accepted_n = secondary_to_ii(
+            school_stats_entry.reg_med_days_interview_accepted, school_stats_entry.reg_med_days_interview_accepted_range, school_stats_entry.reg_med_days_interview_accepted_n = interview_to_acceptance(
                 reg_data)
-            school_stats_entry.reg_med_days_waitlist_accepted, school_stats_entry.reg_med_days_waitlist_accepted_range, school_stats_entry.reg_med_days_waitlist_accepted_n = secondary_to_ii(
+            school_stats_entry.reg_med_days_waitlist_accepted, school_stats_entry.reg_med_days_waitlist_accepted_range, school_stats_entry.reg_med_days_waitlist_accepted_n = waitlist_to_acceptance(
                 reg_data)
             school_stats_entry.reg_acceptance_count = count_acceptance(reg_data)
             school_stats_entry.reg_perc_accepted_interviewed, school_stats_entry.reg_perc_accepted_interviewed_n = percent_interviewed_accepted(
@@ -68,13 +68,13 @@ def update_stats(app):
                 phd_data)
             school_stats_entry.phd_med_days_secondary_ii, school_stats_entry.phd_med_days_secondary_ii_range, school_stats_entry.phd_med_days_secondary_ii_n = secondary_to_ii(
                 phd_data)
-            school_stats_entry.phd_med_days_interview_waitlist, school_stats_entry.phd_med_days_interview_waitlist_range, school_stats_entry.phd_med_days_interview_waitlist_n = secondary_to_ii(
+            school_stats_entry.phd_med_days_interview_waitlist, school_stats_entry.phd_med_days_interview_waitlist_range, school_stats_entry.phd_med_days_interview_waitlist_n = interview_to_waitlist(
                 phd_data)
-            school_stats_entry.phd_med_days_interview_rejection, school_stats_entry.phd_med_days_interview_rejection_range, school_stats_entry.phd_med_days_interview_rejection_n = secondary_to_ii(
+            school_stats_entry.phd_med_days_interview_rejection, school_stats_entry.phd_med_days_interview_rejection_range, school_stats_entry.phd_med_days_interview_rejection_n = interview_to_rejection(
                 phd_data)
-            school_stats_entry.phd_med_days_interview_accepted, school_stats_entry.phd_med_days_interview_accepted_range, school_stats_entry.phd_med_days_interview_accepted_n = secondary_to_ii(
+            school_stats_entry.phd_med_days_interview_accepted, school_stats_entry.phd_med_days_interview_accepted_range, school_stats_entry.phd_med_days_interview_accepted_n = interview_to_acceptance(
                 phd_data)
-            school_stats_entry.phd_med_days_waitlist_accepted, school_stats_entry.phd_med_days_waitlist_accepted_range, school_stats_entry.phd_med_days_waitlist_accepted_n = secondary_to_ii(
+            school_stats_entry.phd_med_days_waitlist_accepted, school_stats_entry.phd_med_days_waitlist_accepted_range, school_stats_entry.phd_med_days_waitlist_accepted_n = waitlist_to_acceptance(
                 phd_data)
             school_stats_entry.phd_acceptance_count = count_acceptance(phd_data)
             school_stats_entry.phd_perc_accepted_interviewed, school_stats_entry.phd_perc_accepted_interviewed_n = percent_interviewed_accepted(
