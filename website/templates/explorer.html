@@ -90,7 +90,7 @@
                             <br>
                             {{ value['city'] }}, {{ value['state'] }} | {{ value['envt'] }} | {{ value['pub_pri'] }} Institution
                             <br>
-                            {{ value['reg_apps'] + value['phd_apps'] }} Applications Tracked {% if value['phd_apps'] > 0 %}({{ value['phd_apps'] }} {{ value['type'] }}-PhD){% endif %}
+                            {{ "{:,}".format(value['reg_apps'] + value['phd_apps']) }} Applications Tracked {% if value['phd_apps'] > 0 %}({{ "{:,}".format(value['phd_apps']) }} {{ value['type'] }}-PhD){% endif %}
                         </center>
                     </div>
             </div>
