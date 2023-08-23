@@ -144,6 +144,8 @@ class School_Stats(db.Model):
     phd_perc_accepted_interviewed_n = db.Column(db.Integer())
     phd_perc_accepted_waitlist = db.Column(db.Float)
     phd_perc_accepted_waitlist_n = db.Column(db.Integer())
+    phd_med_accepted_cgpa = db.Column(db.Float)
+    phd_med_accepted_cgpa_range = db.Column(db.String(150))
     phd_med_accepted_cgpa_n = db.Column(db.Integer())
     phd_med_accepted_sgpa = db.Column(db.Float)
     phd_med_accepted_sgpa_range = db.Column(db.String(150))
