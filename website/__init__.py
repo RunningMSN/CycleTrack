@@ -59,7 +59,7 @@ def create_app():
     # Create scheduler for background calculations
     scheduler = APScheduler()
     scheduler.init_app(app)
-    @scheduler.task('interval', id='stats_updater', seconds=5)
+    @scheduler.task('interval', id='stats_updater', hours=1)
     def update_stats():
         jobs.update_stats(app)
 
