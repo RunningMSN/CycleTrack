@@ -156,14 +156,21 @@ def convert_map(data,color="default"):
     school_df = data[["name","Best Outcome","color"]]
     school_df = school_df.rename(columns={"name":"school"})
     profiles = pd.read_sql(School_Profiles_Data.query.statement, db.session.bind)
+    profiles['school'] = profiles['school'].apply(lambda x: x.replace("'","’")) #very dumb bug where Queen's has differnt apostrophes
     loc_df = school_df.merge(profiles, how="left", on="school")
 
     return loc_df
 
 def convert_horz_bar(data,cycleyear):
     data["name"] = data["name"].str.replace("_"," ")
-    data['secondary_received'] = data['secondary_received'] + dt.timedelta(seconds=1)
-    data['application_complete'] = data['application_complete'] + dt.timedelta(seconds=2)
+    if "secondary_received" not in data.columns:
+        data["secondary_received"] = np.nan
+    else:
+        data['secondary_received'] = data['secondary_received'] + dt.timedelta(seconds=1)
+    if "application_complete" not in data.columns:
+        data["application_complete"] = np.nan
+    else:
+        data['application_complete'] = data['application_complete'] + dt.timedelta(seconds=2)
     temp_melt = data.melt(id_vars=data.columns[0], value_vars=data.columns[1:], var_name='Actions', value_name='date')
     cycle_max = temp_melt["date"].max()
     today = dt.date.today()
