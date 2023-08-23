@@ -1,6 +1,7 @@
 import pandas as pd
 import statistics
 from datetime import datetime
+import os
 
 
 def update_stats(app):
@@ -81,7 +82,6 @@ def update_stats(app):
                 phd_data)
             school_stats_entry.phd_perc_accepted_waitlist, school_stats_entry.phd_perc_accepted_waitlist_n = percent_waitlist_accepted(
                 phd_data)
-
             school_stats_entry.phd_med_accepted_cgpa, school_stats_entry.phd_med_accepted_cgpa_range, school_stats_entry.phd_med_accepted_cgpa_n = cgpa_accepted(
                 phd_data)
             school_stats_entry.phd_med_accepted_sgpa, school_stats_entry.phd_med_accepted_sgpa_range, school_stats_entry.phd_med_accepted_sgpa_n = sgpa_accepted(
@@ -89,8 +89,11 @@ def update_stats(app):
             school_stats_entry.phd_med_accepted_mcat, school_stats_entry.phd_med_accepted_mcat_range, school_stats_entry.phd_med_accepted_mcat_n = mcat_accepted(
                 phd_data)
 
-            db.session.commit()
+            # Generate graphs
+            cycle_status_graphs(reg_data, phd_data, school_stats_entry)
+            interview_acceptance_graphs(reg_data, phd_data, school_stats_entry)
 
+            db.session.commit()
 
 def count_apps(df):
     '''Returns total applications.'''
@@ -270,3 +273,100 @@ def mcat_accepted(df):
         median = statistics.median(accepted_mcat)
         range = f"{min(accepted_mcat):.2f} - {max(accepted_mcat):.2f}"
     return median, range, n
+
+def interview_acceptance_graphs(reg_df, phd_df, school_stats_entry):
+    '''Saves interview and acceptance graphs into explorer_graphs'''
+    from ..visualizations import school_graphs
+    school_id = school_stats_entry.school_id
+    # MD/DO
+    reg_interviews = school_graphs.interview_acceptance_histogram(reg_df, 'interview_received')
+    reg_acceptances = school_graphs.interview_acceptance_histogram(reg_df, 'acceptance')
+    # PhD
+    phd_interviews = school_graphs.interview_acceptance_histogram(phd_df, 'interview_received')
+    phd_acceptances = school_graphs.interview_acceptance_histogram(phd_df, 'acceptance')
+    # Dictionary of graphs with names
+    graphs = {f'interviews_{school_id}_reg': reg_interviews,
+              f'acceptances_{school_id}_reg': reg_acceptances,
+              f'interviews_{school_id}_phd': phd_interviews,
+              f'acceptances_{school_id}_phd': phd_acceptances}
+    # Write graphs
+    for key, value in graphs.items():
+        # Skip empty graphs
+        if value is not None:
+            # Path to graph
+            path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "static", "explorer_graphs", f"{key}.JSON")
+            # Remove existing graphs
+            if os.path.exists(path):
+                os.remove(path)
+            # Add new graph
+            with open(path, "w") as graph_file:
+                graph_file.write(value)
+    # Keep track if graphs are generated
+    if reg_interviews == None:
+        school_stats_entry.reg_interviews_graph = False
+    else:
+        school_stats_entry.reg_interviews_graph = True
+    if reg_acceptances == None:
+        school_stats_entry.reg_acceptance_graph = False
+    else:
+        school_stats_entry.reg_acceptance_graph = True
+    if phd_interviews == None:
+        school_stats_entry.phd_interviews_graph = False
+    else:
+        school_stats_entry.phd_interviews_graph = True
+    if phd_acceptances == None:
+        school_stats_entry.phd_acceptance_graph = False
+    else:
+        school_stats_entry.phd_acceptance_graph = True
+
+def cycle_status_graphs(reg_df, phd_df, school_stats_entry):
+    '''Saves cycle status graphs into explorer_graphs.'''
+    from ..visualizations import school_graphs
+    from ..form_options import VALID_CYCLES
+    school_id = school_stats_entry.school_id
+    # Current year
+    curr_year_reg = school_graphs.cycle_progress(reg_df[reg_df['cycle_year'] == VALID_CYCLES[0]],
+                                 VALID_CYCLES[0])
+    curr_year_phd = school_graphs.cycle_progress(phd_df[phd_df['cycle_year'] == VALID_CYCLES[0]],
+                                 VALID_CYCLES[0])
+    # Past year
+    past_year_reg = school_graphs.cycle_progress(reg_df[reg_df['cycle_year'] == VALID_CYCLES[1]],
+                                 VALID_CYCLES[1])
+    past_year_phd = school_graphs.cycle_progress(phd_df[phd_df['cycle_year'] == VALID_CYCLES[1]],
+                                 VALID_CYCLES[1])
+    # Dictionary of graphs with names
+    graphs = {f'status_{school_id}_reg_curr': curr_year_reg,
+              f'status_{school_id}_phd_curr': curr_year_phd,
+              f'status_{school_id}_reg_prev': past_year_reg,
+              f'status_{school_id}_phd_prev': past_year_phd}
+    # Write graphs
+    for key, value in graphs.items():
+        # Skip empty graphs
+        if value is not None:
+            # Path to graph
+            path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "static", "explorer_graphs", f"{key}.JSON")
+
+            # Remove existing graphs
+            if os.path.exists(path):
+                os.remove(path)
+            # Add new graph
+            with open(path, "w") as graph_file:
+                graph_file.write(value)
+
+    # Keep track if generated graphs
+    if curr_year_reg == None:
+        school_stats_entry.reg_cycle_status_curr_graph = False
+    else:
+        school_stats_entry.reg_cycle_status_curr_graph = True
+    if curr_year_phd == None:
+        school_stats_entry.phd_cycle_status_curr_graph = False
+    else:
+        school_stats_entry.phd_cycle_status_curr_graph = True
+    if past_year_reg == None:
+        school_stats_entry.reg_cycle_status_prev_graph = False
+    else:
+        school_stats_entry.reg_cycle_status_prev_graph = True
+    if past_year_phd == None:
+        school_stats_entry.phd_cycle_status_prev_graph = False
+    else:
+        school_stats_entry.phd_cycle_status_prev_graph = True

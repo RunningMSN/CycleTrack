@@ -64,19 +64,11 @@ def explore_school(school_name):
     school_info = School_Profiles_Data.query.filter_by(school=school_name).first()
     school_stats = School_Stats.query.filter_by(school_id=school_info.school_id).first()
 
-    #TODO: Remove this entirely with saved graphs
-    # Query info about the school
-    query = db.session.query(School, Cycle).filter(School.name == school_name).join(Cycle, School.cycle_id == Cycle.id)
-    reg_data = pd.read_sql(query.filter(School.phd == False).statement, db.session.bind)
-    phd_data = pd.read_sql(query.filter(School.phd == True).statement, db.session.bind)
-
     # Dictionaries with all information about the school
-    reg_info = {'cycle_status_json': school_graphs.cycle_progress(reg_data[reg_data['cycle_year'] == VALID_CYCLES[0]],
-                                                                  VALID_CYCLES[0]),
-                'cycle_status_json_prev': school_graphs.cycle_progress(
-                    reg_data[reg_data['cycle_year'] == VALID_CYCLES[1]], VALID_CYCLES[1]),
-                'interview_graph': school_graphs.interview_acceptance_histogram(reg_data, 'interview_received'),
-                'acceptance_graph': school_graphs.interview_acceptance_histogram(reg_data, 'acceptance'),
+    reg_info = {'cycle_status_json': school_stats.reg_cycle_status_curr_graph,
+                'cycle_status_json_prev': school_stats.reg_cycle_status_prev_graph,
+                'interview_graph': school_stats.reg_interviews_graph,
+                'acceptance_graph': school_stats.reg_acceptance_graph,
                 'interview_count': school_stats.reg_interviews_count,
                 'n_percent_interviewed': school_stats.reg_perc_interviewed_n,
                 'percent_interviewed': school_stats.reg_perc_interviewed,
@@ -119,12 +111,10 @@ def explore_school(school_name):
                 'wl_to_a_range': school_stats.reg_med_days_waitlist_accepted_range,
                 'wl_to_a_n': school_stats.reg_med_days_waitlist_accepted_n}
 
-    phd_info = {'cycle_status_json': school_graphs.cycle_progress(phd_data[phd_data['cycle_year'] == VALID_CYCLES[0]],
-                                                                  VALID_CYCLES[0]),
-                'cycle_status_json_prev': school_graphs.cycle_progress(
-                    phd_data[phd_data['cycle_year'] == VALID_CYCLES[1]], VALID_CYCLES[1]),
-                'interview_graph': school_graphs.interview_acceptance_histogram(phd_data, 'interview_received'),
-                'acceptance_graph': school_graphs.interview_acceptance_histogram(phd_data, 'acceptance'),
+    phd_info = {'cycle_status_json': school_stats.phd_cycle_status_curr_graph,
+                'cycle_status_json_prev': school_stats.phd_cycle_status_prev_graph,
+                'interview_graph': school_stats.phd_interviews_graph,
+                'acceptance_graph': school_stats.phd_acceptance_graph,
                 'interview_count': school_stats.phd_interviews_count,
                 'n_percent_interviewed': school_stats.phd_perc_interviewed_n,
                 'percent_interviewed': school_stats.phd_perc_interviewed,
@@ -170,7 +160,7 @@ def explore_school(school_name):
     last_updated = school_stats.last_updated.strftime("%H:%M CST")
 
     return render_template('school_template.html', user=current_user, school_info=school_info, reg_info=reg_info,
-                           phd_info=phd_info, valid_cycles=VALID_CYCLES, last_updated=last_updated)
+                           phd_info=phd_info, valid_cycles=VALID_CYCLES, last_updated=last_updated, school_id=school_stats.school_id)
 
 @explorer.route('/update_all')
 def update_all():

@@ -414,62 +414,101 @@
     }
 })
 </script>
+
+<!-- GENERATE GRAPHS -->
 {% if reg_info['cycle_status_json'] %}
-    <script>
-    var reg_graph = {{ reg_info['cycle_status_json'] | safe }};
-    reg_graph.config = {'responsive': true, 'displaylogo': false}
-    Plotly.newPlot('reg_status', reg_graph);
-    </script>
+<script>
+    fetch('{{ url_for('static', filename='explorer_graphs/status_'+ school_id|string + '_reg_curr.JSON') }}')
+        .then(response => response.json())
+        .then(data => {
+            data.config = {'responsive': true, 'displaylogo': false};
+            Plotly.newPlot('reg_status', data);
+        })
+        .catch(error => console.log(error));
+</script>
 {% endif %}
 {% if reg_info['cycle_status_json_prev'] %}
-    <script>
-    var reg_graph_prev = {{ reg_info['cycle_status_json_prev'] | safe }};
-    reg_graph_prev.config = {'responsive': true, 'displaylogo': false}
-    Plotly.newPlot('reg_status_prev', reg_graph_prev);
-    </script>
-{% endif %}
-{% if phd_info['cycle_status_json'] %}
-    <script>
-    var phd_graph = {{ phd_info['cycle_status_json'] | safe }};
-    phd_graph.config = {'responsive': true, 'displaylogo': false}
-    Plotly.newPlot('phd_status', phd_graph);
-    </script>
-{% endif %}
-{% if phd_info['cycle_status_json_prev'] %}
-    <script>
-    var phd_graph_prev = {{ phd_info['cycle_status_json_prev'] | safe }};
-    phd_graph_prev.config = {'responsive': true, 'displaylogo': false}
-    Plotly.newPlot('phd_status_prev', phd_graph_prev);
-    </script>
-{% endif %}
-{% if reg_info['interview_graph'] %}
-    <script>
-    var reg_interviews_graph = {{ reg_info['interview_graph'] | safe }};
-    reg_interviews_graph.config = {'responsive': true, 'displaylogo': false}
-    Plotly.newPlot('reg_interviews_graph', reg_interviews_graph);
-    </script>
-{% endif %}
-{% if reg_info['acceptance_graph'] %}
-    <script>
-    var reg_acceptance_graph = {{ reg_info['acceptance_graph'] | safe }};
-    reg_acceptance_graph.config = {'responsive': true, 'displaylogo': false}
-    Plotly.newPlot('reg_acceptance_graph', reg_acceptance_graph);
-    </script>
-{% endif %}
-{% if phd_info['interview_graph'] %}
-    <script>
-    var phd_interviews_graph = {{ phd_info['interview_graph'] | safe }};
-    phd_interviews_graph.config = {'responsive': true, 'displaylogo': false}
-    Plotly.newPlot('phd_interviews_graph', phd_interviews_graph);
-    </script>
-{% endif %}
-{% if phd_info['acceptance_graph'] %}
-    <script>
-    var phd_acceptance_graph = {{ phd_info['acceptance_graph'] | safe }};
-    phd_acceptance_graph.config = {'responsive': true, 'displaylogo': false}
-    Plotly.newPlot('phd_acceptance_graph', phd_acceptance_graph);
-    </script>
+<script>
+    fetch('{{ url_for('static', filename='explorer_graphs/status_'+ school_id|string + '_reg_prev.JSON') }}')
+        .then(response => response.json())
+        .then(data => {
+            data.config = {'responsive': true, 'displaylogo': false};
+            Plotly.newPlot('reg_status_prev', data);
+        })
+        .catch(error => console.log(error));
+</script>
 {% endif %}
 
+{% if phd_info['cycle_status_json'] %}
+<script>
+    fetch('{{ url_for('static', filename='explorer_graphs/status_'+ school_id|string + '_phd_curr.JSON') }}')
+        .then(response => response.json())
+        .then(data => {
+            data.config = {'responsive': true, 'displaylogo': false};
+            Plotly.newPlot('phd_status', data);
+        })
+        .catch(error => console.log(error));
+</script>
+{% endif %}
+
+{% if phd_info['cycle_status_json_prev'] %}
+<script>
+    fetch('{{ url_for('static', filename='explorer_graphs/status_'+ school_id|string + '_phd_prev.JSON') }}')
+        .then(response => response.json())
+        .then(data => {
+            data.config = {'responsive': true, 'displaylogo': false};
+            Plotly.newPlot('phd_status_prev', data);
+        })
+        .catch(error => console.log(error));
+</script>
+{% endif %}
+
+{% if reg_info['interview_graph'] %}
+<script>
+    fetch('{{ url_for('static', filename='explorer_graphs/interviews_'+ school_id|string + '_reg.JSON') }}')
+        .then(response => response.json())
+        .then(data => {
+            data.config = {'responsive': true, 'displaylogo': false};
+            Plotly.newPlot('reg_interviews_graph', data);
+        })
+        .catch(error => console.log(error));
+</script>
+{% endif %}
+
+{% if reg_info['acceptance_graph'] %}
+<script>
+    fetch('{{ url_for('static', filename='explorer_graphs/acceptances_'+ school_id|string + '_reg.JSON') }}')
+        .then(response => response.json())
+        .then(data => {
+            data.config = {'responsive': true, 'displaylogo': false};
+            Plotly.newPlot('reg_acceptance_graph', data);
+        })
+        .catch(error => console.log(error));
+</script>
+{% endif %}
+
+{% if phd_info['interview_graph'] %}
+<script>
+    fetch('{{ url_for('static', filename='explorer_graphs/interviews_'+ school_id|string + '_phd.JSON') }}')
+        .then(response => response.json())
+        .then(data => {
+            data.config = {'responsive': true, 'displaylogo': false};
+            Plotly.newPlot('phd_interviews_graph', data);
+        })
+        .catch(error => console.log(error));
+</script>
+{% endif %}
+
+{% if phd_info['acceptance_graph'] %}
+<script>
+    fetch('{{ url_for('static', filename='explorer_graphs/acceptances_'+ school_id|string + '_phd.JSON') }}')
+        .then(response => response.json())
+        .then(data => {
+            data.config = {'responsive': true, 'displaylogo': false};
+            Plotly.newPlot('phd_acceptance_graph', data);
+        })
+        .catch(error => console.log(error));
+</script>
+{% endif %}
 {% endblock %}
 

@@ -3,3 +3,5 @@ website/site_settings.py
 __pycache__/
 .DS_Store
 instance/
+website/static/explorer_graphs/*
+!website/static/explorer_graphs

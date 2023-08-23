@@ -159,6 +159,14 @@ class School_Stats(db.Model):
     phd_med_days_waitlist_accepted = db.Column(db.Integer())
     phd_med_days_waitlist_accepted_range = db.Column(db.String(150))
     phd_med_days_waitlist_accepted_n = db.Column(db.Integer())
+    reg_cycle_status_curr_graph = db.Column(db.Boolean)
+    reg_cycle_status_prev_graph = db.Column(db.Boolean)
+    reg_interviews_graph = db.Column(db.Boolean)
+    reg_acceptance_graph = db.Column(db.Boolean)
+    phd_cycle_status_curr_graph = db.Column(db.Boolean)
+    phd_cycle_status_prev_graph = db.Column(db.Boolean)
+    phd_interviews_graph = db.Column(db.Boolean)
+    phd_acceptance_graph = db.Column(db.Boolean)
 
 
 class Courses(db.Model):
