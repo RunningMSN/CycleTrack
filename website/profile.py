@@ -6,6 +6,7 @@ from . import db, form_options
 from .models import User,Cycle, School, User_Profiles
 import pandas as pd
 from .visualizations import dot, line, bar, sankey, map, horz_bar
+from .helpers import combine_app_types
 import json
 import uuid
 import markdown
@@ -58,6 +59,7 @@ def profile_home():
     else:
         app_types = list(cycle_data['school_type'].unique())
         if 'MD' in app_types and 'DO' in app_types: app_types.insert(0, 'MD or DO')
+    app_types.append("All")
 
     #edit blocks
     block_id = request.form.get("edit_block")
@@ -214,16 +216,21 @@ def profile_page(userurl):
                         cycle_data = cycle_data.drop([x],axis=1)
 
                 # Filter by PhD
-                if app_type == 'Dual Degree':
+                if app_type == "All":
+                    cycle_data = cycle_data
+                elif app_type == 'Dual Degree':
                     cycle_data = cycle_data[cycle_data['phd'] == True]
                 else:
                     cycle_data = cycle_data[cycle_data['phd'] == False]
 
                 # Filter MD or DO
-                if app_type == 'MD' or app_type == 'MD Only':
+                if app_type == "All":
+                    cycle_data = combine_app_types.combine(cycle_data)
+                elif app_type == 'MD' or app_type == 'MD Only':
                     cycle_data = cycle_data[cycle_data['school_type'] == 'MD']
                 elif app_type == 'DO' or app_type == 'DO Only':
                     cycle_data = cycle_data[cycle_data['school_type'] == 'DO']
+                
                 # Drop extra information
                 cycle_data = cycle_data.drop(['id', 'cycle_id', 'user_id', 'school_type', 'phd', 'note'], axis=1)
                 # Drop empty columns
@@ -240,7 +247,7 @@ def profile_page(userurl):
                     elif vis_type.lower() == 'sankey':
                         graphJSON = sankey.generate(cycle_data, plot_title, stats=False, color=color_type.lower())
                     elif vis_type.lower() == 'map':
-                        graphJSON = map.generate(cycle_data, plot_title, stats=False, color=color_type.lower(),
+                        graphJSON = map.generate(cycle_data, plot_title, app_type=app_type.lower(),stats=False, color=color_type.lower(),
                                                  map_scope=map_type.lower())
                     elif vis_type.lower() == 'timeline':
                         graphJSON = horz_bar.generate(cycle_data, cycle_year, plot_title, stats=False, color=color_type.lower(),
