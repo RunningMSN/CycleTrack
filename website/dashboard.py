@@ -8,7 +8,7 @@ import dateutil.parser
 import re
 from .visualizations import dot, line, bar, sankey, map, gpa_graph, horz_bar
 import pandas as pd
-from .helpers import import_list_funcs, categorize_stats, school_stats_calculators, gpa_calculators, combine_app_types
+from .helpers import import_list_funcs, categorize_stats, gpa_calculators, combine_app_types
 from flask_mail import Message
 
 dashboard = Blueprint('dashboard', __name__)
@@ -207,11 +207,6 @@ def lists():
                     School(name=schools_add[i], cycle_id=cycle.id, user_id=current_user.id, phd=dual_degree_phd,
                            school_type=school_type))
                 db.session.commit()
-            # Update the application counter
-            if dual_degree_phd:
-                school_stats_calculators.count_apps_phd(schools_add[i])
-            else:
-                school_stats_calculators.count_apps_reg(schools_add[i])
     # Handle editing schools
     # school_id = request.form.get('school_id')
     # if school_id:
@@ -657,10 +652,6 @@ def delete_cycle():
             for school in cycle.schools:
                 db.session.delete(school)
                 db.session.commit()
-                if school.phd:
-                    school_stats_calculators.count_apps_phd(school.name)
-                else:
-                    school_stats_calculators.count_apps_reg(school.name)
             for profile_item in User_Profiles.query.filter_by(cycle_id=cycle.id).all():
                 db.session.delete(profile_item)
             db.session.delete(cycle)
@@ -677,11 +668,6 @@ def delete_school():
         if school.user_id == current_user.id:
             db.session.delete(school)
             db.session.commit()
-            # Remove school from count
-            if school.phd:
-                school_stats_calculators.count_apps_phd(school.name)
-            else:
-                school_stats_calculators.count_apps_reg(school.name)
             return jsonify({})
 
 

@@ -4,7 +4,6 @@ from . import db, form_options
 from .models import Cycle, School, School_Profiles_Data, School_Stats
 from .visualizations import school_graphs
 import pandas as pd
-from .helpers import school_stats_calculators
 from .form_options import VALID_CYCLES
 
 explorer = Blueprint('explorer', __name__)
@@ -65,7 +64,8 @@ def explore_school(school_name):
     school_stats = School_Stats.query.filter_by(school_id=school_info.school_id).first()
 
     # Dictionaries with all information about the school
-    reg_info = {'cycle_status_json': school_stats.reg_cycle_status_curr_graph,
+    reg_info = {'app_count': school_stats.reg_apps_count,
+                'cycle_status_json': school_stats.reg_cycle_status_curr_graph,
                 'cycle_status_json_prev': school_stats.reg_cycle_status_prev_graph,
                 'interview_graph': school_stats.reg_interviews_graph,
                 'acceptance_graph': school_stats.reg_acceptance_graph,
@@ -111,7 +111,8 @@ def explore_school(school_name):
                 'wl_to_a_range': school_stats.reg_med_days_waitlist_accepted_range,
                 'wl_to_a_n': school_stats.reg_med_days_waitlist_accepted_n}
 
-    phd_info = {'cycle_status_json': school_stats.phd_cycle_status_curr_graph,
+    phd_info = {'app_count': school_stats.phd_apps_count,
+                'cycle_status_json': school_stats.phd_cycle_status_curr_graph,
                 'cycle_status_json_prev': school_stats.phd_cycle_status_prev_graph,
                 'interview_graph': school_stats.phd_interviews_graph,
                 'acceptance_graph': school_stats.phd_acceptance_graph,
@@ -157,13 +158,9 @@ def explore_school(school_name):
                 'wl_to_a_range': school_stats.phd_med_days_waitlist_accepted_range,
                 'wl_to_a_n': school_stats.phd_med_days_waitlist_accepted_n}
 
+    app_counts = {'reg': school_stats.reg_apps_count, 'phd': school_stats.phd_apps_count}
+
     last_updated = school_stats.last_updated.strftime("%H:%M CST")
 
     return render_template('school_template.html', user=current_user, school_info=school_info, reg_info=reg_info,
                            phd_info=phd_info, valid_cycles=VALID_CYCLES, last_updated=last_updated, school_id=school_stats.school_id)
-
-@explorer.route('/update_all')
-def update_all():
-    school_stats_calculators.update_all_schools()
-    flash('Updated the stats for all schools in the database.', category='success')
-    return redirect(url_for('pages.index'))

@@ -73,13 +73,13 @@
     <div class="row" id="school-info">
             <!-- TAB LIST -->
             <ul class="nav nav-tabs" id="myTab" role="tablist">
-                {% if school_info.reg_apps_count > 0 %}
+                {% if reg_info['app_count'] > 0 %}
                 <li class="nav-item">
                     <a class="nav-link active" id="md-tab" data-toggle="tab" href="#md" role="tab" aria-controls="md"
                        aria-selected="true"><h6>{{ school_info.md_or_do }}</h6></a>
                 </li>
                 {% endif %}
-                {% if school_info.phd_apps_count > 0 %}
+                {% if phd_info['app_count'] > 0 %}
                 <li class="nav-item">
                     <a class="nav-link" id="mdphd-tab" data-toggle="tab" href="#mdphd" role="tab" aria-controls="mdphd"
                        aria-selected="false"><h6>{{ school_info.md_or_do }}-PhD</h6></a>
