@@ -160,7 +160,7 @@ def convert_map(data,app_type,color="default"):
     #merge with school locations
     school_df = data[["name","Best Outcome","color"]]
     school_df = school_df.rename(columns={"name":"school"})
-    profiles = pd.read_sql(School_Profiles_Data.query.statement, db.session.bind)
+    profiles = pd.read_sql(School_Profiles_Data.query.statement, db.get_engine())
     profiles['school'] = profiles['school'].apply(lambda x: x.replace("'","’")) #very dumb bug where Queen's has differnt apostrophes
     loc_df = school_df.merge(profiles, how="left", on="school")
     print(loc_df)

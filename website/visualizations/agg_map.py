@@ -9,7 +9,7 @@ import pandas as pd
 def generate():
     '''Generates aggregate map of all schools currently in CycleTrack.'''
     # Grab info from school profiles
-    data = pd.read_sql(School_Profiles_Data.query.statement, db.session.bind)
+    data = pd.read_sql(School_Profiles_Data.query.statement, db.get_engine())
 
     # Restrict to USA
     data = data[data['country'] == 'USA']

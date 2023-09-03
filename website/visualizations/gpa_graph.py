@@ -8,7 +8,7 @@ import json
 def generate(courses):
     '''Returns a plot of GPA over time using the supplied courses.'''
     # Convert to dataframe
-    df = pd.read_sql(courses.statement, db.session.bind)
+    df = pd.read_sql(courses.statement, db.get_engine())
     # Store GPA data
     gpa_data = {'xlab': [], 'year': [], 'term': [], 'amcas_gpa': [], 'aacomas_gpa': [], 'tmdsas_gpa': []}
     # Grab unique years

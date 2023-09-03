@@ -37,7 +37,7 @@ def profile_home():
     cycle_ids = current_user.cycles
     cycle_years = [Cycle.query.filter_by(id=x.id).first().cycle_year for x in cycle_ids]
 
-    cycle_data = pd.read_sql(School.query.filter_by(user_id=userid).statement, db.session.bind)
+    cycle_data = pd.read_sql(School.query.filter_by(user_id=userid).statement, db.get_engine())
 
     # Handle editing publish settings
     if request.form.get('profile_publish_setting'):
@@ -114,7 +114,7 @@ def profile_home():
                 else:
                     selected_cycle_year = request.form.get('cycle_year')
                     cycle_id = Cycle.query.filter_by(user_id=userid).first().id
-                    #cycle_data = pd.read_sql(School.query.filter_by(cycle_id=cycle_id).statement, db.session.bind)
+                    #cycle_data = pd.read_sql(School.query.filter_by(cycle_id=cycle_id).statement, db.get_engine())
                     # Vis Generation
                     vis_type = request.form.get('vis_type')
                     # Grab Settings
@@ -186,7 +186,7 @@ def profile_page(userurl):
                 graphJSON = None
                 # cycle data
                 cycle_id = block.cycle_id
-                cycle_data = pd.read_sql(School.query.filter_by(cycle_id=cycle_id).statement, db.session.bind)
+                cycle_data = pd.read_sql(School.query.filter_by(cycle_id=cycle_id).statement, db.get_engine())
                 # app type
                 app_type = block.app_type
                 # vis type
