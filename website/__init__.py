@@ -13,7 +13,7 @@ mail = Mail()
 
 def create_app():
     # Site settings
-    app = Flask(__name__)
+    app = Flask(__name__, static_folder="static")
     app.config['SECRET_KEY'] = site_settings.SECRET_KEY
     app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
     app.config['MAIL_SERVER'] = site_settings.MAIL_SERVER
@@ -70,6 +70,7 @@ def create_app():
     return app
 
 def create_database(app):
-    if not path.exists('website/' + DB_NAME):
-        db.create_all(app=app)
-        print("Created database.")
+    with app.app_context():
+        if not path.exists('instance/' + DB_NAME):
+            db.create_all()
+            print("Created database.")
