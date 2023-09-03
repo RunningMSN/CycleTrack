@@ -13,8 +13,8 @@ def update_stats(app):
             # Query info about the school
             query = db.session.query(School, Cycle).filter(School.name == school.school).join(Cycle,
                                                                                               School.cycle_id == Cycle.id)
-            reg_data = pd.read_sql(query.filter(School.phd == False).statement, db.session.bind)
-            phd_data = pd.read_sql(query.filter(School.phd == True).statement, db.session.bind)
+            reg_data = pd.read_sql(query.filter(School.phd == False).statement, db.get_engine())
+            phd_data = pd.read_sql(query.filter(School.phd == True).statement, db.get_engine())
 
             # Grab the school stats entry and run all calculations
             school_stats_entry = School_Stats.query.filter_by(school_id=school.school_id).first()
