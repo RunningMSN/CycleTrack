@@ -599,7 +599,7 @@ def export_list():
     cycle_id = int(request.form.get('cycle_id'))
     cycle = Cycle.query.filter_by(id=cycle_id).first()
     # Create dataframe of schools for that cycle and convert to CSV
-    cycle_data = pd.read_sql(School.query.filter_by(cycle_id=cycle_id).statement, db.session.bind).drop(
+    cycle_data = pd.read_sql(School.query.filter_by(cycle_id=cycle_id).statement, db.get_engine()).drop(
         ['id', 'cycle_id', 'user_id', 'school_type', 'phd', 'note'], axis=1)
     csv = cycle_data.to_csv(index=False, encoding='utf-8')
     # Generate response/download
@@ -690,7 +690,7 @@ def visualizations():
 
     # Grab cycle and data
     cycle = Cycle.query.filter_by(id=int(cycle_id)).first()
-    cycle_data = pd.read_sql(School.query.filter_by(cycle_id=cycle.id).statement, db.session.bind)
+    cycle_data = pd.read_sql(School.query.filter_by(cycle_id=cycle.id).statement, db.get_engine())
     # Get application types
     # Dual Degree Types
     if any(cycle_data['phd']):
