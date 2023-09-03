@@ -285,12 +285,9 @@ function toggleCancel() {
                         </div>
                         <!-- ICONS -->
                         <div style="padding-top:5px">
-                            <button type="button" class="btn btn-link" data-toggle="modal" data-target="#{{ school.name }}-{{ school.phd }}-modal" style="padding: 1px">
-                                <i class="bi bi-pencil-square"></i>
-                            </button>
-                                <a href="{{ url_for('explorer.explorer_home') }}/{{ school.name }}" class="btn btn-link" style="padding: 1px">
-                                    <i class="bi bi-search"></i>
-                                </a>
+                            <a href="{{ url_for('explorer.explorer_home') }}/{{ school.name }}" class="btn btn-link" style="padding: 1px">
+                                <i class="bi bi-search"></i>
+                            </a>
                             <button type="button" class="btn btn-link" data-toggle="modal" data-target="#{{ school.name }}-{{ school.phd }}-delete" style="padding: 1px">
                                 <i class="bi bi-trash"></i>
                             </button>
@@ -533,100 +530,7 @@ function toggleCancel() {
     </div>
 </div>
 
-
-<!-- SETUP MODAL FOR EDITING EACH SCHOOL -->
 {% for school, profile in schools %}
-<div class="modal fade" id="{{ school.name }}-{{ school.phd }}-modal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <form method="POST">
-                <div class="modal-header">
-                    <h5 class="modal-title">Edit {{ school.name }} ({% if school.school_type == "MD" %}MD{% else %}DO{%
-                        endif %}{% if school.phd %}-PhD{% endif %})</h5>
-                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="bg-warning container" style="padding: 10px; margin-top: 10px; margin-bottom:10px">
-                       Editing schools has changed! Please use the Edit button near the top of your list to edit all
-                        schools at the same time.
-                    </div>
-                    <!--<input type="hidden" id="cycle_id_modal" name="cycle_id" value="{{ cycle.id }}">
-                    <input type="hidden" id="school_id" name="school_id" value="{{ school.id }}">
-                    <input type="hidden" id="id" name="id" value="{{ school.id }}">
-                    {% if not profile.country == 'CAN' %}
-                    <div style="padding-top:5px">
-                        <label for="primary">Primary Application Submitted/Verified Date</label>
-                        <input type="date" class="form-control" id="primary" name="primary"
-                               value="{% if school.primary %}{{ school.primary.strftime('%Y-%m-%d') }}{% endif %}"
-                               min="{{ cycle.cycle_year - 1 }}-05-01" max="{{ cycle.cycle_year }}-08-31" />
-                    </div>
-                    <div style="padding-top:5px">
-                        <label for="primary">Secondary Received Date</label>
-                        <input type="date" class="form-control" id="secondary_received" name="secondary_received"
-                               value="{% if school.secondary_received %}{{ school.secondary_received.strftime('%Y-%m-%d') }}{% endif %}"
-                               min="{{ cycle.cycle_year - 1 }}-05-01" max="{{ cycle.cycle_year }}-08-31" />
-                    </div>
-                    {% endif %}
-                    <div style="padding-top:5px">
-                        <label for="primary">Application Complete Date</label>
-                        <input type="date" class="form-control" id="application_complete" name="application_complete"
-                               value="{% if school.application_complete %}{{ school.application_complete.strftime('%Y-%m-%d') }}{% endif %}"
-                               min="{{ cycle.cycle_year - 1 }}-05-01" max="{{ cycle.cycle_year }}-08-31" />
-                    </div>
-                    <div style="padding-top:5px">
-                        <label for="primary">Interview Received Date</label>
-                        <input type="date" class="form-control" id="interview_received" name="interview_received"
-                               value="{% if school.interview_received %}{{ school.interview_received.strftime('%Y-%m-%d') }}{% endif %}"
-                               min="{{ cycle.cycle_year - 1 }}-05-01" max="{{ cycle.cycle_year }}-08-31" />
-                    </div>
-                    <div style="padding-top:5px">
-                        <label for="primary">Interview Scheduled Date</label>
-                        <input type="date" class="form-control" id="interview_date" name="interview_date"
-                               value="{% if school.interview_date %}{{ school.interview_date.strftime('%Y-%m-%d') }}{% endif %}"
-                               min="{{ cycle.cycle_year - 1 }}-05-01" max="{{ cycle.cycle_year }}-08-31" />
-                        <small>If your interview is multiple days long, just enter the first day.</small>
-                    </div>
-                    <div style="padding-top:5px">
-                        <label for="primary">Rejection Date</label>
-                        <input type="date" class="form-control" id="rejection" name="rejection"
-                               value="{% if school.rejection %}{{ school.rejection.strftime('%Y-%m-%d') }}{% endif %}"
-                               min="{{ cycle.cycle_year - 1 }}-05-01" max="{{ cycle.cycle_year }}-08-31" />
-                    </div>
-                    <div style="padding-top:5px">
-                        <label for="primary">Waitlist Date</label>
-                        <input type="date" class="form-control" id="waitlist" name="waitlist"
-                               value="{% if school.waitlist %}{{ school.waitlist.strftime('%Y-%m-%d') }}{% endif %}"
-                               min="{{ cycle.cycle_year - 1 }}-05-01" max="{{ cycle.cycle_year }}-08-31" />
-                    </div>
-                    <div style="padding-top:5px">
-                        <label for="primary">Acceptance Date</label>
-                        <input type="date" class="form-control" id="acceptance" name="acceptance"
-                               value="{% if school.acceptance %}{{ school.acceptance.strftime('%Y-%m-%d') }}{% endif %}"
-                               min="{{ cycle.cycle_year - 1 }}-05-01" max="{{ cycle.cycle_year }}-08-31" />
-                    </div>
-                    <div style="padding-top:5px">
-                        <label for="primary">Withdrawn Date</label>
-                        <input type="date" class="form-control" id="withdrawn" name="withdrawn"
-                               value="{% if school.withdrawn %}{{ school.withdrawn.strftime('%Y-%m-%d') }}{% endif %}"
-                               min="{{ cycle.cycle_year - 1 }}-05-01" max="{{ cycle.cycle_year }}-08-31" />
-                    </div>
-                    <div style="padding-top:5px">
-                        <label for="note">Notes</label><br />
-                        <textarea id="note" class="form-control" name="note" style="width:100%; height: 100px">{% if school.note %}{{ school.note }}{% endif %}</textarea>
-                    </div>-->
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <!--<button type="submit" class="btn btn-primary">Save Changes</button>
-                    <button type="button" class="btn btn-danger"
-                            onclick="deleteSchool({{ school.id }}, {{ cycle.id }})">Delete School
-                    </button>-->
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
 <!-- SETUP DELETION WARNINGS -->
 <div class="modal fade" id="{{ school.name }}-{{ school.phd }}-delete" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -638,8 +542,10 @@ function toggleCancel() {
                 </div>
                 <div class="modal-body">
                         <div style="padding: 10px;">
-                            Are you sure you want to delete this school? Deleting the cycle will permanently delete any
-                            information associated with it.
+                            Are you sure you want to delete <strong>{{ school.name }} ({{ school.school_type }}{% if school.phd %}-PhD{% endif %})</strong> from your list?
+                            Deleting it is <strong>permanent</strong>. You will need to re-add {{ school.name }}
+                            ({{ school.school_type }}{% if school.phd %}-PhD{% endif %}) and any
+                            associated information if you change your mind.
                         </div>
                     </div>
                 <div class="modal-footer">
