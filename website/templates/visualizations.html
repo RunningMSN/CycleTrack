@@ -149,16 +149,10 @@
 
 
             </div>
-            <div class="row row-cols-auto">
-                <div class="col" style="margin-bottom: 5px">
-                    <label style="padding-right:10px">
-                        <input type="checkbox" id="advancedOptions" name="advanced_options" value="true">
-                        <label for="advancedOptions"> <strong>Advanced Options</strong></label><br>
-                    </label>
-                </div>
-            </div>
-            <div id="advancedArea" style="display: none">
-                <h5>Graph Annotations</h5>
+                <div class="row row-cols-auto" id="advanced">
+                <details>
+                    <summary class="h4">Advanced Options</summary>
+                    <h5>Graph Annotations</h5>
                 <div class="row row-cols-auto">
                     <!-- DEMOGRAPHICS -->
                     <div class="col" style="min-width: 300px">
@@ -269,6 +263,7 @@
                         </label>
                     </div>
                 </div>
+                </details>
             </div>
             <button class="btn btn-primary" type="submit">Generate</button>
         </form>
