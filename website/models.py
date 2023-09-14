@@ -165,6 +165,12 @@ class School_Stats(db.Model):
     phd_cycle_status_prev_graph = db.Column(db.Boolean)
     phd_interviews_graph = db.Column(db.Boolean)
     phd_acceptance_graph = db.Column(db.Boolean)
+    reg_interview_date = db.Column(db.DateTime(timezone=True), nullable=True)
+    reg_waitlist_date = db.Column(db.DateTime(timezone=True), nullable=True)
+    reg_acceptance_date = db.Column(db.DateTime(timezone=True), nullable=True)
+    phd_interview_date = db.Column(db.DateTime(timezone=True), nullable=True)
+    phd_waitlist_date = db.Column(db.DateTime(timezone=True), nullable=True)
+    phd_acceptance_date = db.Column(db.DateTime(timezone=True), nullable=True)
 
 
 class Courses(db.Model):

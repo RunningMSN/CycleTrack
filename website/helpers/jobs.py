@@ -88,6 +88,7 @@ def update_stats(app):
                 phd_data)
             school_stats_entry.phd_med_accepted_mcat, school_stats_entry.phd_med_accepted_mcat_range, school_stats_entry.phd_med_accepted_mcat_n = mcat_accepted(
                 phd_data)
+            school_stats_entry.reg_interview_date, school_stats_entry.reg_waitlist_date, school_stats_entry.reg_acceptance_date, school_stats_entry.phd_interview_date, school_stats_entry.phd_waitlist_date, school_stats_entry.phd_acceptance_date = most_recent(reg_data,phd_data)
 
             # Generate graphs
             cycle_status_graphs(reg_data, phd_data, school_stats_entry)
@@ -344,7 +345,9 @@ def cycle_status_graphs(reg_df, phd_df, school_stats_entry):
         # Skip empty graphs
         if value is not None:
             # Path to graph
-            path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "static", "explorer_graphs", f"{key}.JSON")
+            #path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "static", "explorer_graphs", f"{key}.JSON")
+
+            path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "static", "explorer_graphs", f"{key}.JSON")
 
             # Remove existing graphs
             if os.path.exists(path):
@@ -370,3 +373,45 @@ def cycle_status_graphs(reg_df, phd_df, school_stats_entry):
         school_stats_entry.phd_cycle_status_prev_graph = False
     else:
         school_stats_entry.phd_cycle_status_prev_graph = True
+
+
+def most_recent(reg_df,phd_df):
+    '''Returns the most recent dates of interview and waitlist and acceptance for the school: regular and phd.'''
+    import numpy as np
+    from ..form_options import VALID_CYCLES
+    # Most recent cycle
+    reg_df = reg_df[reg_df['cycle_year'] == VALID_CYCLES[0]]
+    phd_df = phd_df[phd_df['cycle_year'] == VALID_CYCLES[0]]
+    # Most recent interview date reg
+    reg_interviews = reg_df['interview_received'].dropna().max()
+    reg_interviews = reg_interviews.to_pydatetime()
+    # Most recent waitlist date reg
+    reg_waitlist = reg_df['waitlist'].dropna().max()
+    reg_waitlist = reg_waitlist.to_pydatetime()
+    # Most recent acceptance date reg
+    reg_acceptances = reg_df['acceptance'].dropna().max()
+    reg_acceptances = reg_acceptances.to_pydatetime()
+    # Most recent interview date phd
+    phd_interviews = phd_df['interview_received'].dropna().max()
+    phd_interviews = phd_interviews.to_pydatetime()
+    # Most recent waitlist date phd
+    phd_waitlist = phd_df['waitlist'].dropna().max()
+    phd_waitlist = phd_waitlist.to_pydatetime()
+    # Most recent acceptance date phd
+    phd_acceptances = phd_df['acceptance'].dropna().max()
+    phd_acceptances = phd_acceptances.to_pydatetime()
+
+    if pd.isna(reg_interviews):
+        reg_interviews = None
+    if pd.isna(reg_waitlist):
+        reg_waitlist = None
+    if pd.isna(reg_acceptances):
+        reg_acceptances = None
+    if pd.isna(phd_interviews):
+        phd_interviews = None
+    if pd.isna(phd_waitlist):
+        phd_waitlist = None
+    if pd.isna(phd_acceptances):
+        phd_acceptances = None
+    
+    return reg_interviews, reg_waitlist, reg_acceptances, phd_interviews, phd_waitlist, phd_acceptances

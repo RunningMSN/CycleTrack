@@ -283,6 +283,26 @@ function toggleCancel() {
                             </div>
                             {% endif %}
                         </div>
+                        {% if most_recent[school.name] %}
+                        <div class="row" style="font-size: 70%;">
+                            <details>
+                                <summary>Most recent:</summary>
+                                <p>
+                                    {% if most_recent[school.name]["interview"]%}
+                                    Interview invite: {{most_recent[school.name]["interview"]}}<br>
+                                    {% endif %}
+                                    {% if most_recent[school.name]["waitlist"] %}
+                                    Waitlist: {{most_recent[school.name]["waitlist"]}}<br>
+                                    {% endif %}
+                                    {% if most_recent[school.name]["acceptance"]%}
+                                    Acceptance: {{most_recent[school.name]["acceptance"]}}
+                                    {% endif %}
+                                </p>
+                            </details>
+                            
+                        </div>
+
+                        {% endif %}
                         <!-- ICONS -->
                         <div style="padding-top:5px">
                             <a href="{{ url_for('explorer.explorer_home') }}/{{ school.name }}" class="btn btn-link" style="padding: 1px">

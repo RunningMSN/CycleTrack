@@ -58,14 +58,13 @@ def create_app():
 
     # Create scheduler for background calculations
     scheduler = APScheduler()
-    scheduler.init_app(app)
     @scheduler.task('interval', id='stats_updater', hours=1)
     def update_stats():
         jobs.update_stats(app)
 
     scheduler.start()
     # Run calculations on startup if needed
-    # jobs.update_stats(app)
+    #jobs.update_stats(app)
 
     return app
 

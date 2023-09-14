@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, flash, jsonify, redirect, url_for, Response, Markup, escape
 from flask_login import current_user, login_required
 from . import db, form_options, mail
-from .models import Cycle, School, School_Profiles_Data, Courses, User_Profiles
+from .models import Cycle, School, School_Profiles_Data, Courses, User_Profiles, School_Stats
 import json
 from datetime import datetime, date
 import dateutil.parser
@@ -340,10 +340,35 @@ def lists():
     if School.query.filter_by(cycle_id=cycle.id, school_type='DO', phd=False).first():
         program_types.append('DO')
 
+    # if it's the current cycle, get the most recent dates
+    if cycle.cycle_year == form_options.VALID_CYCLES[0]:
+        dates = {}
+        for school in schools:
+            school_stats = School_Stats.query.filter_by(school_id=school[1].school_id).first()
+            name = school[0].name
+            dates[name] = {}
+            if school[0].phd == True:
+                dates[name]['interview'] = school_stats.phd_interview_date.strftime("%m-%d-%Y") if school_stats.phd_interview_date is not None else None 
+                dates[name]['waitlist'] = school_stats.phd_waitlist_date.strftime("%m-%d-%Y") if school_stats.phd_waitlist_date is not None else None
+                dates[name]['acceptance'] = school_stats.phd_acceptance_date.strftime("%m-%d-%Y") if school_stats.phd_acceptance_date is not None else None
+                if not school_stats.phd_interview_date and not school_stats.phd_waitlist_date and not school_stats.phd_acceptance_date:
+                    dates[name]= None
+            else:
+                dates[name]['interview'] = school_stats.reg_interview_date.strftime("%m-%d-%Y") if school_stats.reg_interview_date is not None else None
+                dates[name]['waitlist'] = school_stats.reg_waitlist_date.strftime("%m-%d-%Y") if school_stats.reg_waitlist_date is not None else None
+                dates[name]['acceptance'] = school_stats.reg_acceptance_date.strftime("%m-%d-%Y") if school_stats.reg_acceptance_date is not None else None
+                if not school_stats.reg_interview_date and not school_stats.reg_waitlist_date and not school_stats.reg_acceptance_date:
+                    dates[name]= None
+    else:
+        dates = None
+
     return render_template('lists.html', user=current_user, cycle=cycle, schools=schools, phd_applicant=phd_applicant,
                            usmd_school_list=form_options.get_md_schools('USA'),
                            camd_school_list=form_options.get_md_schools('CAN'),
-                           do_school_list=form_options.get_do_schools(), program_types=program_types, today=datetime.today())
+                           do_school_list=form_options.get_do_schools(), program_types=program_types, today=datetime.today(),most_recent=dates)
+
+
+
 
 
 @dashboard.route('/import-list', methods=["GET", "POST"])
