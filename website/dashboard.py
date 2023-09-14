@@ -348,15 +348,15 @@ def lists():
             name = school[0].name
             dates[name] = {}
             if school[0].phd == True:
-                dates[name]['interview'] = school_stats.phd_interview_date.strftime("%m-%d-%Y") if school_stats.phd_interview_date is not None else None 
-                dates[name]['waitlist'] = school_stats.phd_waitlist_date.strftime("%m-%d-%Y") if school_stats.phd_waitlist_date is not None else None
-                dates[name]['acceptance'] = school_stats.phd_acceptance_date.strftime("%m-%d-%Y") if school_stats.phd_acceptance_date is not None else None
+                dates[name]['interview'] = school_stats.phd_interview_date.strftime("%m-%d-%y") if school_stats.phd_interview_date is not None else None 
+                dates[name]['waitlist'] = school_stats.phd_waitlist_date.strftime("%m-%d-%y") if school_stats.phd_waitlist_date is not None else None
+                dates[name]['acceptance'] = school_stats.phd_acceptance_date.strftime("%m-%d-%y") if school_stats.phd_acceptance_date is not None else None
                 if not school_stats.phd_interview_date and not school_stats.phd_waitlist_date and not school_stats.phd_acceptance_date:
                     dates[name]= None
             else:
-                dates[name]['interview'] = school_stats.reg_interview_date.strftime("%m-%d-%Y") if school_stats.reg_interview_date is not None else None
-                dates[name]['waitlist'] = school_stats.reg_waitlist_date.strftime("%m-%d-%Y") if school_stats.reg_waitlist_date is not None else None
-                dates[name]['acceptance'] = school_stats.reg_acceptance_date.strftime("%m-%d-%Y") if school_stats.reg_acceptance_date is not None else None
+                dates[name]['interview'] = school_stats.reg_interview_date.strftime("%m-%d-%y") if school_stats.reg_interview_date is not None else None
+                dates[name]['waitlist'] = school_stats.reg_waitlist_date.strftime("%m-%d-%y") if school_stats.reg_waitlist_date is not None else None
+                dates[name]['acceptance'] = school_stats.reg_acceptance_date.strftime("%m-%d-%y") if school_stats.reg_acceptance_date is not None else None
                 if not school_stats.reg_interview_date and not school_stats.reg_waitlist_date and not school_stats.reg_acceptance_date:
                     dates[name]= None
     else:
