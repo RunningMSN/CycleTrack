@@ -180,7 +180,7 @@ def convert_horz_bar(data,cycleyear):
     temp_melt = data.melt(id_vars=data.columns[0], value_vars=data.columns[1:], var_name='Actions', value_name='date')
     cycle_max = temp_melt["date"].max()
     today = dt.date.today()
-    if dt.date(today.year,8,31) <= dt.date(cycleyear-1,8,31):
+    if dt.date(today.year,8,31) >= dt.date(cycleyear,8,31):
         last_date = dt.date(cycleyear,8,31)
     else:
         last_date = today
