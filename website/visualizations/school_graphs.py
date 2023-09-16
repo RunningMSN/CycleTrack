@@ -57,7 +57,7 @@ def cycle_progress(data, cycle_year):
     # Overlay both histograms
     fig.update_layout(barmode='overlay', bargap=0, margin=dict(l=0, r=0, t=0, b=0), height=200, autosize=True)
     
-    # Find the maximum number of date repeated in each column
+    # Find the maximum number of date repeated in each column; current threshold for log scale on any date is 10 actions
     max_count = data.apply(pd.Series.value_counts).max()
     if (max_count > 10).any():
         fig.update_yaxes(type="log")
