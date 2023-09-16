@@ -14,30 +14,21 @@
     </div>
 </div>
 
-{% if graphJSON %}
+
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 <div class="container d-none d-sm-none d-md-block" style="padding-top:20px">
-    <div id="chart" class="chart"></div>
+    <div id="agg_map" class="agg_map"></div>
     <script>
-        var graphs = {{ graphJSON | safe }};
-        graphs.config = {'responsive': true, 'displaylogo': false, 'scrollZoom': false,
-        modeBarButtonsToRemove:["toImage","select2d","lasso2d",]}
-        Plotly.newPlot('chart', graphs);
+        fetch('{{ url_for('static', filename='agg_map/map.JSON') }}')
+            .then(response => response.json())
+            .then(data => {
+                data.config = {'responsive': true, 'displaylogo': false};
+                Plotly.newPlot('agg_map', data);
+            })
+            .catch(error => console.log(error));
     </script>
 </div>
 
-<script type="text/javascript">
-    var plot_element = document.getElementById('chart');
-    plot_element.on('plotly_click', function(data){
 
-        var point = data.points[0];
-        if (point) {
-            console.log(point.customdata);
-            window.open(point.customdata);
-        }
-    })
-
-</script>
-{% endif %}
 
 {% endblock %}

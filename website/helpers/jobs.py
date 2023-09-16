@@ -415,3 +415,19 @@ def most_recent(reg_df,phd_df):
         phd_acceptances = None
     
     return reg_interviews, reg_waitlist, reg_acceptances, phd_interviews, phd_waitlist, phd_acceptances
+
+
+def update_map(app):
+    from ..visualizations import agg_map
+    with app.app_context():
+        agg_map = agg_map.generate(app)
+        path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "static", "agg_map", "map.JSON")
+
+        # Remove existing graphs
+        if os.path.exists(path):
+            os.remove(path)
+        # Add new graph
+        with open(path, "w") as graph_file:
+            graph_file.write(agg_map)
+
+        

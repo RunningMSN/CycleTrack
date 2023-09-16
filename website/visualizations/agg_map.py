@@ -1,15 +1,17 @@
 import plotly
 import plotly.graph_objects as go
 import json
-from ..models import School_Profiles_Data
+from ..models import School_Profiles_Data, School_Stats
 from .. import db
 from flask import url_for
 import pandas as pd
 
-def generate():
+def generate(app):
     '''Generates aggregate map of all schools currently in CycleTrack.'''
-    # Grab info from school profiles
-    data = pd.read_sql(School_Profiles_Data.query.statement, db.get_engine())
+    school_info = pd.read_sql(School_Profiles_Data.query.statement, db.get_engine())
+    school_stats = pd.read_sql(School_Stats.query.statement, db.get_engine())
+    data = school_info.join(school_stats, on='school_id',lsuffix='', rsuffix='_stats')
+    data = data.drop("school_id_stats", axis=1)
 
     # Restrict to USA
     data = data[data['country'] == 'USA']
@@ -20,7 +22,10 @@ def generate():
     data = data[data['apps_count'] > 0]
 
     # Generate links for URLS
-    data['url'] = url_for('explorer.explorer_home')+'/'+data['school']
+    with app.test_request_context():
+        data['url'] = url_for('explorer.explorer_home', school=data['school'], _external=True)
+
+    #data['url'] = url_for('explorer.explorer_home')+'/'+data['school']
 
     # Generate marker colors
     data['color'] = data.apply(lambda row: marker_color(row), axis=1)
