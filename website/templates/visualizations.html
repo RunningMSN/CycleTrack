@@ -147,6 +147,21 @@
                     </div>
                 </div>
 
+                <!--- CREATE A NO ACTION CATEGORY FOR SANKEY -->
+                <div class="col {% if not (save_settings['vis_type'] == 'Sankey') %}d-none{% endif %}" style="min-width: 300px" id ="noAction">
+                    <div class="row" style="margin-bottom:5px">
+                        <div class="col-auto">
+                            <strong class="align-middle">Add no action to Sankey: </strong>
+                        </div>
+                        <div class="col-auto">
+                            <label style="padding-right:10px">
+                                <input type="checkbox" name="no_action" value="true" {% if
+                                       save_settings['no_action'] %} checked {% endif %}> Yes
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
 
             </div>
                 <div class="row row-cols-auto" id="advanced">
@@ -206,6 +221,7 @@
                         <textarea name="custom_text" id="custom_text" class="form-control" maxlength="100">{% if save_settings['custom_text'] %}{{ save_settings['custom_text'] }}{% else %}{% endif %}</textarea>
                     </div>
                 </div>
+                <!-- EXCLUDE DATA FROM PLOT--->
                 <h5>Exclude Data</h5>
                 <div class="row row-cols-auto" style="margin-bottom: 5px">
                     <div class="col">

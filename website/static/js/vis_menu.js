@@ -3,6 +3,7 @@ $(document).ready(function() {
     var mapScope = document.getElementById('mapScope');
     var hideNames = document.getElementById('hideNames');
     var organizeY = document.getElementById('organizeY');
+    var noAction = document.getElementById('noAction');
     $("#vis_type").change(function() {
         var vis_type = $(this).val();
         if (vis_type == 'Map') {
@@ -17,6 +18,13 @@ $(document).ready(function() {
         } else {
             hideNames.classList.add("d-none");
             organizeY.classList.add("d-none");
+        }
+
+        if (vis_type == 'Sankey'){
+            noAction.classList.remove("d-none");
+        }
+        else {
+            noAction.classList.add("d-none");
         }
     });
 

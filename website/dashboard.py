@@ -752,6 +752,7 @@ def visualizations():
         custom_text = request.form.get("custom_text")
         hide_names = request.form.get("hide_names")
         organize_y = request.form.get("organize_y")
+        no_action = request.form.get("no_action")
         # Default to no stats
         if demographics and not anonymize_demographics:
             if not cycle.mcat_total and not cycle.cgpa and not cycle.sgpa and not cycle.home_state:
@@ -776,6 +777,7 @@ def visualizations():
         # Save Settings
         save_settings = {'vis_type': vis_type, 'app_type': app_type, 'color_type': color_type, 'plot_title': plot_title,
                          'map_type': map_type, 'demographics': demographics,
+                         'no_action': no_action,
                          'anonymize_demographics': anonymize_demographics, 'filters': {}, 'custom_text': custom_text,
                          'hide_names':hide_names, 'organize_y': organize_y}
 
@@ -830,7 +832,7 @@ def visualizations():
                 graphJSON = bar.generate(cycle_data, plot_title, stats, color=color_type.lower(),
                                          custom_text=save_settings['custom_text'])
             elif vis_type.lower() == 'sankey':
-                graphJSON = sankey.generate(cycle_data, plot_title, stats, color=color_type.lower(),
+                graphJSON = sankey.generate(cycle_data, plot_title, stats, color=color_type.lower(),no_action = no_action,
                                             custom_text=save_settings['custom_text'])
             elif vis_type.lower() == 'map':
                 graphJSON = map.generate(cycle_data, plot_title, stats, app_type=app_type.lower(), color=color_type.lower(),

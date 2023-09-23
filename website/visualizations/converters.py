@@ -19,7 +19,7 @@ palette = {
 
 action_names = {'primary': 'Primary Submitted', 'secondary_received': 'Secondary Received', 'application_complete': 'Application Complete',
                   'interview_received': 'Interview Received', 'interview_date': 'Interview Complete', 'rejection': 'Rejection',
-                  'waitlist': 'Waitlist', 'acceptance': 'Acceptance', 'withdrawn': 'Withdrawn'}
+                  'waitlist': 'Waitlist', 'acceptance': 'Acceptance', 'withdrawn': 'Withdrawn','no_action':'No Action'}
 
                   
 action_weight = {
@@ -98,11 +98,13 @@ def convert_bar_df(data):
     output = output.groupby(['Date', 'Best Outcome']).size().reset_index(name='Count')
     return output
 
-def sankey_build_frames(cycle_data,color="default"):
+def sankey_build_frames(cycle_data,color="default",no_action=False):
     df_nodes = {'label': cycle_data.columns}
     df_nodes = pd.DataFrame(df_nodes)
     ids = {}
     fig_colors = palette[color]
+    if no_action:
+        fig_colors["no_action"] = "#c0c0c0"
     for i in range(0, len(df_nodes['label'])):
         ids[df_nodes['label'][i]] = i
     df_nodes['color'] = df_nodes.apply(lambda row: fig_colors[row.label], axis=1)
