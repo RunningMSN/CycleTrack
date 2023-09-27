@@ -191,6 +191,7 @@ def convert_horz_bar(data,cycleyear):
     melted = data.melt(id_vars=data.columns[0], value_vars=data.columns[1:], var_name='Actions', value_name='date')
     schools = melted["name"].unique()
     dfs = []
+    melted['date'] = pd.to_datetime(melted['date'])
     melted = melted.sort_values(by="date")
     for school in schools:
         melt_copy = melted.copy()
