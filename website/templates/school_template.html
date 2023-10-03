@@ -61,12 +61,21 @@
     <!-- WARNING ABOUT WIP -->
     <div class="row">
         <div class="bg-warning container" style="margin-top:10px; margin-bottom:10px">
-            This feature is a work in progress and requires more data. Invite other future doctors to track their cycles using CycleTrack to expedite development!
+            Data on this page is crowd-sourced from CycleTrack users. Please note that data may not be accurate to the
+            true statistics of a school, and is subject to potential errors from self-reporting. Any official data from
+            this school can be found by using the
+            {% if school_info.msar_choosedo_link|length > 0 %}
+            <a href="{{ school_info.msar_choosedo_link }}" target="_blank">
+                {% endif %}{% if school_info.md_or_do == 'MD' %}MSAR{% else %}Choose DO Explorer{% endif %}{% if school_info.msar_choosedo_link|length > 0 %}
+            </a>{% endif %}
+            or the school's <a href="{{school_info.reg_website}}">official website</a>.
         </div>
     </div>
     <div class="row">
         <p>
-            This page updates hourly. Last updated: {{ last_updated }}
+            This page updates hourly. Last updated: {{ last_updated }}.
+            <br />
+
         </p>
     </div>
     <!-- SCHOOL INFO TABS -->
