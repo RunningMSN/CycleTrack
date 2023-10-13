@@ -136,5 +136,40 @@
         </p>
     </div>
 </footer>
+
+<footer class="cookie-footer">
+    {% if cookies_check() %}
+            {# then user has already consented so no requirement for consent banner #}
+    {% else %}
+            {# show a cookie consent banner #}
+            <div id="cookie-consent-container" class="container">
+                <p>This website uses cookies to ensure you get the best experience on our website. We only use cookies for site functionality and analytics.
+                    <br>
+                    To find out more, read our <a href="{{ url_for('pages.privacy') }}" class="text-muted">Privacy Policy</a>.</p>
+                <button id="cookie-consent" class="btn btn-secondary"> <i class="bi bi-check"></i> OK</button>
+            </div>
+            <script>
+                var fn = function () {
+                    document.cookie = "cookie_consent=true";
+                    document.getElementById('cookie-consent-container').hidden = true;
+                };
+                document.getElementById('cookie-consent').onclick = fn;
+            </script>
+    {% endif %}
+</footer>
+
+
 </body>
 </html>
+
+
+<style>
+    .cookie-footer {
+        position: sticky;
+        width: 100%;
+        background-color: rgb(221, 177, 216);
+        bottom: 0;
+        padding-top: 1%;
+        padding-bottom: 1%;
+    }
+</style>

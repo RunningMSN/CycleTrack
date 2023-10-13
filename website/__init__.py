@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_apscheduler import APScheduler
 from os import path
@@ -39,6 +39,17 @@ def create_app():
     app.register_blueprint(explorer, url_prefix='/')
     app.register_blueprint(profile, url_prefix='/')
     app.register_blueprint(jinja_templates, url_prefix='/')
+
+    @app.context_processor
+    def inject_template_scope():
+        injections = dict()
+        
+        def cookies_check():
+            value = request.cookies.get('cookie_consent')
+            return value == 'true'
+        injections.update(cookies_check=cookies_check)
+
+        return injections
 
     from .models import User
 
