@@ -29,6 +29,10 @@
         <button type="submit" class="btn btn-primary">Submit Changes</button>
     </form>
 
+    {% if unverified %}
+    <button><a href="{{ url_for('authentication.resend_email') }}">Resend Verification Email</a></button>
+    {% endif %}
+
     <button class="btn btn-danger" style="margin-top: 20px" data-toggle="modal" data-target="#delete-account">Delete Your Account</button>
 </div>
 
