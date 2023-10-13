@@ -9,6 +9,7 @@ from flask_mail import Message
 from flask_login import current_user, login_required
 from datetime import datetime
 import requests
+from email_validator import validate_email
 
 authentication = Blueprint('authentication', __name__)
 s = URLSafeTimedSerializer(site_settings.SECRET_KEY)
@@ -59,12 +60,16 @@ def register():
         password1 = request.form.get('password1')
         password2 = request.form.get('password2')
         terms_response = request.form.get('terms_agree')
+
+        # Check if email is valid
+        is_email_valid = validate_email(email,check_deliverability=True)
+
         # check if user already exists
         user = User.query.filter_by(email=email).first()
         if user:
             flash('Email already in use.', category='error')
-        elif len(email) < 4:
-            flash('Email must be greater than 3 characters.', category='error')
+        elif not is_email_valid:
+            flash('Email is not valid.', category='error')
         elif not password_meets_criteria(password1, password2):
             pass
         # Check that agreed to privacy/terms
@@ -82,6 +87,7 @@ def register():
                 print(f"failed to get reCaptcha: {e}")
             
             if recaptcha_passed:
+                email = is_email_valid.normalized
                 # add user to database
                 now = datetime.now()
                 new_user = User(email=email, password=generate_password_hash(password1, method='sha256'),create_date=now,
