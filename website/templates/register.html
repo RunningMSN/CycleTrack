@@ -1,7 +1,21 @@
 {% extends 'base.html' %}
+
+{%block additional_js %}
+    <script src="https://www.google.com/recaptcha/api.js?render={{reCAPTCHA_site_key}}"></script>
+
+    <script>
+        grecaptcha.ready(function () {
+            grecaptcha.execute('{{reCAPTCHA_site_key}}', {action: 'validate_captcha'}).then(function (token) {
+                console.info("got token: " + token);
+                document.getElementById('g-recaptcha-response').value = token;
+            });
+        });
+    </script>
+{% endblock %}
+
 {% block title %}Register{% endblock %}
 {% block content %}
-<div class="container">
+<div class="container" id="registration-form">
     <form method="POST">
         <h2 style="padding-top: 10px">Create an account</h2>
         <div class="form-group" style="padding-bottom:10px">
@@ -22,7 +36,11 @@
             <label for="terms_agree"> I agree to CycleTrack's <a href="{{ url_for('pages.privacy') }}">Privacy Policy</a>
                 and <a href="{{ url_for('pages.terms') }}">Terms and Conditions</a>.</label><br>
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+
+        <input type="hidden" id="g-recaptcha-response" name="g-recaptcha-response">
+        <input type="hidden" name="action" value="validate_captcha">
+        <input type="submit" class="btn btn-primary" value="Submit"/>
+
     </form>
 </div>
 {% endblock %}

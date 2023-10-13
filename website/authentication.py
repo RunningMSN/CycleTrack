@@ -8,6 +8,7 @@ from itsdangerous import URLSafeTimedSerializer, BadTimeSignature
 from flask_mail import Message
 from flask_login import current_user, login_required
 from datetime import datetime
+import requests
 
 authentication = Blueprint('authentication', __name__)
 s = URLSafeTimedSerializer(site_settings.SECRET_KEY)
@@ -48,6 +49,7 @@ def logout():
 
 @authentication.route('/register', methods=['GET', 'POST'])
 def register():
+    recaptcha_site = site_settings.RECAPTCHA_SITE
     # If user already logged in, redirect
     if current_user.is_authenticated:
         return redirect(url_for('dashboard.cycles'))
@@ -69,21 +71,32 @@ def register():
         elif not terms_response == 'agree':
             flash('You must agree to the privacy policy and terms and conditions to register.', category='error')
         else:
-            # add user to database
-            now = datetime.now()
-            new_user = User(email=email, password=generate_password_hash(password1, method='sha256'),create_date=now,
-                            privacy_announce=True)
-            db.session.add(new_user)
-            db.session.commit()
+            parameters = request.form
+            recaptcha_passed = False
+            recaptcha_response = parameters.get('g-recaptcha-response')
+            try:
+                recaptcha_secret = site_settings.RECAPTCHA_SECRET
+                response = requests.post(f'https://www.google.com/recaptcha/api/siteverify?secret={recaptcha_secret}&response={recaptcha_response}').json()
+                recaptcha_passed = response.get('success')
+            except Exception as e:
+                print(f"failed to get reCaptcha: {e}")
+            
+            if recaptcha_passed:
+                # add user to database
+                now = datetime.now()
+                new_user = User(email=email, password=generate_password_hash(password1, method='sha256'),create_date=now,
+                                privacy_announce=True)
+                db.session.add(new_user)
+                db.session.commit()
 
-            # send verification email
-            send_verification(email)
+                # send verification email
+                send_verification(email)
 
-            # login and go to dashboard
-            login_user(new_user, remember=True)
-            return redirect(url_for('dashboard.cycles'))
+                # login and go to dashboard
+                login_user(new_user, remember=True)
+                return redirect(url_for('dashboard.cycles'))
 
-    return render_template('register.html', user=current_user)
+    return render_template('register.html', user=current_user,reCAPTCHA_site_key=recaptcha_site)
 
 @authentication.route('/confirm_email/<token>')
 def confirm_email(token):
@@ -224,3 +237,6 @@ def password_meets_criteria(password, confirm_password):
         flash("Password must be at least 7 characters.", category='error')
         return False
     return True
+
+
+
