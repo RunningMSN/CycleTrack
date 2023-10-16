@@ -787,12 +787,15 @@ def visualizations():
                         'acceptance': None, 'withdrawn': None}
 
         # Apply data filters and save
-        for filter in filter_types.keys():
-            if request.form.get(f'exclude-{filter}'):
+        if request.form.get(f'exclude-selection'):
+            filters = request.form.getlist('exclude-selection')
+            filters = [element.replace("exclude-", "") for element in filters]
+            for filter in filters:
                 cycle_data = cycle_data.drop([filter], axis=1)
                 save_settings['filters'][filter] = True
-            else:
-                save_settings['filters'][filter] = False
+        else:
+            filters = filter_types.keys()
+            save_settings['filters'][filter] = False
 
 
         # Combine all application types (aka rename the schools with a suffix)
@@ -846,7 +849,7 @@ def visualizations():
 
     return render_template('visualizations.html', user=current_user, cycle=cycle, app_types=app_types,
                            vis_types=form_options.VIS_TYPES, color_types=form_options.COLOR_TYPES, graphJSON=graphJSON,
-                           save_settings=save_settings, map_types=form_options.MAP_TYPES,
+                           save_settings=save_settings, map_types=form_options.MAP_TYPES, filter_options = form_options.FILTER_OPTIONS_VIS,
                            organize_y_options=form_options.ORGANIZE_Y_OPTIONS)
 
 

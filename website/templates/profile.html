@@ -66,6 +66,12 @@
             }
         }
     </script>
+    <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/css/bootstrap-select.min.css">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/js/bootstrap-select.min.js"></script>
+
 {% endblock %}
 {% block dash_content %}
 <div id="profile_settings" class="container" style="padding-top:10px">
@@ -263,8 +269,8 @@
                         <input id="plot_title" name="plot_title" type="text" class="btn-sm form-control">
                     </div>
                     <div class="form-group" id="filter_div" style="display:none">
-                        <label for="type">Filter Data (can select multiple to remove from plot)</label>
-                        <select id="filter_values" name="filter_values" class="btn-sm form-control" multiple>
+                        <label for="type">Exclude Data</label>
+                        <select id="filter_values" name="filter_values" class= "selectpicker" multiple>
                             {% for filter in filter_options %}
                             <option value="{{ filter }}">{{ filter }}</option>
                             {% endfor %}
