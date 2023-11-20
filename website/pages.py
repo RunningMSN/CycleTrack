@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, flash, Markup
+from flask import Blueprint, render_template, flash, Markup, url_for
 from flask_login import current_user
 from . import db
 from .models import User, School, School_Profiles_Data
@@ -14,6 +14,12 @@ def privacy_announcement():
             flash(Markup('Our privacy policy has changed as of 9/9/2022. You can review our new policy <a href="https://cycletrack.org/privacy">here</a>.'), category='warning')
             current_user.privacy_announce = True
             db.session.commit()
+
+@pages.before_app_request
+def verification_required():
+    if current_user.is_authenticated:
+        if current_user.email_verified == False:
+            flash(Markup(f'Please verify your email address. If your email is not verified by November 15, 2023, your account will be deleted. <a href={url_for("authentication.resend_email",email=current_user.email)}>Resend verification email</a>.'), category='warning')
 
 @pages.route('/')
 def index():

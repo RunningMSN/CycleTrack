@@ -50,6 +50,19 @@ MAP_TYPES = ["USA", "North America"]
 # Settings for organizing Y axis on timeline and dot plots
 ORGANIZE_Y_OPTIONS = ["Alphabetical", "Status"]
 
+FILTER_OPTIONS_VIS = {
+    'primary': 'Primary Submitted',
+    'secondary_received': 'Secondary Received',
+    'application_complete': 'Application Complete',
+    'interview_received': 'Interview Received',
+    'interview_date': 'Interview Date',
+    'rejection': 'Rejected',
+    'waitlist': 'Waitlisted',
+    'acceptance': 'Accepted',
+    'withdrawn': 'Withdrawn'
+}
+
+
 # Settings for user profile
 PROFILE_TYPES = ["Public", "Private"]
 BLOCK_TYPES = ["Graph","Text"]
@@ -63,8 +76,7 @@ COLUMN_LABEL_CONVERT_SQL = {"School Name": "name", "Primary Submitted/Verified":
                             "Secondary Received": "secondary_received",
                             "Application Complete": "application_complete", "Interview Received": "interview_received",
                             "Interview Date": "interview_date", "Rejected": "rejection", "Waitlisted": "waitlist",
-                            "Accepted": "acceptance",
-                            "Withdrawn": "withdrawn"}
+                            "Accepted": "acceptance","Withdrawn": "withdrawn"}
 
 # Explorer options
 STATES_WITH_SCHOOLS = ["Alabama",  "Arizona", "Arkansas", "California", "Colorado", "Connecticut",
