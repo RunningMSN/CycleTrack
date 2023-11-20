@@ -11,3 +11,4 @@ jellyfish
 Flask-Mail
 markdown
 flask-apscheduler
+email-validator
