@@ -136,27 +136,35 @@
         </p>
     </div>
 </footer>
-{% if cookies_check() %}
-            {# then user has already consented so no requirement for consent banner #}
-    {% else %}
+
+<!-- COOKIES MESSAGE -->
+{% if not cookies_check() %}
 <footer id="cookie-footer" class="cookie-footer">
-            {# show a cookie consent banner #}
-            <div id="cookie-consent-container" class="container">
-                <p>This website uses cookies to ensure you get the best experience on our website. We only use cookies for site functionality and analytics.
-                    <br>
-                    To find out more, read our <a href="{{ url_for('pages.privacy') }}" class="text-muted">Privacy Policy</a>.</p>
-                <button id="cookie-consent" class="btn btn-secondary"> <i class="bi bi-check"></i> OK</button>
+    {# show a cookie consent banner #}
+    <div id="cookie-consent-container" class="container">
+        <div class="row">
+            <div class="col-auto">
+                <h3>Cookies |</h3>
             </div>
-            <script>
+            <div class="col-9">
+                    This website uses cookies to ensure the best experience on our website. We only use cookies for site
+            functionality and analytics. To find out more, read our <a href="{{ url_for('pages.privacy') }}" class="text-muted">Privacy Policy</a>.
+            </div>
+            <div class="col-auto">
+                <button id="cookie-consent" class="btn btn-outline-dark">Agree</button>
+            </div>
+        </div>
+    </div>
+    <script>
                 var fn = function () {
                     document.cookie = "cookie_consent=true";
                     document.getElementById('cookie-consent-container').hidden = true;
                     document.getElementById('cookie-footer').classList.add("d-none");
                 };
                 document.getElementById('cookie-consent').onclick = fn;
-            </script>
+    </script>
 </footer>
-    {% endif %}
+{% endif %}
 
 </body>
 </html>
@@ -166,7 +174,7 @@
     .cookie-footer {
         position: sticky;
         width: 100%;
-        background-color: rgb(221, 177, 216);
+        background-color: #FFB6C1;
         bottom: 0;
         padding-top: 1%;
         padding-bottom: 1%;
