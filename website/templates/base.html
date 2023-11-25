@@ -136,11 +136,10 @@
         </p>
     </div>
 </footer>
-
-<footer class="cookie-footer">
-    {% if cookies_check() %}
+{% if cookies_check() %}
             {# then user has already consented so no requirement for consent banner #}
     {% else %}
+<footer id="cookie-footer" class="cookie-footer">
             {# show a cookie consent banner #}
             <div id="cookie-consent-container" class="container">
                 <p>This website uses cookies to ensure you get the best experience on our website. We only use cookies for site functionality and analytics.
@@ -152,12 +151,12 @@
                 var fn = function () {
                     document.cookie = "cookie_consent=true";
                     document.getElementById('cookie-consent-container').hidden = true;
+                    document.getElementById('cookie-footer').classList.add("d-none");
                 };
                 document.getElementById('cookie-consent').onclick = fn;
             </script>
-    {% endif %}
 </footer>
-
+    {% endif %}
 
 </body>
 </html>
