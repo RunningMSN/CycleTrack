@@ -1,6 +1,6 @@
 import pandas as pd
 import statistics
-from datetime import datetime
+from datetime import datetime, timedelta
 import os
 
 
@@ -430,4 +430,18 @@ def update_map(app):
         with open(path, "w") as graph_file:
             graph_file.write(agg_map)
 
-        
+
+def remove_unused_accounts(app):
+    with app.app_context():
+        from .. import db
+        from ..models import User, Cycle
+        unverified = User.query.filter_by(email_verified=False)
+        for user in unverified:
+            # Don't delete users with a create date if they have data
+            cycle_found = Cycle.query.filter_by(user_id=user.id).first()
+            if not cycle_found:
+                # Check that creation date is more than 2 weeks old
+                if (user.create_date is None) or (datetime.today() >= user.create_date + timedelta(days=14)):
+                    # Delete the user because no cycle found
+                    db.session.delete(user)
+        db.session.commit()

@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, flash, Markup, url_for
 from flask_login import current_user
 from . import db
 from .models import User, School, School_Profiles_Data
+from datetime import datetime, timedelta
 
 pages = Blueprint('pages', __name__)
 
@@ -13,11 +14,11 @@ def privacy_announcement():
             current_user.privacy_announce = True
             db.session.commit()
 
-# @pages.before_app_request
-# def verification_required():
-#     if current_user.is_authenticated:
-#         if current_user.email_verified == False:
-#             flash(Markup(f'Please verify your email address. If your email is not verified by November 30, 2023, your account will be deleted. <a href={url_for("authentication.resend_email",email=current_user.email)}>Resend verification email</a>.'), category='warning')
+@pages.before_app_request
+def verification_required():
+    if current_user.is_authenticated:
+        if current_user.email_verified == False:
+            flash(Markup(f'Please verify your email address. If your email is not verified by {(current_user.create_date + timedelta(days=14)).strftime("%m/%d/%Y")}, your account will be deleted. <a href={url_for("authentication.resend_email",email=current_user.email)}>Resend verification email</a>.'), category='warning')
 
 @pages.route('/')
 def index():
