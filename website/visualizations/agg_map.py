@@ -47,7 +47,7 @@ def generate(app):
             opacity=0.7
         ),
         hoverinfo = "text",
-        text = data['school'] ,#+ '<br>Applications: ' + (data['apps_count']).astype(str),
+        text = data['school'] + '<br>Applications: ' + (data['apps_count']).astype(str),
         customdata = data['url']
     ))
 
