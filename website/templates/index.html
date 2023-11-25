@@ -22,7 +22,7 @@
         fetch('{{ url_for('static', filename='agg_map/map.JSON') }}')
             .then(response => response.json())
             .then(data => {
-                data.config = {'responsive': true, 'displaylogo': false};
+                data.config = {'responsive': true, 'displaylogo': false, 'scrollZoom': false};
                 Plotly.newPlot('agg_map', data);
             })
             .catch(error => console.log(error));
