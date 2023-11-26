@@ -75,9 +75,9 @@ def create_app():
     @scheduler.task('interval',id='map_updated',hours=1)
     def update_map():
         jobs.update_map(app)
-    @scheduler.task('interval', id='map_updated', hours=24)
-    def update_map():
-        jobs.update_map(app)
+    @scheduler.task('interval', id='remove_inactive_users', hours=24)
+    def remove_inactive_users():
+        jobs.remove_unused_accounts(app)
 
     scheduler.start()
     # Run calculations on startup if needed
