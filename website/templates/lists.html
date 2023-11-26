@@ -513,7 +513,7 @@ function toggleCancel() {
                     <div class="form-group">
                         <label for="type">Choose a School</label>
                         <br/>
-                        <select id="add_school" name="add_school" class="selectpicker" data-live-search="true">
+                        <select id="add_school" name="add_school" class="selectpicker border border-secondary rounded" data-live-search="true">
                             <optgroup label="US MD">
                                 {% for school in usmd_school_list %}<option value='{{ school }}'>{{ school }}</option>{% endfor %}
                             </optgroup>
