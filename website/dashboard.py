@@ -793,9 +793,6 @@ def visualizations():
             for filter in filters:
                 cycle_data = cycle_data.drop([filter], axis=1)
                 save_settings['filters'][filter] = True
-        else:
-            filters = filter_types.keys()
-            save_settings['filters'][filter] = False
 
 
         # Combine all application types (aka rename the schools with a suffix)
