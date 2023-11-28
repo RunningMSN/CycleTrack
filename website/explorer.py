@@ -51,13 +51,13 @@ def explorer_home():
     return render_template('explorer.html', user=current_user, state_options=sorted(form_options.STATES_WITH_SCHOOLS),
                            state_abbrev=form_options.STATE_ABBREV,schools=df)
 
-@explorer.route('/explorer/<school_name>')
+@explorer.route('/explorer/school/<school_name>')
 def explore_school(school_name):
     # Find school
     school_name = school_name.replace('%20', ' ')
     if school_name not in form_options.get_md_schools() and school_name not in form_options.get_do_schools():
         flash(f'Could not find {school_name}. Please navigate to your school using the explorer.', category='error')
-        return redirect(url_for('explorer.explorer'))
+        return redirect(url_for('explorer.explorer_home'))
 
     # Grab school information
     school_info = School_Profiles_Data.query.filter_by(school=school_name).first()
@@ -164,3 +164,20 @@ def explore_school(school_name):
 
     return render_template('school_template.html', user=current_user, school_info=school_info, reg_info=reg_info,
                            phd_info=phd_info, valid_cycles=VALID_CYCLES, last_updated=last_updated, school_id=school_stats.school_id)
+
+
+@explorer.route('/explorer/summary/<year>')
+def explore_summary(year):
+    # Make sure the summary is an integer.
+    try:
+        year = int(year)
+    except:
+        flash(f'An error occurred. Please try again, if you believe this is a mistake, please submit a bug report.', category='error')
+        return redirect(url_for('explorer.explorer_home'))
+
+    # Check that the year is within the past 2 cycles.
+    if not (year == form_options.VALID_CYCLES[0] or year == form_options.VALID_CYCLES[1]):
+        flash(f'{year} is not available. Please make sure you are viewing a valid summary page.', category='error')
+        return redirect(url_for('explorer.explorer_home'))
+
+    return render_template('cycle_summary.html', user=current_user, year=year)

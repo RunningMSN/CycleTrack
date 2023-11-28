@@ -246,7 +246,7 @@ function toggleCancel() {
                     <!-- LOGO -->
                     <center>
                         <div class="row">
-                            <a href="{{ url_for('explorer.explorer_home') }}/{{ school['name'] }}" class="normal_list">
+                            <a href="{{ url_for('explorer.explorer_home') }}/school/{{ school['name'] }}" class="normal_list">
                                 <img src="{{ url_for('static', filename='images/school_logos/' + profile.logo_file_name) }}" style="max-width:100px;max-height:100px" width="100%" height="auto">
                             </a>
                             <a class="bulk_list d-none">
@@ -298,7 +298,7 @@ function toggleCancel() {
                         {% endif %}
                         <!-- ICONS -->
                         <div style="padding-top:5px">
-                            <a href="{{ url_for('explorer.explorer_home') }}/{{ school.name }}" class="btn btn-link" style="padding: 1px">
+                            <a href="{{ url_for('explorer.explorer_home') }}/school/{{ school.name }}" class="btn btn-link" style="padding: 1px">
                                 <i class="bi bi-search"></i>
                             </a>
                             <button type="button" class="btn btn-link" data-toggle="modal" data-target="#{{ school.name }}-{{ school.phd }}-delete" style="padding: 1px">
@@ -316,7 +316,7 @@ function toggleCancel() {
 
                 <!-- SCHOOL TEXT AREA ON RIGHT -->
                 <div class="col-lg">
-                    <a class="normal_list" href="{{ url_for('explorer.explorer_home') }}/{{ school.name }}"
+                    <a class="normal_list" href="{{ url_for('explorer.explorer_home') }}/school/{{ school.name }}"
                        style="color:black;text-decoration: none">
                         <h5>{{ school.name }} ({{ school.school_type }}{% if school.phd %}-PhD{% endif %})</h5>
                     </a>
