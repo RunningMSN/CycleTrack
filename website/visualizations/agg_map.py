@@ -10,8 +10,9 @@ def generate(app):
     '''Generates aggregate map of all schools currently in CycleTrack.'''
     school_info = pd.read_sql(School_Profiles_Data.query.statement, db.get_engine())
     school_stats = pd.read_sql(School_Stats.query.statement, db.get_engine())
-    data = school_info.join(school_stats, on='school_id',lsuffix='', rsuffix='_stats')
-    data = data.drop("school_id_stats", axis=1)
+    school_info = school_info.set_index('school_id')
+    school_stats = school_stats.set_index('school_id')
+    data = school_info.join(school_stats, on='school_id', lsuffix='', rsuffix='_stats', how='inner')
 
     # Restrict to USA
     data = data[data['country'] == 'USA']
