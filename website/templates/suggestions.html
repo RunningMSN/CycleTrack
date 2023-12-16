@@ -1,54 +1,41 @@
 {% extends 'dashboard.html' %}
 {% block title %} Suggestions/Reports {% endblock %}
+{% block additional_js %}
+<script>
+     function checkValid() {
+        var form_type = document.getElementById("form_type").value;
+        var content = document.getElementById("content").value
+        var button = document.getElementById("submit_button");
+
+        if (form_type !== "" && content !== "") {
+            button.removeAttribute("disabled");
+        } else {
+            button.setAttribute("disabled", "disabled");
+        }
+     }
+</script>
+{% endblock %}
 {% block dash_content %}
 <div id="visualizations" class="container" style="padding-top:10px">
     <form method="POST">
         <h2>Suggestions and Bug Reports</h2>
         <div style="margin-bottom: 10px">
-            We're always looking to make CycleTrack better. If you have a suggestion or think something isn't working
-            the way it should be, please let us know!
-        </div>
-        <div>
-            <div class="form-group" style="padding-top: 5px; padding-bottom:5px;">
-                <div class="row" style="margin-bottom: 10px">
-                    <div class="col-2">
-                        Suggestion or Bug Report:
-                    </div>
-                    <div class="col">
-                        <input type="radio" id="suggestion" name="type" value="Suggestion">
-                        <label for="suggestion">Suggestion</label><br>
-                        <input type="radio" id="bug" name="type" value="Bug Report">
-                        <label for="bug">Bug Report</label><br>
-                    </div>
-                </div>
-                <div class="row" style="margin-bottom:10px">
-                    <div class="col-2">
-                        Can we contact your email if we have questions?
-                    </div>
-                    <div class="col">
-                        <input type="radio" id="yes_contact" name="contact" value="yes">
-                        <label for="yes_contact">Yes</label><br>
-                        <input type="radio" id="no_contact" name="contact" value="no">
-                        <label for="no_contact">No</label><br>
-                    </div>
-                </div>
-                <div class="row" style="margin-bottom:10px">
-                    <p>Enter your suggestion/bug report below. Please feel free to include screenshots by including an
-                        Imgur or Google Drive link. If you're ok with us contacting you about this, but
-                        prefer to communicate via discord, please leave your username here as well.</p>
-                    <textarea id="content" name="content" style="height:100px"></textarea>
-                </div>
-                <div class="row" style="margin-bottom:10px">
-                    <div class="col-3">
-                        What is the abbreviation for 'Medical College Admission Test'?
-                    </div>
-                    <div class="col">
-                        <input type="text" name="spam_protect" id="spam_protect" />
-                    </div>
-                </div>
-
-                <button type="submit" class="btn btn-primary">Submit</button>
+            <p>Your suggestions and bug reports help us make CycleTrack better! Any screenshots or attachments are welcome
+            via a Google Drive (or alternative) link within the submission form.</p>
+            <div class="row">
+                <select id="form_type" name="form_type" class="form-select" onchange="checkValid()">
+                    <option value="" disabled selected>Select an Option</option>
+                    <option value="Suggestion">Suggestion</option>
+                    <option value="Bug Report">Bug Report</option>
+                </select>
             </div>
+            <br />
+            <div class="row">
+            <textarea id="content" name="content" style="height:200px" onkeyup="checkValid()"
+                      placeholder="Write your suggestion or bug report here."></textarea>
+            </div>
+            <br />
+        <button id = "submit_button" type="submit" class="btn btn-primary" disabled>Submit</button>
         </div>
     </form>
 </div>

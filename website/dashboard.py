@@ -638,29 +638,21 @@ def export_list():
 def suggestions():
     if request.method == 'POST':
         form_type = request.form.get('type')
-        contact = request.form.get('contact')
         content = request.form.get('content')
-        spam_protect = request.form.get('spam_protect')
-        if form_type and contact and content and spam_protect:
-            if spam_protect.lower() == 'mcat':
-                # Send email to us with suggestion
-                email = Message(f'{form_type} on {date.today().strftime("%B %d, %Y")}',
-                                sender=(f'CycleTrack {form_type}',
-                                        f'admin@cycletrack.org'),
-                                recipients=['admin@cycletrack.org'],
-                                reply_to=current_user.email)
-                email.body = f'Form Type: {form_type}\n\nAllow Contact: {contact}\n\nMessage:\n{content}'
-                mail.send(email)
+        if form_type and content:
+            # Send email to us with suggestion
+            email = Message(f'{form_type} on {date.today().strftime("%B %d, %Y")}',
+                            sender=(f'CycleTrack {form_type}',
+                                    f'admin@cycletrack.org'),
+                            recipients=['admin@cycletrack.org'],
+                            reply_to=current_user.email)
+            email.body = f'Form Type: {form_type}\n\n{content}'
+            mail.send(email)
 
-                if contact == 'yes':
-                    flash(
-                        f'Your {form_type.lower()} has been received. We may contact you if we have further questions.',
-                        category='success')
-                else:
-                    flash(f'Your {form_type.lower()} has been received.', category='success')
-                return redirect(url_for('dashboard.cycles'))
-            else:
-                flash('You did not answer our security question correctly.', category='error')
+            flash(
+                f'Your {form_type.lower()} has been received. We may contact you if we have further questions.',
+                category='success')
+            return redirect(url_for('dashboard.cycles'))
         else:
             flash(f'Please make sure to fill out all request fields.', category='error')
 
