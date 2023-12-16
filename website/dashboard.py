@@ -637,7 +637,7 @@ def export_list():
 @login_required
 def suggestions():
     if request.method == 'POST':
-        form_type = request.form.get('type')
+        form_type = request.form.get('form_type')
         content = request.form.get('content')
         if form_type and content:
             # Send email to us with suggestion
