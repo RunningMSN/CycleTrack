@@ -190,6 +190,7 @@ function toggleCancel() {
             <form method="POST" style="position: relative; display:inline;">
             <input type="hidden" value="{{cycle.id}}" name="cycle_id">
             <input type="hidden" value="true" name="bulk_edit">
+            <input type="hidden" value="" id="edited_schools" name="edited_schools">
 
             <button class="btn btn-secondary rounded bulk_list d-none" type="submit" style="margin: 3px; margin-left: 0px;">
                 Save Changes
@@ -338,7 +339,7 @@ function toggleCancel() {
                             {% endif %}
                             </span>
                             <span class="bulk_list d-none">
-                                <input class="datepicker" type="text" data-cycle="{{cycle.cycle_year}}" value="{%- if school.primary -%}{{ school.primary.strftime('%Y-%m-%d') }}{%- endif -%}" name="primary-{{school.id}}">
+                                <input onclick = "editedSchool('{{ school.id }}', 'primary')" class="datepicker" type="text" data-cycle="{{cycle.cycle_year}}" value="{%- if school.primary -%}{{ school.primary.strftime('%Y-%m-%d') }}{%- endif -%}" name="primary-{{school.id}}">
                             </span>
                         </div>
                         <div class="col-lg-2">
@@ -354,7 +355,7 @@ function toggleCancel() {
                             {% endif %}
                             </span>
                             <span class="bulk_list d-none">
-                                <input class="datepicker" type="text" data-cycle="{{cycle.cycle_year}}" value="{%- if school.secondary_received -%}{{ school.secondary_received.strftime('%Y-%m-%d') }}{%- endif -%}" name="secondary_received-{{school.id}}">
+                                <input onclick = "editedSchool('{{ school.id }}', 'secondary_received')" class="datepicker" type="text" data-cycle="{{cycle.cycle_year}}" value="{%- if school.secondary_received -%}{{ school.secondary_received.strftime('%Y-%m-%d') }}{%- endif -%}" name="secondary_received-{{school.id}}">
                             </span>
                         </div>
                         {% endif %}
@@ -371,7 +372,7 @@ function toggleCancel() {
                             {% endif %}
                             </span>
                             <span class="bulk_list d-none">
-                                <input class="datepicker" type="text" data-cycle="{{cycle.cycle_year}}" value="{%- if school.application_complete-%}{{ school.application_complete.strftime('%Y-%m-%d') }}{%- endif -%}" name="application_complete-{{school.id}}">
+                                <input onclick = "editedSchool('{{ school.id }}', 'application_complete')" class="datepicker" type="text" data-cycle="{{cycle.cycle_year}}" value="{%- if school.application_complete-%}{{ school.application_complete.strftime('%Y-%m-%d') }}{%- endif -%}" name="application_complete-{{school.id}}">
                             </span>
                         </div>
                         <div class="col-lg-2">
@@ -387,7 +388,7 @@ function toggleCancel() {
                             {% endif %}
                             </span>
                             <span class="bulk_list d-none">
-                                <input class="datepicker" type="text" data-cycle="{{cycle.cycle_year}}" value="{%- if school.interview_received -%}{{ school.interview_received.strftime('%Y-%m-%d') }}{%- endif -%}" name="interview_received-{{school.id}}">
+                                <input onclick = "editedSchool('{{ school.id }}', 'interview_received')" class="datepicker" type="text" data-cycle="{{cycle.cycle_year}}" value="{%- if school.interview_received -%}{{ school.interview_received.strftime('%Y-%m-%d') }}{%- endif -%}" name="interview_received-{{school.id}}">
                             </span>
                         </div>
                         <div class="col-lg-2">
@@ -403,7 +404,7 @@ function toggleCancel() {
                             {% endif %}
                             </span>
                             <span class="bulk_list d-none">
-                                <input class="datepicker" type="text" data-cycle="{{cycle.cycle_year}}" value="{%- if school.interview_date -%}{{ school.interview_date.strftime('%Y-%m-%d') }}{%- endif -%}" name="interview_date-{{school.id}}">
+                                <input onclick = "editedSchool('{{ school.id }}', 'interview_date')" class="datepicker" type="text" data-cycle="{{cycle.cycle_year}}" value="{%- if school.interview_date -%}{{ school.interview_date.strftime('%Y-%m-%d') }}{%- endif -%}" name="interview_date-{{school.id}}">
                             </span>
                         </div>
                         <div class="col-lg-2">
@@ -419,7 +420,7 @@ function toggleCancel() {
                             {% endif %}
                             </span>
                             <span class="bulk_list d-none">
-                                <input class="datepicker" type="text" data-cycle="{{cycle.cycle_year}}" value="{%- if school.rejection -%}{{ school.rejection.strftime('%Y-%m-%d') }}{%- endif -%}" name="rejection-{{school.id}}">
+                                <input onclick = "editedSchool('{{ school.id }}', 'rejection')" class="datepicker" type="text" data-cycle="{{cycle.cycle_year}}" value="{%- if school.rejection -%}{{ school.rejection.strftime('%Y-%m-%d') }}{%- endif -%}" name="rejection-{{school.id}}">
                             </span>
                         </div>
                         <div class="col-lg-2">
@@ -435,7 +436,7 @@ function toggleCancel() {
                             {% endif %}
                             </span>
                             <span class="bulk_list d-none">
-                                <input class="datepicker" type="text" data-cycle="{{cycle.cycle_year}}" value="{%- if school.waitlist -%}{{ school.waitlist.strftime('%Y-%m-%d') }}{%- endif -%}" name="waitlist-{{school.id}}">
+                                <input onclick = "editedSchool('{{ school.id }}', 'waitlist')" class="datepicker" type="text" data-cycle="{{cycle.cycle_year}}" value="{%- if school.waitlist -%}{{ school.waitlist.strftime('%Y-%m-%d') }}{%- endif -%}" name="waitlist-{{school.id}}">
                             </span>
                         </div>
                         <div class="col-lg-2">
@@ -451,7 +452,7 @@ function toggleCancel() {
                             {% endif %}
                             </span>
                             <span class="bulk_list d-none">
-                                <input class="datepicker" type="text" data-cycle="{{cycle.cycle_year}}" value="{%- if school.acceptance -%}{{ school.acceptance.strftime('%Y-%m-%d') }}{%- endif -%}" name="acceptance-{{school.id}}">
+                                <input onclick = "editedSchool('{{ school.id }}', 'acceptance')" class="datepicker" type="text" data-cycle="{{cycle.cycle_year}}" value="{%- if school.acceptance -%}{{ school.acceptance.strftime('%Y-%m-%d') }}{%- endif -%}" name="acceptance-{{school.id}}">
                             </span>
                         </div>
                         <div class="col-lg-2">
@@ -467,7 +468,7 @@ function toggleCancel() {
                                 {% endif %}
                             </span>
                             <span class="bulk_list d-none">
-                                <input class="datepicker" type="text" data-cycle="{{cycle.cycle_year}}" value="{%- if school.withdrawn -%}{{ school.withdrawn.strftime('%Y-%m-%d') }}{%- endif -%}" name="withdrawn-{{school.id}}">
+                                <input onclick = "editedSchool('{{ school.id }}', 'withdrawn')" class="datepicker" type="text" data-cycle="{{cycle.cycle_year}}" value="{%- if school.withdrawn -%}{{ school.withdrawn.strftime('%Y-%m-%d') }}{%- endif -%}" name="withdrawn-{{school.id}}">
                             </span>
                         </div>
                     </div>
@@ -486,7 +487,7 @@ function toggleCancel() {
                     <div class="row" style="padding-top: 10px">
                     <span class="bulk_list d-none">
                         <strong>Notes:</strong>
-                        <input class="form-control" type="text" data-cycle="{{cycle.cycle_year}}" value="{%- if school.note -%}{{ school.note }}{%- endif -%}" name="note-{{school.id}}">
+                        <input onclick = "editedSchool('{{ school.id }}', 'note')" class="form-control" type="text" data-cycle="{{cycle.cycle_year}}" value="{%- if school.note -%}{{ school.note }}{%- endif -%}" name="note-{{school.id}}">
                     </span>
                     </div>
             </div>

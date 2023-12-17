@@ -49,3 +49,13 @@ function updateDisplay() {
     document.getElementById('school_names').value = delimitedschools;
     document.getElementById('phd_values').value = delimitedphds;
 }
+
+schools_edited = []
+function editedSchool(name, action) {
+    nameAction = name + '-' + action;
+    if (!schools_edited.includes(nameAction)) {
+        schools_edited.push(nameAction)
+    }
+    var schoolsEditedFormOption = document.getElementById("edited_schools");
+    schoolsEditedFormOption.value = schools_edited;
+}

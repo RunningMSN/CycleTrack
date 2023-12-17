@@ -207,121 +207,76 @@ def lists():
                     School(name=schools_add[i], cycle_id=cycle.id, user_id=current_user.id, phd=dual_degree_phd,
                            school_type=school_type))
                 db.session.commit()
-    # Handle editing schools
-    # school_id = request.form.get('school_id')
-    # if school_id:
-    #     school = School.query.filter_by(id=int(school_id)).first()
-    #     primary = request.form.get('primary')
-    #     if primary:
-    #         school.primary = datetime.strptime(primary, '%Y-%m-%d')
-    #     else:
-    #         school.primary = None
-    #     secondary_received = request.form.get('secondary_received')
-    #     if secondary_received:
-    #         school.secondary_received = datetime.strptime(secondary_received, '%Y-%m-%d')
-    #     else:
-    #         school.secondary_received = None
-    #     application_complete = request.form.get('application_complete')
-    #     if application_complete:
-    #         school.application_complete = datetime.strptime(application_complete, '%Y-%m-%d')
-    #     else:
-    #         school.application_complete = None
-    #     interview_received = request.form.get('interview_received')
-    #     if interview_received:
-    #         school.interview_received = datetime.strptime(interview_received, '%Y-%m-%d')
-    #     else:
-    #         school.interview_received = None
-    #     interview_date = request.form.get('interview_date')
-    #     if interview_date:
-    #         school.interview_date = datetime.strptime(interview_date, '%Y-%m-%d')
-    #     else:
-    #         school.interview_date = None
-    #     rejection = request.form.get('rejection')
-    #     if rejection:
-    #         school.rejection = datetime.strptime(rejection, '%Y-%m-%d')
-    #     else:
-    #         school.rejection = None
-    #     waitlist = request.form.get('waitlist')
-    #     if waitlist:
-    #         school.waitlist = datetime.strptime(waitlist, '%Y-%m-%d')
-    #     else:
-    #         school.waitlist = None
-    #     acceptance = request.form.get('acceptance')
-    #     if acceptance:
-    #         school.acceptance = datetime.strptime(acceptance, '%Y-%m-%d')
-    #     else:
-    #         school.acceptance = None
-    #     withdrawn = request.form.get('withdrawn')
-    #     if withdrawn:
-    #         school.withdrawn = datetime.strptime(withdrawn, '%Y-%m-%d')
-    #     else:
-    #         school.withdrawn = None
-    #     note = request.form.get('note')
-    #     if note:
-    #         school.note = escape(note)
-    #     else:
-    #         school.note = None
-    #     db.session.commit()
 
     # Handle bulk edit
     if request.form.get('bulk_edit'):
-        for key in request.form:
-            school_id = key.partition("-")[-1]
-            if not school_id:
-                continue
-            school = School.query.filter_by(id=int(school_id)).first()
-            primary = request.form.get("primary-" + school_id)
-            if primary:
-                school.primary = dateutil.parser.parse(primary)
-            else:
-                school.primary = None
-            secondary_received = request.form.get("secondary_received-" + school_id)
-            if secondary_received:
-                school.secondary_received = dateutil.parser.parse(secondary_received)
-            else:
-                school.secondary_received = None
-            application_complete = request.form.get("application_complete-" + school_id)
-            if application_complete:
-                school.application_complete = dateutil.parser.parse(application_complete)
-            else:
-                school.application_complete = None
-            interview_received = request.form.get("interview_received-" + school_id)
-            if interview_received:
-                school.interview_received = dateutil.parser.parse(interview_received)
-            else:
-                school.interview_received = None
-            interview_date = request.form.get("interview_date-" + school_id)
-            if interview_date:
-                school.interview_date = dateutil.parser.parse(interview_date)
-            else:
-                school.interview_date = None
-            rejection = request.form.get("rejection-" + school_id)
-            if rejection:
-                school.rejection = dateutil.parser.parse(rejection)
-            else:
-                school.rejection = None
-            waitlist = request.form.get("waitlist-" + school_id)
-            if waitlist:
-                school.waitlist = dateutil.parser.parse(waitlist)
-            else:
-                school.waitlist = None
-            acceptance = request.form.get("acceptance-" + school_id)
-            if acceptance:
-                school.acceptance = dateutil.parser.parse(acceptance)
-            else:
-                school.acceptance = None
-            withdrawn = request.form.get("withdrawn-" + school_id)
-            if withdrawn:
-                school.withdrawn = dateutil.parser.parse(withdrawn)
-            else:
-                school.withdrawn = None
-            note = request.form.get("note-" + school_id)
-            if note:
-                school.note = escape(note)
-            else:
-                school.note = None
-            db.session.commit()
+        if len(request.form.get("edited_schools")) > 0:
+            edited_schools = request.form.get("edited_schools").split(sep=",")
 
+            for school in edited_schools:
+                school_id = school.partition("-")[0]
+                action = school.partition("-")[-1]
+
+                # Grab the school
+                school = School.query.filter_by(id=int(school_id)).first()
+                if action == "primary":
+                    primary = request.form.get("primary-" + school_id)
+                    if primary:
+                        school.primary = dateutil.parser.parse(primary)
+                    else:
+                        school.primary = None
+                elif action == "secondary_received":
+                    secondary_received = request.form.get("secondary_received-" + school_id)
+                    if secondary_received:
+                        school.secondary_received = dateutil.parser.parse(secondary_received)
+                    else:
+                        school.secondary_received = None
+                elif action == "application_complete":
+                    application_complete = request.form.get("application_complete-" + school_id)
+                    if application_complete:
+                        school.application_complete = dateutil.parser.parse(application_complete)
+                    else:
+                        school.application_complete = None
+                elif action == "interview_received":
+                    interview_received = request.form.get("interview_received-" + school_id)
+                    if interview_received:
+                        school.interview_received = dateutil.parser.parse(interview_received)
+                    else:
+                        school.interview_received = None
+                elif action == "interview_date":
+                    interview_date = request.form.get("interview_date-" + school_id)
+                    if interview_date:
+                        school.interview_date = dateutil.parser.parse(interview_date)
+                    else:
+                        school.interview_date = None
+                elif action == "rejection":
+                    rejection = request.form.get("rejection-" + school_id)
+                    if rejection:
+                        school.rejection = dateutil.parser.parse(rejection)
+                    else:
+                        school.rejection = None
+                elif action == "waitlist":
+                    waitlist = request.form.get("waitlist-" + school_id)
+                    if waitlist:
+                        school.waitlist = dateutil.parser.parse(waitlist)
+                    else:
+                        school.waitlist = None
+                elif action == "acceptance":
+                    acceptance = request.form.get("acceptance-" + school_id)
+                    if acceptance:
+                        school.acceptance = dateutil.parser.parse(acceptance)
+                    else:
+                        school.acceptance = None
+                elif action == "withdrawn":
+                    withdrawn = request.form.get("withdrawn-" + school_id)
+                    if withdrawn:
+                        school.withdrawn = dateutil.parser.parse(withdrawn)
+                    else:
+                        school.withdrawn = None
+                elif action == "note":
+                    note = request.form.get("note-" + school_id)
+                    school.note = escape(note)
+        db.session.commit()
 
     # Check if PhD applicant for message about MD/DO-only consideration
     if School.query.filter_by(cycle_id=cycle.id, phd=True).first():
