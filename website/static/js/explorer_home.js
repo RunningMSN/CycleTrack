@@ -40,6 +40,15 @@ function filterSettings() {
                 remove = true;
             }
         }
+
+        // Check applied setting
+        var appliedSetting = document.getElementById("toggle_applied");
+        if (appliedSetting.checked) {
+            if (!all_schools[i].classList.contains('applied_True')) {
+                remove = true;
+            }
+        }
+
         // Add or remove school
         if (remove) {
             all_schools[i].classList.add("d-none");

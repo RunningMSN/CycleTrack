@@ -73,13 +73,31 @@
                             </tr>
                         </table>
                     </div>
+                    {% if current_applicant %}
+                    <div class="col">
+                         <table>
+                             <tr>
+                                 <td>
+                                     <label class="form-check-label" for="flexSwitchCheckDefault" style="padding-right: 10px"><strong>My Schools</strong></label>
+                                 </td>
+                                 <td>
+                                     <div class="form-check form-switch">
+                                         <input class="form-check-input" type="checkbox" role="switch"
+                                                id="toggle_applied" style="height: 25px; width: 50px" onclick="filterSettings()">
+                                     </div>
+                                 </td>
+
+                             </tr>
+                         </table>
+                    </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
     </div>
     <div class="row">
         {% for key,value in schools.iterrows() %}
-        <div class="col school_entry school_type_{{ value['type'] }} state_{{ value['state'] }} country_{{ value['country'] }}" style="padding:10px; min-width: 350px;">
+        <div class="col school_entry school_type_{{ value['type'] }} state_{{ value['state'] }} country_{{ value['country'] }} applied_{{ value['applied_to'] }}" style="padding:10px; min-width: 350px;">
             <div class="container" style="background:white; padding:10px">
                     <div class="col d-flex align-items-center justify-content-center" style="height: 100px;">
                         <a href="{{ url_for('explorer.explorer_home') }}/school/{{ value['name'] }}">

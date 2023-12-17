@@ -15,12 +15,15 @@ def explorer_home():
 
     # If user is logged in, grab their schools
     applied_schools = []
+    current_applicant = False
     if current_user.is_authenticated:
         # Grab most recent cycle
         cycle = db.session.query(Cycle).filter_by(user_id = current_user.id).order_by(Cycle.id.desc()).first()
         if cycle.cycle_year in [VALID_CYCLES[0], VALID_CYCLES[1]]:
             schools = pd.read_sql(School.query.filter_by(cycle_id=cycle.id).statement, db.get_engine())
             applied_schools = schools["name"].tolist()
+            if len(applied_schools) > 0:
+                current_applicant = True
 
     build_df = {'name': [], 'type': [], 'reg_apps': [],
                 'phd_apps': [], 'logo_link': [], 'city': [], 'state': [], 'country': [], 'envt': [], 'pub_pri': [],
@@ -63,7 +66,7 @@ def explorer_home():
         df = None
     # Render page
     return render_template('explorer.html', user=current_user, state_options=sorted(form_options.STATES_WITH_SCHOOLS),
-                           state_abbrev=form_options.STATE_ABBREV,schools=df)
+                           state_abbrev=form_options.STATE_ABBREV,schools=df, current_applicant = current_applicant)
 
 @explorer.route('/explorer/school/<school_name>')
 def explore_school(school_name):
