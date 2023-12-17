@@ -50,6 +50,7 @@ class School(db.Model):
     acceptance = db.Column(db.DateTime(timezone=True), nullable=True)
     withdrawn = db.Column(db.DateTime(timezone=True), nullable=True)
     note = db.Column(db.Text(), nullable=True)
+    school_id = db.Column(db.Integer, db.ForeignKey('school__profiles__data.school_id'))
 
 class School_Profiles_Data(db.Model):
     school = db.Column(db.String(150), primary_key=True)

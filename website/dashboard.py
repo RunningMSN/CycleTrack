@@ -194,18 +194,20 @@ def lists():
         phds_add = request.form.get('phd_values').split('<>')
 
         for i in range(0, len(schools_add)):
-            school_type = School_Profiles_Data.query.filter_by(school=schools_add[i]).first().md_or_do
+            school_profile = School_Profiles_Data.query.filter_by(school=schools_add[i]).first()
+            school_type = school_profile.md_or_do
+            school_id = school_profile.school_id
 
             # Check if school already exists
             if phds_add[i] == 'true':
                 dual_degree_phd=True
             else:
                 dual_degree_phd = False
-            school = School.query.filter_by(name=schools_add[i], cycle_id=cycle.id, phd=dual_degree_phd).first()
+            school = School.query.filter_by(school_id=school_id, cycle_id=cycle.id, phd=dual_degree_phd).first()
             if(not school):
                 db.session.add(
                     School(name=schools_add[i], cycle_id=cycle.id, user_id=current_user.id, phd=dual_degree_phd,
-                           school_type=school_type))
+                           school_type=school_type, school_id=school_id))
                 db.session.commit()
 
     # Handle bulk edit
@@ -478,6 +480,7 @@ def import_list():
                         cycle_data[column] = pd.to_datetime(cycle_data[column], unit='ms')
                 for index, row in cycle_data.iterrows():
                     school_name = correct_names[row['name']]
+                    school_id = School_Profiles_Data.query.filter_by(school=school_name).first().school_id
                     # Check input for PhD
                     if row['name'] in phds:
                         dual_degree_phd = True
@@ -537,7 +540,7 @@ def import_list():
                         withdrawn = None
 
                     # Try to find if school is already in the list
-                    school = School.query.filter_by(name=school_name, phd=dual_degree_phd, cycle_id=cycle_id).first()
+                    school = School.query.filter_by(school_id=school_id, phd=dual_degree_phd, cycle_id=cycle_id).first()
                     if school:
                         if primary: school.primary = primary
                         if secondary_received: school.secondary_received = secondary_received
@@ -556,7 +559,7 @@ def import_list():
                                               application_complete=application_complete,
                                               interview_received=interview_received, interview_date=interview_date,
                                               rejection=rejection, waitlist=waitlist, acceptance=acceptance,
-                                              withdrawn=withdrawn))
+                                              withdrawn=withdrawn, school_id=school_id))
                         db.session.commit()
                 # Success message and redirect
                 flash('Successfully imported your school list.', category='success')
