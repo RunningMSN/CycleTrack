@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask_login import current_user
 from . import db, form_options
 from .models import Cycle, School, School_Profiles_Data, School_Stats
-from .visualizations import school_graphs
+from .visualizations import school_graphs, cycle_summary
 import pandas as pd
 from .form_options import VALID_CYCLES
 
@@ -13,8 +13,18 @@ def explorer_home():
     # Get info about all available schools
     all_schools = School_Profiles_Data.query.all()
 
+    # If user is logged in, grab their schools
+    applied_schools = []
+    if current_user.is_authenticated:
+        # Grab most recent cycle
+        cycle = db.session.query(Cycle).filter_by(user_id = current_user.id).order_by(Cycle.id.desc()).first()
+        if cycle.cycle_year in [VALID_CYCLES[0], VALID_CYCLES[1]]:
+            schools = pd.read_sql(School.query.filter_by(cycle_id=cycle.id).statement, db.get_engine())
+            applied_schools = schools["name"].tolist()
+
     build_df = {'name': [], 'type': [], 'reg_apps': [],
-                'phd_apps': [], 'logo_link': [], 'city': [], 'state': [], 'country': [], 'envt': [], 'pub_pri': []}
+                'phd_apps': [], 'logo_link': [], 'city': [], 'state': [], 'country': [], 'envt': [], 'pub_pri': [],
+                'applied_to': []}
 
     for school in all_schools:
         school_stats = School_Stats.query.filter_by(school_id=school.school_id).first()
@@ -41,6 +51,10 @@ def explorer_home():
             build_df['country'].append(school.country)
             build_df['envt'].append(school.envt_type)
             build_df['pub_pri'].append(school.private_public)
+            if school.school in applied_schools:
+                build_df['applied_to'].append(True)
+            else:
+                build_df['applied_to'].append(False)
 
     # Generate dataframe
     df = pd.DataFrame(build_df).sort_values('name')
@@ -179,5 +193,7 @@ def explore_summary(year):
     if not (year == form_options.VALID_CYCLES[0] or year == form_options.VALID_CYCLES[1]):
         flash(f'{year} is not available. Please make sure you are viewing a valid summary page.', category='error')
         return redirect(url_for('explorer.explorer_home'))
+
+    map = cycle_summary.map(year)
 
     return render_template('cycle_summary.html', user=current_user, year=year)
