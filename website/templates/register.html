@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
 
 {%block additional_js %}
+    <script src="{{ url_for('static', filename='/js/registration.js') }}"></script>
     <script src="https://www.google.com/recaptcha/api.js?render={{reCAPTCHA_site_key}}"></script>
 
     <script>
         grecaptcha.ready(function () {
             grecaptcha.execute('{{reCAPTCHA_site_key}}', {action: 'validate_captcha'}).then(function (token) {
-                console.info("got token: " + token);
                 document.getElementById('g-recaptcha-response').value = token;
             });
         });
@@ -20,26 +20,32 @@
         <h2 style="padding-top: 10px">Create an account</h2>
         <div class="form-group" style="padding-bottom:10px">
             <label for="email">Email Address</label>
-            <input type="email" class="form-control" id="email" name="email" placeholder="Enter email" />
+            <input type="email" class="form-control" id="email" name="email" placeholder="Enter email" onkeyup="formValid()" />
             <small>You will need to verify your email before using the platform. We promise not to share it with anyone.</small>
         </div>
         <div class="form-group" style="padding-bottom:10px">
             <label for="password1">Password</label>
-            <input type="password" class="form-control" id="password1" name="password1" placeholder="Enter password" />
+            <div id="password_requirement_text" class="d-none">
+            <small id="password_requirement" style="color: red;">Your password must be at least 7 characters in length!</small>
+            </div>
+            <input type="password" class="form-control" id="password1" name="password1" placeholder="Enter password" onkeyup="checkPasswordRequirements(); formValid()" />
         </div>
         <div class="form-group" style="padding-bottom:10px">
             <label for="password2">Confirm password</label>
-            <input type="password" class="form-control" id="password2" name="password2" placeholder="Confirm password" />
+            <div id="password_match_text" class="d-none">
+            <small id="password_match" style="color: red;">Your passwords must match!</small>
+            </div>
+            <input type="password" class="form-control" id="password2" name="password2" placeholder="Confirm password" onkeyup="checkPasswordMatch(); formValid()" />
         </div>
         <div class="form-group" style="padding-bottom:10px">
-            <input type="checkbox" id="terms_agree" name="terms_agree" value="agree">
+            <input type="checkbox" id="terms_agree" name="terms_agree" value="agree" onclick="formValid()">
             <label for="terms_agree"> I agree to CycleTrack's <a href="{{ url_for('pages.privacy') }}">Privacy Policy</a>
                 and <a href="{{ url_for('pages.terms') }}">Terms and Conditions</a>.</label><br>
         </div>
 
         <input type="hidden" id="g-recaptcha-response" name="g-recaptcha-response">
         <input type="hidden" name="action" value="validate_captcha">
-        <input type="submit" class="btn btn-primary" value="Submit"/>
+        <input id="submit_button" type="submit" class="btn btn-primary" value="Submit" disabled/>
 
     </form>
 </div>
