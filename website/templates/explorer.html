@@ -73,8 +73,8 @@
                             </tr>
                         </table>
                     </div>
-                    {% if current_applicant %}
-                    <div class="col">
+
+                    <div class="col {% if not current_applicant %}d-none{% endif %}">
                          <table>
                              <tr>
                                  <td>
@@ -90,7 +90,6 @@
                              </tr>
                          </table>
                     </div>
-                    {% endif %}
                 </div>
             </div>
         </div>
