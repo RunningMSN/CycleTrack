@@ -4,6 +4,7 @@
     <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
     <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 {% endblock %}
 {% block content %}
 <!-- SCHOOL LIST MANAGEMENT -->
@@ -18,8 +19,17 @@
     <div class="row">
         <div class="col-6" style="min-width: 500px">
             <div class="container bg-light" style="margin: 10px">
-                <h4>Where Did People Apply?</h4>
-                <p>Map of schools across the US similar to agg map.</p>
+                <h4 style="padding:10px">Where Did People Apply?</h4>
+                <div id="agg_map" class="agg_map"></div>
+                <script>
+                    fetch('{{ url_for('static', filename='agg_map/map.JSON') }}')
+                        .then(response => response.json())
+                        .then(data => {
+                            data.config = {'responsive': true, 'displaylogo': false, 'scrollZoom': false};
+                            Plotly.newPlot('agg_map', data);
+                        })
+                        .catch(error => console.log(error));
+                </script>
             </div>
         </div>
         <div class="col-6" style="min-width: 500px">
