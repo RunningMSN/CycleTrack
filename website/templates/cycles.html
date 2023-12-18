@@ -9,6 +9,149 @@
 </script>
 {% endblock %}
 {% block dash_content %}
+<!-- SETUP MODAL FOR ADDING A NEW CYCLE -->
+<div class="modal fade" id="add_cycle_modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form method="POST">
+                <div class="modal-header">
+                    <h5 class="modal-title">New Application Cycle</h5>
+                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <table class="table">
+                        <td><a href="#" data-toggle="tooltip" title="This is the year you would begin medical school."
+                               style="color:black;text-decoration-style:dotted">Year of Matriculation</a></td>
+                        <td>
+                            <select name="new_cycle_year" id="new_cycle_year" class="btn-sm modalinput">
+                                {% for cycle_option in cycle_options %}
+                                <option value="{{ cycle_option }}">{{ cycle_option }}</option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                    </table>
+                    <div style="padding-bottom: 10px">
+                        You have the option to provide additional information about your application cycle. This
+                        information is de-identified and aggregated to help make medical school application more
+                        transparent.<br /> <br />
+                        You may skip this section or leave any questions blank if you don't feel comfortable sharing. For
+                        privacy information, see our <a href="{{ url_for('pages.privacy') }}">privacy policy</a>.
+                    </div>
+                    <div>
+                                <div>
+
+                                    <table class="table">
+                                        <tr><td colspan="2"><h5>Demographics</h5></td></tr>
+                                        <tr>
+                                            <td>Home State</td>
+                                            <td>
+                                                <select name="home_state" id="home_state" class="btn-sm modalinput">
+                                                    <option value=""></option>
+                                                    {% for state in state_options %}
+                                                    <option value="{{ state }}">{{ state }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><a href="#" data-toggle="tooltip" title="This is the age you will be when you would start medical school." style="color:black;text-decoration-style:dotted">Age at Matriculation</a></td>
+                                            <td><input type="text" name="age" id="age" class="modalinput" /></input></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Gender</td>
+                                            <td>
+                                                <select name="gender" id="gender_new" class="btn-sm modalinput" onchange="toggleOtherGender('new')">
+                                                    <option value=""></option>
+                                                    {% for gender in gender_options %}
+                                                    <option value="{{ gender }}">{{ gender }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr class="d-none" id="other_gender_new">
+                                            <td>&nbsp;&nbsp;&nbsp;Other</td>
+                                            <td>
+                                                <input type="text" name="other_gender" class="modalinput"/></input>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><a href="#" data-toggle="tooltip" title="We ask about biological sex because this is a variable commonly reported by medical schools." style="color:black;text-decoration-style:dotted">Biological Sex</a></td>
+                                            <td>
+                                                <select name="sex" id="sex_new" class="btn-sm modalinput" onchange="toggleOtherSex('new')">
+                                                    <option value=""></option>
+                                                    {% for sex in sex_options %}
+                                                    <option value="{{ sex }}">{{ sex }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr class="d-none" id="other_sex_new">
+                                            <td>&nbsp;&nbsp;&nbsp;Other</td>
+                                            <td>
+                                                <input type="text" name="other_sex" class="modalinput"/></input>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Race/Ethnicity</td>
+                                            <td>
+                                                <select name="race_ethnicity" id="race_ethnicity_new" class="btn-sm modalinput" onchange="toggleOtherRaceEthnicity('new')">
+                                                    <option value=""></option>
+                                                    {% for race_ethnicity in race_ethnicity_options %}
+                                                    <option value="{{ race_ethnicity }}">{{ race_ethnicity }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr class="d-none" id="other_race_ethnicity_new">
+                                            <td>&nbsp;&nbsp;&nbsp;Other</td>
+                                            <td>
+                                                <input type="text" name="other_race_ethnicity" class="modalinput" /></input>
+                                            </td>
+                                        </tr>
+                                        <tr><td colspan="2"><h5>GPA</h5></td></tr>
+                                        <tr>
+                                            <td>Cumulative GPA</td>
+                                            <td><input type="text" name="cgpa" id="cgpa" class="modalinput" /></input></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Science GPA</td>
+                                            <td><input type="text" name="sgpa" id="sgpa" class="modalinput"/></input></td>
+                                        </tr>
+                                        <tr><td colspan="2"><h5>MCAT</h5></td></tr>
+                                        <tr>
+                                            <td>Total MCAT Score</td>
+                                            <td><input type="text" name="mcat_total" id="mcat_total" class="modalinput"/></input></td>
+                                        </tr>
+                                        <tr>
+                                            <td><a href="#" data-toggle="tooltip" title="Chemical and Physical Foundations of Biological Systems" style="color:black;text-decoration-style:dotted">C/P Score</a></td>
+                                            <td><input type="text" name="mcat_cp" id="mcat_cp" class="modalinput" /></input></td>
+                                        </tr>
+                                        <tr>
+                                            <td><a href="#" data-toggle="tooltip" title="Critical Analysis and Reasoning Skills" style="color:black;text-decoration-style:dotted">CARS Score</a></td>
+                                            <td><input type="text" name="mcat_cars" id="mcat_cars" class="modalinput" /></input></td>
+                                        </tr>
+                                        <tr>
+                                            <td><a href="#" data-toggle="tooltip" title="Biological and Biochemical Foundations of Living Systems" style="color:black;text-decoration-style:dotted">B/B Score</a></td>
+                                            <td><input type="text" name="mcat_bb" id="mcat_bb" class="modalinput" /></input></td>
+                                        </tr>
+                                        <tr>
+                                            <td><a href="#" data-toggle="tooltip" title="Psychological, Social, and Biological Foundations of Behavior" style="color:black;text-decoration-style:dotted">P/S Score</a></td>
+                                            <td><input type="text" name="mcat_ps" id="mcat_ps" class="modalinput" /></input></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                        </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
 <!-- CYCLE MANAGEMENT -->
 <div id="cycles" class="container" style="padding-top:10px">
     <h2>My Application Cycles</h2>
@@ -223,33 +366,15 @@
                 </td>
             </tr>
         </table>
-
-
     </li>
     {% endfor %}
     {% else %}
     <p>You have not added any application cycles. Get started by adding a cycle using the menu below.</p>
     {% endif %}
     <!-- Add Cycles -->
-    <form method="POST">
-        <table>
-            <tr>
-                <td style="padding: 10px"><a href="#" data-toggle="tooltip" title="Year that you would start classes"
-                                             style="text-decoration-style:dotted;color:black">Add a new cycle:</a></td>
-                <td style="padding: 10px">
-                    <select name="add_cycle" id="add_cycle" class="btn-sm">
-                        {% for cycle_option in cycle_options %}
-                        <option value="{{ cycle_option }}">Matriculate in {{ cycle_option }}</option>
-                        {% endfor %}
-                    </select>
-                </td>
-                <td style="padding: 10px">
-                    <button type="submit" class="btn btn-primary btn-sm">Submit</button>
-                </td>
-
-            </tr>
-        </table>
-    </form>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add_cycle_modal" style="margin-top: 10px">
+        Add New Cycle
+    </button>
 </div>
 
 <!-- OTHER TOOLS -->

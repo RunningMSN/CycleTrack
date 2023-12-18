@@ -19,18 +19,24 @@ dashboard = Blueprint('dashboard', __name__)
 def cycles():
     # Manage all requests for updating information
     if request.method == 'POST':
-        # Adding cycle
-        add_cycle = request.form.get('add_cycle')
+        # Find that person is editing a cycle
+        cycle_id = request.form.get('cycle_id_edit')
+
+        # Find that is adding a new cycle
+        add_cycle = request.form.get('new_cycle_year')
         if add_cycle:
             # Check if added cycle already exists
             cycle = Cycle.query.filter_by(cycle_year=int(add_cycle), user_id=current_user.id).first()
             if cycle:
-                flash('You already have this cycle added.', category='error')
+                flash(f'You already have a cycle for {add_cycle}.', category='error')
             else:
-                db.session.add(Cycle(cycle_year=int(add_cycle), user_id=current_user.id, mentoring_message=False))
+                new_cycle = Cycle(cycle_year=int(add_cycle), user_id=current_user.id, mentoring_message=False)
+                db.session.add(new_cycle)
                 db.session.commit()
-        # Handle editing cycle profile
-        cycle_id = request.form.get('cycle_id_edit')
+
+                # Add a cycle_id to send any demographics, etc. into the editing
+                cycle_id = new_cycle.id
+
         if cycle_id:
             cycle = Cycle.query.filter_by(id=int(cycle_id)).first()
             gender = request.form.get('gender')
