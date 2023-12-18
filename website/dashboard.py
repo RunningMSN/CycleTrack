@@ -284,6 +284,9 @@ def lists():
                 elif action == "note":
                     note = request.form.get("note-" + school_id)
                     school.note = escape(note)
+        else:
+            flash(Markup("We've detected that your updates may not have saved correctly. If this is indeed an error, please try "
+                  "<a href='https://www.umass.edu/afsystems/sites/default/files/resources/how-do-i-clear-my-web-browser.pdf'>clearing your browser's cache</a>. If the problem persists, please send us a bug report."), category="warning")
         db.session.commit()
 
     # Check if PhD applicant for message about MD/DO-only consideration
