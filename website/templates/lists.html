@@ -376,6 +376,22 @@ function toggleCancel() {
                             </span>
                         </div>
                         <div class="col-lg-2">
+                            <strong>Pre-Interview Hold:</strong><br>
+                            <span class="normal_list">
+                            {% if school.pre_int_hold %}
+                                {% if school.pre_int_hold.date() > today.date() %}
+                                <i class="bi bi-exclamation-circle-fill text-warning" data-toggle="tooltip" data-placement="top" title="This date is in the future"></i>
+                                {% endif %}
+                            {{ school.pre_int_hold.strftime('%m/%d/%Y') }}
+                            {% else %}
+                            -
+                            {% endif %}
+                            </span>
+                            <span class="bulk_list d-none">
+                                <input onclick = "editedSchool('{{ school.id }}', 'pre_int_hold')" class="datepicker" type="text" data-cycle="{{cycle.cycle_year}}" value="{%- if school.pre_int_hold-%}{{ school.pre_int_hold.strftime('%Y-%m-%d') }}{%- endif -%}" name="pre_int_hold-{{school.id}}">
+                            </span>
+                        </div>
+                        <div class="col-lg-2">
                             <strong>Interview Received:</strong><br>
                             <span class="normal_list">
                             {% if school.interview_received %}

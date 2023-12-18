@@ -43,6 +43,7 @@ class School(db.Model):
     primary = db.Column(db.DateTime(timezone=True), nullable=True)
     secondary_received = db.Column(db.DateTime(timezone=True), nullable=True)
     application_complete = db.Column(db.DateTime(timezone=True), nullable=True)
+    pre_int_hold = db.Column(db.DateTime(timezone=True), nullable=True)
     interview_received = db.Column(db.DateTime(timezone=True), nullable=True)
     interview_date = db.Column(db.DateTime(timezone=True), nullable=True)
     rejection = db.Column(db.DateTime(timezone=True), nullable=True)
@@ -69,6 +70,7 @@ class School_Profiles_Data(db.Model):
     lor_reg_link = db.Column(db.String(150))
     lor_phd_link = db.Column(db.String(150))
     school_id = db.Column(db.Integer)
+    official_name = db.Column(db.String(150))
 
 
 class School_Stats(db.Model):

@@ -239,6 +239,12 @@ def lists():
                         school.application_complete = dateutil.parser.parse(application_complete)
                     else:
                         school.application_complete = None
+                elif action == "pre_int_hold":
+                    pre_int_hold = request.form.get("pre_int_hold-" + school_id)
+                    if pre_int_hold:
+                        school.pre_int_hold = dateutil.parser.parse(pre_int_hold)
+                    else:
+                        school.application_complete = None
                 elif action == "interview_received":
                     interview_received = request.form.get("interview_received-" + school_id)
                     if interview_received:
@@ -509,6 +515,11 @@ def import_list():
                     except Exception:
                         application_complete = None
                     try:
+                        pre_int_hold = row['pre_int_hold']
+                        if pd.isnull(pre_int_hold): pre_int_hold = None
+                    except Exception:
+                        pre_int_hold = None
+                    try:
                         interview_received = row['interview_received']
                         if pd.isnull(interview_received): interview_received = None
                     except Exception:
@@ -545,6 +556,7 @@ def import_list():
                         if primary: school.primary = primary
                         if secondary_received: school.secondary_received = secondary_received
                         if application_complete: school.application_complete = application_complete
+                        if pre_int_hold: school.pre_int_hold = pre_int_hold
                         if interview_received: school.interview_received = interview_received
                         if interview_date: school.interview_date = interview_date
                         if rejection: school.rejection = rejection
@@ -557,6 +569,7 @@ def import_list():
                                               school_type=school_type, phd=dual_degree_phd, primary=primary,
                                               secondary_received=secondary_received,
                                               application_complete=application_complete,
+                                              pre_int_hold=pre_int_hold,
                                               interview_received=interview_received, interview_date=interview_date,
                                               rejection=rejection, waitlist=waitlist, acceptance=acceptance,
                                               withdrawn=withdrawn, school_id=school_id))
@@ -583,7 +596,7 @@ def export_list():
     cycle = Cycle.query.filter_by(id=cycle_id).first()
     # Create dataframe of schools for that cycle and convert to CSV
     cycle_data = pd.read_sql(School.query.filter_by(cycle_id=cycle_id).statement, db.get_engine()).drop(
-        ['id', 'cycle_id', 'user_id', 'school_type', 'phd', 'note'], axis=1)
+        ['id', 'cycle_id', 'user_id', 'school_type', 'phd', 'note', 'school_id'], axis=1)
     csv = cycle_data.to_csv(index=False, encoding='utf-8')
     # Generate response/download
     response = Response(csv, mimetype='text/csv')
@@ -765,7 +778,7 @@ def visualizations():
             cycle_data = cycle_data[cycle_data['school_type'] == 'DO']
 
         # Drop extra information
-        cycle_data.drop(['id', 'cycle_id', 'user_id', 'school_type', 'phd', 'note'], axis=1, inplace=True)
+        cycle_data.drop(['id', 'cycle_id', 'user_id', 'school_type', 'phd', 'note', 'school_id', 'pre_int_hold'], axis=1, inplace=True)
         # Drop empty columns
         cycle_data = cycle_data.dropna(axis=1, how='all')
 
