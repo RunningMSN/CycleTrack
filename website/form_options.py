@@ -26,9 +26,11 @@ def get_do_schools():
 
 # Options for cycle profile page
 SEX_OPTIONS = ["Male", "Female", "Other"]
-GENDER_OPTIONS = ["Male", "Female", "Trans Male", "Trans Female", "Genderqueer", "Other"]
-RACE_ETHNICITY_OPTIONS = ["Hispanic/Latino/Spanish Origin", "American Indian/Alaskan Native", "Asian",
-                          "Black/African American", "Native Hawaiian/Pacific Islander", "White"]
+GENDER_OPTIONS = ["Man", "Woman", "Trans Man", "Trans Woman", "Non-Binary", "Other"]
+RACE_ETHNICITY_OPTIONS = ["American Indian/Alaska Native", "Asian",
+                          "Black/African American", "Hispanic/Latino/Spanish Origin", "Native Hawaiian/Pacific Islander",
+                          "White", "Other", "Multiple Race/Ethnicity", "Unknown Race/Ethnicity",
+                          "Non-US Citizen/Non-Permanent Resident"]
 STATE_OPTIONS = ["Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware",
                  "District of Columbia", "Florida","Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa",
                  "Kansas", "Kentucky", "Louisiana", "Maine","Maryland", "Massachusetts", "Michigan", "Minnesota",

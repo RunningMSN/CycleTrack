@@ -38,11 +38,31 @@ def cycles():
                 cycle.gender = gender
             else:
                 cycle.gender = None
+            other_gender = request.form.get('other_gender')
+            if len(other_gender) > 0:
+                cycle.other_gender = other_gender
+            else:
+                cycle.other_gender = None
             sex = request.form.get('sex')
             if len(sex) > 0 and sex in form_options.SEX_OPTIONS:
                 cycle.sex = sex
             else:
                 cycle.sex = None
+            other_sex = request.form.get('other_sex')
+            if len(other_sex) > 0:
+                cycle.other_sex = other_sex
+            else:
+                cycle.other_sex = None
+            age = request.form.get('age')
+            if age:
+                try:
+                    age = int(age)
+                    if age >15 and age <50:
+                        cycle.age = age
+                except Exception as e:
+                    flash('Please make sure your age is an integer.', category='error')
+            else:
+                cycle.age = None
             birth = request.form.get('birth_month_year')
             if birth:
                 # Check that formatting is generally right
@@ -67,6 +87,11 @@ def cycles():
                 cycle.race_ethnicity = race_ethnicity
             else:
                 cycle.race_ethnicity = None
+            other_race_ethnicity = request.form.get('other_race_ethnicity')
+            if len(other_race_ethnicity) > 0:
+                cycle.other_race_ethnicity = other_race_ethnicity
+            else:
+                cycle.other_race_ethnicity = None
             home_state = request.form.get('home_state')
             if len(home_state) > 0 and home_state in form_options.STATE_OPTIONS:
                 cycle.home_state = home_state
