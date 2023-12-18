@@ -244,7 +244,7 @@ def lists():
                     if pre_int_hold:
                         school.pre_int_hold = dateutil.parser.parse(pre_int_hold)
                     else:
-                        school.application_complete = None
+                        school.pre_int_hold = None
                 elif action == "interview_received":
                     interview_received = request.form.get("interview_received-" + school_id)
                     if interview_received:
