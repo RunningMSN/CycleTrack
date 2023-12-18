@@ -207,6 +207,7 @@ function toggleCancel() {
                     <option value="primary">Primary Submitted</option>
                     <option value="secondary">Secondary Received</option>
                     <option value="complete">App Complete</option>
+                    <option value="hold">Pre-Interview Hold</option>
                     <option value="interview">Interviewed</option>
                     <option value="rejection">Rejected</option>
                     <option value="waitlist">Waitlist</option>
@@ -237,6 +238,7 @@ function toggleCancel() {
             {% elif school.rejection%}rejection
             {% elif school.waitlist %}waitlist
             {% elif school.interview_received %}interview
+            {% elif school.pre_int_hold %}hold
             {% elif school.application_complete %}complete
             {% elif school.secondary_received %}secondary
             {% elif school.primary %}primary
