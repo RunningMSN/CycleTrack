@@ -285,13 +285,13 @@ function toggleCancel() {
                                 <summary>Most recent:</summary>
                                 <p>
                                     {% if most_recent[school.name]["interview"]%}
-                                    II: {{most_recent[school.name]["interview"]}}<br>
+                                    <a href="#" data-toggle="tooltip" title="Most recent reported interview invitation." style="color:black;text-decoration-style:dotted;" >II: {{most_recent[school.name]["interview"]}}</a><br>
                                     {% endif %}
                                     {% if most_recent[school.name]["waitlist"] %}
-                                    WL: {{most_recent[school.name]["waitlist"]}}<br>
+                                    <a href="#" data-toggle="tooltip" title="Most recent reported waitlist." style="color:black;text-decoration-style:dotted;">WL: {{most_recent[school.name]["waitlist"]}}</a><br>
                                     {% endif %}
                                     {% if most_recent[school.name]["acceptance"]%}
-                                    A: {{most_recent[school.name]["acceptance"]}}
+                                    <a href="#" data-toggle="tooltip" title="Most recent reported acceptance." style="color:black;text-decoration-style:dotted;">A: {{most_recent[school.name]["acceptance"]}}</a>
                                     {% endif %}
                                 </p>
                             </details>
