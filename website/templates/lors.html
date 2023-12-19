@@ -1,5 +1,12 @@
 {% extends 'base.html' %}
 {% block title %} Letters of Recommendation  {% endblock %}
+{% block additional_js %}
+<script>
+        $(function () {
+          $('[data-toggle="tooltip"]').tooltip()
+        })
+</script>
+{% endblock %}
 {% block content %}
 <!-- SCHOOL LIST MANAGEMENT -->
 <div class="container" style="padding-top:10px">
