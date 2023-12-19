@@ -110,7 +110,9 @@ def sankey_build_frames(cycle_data,color="default",no_action=False):
     df_nodes['color'] = df_nodes.apply(lambda row: fig_colors[row.label], axis=1)
     df_nodes['label'] = df_nodes.apply(lambda row: action_names[row.label], axis=1)
     out = {'Source': [], 'Target': [], 'Link Color': []}
+
     for index, row in cycle_data.iterrows():
+        row = pd.to_datetime(row, errors='coerce').dt.date
         row_sorted = row.dropna().sort_values()
         for i in range(0, len(row_sorted)):
             if i == len(row_sorted) - 1:

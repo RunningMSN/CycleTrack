@@ -1,3 +1,4 @@
+import pandas as pd
 import plotly
 import json
 from . import converters
@@ -11,11 +12,10 @@ def generate(cycle_data, title, stats, color="default",no_action=False,custom_te
     cycle_data = cycle_data.drop('name', axis=1)
     if 'interview_date' in cycle_data.columns:
         cycle_data = cycle_data.drop('interview_date', axis=1)
-    
+
     # if there is only 1 value per row, make the no_action column today's date. Otherwise, set it to none
     if no_action:
-        cycle_data['no_action'] = cycle_data.apply(lambda row: datetime.date.today() if row.count() == 1 else None, axis=1)
-        print(cycle_data)
+        cycle_data['no_action'] = cycle_data.apply(lambda row: datetime.date.today() if row.count() == 1 else pd.NaT, axis=1)
         
 
     df_nodes, df_links = converters.sankey_build_frames(cycle_data,color,no_action)
