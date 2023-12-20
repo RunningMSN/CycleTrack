@@ -5,6 +5,7 @@ from .models import Cycle, School, School_Profiles_Data, School_Stats
 from .visualizations import school_graphs, cycle_summary
 import pandas as pd
 from .form_options import VALID_CYCLES
+from datetime import timedelta
 
 explorer = Blueprint('explorer', __name__)
 
@@ -177,7 +178,7 @@ def explore_school(school_name):
 
     app_counts = {'reg': school_stats.reg_apps_count, 'phd': school_stats.phd_apps_count}
 
-    last_updated = school_stats.last_updated.strftime("%H:%M CST")
+    last_updated = school_stats.last_updated.strftime("%m/%d/%Y %H:%M:%S CST")
 
     return render_template('school_template.html', user=current_user, school_info=school_info, reg_info=reg_info,
                            phd_info=phd_info, valid_cycles=VALID_CYCLES, last_updated=last_updated, school_id=school_stats.school_id)

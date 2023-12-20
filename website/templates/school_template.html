@@ -73,7 +73,7 @@
     </div>
     <div class="row">
         <p>
-            This page updates hourly. Last updated: {{ last_updated }}.
+            This page updates hourly. Last updated: <span id="local_time"></span> (<span id="update_elapsed"></span> ago).
             <br />
 
         </p>
@@ -413,6 +413,25 @@
             </div>
     </div>
 </div>
+
+<!-- time localization -->
+<script>
+    function msToTime(ms) {
+        let seconds = (ms / 1000).toFixed(1);
+        let minutes = (ms / (1000 * 60)).toFixed(1);
+        let hours = (ms / (1000 * 60 * 60)).toFixed(1);
+        let days = (ms / (1000 * 60 * 60 * 24)).toFixed(1);
+        if (seconds < 60) return seconds + " sec";
+        else if (minutes < 60) return minutes + " min";
+        else if (hours < 24) return hours + " hrs";
+        else return days + " days"
+      };
+    var last_updated = new Date("{{ last_updated }}");
+    document.getElementById("local_time").innerHTML = last_updated.toLocaleTimeString('en-US', {hour: '2-digit', minute: '2-digit', hour12: true});
+    var now = Date.now()
+    var timeDiff = (now - last_updated);
+    document.getElementById("update_elapsed").innerHTML = msToTime(timeDiff);
+</script>
 
 <!-- PREPARE GRAPHS -->
 <script>
