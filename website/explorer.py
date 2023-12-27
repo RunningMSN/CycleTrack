@@ -20,11 +20,12 @@ def explorer_home():
     if current_user.is_authenticated:
         # Grab most recent cycle
         cycle = db.session.query(Cycle).filter_by(user_id = current_user.id).order_by(Cycle.id.desc()).first()
-        if cycle.cycle_year in [VALID_CYCLES[0], VALID_CYCLES[1]]:
-            schools = pd.read_sql(School.query.filter_by(cycle_id=cycle.id).statement, db.get_engine())
-            applied_schools = schools["name"].tolist()
-            if len(applied_schools) > 0:
-                current_applicant = True
+        if cycle:
+            if cycle.cycle_year in [VALID_CYCLES[0], VALID_CYCLES[1]]:
+                schools = pd.read_sql(School.query.filter_by(cycle_id=cycle.id).statement, db.get_engine())
+                applied_schools = schools["name"].tolist()
+                if len(applied_schools) > 0:
+                    current_applicant = True
 
     build_df = {'name': [], 'type': [], 'reg_apps': [],
                 'phd_apps': [], 'logo_link': [], 'city': [], 'state': [], 'country': [], 'envt': [], 'pub_pri': [],
