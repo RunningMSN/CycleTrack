@@ -110,7 +110,7 @@
                     </div>
                     <div>
                         <center>
-                            <strong>{% if value['applied_to'] %}<i class="bi bi-star-fill" style="color: gold"></i> {% endif %}<a href="{{ url_for('explorer.explorer_home') }}/school/{{ value['name'] }}" style="color:black;text-decoration: none"><a href="#" data-toggle="tooltip" title="{{ value['official_name'] }} " style="color:black;text-decoration-style:dotted;" >{{ value['name'] }} ({{ value['type'] }})</a></a></strong>
+                            <strong>{% if value['applied_to'] %}<i class="bi bi-star-fill" style="color: gold"></i> {% endif %}<a href="{{ url_for('explorer.explorer_home') }}/school/{{ value['name'] }}" data-toggle="tooltip" title="{{ value['official_name'] }} " style="color:black;text-decoration-style:dotted;" >{{ value['name'] }} ({{ value['type'] }})</a></strong>
                             <br>
                             {{ value['city'] }}, {{ value['state'] }} | {{ value['envt'] }} | {{ value['pub_pri'] }} Institution
                             <br>
