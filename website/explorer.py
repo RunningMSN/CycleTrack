@@ -27,7 +27,7 @@ def explorer_home():
                 if len(applied_schools) > 0:
                     current_applicant = True
 
-    build_df = {'name': [], 'type': [], 'reg_apps': [],
+    build_df = {'name': [], 'official_name': [],'type': [], 'reg_apps': [],
                 'phd_apps': [], 'logo_link': [], 'city': [], 'state': [], 'country': [], 'envt': [], 'pub_pri': [],
                 'applied_to': []}
 
@@ -49,6 +49,7 @@ def explorer_home():
 
             # Grab information about school
             build_df['name'].append(school.school)
+            build_df['official_name'].append(school.official_name)
             build_df['type'].append(school.md_or_do)
             build_df['logo_link'].append(school.logo_file_name)
             build_df['city'].append(school.city)

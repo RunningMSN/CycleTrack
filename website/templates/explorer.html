@@ -5,6 +5,11 @@
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
     <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
     <script src="{{ url_for('static', filename='/js/explorer_home.js') }}"></script>
+    <script>
+            $(function () {
+              $('[data-toggle="tooltip"]').tooltip()
+            })
+    </script>
 {% endblock %}
 {% block content %}
 <!-- SCHOOL LIST MANAGEMENT -->
@@ -105,7 +110,7 @@
                     </div>
                     <div>
                         <center>
-                            <strong>{% if value['applied_to'] %}<i class="bi bi-star-fill" style="color: gold"></i> {% endif %}<a href="{{ url_for('explorer.explorer_home') }}/school/{{ value['name'] }}" style="color:black;text-decoration: none">{{ value['name'] }} ({{ value['type'] }})</a></strong>
+                            <strong>{% if value['applied_to'] %}<i class="bi bi-star-fill" style="color: gold"></i> {% endif %}<a href="{{ url_for('explorer.explorer_home') }}/school/{{ value['name'] }}" style="color:black;text-decoration: none"><a href="#" data-toggle="tooltip" title="{{ value['official_name'] }} " style="color:black;text-decoration-style:dotted;" >{{ value['name'] }} ({{ value['type'] }})</a></a></strong>
                             <br>
                             {{ value['city'] }}, {{ value['state'] }} | {{ value['envt'] }} | {{ value['pub_pri'] }} Institution
                             <br>
