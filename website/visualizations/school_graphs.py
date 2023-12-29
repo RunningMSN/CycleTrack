@@ -77,6 +77,17 @@ def interview_acceptance_histogram(df, column_name):
     if len(trace_1) == 0 and len(trace_2) == 0 and len(trace_3) == 0:
         return None
 
+    # Make sure data is in range
+    min = pd.to_datetime(str(VALID_CYCLES[0] - 1) + "-05-01")
+    max = pd.to_datetime(str(VALID_CYCLES[0]) + "-08-31")
+
+    trace_1 = trace_1[trace_1 >= min]
+    trace_1 = trace_1[trace_1 <= max]
+    trace_2 = trace_2[trace_2 >= min]
+    trace_2 = trace_2[trace_2 <= max]
+    trace_3 = trace_3[trace_3 >= min]
+    trace_3 = trace_3[trace_3 <= max]
+
     fig = go.Figure()
     fig.add_trace(go.Histogram(x=trace_1,
                                name=str(VALID_CYCLES[0]),
