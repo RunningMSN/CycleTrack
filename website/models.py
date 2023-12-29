@@ -209,3 +209,15 @@ class User_Profiles(db.Model):
     filter_values = db.Column(db.Text,nullable=True)
     hide_names = db.Column(db.Boolean, default=False)
     text = db.Column(db.Text, nullable=True)
+
+class Secondary_Costs(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    school_id = db.Column(db.Integer, db.ForeignKey('school__profiles__data.school_id'))
+    cycle_year = db.Column(db.Integer)
+    reg_cost = db.Column(db.Integer)
+    reg_cost_confirmed = db.Column(db.Boolean)
+    phd_cost = db.Column(db.Integer)
+    phd_cost_confirmed = db.Column(db.Boolean)
+    reg_to_phd = db.Column(db.Integer)
+    reg_to_phd_confirmed = db.Column(db.Boolean)
+    contributors = db.Column(db.String(20))

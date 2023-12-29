@@ -159,6 +159,79 @@ function toggleCancel() {
         </a>
     </p>
     {% endif %}
+    <div class="row">
+        <div class="col">
+        {% if schools_to_add_secondary_cost|length > 0%}
+        <!-- SETUP COST MODAL -->
+        <div class="modal fade" id="add-cost-modal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                    <form method="POST">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Secondary Costs</h5>
+                            <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>
+                                Please enter the cost of the secondary application as an integer (e.g. 100 rather than $100).
+                                If you qualified fee assistance at a school, please skip the school or enter the price it
+                                would have cost without it.
+                            </p>
+                            <p>
+                                Enter as many or few costs as you would like. We (and future applicants) greatly thank you!
+                            </p>
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <td>School</td>
+                                    <td class="float-end" style="width: 100%">Secondary Cost ($)</td>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for index, school in schools_to_add_secondary_cost.iterrows() %}
+                                <tr>
+                                    <td>
+                                        {% if school['type'] == 'Reg_to_PhD' %}
+                                        You applied to {{ school['name'] }} as {{ school['prog_type'] }}-PhD and
+                                        regular {{ school['prog_type'] }}. What was the additional cost of applying to the regular
+                                        {{ school['prog_type'] }} program? If no additional cost, enter 0.
+                                        {% else %}
+                                        {{ school['name'] }} ({{ school['prog_type'] }}{% if school['type'] == 'PhD'
+                                        %}-PhD{% endif %})
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <input type="text" name="cost-{{ school['school_id'] }}-{{ school['type'] }}"
+                                               id="cost-{{ school['school_id'] }}-{{ school['type'] }}" class="modalinput"
+                                               style="width: 100%"/>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                                <input type="hidden" name="input_cost" id="input_cost" value="true" />
+                                <input type="hidden" name="cycle_id" id="cycle_id" value="{{ cycle.id }}" />
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- ASK TO ENTER -->
+        <div class="container" style="padding: 10px; margin-top: 10px; margin-bottom:10px; background-color: #90EE90" >
+            <span style="vertical-align: middle">
+                We are collecting the costs of secondary applications to help future applicants anticipate cost. If you are
+                willing, please share the cost of secondary applications to some of your schools by clicking
+                <btn class="btn btn-link" data-toggle="modal" data-target="#add-cost-modal" style="padding: 0px; margin: 0px; vertical-align:top">here</btn>. We
+                will only ask you for costs that other applicants have not already shared.
+            </span>
+        </div>
+        {% endif %}
+            </div>
+    </div>
 
     <div class="row">
         <div class="col-auto">
@@ -243,6 +316,7 @@ function toggleCancel() {
             {% elif school.secondary_received %}secondary
             {% elif school.primary %}primary
             {%endif%}">
+
             <div class="row rows-cols-2">
                 <!-- SCHOOL LOGO AREA ON LEFT -->
                 <div class="col-lg-1">

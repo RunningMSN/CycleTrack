@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, flash, jsonify, redirect, url_for, Response, Markup, escape
 from flask_login import current_user, login_required
 from . import db, form_options, mail
-from .models import Cycle, School, School_Profiles_Data, Courses, User_Profiles, School_Stats
+from .models import Cycle, School, School_Profiles_Data, Courses, User_Profiles, School_Stats, Secondary_Costs
 import json
 from datetime import datetime, date
 import dateutil.parser
@@ -320,6 +320,79 @@ def lists():
                   "<a href='https://www.umass.edu/afsystems/sites/default/files/resources/how-do-i-clear-my-web-browser.pdf'>clearing your browser's cache</a>. If the problem persists, please send us a bug report."), category="warning")
         db.session.commit()
 
+    # Handle updating costs
+    if request.form.get('input_cost'):
+        for item in request.form:
+            if item.startswith("cost-"):
+                school_details = item.split('-')
+                secondary_cost = Secondary_Costs.query.filter_by(school_id=school_details[1],
+                                                                 cycle_year=cycle.cycle_year).first()
+                try:
+                    value = int(request.form.get(item))
+                except Exception:
+                    value = None
+
+                if value and not current_user.id in secondary_cost.contributors.split(','):
+                    secondary_cost.contributors += f"{current_user.id},"
+                    if school_details[2] == 'Reg':
+                        if secondary_cost.reg_cost == value:
+                            secondary_cost.reg_cost_confirmed = True
+                        else:
+                            secondary_cost.reg_cost = value
+                    elif school_details[2] == 'PhD':
+                        if secondary_cost.phd_cost == value:
+                            secondary_cost.phd_cost_confirmed = True
+                        else:
+                            secondary_cost.phd_cost = value
+                    elif school_details[2] == 'Reg_to_PhD':
+                        if secondary_cost.reg_to_phd == value:
+                            secondary_cost.reg_to_phd_confirmed = True
+                        else:
+                            secondary_cost.reg_to_phd = value
+                    db.session.commit()
+
+    # Check if there are schools person can add secondary cost to
+    schools_to_add_secondary_cost = pd.DataFrame(columns=['school_id', 'name', 'type', 'prog_type'])
+
+    for school, profile in schools:
+        # Check if cost entry exists
+        secondary_cost = Secondary_Costs.query.filter_by(school_id=school.school_id, cycle_year=cycle.cycle_year).first()
+        # If cost entry doesn't exist, create one for the school
+        if not secondary_cost:
+            secondary_cost = Secondary_Costs(school_id=school.school_id, cycle_year=cycle.cycle_year, contributors="")
+            db.session.add(secondary_cost)
+            db.session.commit()
+        # Check if user has contributed to cost entry already
+        cost_contributors = secondary_cost.contributors.split(',')
+        if not str(current_user.id) in cost_contributors:
+            # If applying PhD
+            if school.phd and not secondary_cost.phd_cost_confirmed and school.application_complete:
+                new_row = pd.DataFrame({'school_id': [school.school_id],
+                                        'name': [school.name],
+                                        'type': ['PhD'],
+                                        'prog_type': [school.school_type]})
+                schools_to_add_secondary_cost = pd.concat([schools_to_add_secondary_cost, new_row], ignore_index=True)
+
+                # Assume it is concurrent application to 2 programs if the application complete date is the same for both
+                reg_check = School.query.filter_by(school_id=school.school_id, phd=False, cycle_id=school.cycle_id,
+                                                   application_complete=school.application_complete).first()
+                if reg_check and not secondary_cost.reg_to_phd_confirmed and reg_check.application_complete:
+                    new_row = pd.DataFrame({'school_id': [school.school_id],
+                                            'name': [school.name],
+                                            'type': ['Reg_to_PhD'],
+                                            'prog_type': [school.school_type]})
+                    schools_to_add_secondary_cost = pd.concat([schools_to_add_secondary_cost, new_row],
+                                                              ignore_index=True)
+            else:
+                # Make sure don't have PhD application, if have a PhD application, move on
+                phd_check = School.query.filter_by(school_id=school.school_id, phd=True, cycle_id=school.cycle_id).first()
+                if not phd_check and not secondary_cost.reg_cost_confirmed and school.application_complete:
+                    new_row = pd.DataFrame({'school_id': [school.school_id],
+                                            'name': [school.name],
+                                            'type': ['Reg'],
+                                            'prog_type': [school.school_type]})
+                    schools_to_add_secondary_cost = pd.concat([schools_to_add_secondary_cost, new_row],
+                                                              ignore_index=True)
     # Check if PhD applicant for message about MD/DO-only consideration
     if School.query.filter_by(cycle_id=cycle.id, phd=True).first():
         phd_applicant = True
@@ -362,7 +435,8 @@ def lists():
     return render_template('lists.html', user=current_user, cycle=cycle, schools=schools, phd_applicant=phd_applicant,
                            usmd_school_list=form_options.get_md_schools('USA'),
                            camd_school_list=form_options.get_md_schools('CAN'),
-                           do_school_list=form_options.get_do_schools(), program_types=program_types, today=datetime.today(),most_recent=dates)
+                           do_school_list=form_options.get_do_schools(), program_types=program_types, today=datetime.today(),
+                           most_recent=dates, schools_to_add_secondary_cost=schools_to_add_secondary_cost)
 
 
 
