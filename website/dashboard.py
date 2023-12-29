@@ -809,6 +809,7 @@ def visualizations():
                      'map_type': None, 'demographics': None, 'anonymize_demographics': None, 'custom_text': None,
                      'hide_names': None, 'organize_y': None}
     graphJSON = None
+    sankeymatic = None
     if vis_type:
         # Grab Settings
         if request.form.get('plot_title'):
@@ -903,7 +904,7 @@ def visualizations():
                 graphJSON = bar.generate(cycle_data, plot_title, stats, color=color_type.lower(),
                                          custom_text=save_settings['custom_text'])
             elif vis_type.lower() == 'sankey':
-                graphJSON = sankey.generate(cycle_data, plot_title, stats, color=color_type.lower(),no_action = no_action,
+                graphJSON, sankeymatic = sankey.generate(cycle_data, plot_title, stats, color=color_type.lower(),no_action = no_action,
                                             custom_text=save_settings['custom_text'])
             elif vis_type.lower() == 'map':
                 graphJSON = map.generate(cycle_data, plot_title, stats, app_type=app_type.lower(), color=color_type.lower(),
@@ -918,7 +919,7 @@ def visualizations():
     return render_template('visualizations.html', user=current_user, cycle=cycle, app_types=app_types,
                            vis_types=form_options.VIS_TYPES, color_types=form_options.COLOR_TYPES, graphJSON=graphJSON,
                            save_settings=save_settings, map_types=form_options.MAP_TYPES, filter_options = form_options.FILTER_OPTIONS_VIS,
-                           organize_y_options=form_options.ORGANIZE_Y_OPTIONS)
+                           organize_y_options=form_options.ORGANIZE_Y_OPTIONS, sankeymatic=sankeymatic)
 
 
 @dashboard.route('/gpa', methods=['GET'])

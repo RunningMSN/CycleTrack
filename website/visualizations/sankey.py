@@ -18,7 +18,7 @@ def generate(cycle_data, title, stats, color="default",no_action=False,custom_te
         cycle_data['no_action'] = cycle_data.apply(lambda row: datetime.date.today() if row.count() == 1 else pd.NaT, axis=1)
         
 
-    df_nodes, df_links = converters.sankey_build_frames(cycle_data,color,no_action)
+    df_nodes, df_links, sankeymatic = converters.sankey_build_frames(cycle_data,color,no_action)
 
     # Sankey plot setup
     data_trace = dict(
@@ -114,4 +114,4 @@ def generate(cycle_data, title, stats, color="default",no_action=False,custom_te
 
     # Convert to JSON and return it for plotting
     graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
-    return graphJSON
+    return graphJSON, sankeymatic

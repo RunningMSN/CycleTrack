@@ -109,7 +109,7 @@ def sankey_build_frames(cycle_data,color="default",no_action=False):
         ids[df_nodes['label'][i]] = i
     df_nodes['color'] = df_nodes.apply(lambda row: fig_colors[row.label], axis=1)
     df_nodes['label'] = df_nodes.apply(lambda row: action_names[row.label], axis=1)
-    out = {'Source': [], 'Target': [], 'Link Color': []}
+    out = {'Source': [], 'Target': [], 'Link Color': [], 'Source Name': [], 'Target Name': []}
 
     for index, row in cycle_data.iterrows():
         row = pd.to_datetime(row, errors='coerce').dt.date
@@ -119,7 +119,9 @@ def sankey_build_frames(cycle_data,color="default",no_action=False):
                 break
             else:
                 out['Source'].append(ids[row_sorted.index[i]])
+                out['Source Name'].append(action_names[row_sorted.index[i]])
                 out['Target'].append(ids[row_sorted.index[i + 1]])
+                out['Target Name'].append(action_names[row_sorted.index[i + 1]])
                 h = fig_colors[row_sorted.index[i + 1]].lstrip('#')
                 col = tuple(int(h[i:i + 2], 16) for i in (0, 2, 4))
                 col = list(col)
@@ -136,7 +138,11 @@ def sankey_build_frames(cycle_data,color="default",no_action=False):
         else:
             full_labels.append(f'{action_names[key]}: {str(sum(df_links[df_links["Target"] == value]["size"]))}')
     df_nodes['label'] = full_labels
-    return df_nodes, df_links
+
+    sankeymatic = ""
+    for index, row in df_links.iterrows():
+        sankeymatic += f"{row['Source Name']} [{row['size']}] {row['Target Name']}<br>"
+    return df_nodes, df_links, sankeymatic
 
 
 def convert_map(data,app_type,color="default"):
