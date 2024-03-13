@@ -427,9 +427,15 @@
         else return days + " days"
       };
     var last_updated = new Date("{{ last_updated }}");
+    var offset = new Date().getTimezoneOffset();
+    if (offset > 0) {
+        last_updated.setHours(last_updated.getHours() - 1);
+    }
     document.getElementById("local_time").innerHTML = last_updated.toLocaleTimeString('en-US', {hour: '2-digit', minute: '2-digit', hour12: true});
-    var now = Date.now()
+    var now = Date.now();
     var timeDiff = (now - last_updated);
+    console.log("now "+Date.now());
+    console.log("diff "+timeDiff);
     document.getElementById("update_elapsed").innerHTML = msToTime(timeDiff);
 </script>
 
