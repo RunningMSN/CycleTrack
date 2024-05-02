@@ -3,7 +3,7 @@ from . import db
 from .models import School_Profiles_Data
 
 # Cycles available to add data
-VALID_CYCLES = [2024, 2023, 2022, 2021, 2020, 2019, 2018, 2017, 2016, 2015, 2014, 2013]
+VALID_CYCLES = [2025, 2024, 2023, 2022, 2021, 2020, 2019, 2018, 2017, 2016, 2015, 2014, 2013]
 # Current cycle to be used for explorer pages
 CURRENT_CYCLE = 2022
 
