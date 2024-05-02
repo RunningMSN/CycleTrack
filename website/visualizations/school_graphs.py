@@ -69,9 +69,9 @@ def interview_acceptance_histogram(df, column_name):
     # Generate all traces for the past 3 cycles (including current)
     trace_1 = df[df['cycle_year'] == VALID_CYCLES[0]][column_name].dropna()
     trace_2 = df[df['cycle_year'] == VALID_CYCLES[1]][column_name].dropna()
-    trace_2 = trace_2.apply(lambda x: x.replace(year=x.year + 1))
+    trace_2 = trace_2.apply(lambda x: x + pd.DateOffset(years=1))
     trace_3 = df[df['cycle_year'] == VALID_CYCLES[2]][column_name].dropna()
-    trace_3 = trace_3.apply(lambda x: x.replace(year=x.year + 2))
+    trace_3 = trace_3.apply(lambda x: x + pd.DateOffset(years=2))
 
     # If no data return
     if len(trace_1) == 0 and len(trace_2) == 0 and len(trace_3) == 0:
