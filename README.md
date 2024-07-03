@@ -67,3 +67,15 @@ about the school such as the state of admissions actions over the current applic
 information about applicants interviewed/accepted to that particular school. We recognize that there is likely
 additional information about schools that you may like displayed. If so, please contact us and if feasible, we will work
 to add this in.
+
+## License
+
+This project is licensed under the CycleTrack License Agreement. By accessing, viewing, or contributing to this code, 
+you agree to the terms and conditions outlined in the [LICENSE](./LICENSE) file.
+
+### Key Points:
+- **Viewing**: You can view the source code for personal, educational, or informational purposes.
+- **Contributing**: Contributions are welcome, but by submitting, you assign all rights to Daniel Amusin (RunningMSN) and Isabelle Hua (ijhua).
+- **Restrictions**: You are not allowed to reproduce, distribute, or use the code for commercial purposes without prior written consent.
+
+For more details, please read the [LICENSE](./LICENSE) file.
