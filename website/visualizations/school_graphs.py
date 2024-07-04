@@ -55,7 +55,7 @@ def cycle_progress(data, cycle_year):
                                hovertemplate = "%{x}<br>%{y}<extra></extra>",))
 
     # Overlay both histograms
-    fig.update_layout(barmode='overlay', bargap=0, margin=dict(l=0, r=0, t=0, b=0), height=200, autosize=True)
+    fig.update_layout(barmode='overlay', bargap=0, margin=dict(l=0, r=0, t=0, b=0), height=200, autosize=True, legend=dict(y=0.5))
     
     # Find the maximum number of date repeated in each column; current threshold for log scale on any date is 10 actions
     max_count = data.apply(pd.Series.value_counts).max()
