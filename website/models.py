@@ -37,7 +37,8 @@ class Cycle(db.Model):
     mcat_ps = db.Column(db.Integer, nullable=True)
     mentoring_message = db.Column(db.Boolean, default=False)
     casper = db.Column(db.Integer, nullable=True)
-    preview = db.Column(db.Integer, nullable=True)
+    preview_score = db.Column(db.Integer, nullable=True)
+    preview_percentile = db.Column(db.Integer, nullable=True)
 
 class School(db.Model):
     id = db.Column(db.Integer, primary_key=True)
