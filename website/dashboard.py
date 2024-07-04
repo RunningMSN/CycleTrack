@@ -182,6 +182,45 @@ def cycles():
                           category='error')
             else:
                 cycle.mcat_ps = None
+            casper = request.form.get('casper')
+            if casper:
+                try:
+                    if int(casper) >= 1 and int(casper) <= 4:
+                        cycle.casper = int(casper)
+                    else:
+                        flash('Please make sure you enter a CASPer quartile between 1 and 4.',
+                              category='error')
+                except Exception as e:
+                    flash('Please make sure you enter a CASPer quartile between 1 and 4.',
+                          category='error')
+            else:
+                cycle.casper = None
+            preview_score = request.form.get('preview_score')
+            if preview_score:
+                try:
+                    if int(preview_score) >= 1 and int(preview_score) <= 9:
+                        cycle.preview_score = int(preview_score)
+                    else:
+                        flash('Please make sure you enter a PREview score between 1 and 9.',
+                              category='error')
+                except Exception as e:
+                    flash('Please make sure you enter a CASPer quartile between 1 and 4.',
+                          category='error')
+            else:
+                cycle.preview_score = None
+            preview_percentile = request.form.get('preview_percentile')
+            if preview_percentile:
+                try:
+                    if int(preview_percentile) >= 0 and int(preview_percentile) <= 100:
+                        cycle.preview_percentile = int(preview_percentile)
+                    else:
+                        flash('Please make sure you enter a PREview percentile between 0 and 100.',
+                              category='error')
+                except Exception as e:
+                    flash('Please make sure you enter a PREview percentile between 0 and 100.',
+                          category='error')
+            else:
+                cycle.preview_percentile = None
             db.session.commit()
 
     # Check if have stats filled out using cGPA as representative info
@@ -353,7 +392,6 @@ def lists():
 
     # Check if there are schools person can add secondary cost to
     schools_to_add_secondary_cost = pd.DataFrame(columns=['school_id', 'name', 'type', 'prog_type'])
-
     for school, profile in schools:
         # Check if cost entry exists
         secondary_cost = Secondary_Costs.query.filter_by(school_id=school.school_id, cycle_year=cycle.cycle_year).first()
@@ -393,6 +431,7 @@ def lists():
                                             'prog_type': [school.school_type]})
                     schools_to_add_secondary_cost = pd.concat([schools_to_add_secondary_cost, new_row],
                                                               ignore_index=True)
+
     # Check if PhD applicant for message about MD/DO-only consideration
     if School.query.filter_by(cycle_id=cycle.id, phd=True).first():
         phd_applicant = True
@@ -703,8 +742,24 @@ def export_list():
     cycle_id = int(request.form.get('cycle_id'))
     cycle = Cycle.query.filter_by(id=cycle_id).first()
     # Create dataframe of schools for that cycle and convert to CSV
-    cycle_data = pd.read_sql(School.query.filter_by(cycle_id=cycle_id).statement, db.get_engine()).drop(
-        ['id', 'cycle_id', 'user_id', 'school_type', 'phd', 'note', 'school_id'], axis=1)
+    cycle_data = (pd.read_sql(School.query.filter_by(cycle_id=cycle_id).statement, db.get_engine()))
+
+    # Adjust the names to be more legible
+    def adjust_name(row):
+        adjusted = f"{row['name']}"
+        if row['phd'] == 1:
+            adjusted += f' {row['school_type']}-PhD'
+        return adjusted
+
+    cycle_data['name'] = cycle_data.apply(adjust_name, axis=1)
+    # Drop unnecessary colunmns
+    cycle_data = cycle_data.drop(['id', 'cycle_id', 'user_id', 'school_type', 'phd', 'school_id'], axis=1)
+
+    # Rename headers
+    cycle_data = cycle_data.set_axis(['Name', "Primary Submitted", "Secondary Received", "Application Complete",
+                                      "Pre-Interview Hold", "Interview Received", "Interview Date", "Rejection",
+                                      "Waitlist", "Acceptance", "Withdrawn", "Note"], axis=1)
+
     csv = cycle_data.to_csv(index=False, encoding='utf-8')
     # Generate response/download
     response = Response(csv, mimetype='text/csv')
@@ -1068,8 +1123,3 @@ def delete_class():
         db.session.commit()
         return jsonify({})
 
-
-@dashboard.route('essays', methods=['GET', 'POST'])
-@login_required
-def essays():
-    return render_template('essays.html', user=current_user, cycles=current_user.cycles)

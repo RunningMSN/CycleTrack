@@ -138,6 +138,24 @@
                                             <td><a href="#" data-toggle="tooltip" title="Psychological, Social, and Biological Foundations of Behavior" style="color:black;text-decoration-style:dotted">P/S Score</a></td>
                                             <td><input type="text" name="mcat_ps" id="mcat_ps" class="modalinput" /></input></td>
                                         </tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                <h5>Situational Judgement</h5>
+                                                <small>Leave empty if exam not taken</small>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><a href="#" data-toggle="tooltip" title="Casper score can be an integer 1-4" style="color:black;text-decoration-style:dotted">Casper Quartile</a></td>
+                                            <td><input type="text" name="casper" id="casper" class="modalinput"/></input></td>
+                                        </tr>
+                                         <tr>
+                                            <td><a href="#" data-toggle="tooltip" title="PREview score can be an integer 1-9" style="color:black;text-decoration-style:dotted">PREview Score</a></td>
+                                            <td><input type="text" name="preview_score" id="preview_score" class="modalinput"/></input></td>
+                                        </tr>
+                                        <tr>
+                                            <td><a href="#" data-toggle="tooltip" title="PREview percentile can be an integer 0-100" style="color:black;text-decoration-style:dotted">PREview Percentile</a></td>
+                                            <td><input type="text" name="preview_percentile" id="preview_percentile" class="modalinput"/></input></td>
+                                        </tr>
                                     </table>
                                 </div>
                         </div>
@@ -300,6 +318,24 @@
                                         <tr>
                                             <td><a href="#" data-toggle="tooltip" title="Psychological, Social, and Biological Foundations of Behavior" style="color:black;text-decoration-style:dotted">P/S Score</a></td>
                                             <td><input type="text" name="mcat_ps" id="mcat_ps" class="modalinput" {% if cycle.mcat_ps %}value="{{ cycle.mcat_ps }}"{% endif %}/></input></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                <h5>Situational Judgement</h5>
+                                                <small>Leave empty if exam not taken</small>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><a href="#" data-toggle="tooltip" title="Casper score can be an integer 1-4" style="color:black;text-decoration-style:dotted">Casper Quartile</a></td>
+                                            <td><input type="text" name="casper" id="casper" class="modalinput" {% if cycle.casper %}value="{{ cycle.casper }}"{% endif %}/></input></td>
+                                        </tr>
+                                         <tr>
+                                            <td><a href="#" data-toggle="tooltip" title="PREview score can be an integer 1-9" style="color:black;text-decoration-style:dotted">PREview Score</a></td>
+                                            <td><input type="text" name="preview_score" id="preview_score" class="modalinput" {% if cycle.preview_score %}value="{{ cycle.preview_score }}"{% endif %}/></input></td>
+                                        </tr>
+                                        <tr>
+                                            <td><a href="#" data-toggle="tooltip" title="PREview percentile can be an integer 0-100" style="color:black;text-decoration-style:dotted">PREview Percentile</a></td>
+                                            <td><input type="text" name="preview_percentile" id="preview_percentile" class="modalinput" {% if cycle.preview_percentile %}value="{{ cycle.preview_percentile }}"{% endif %}/></input></td>
                                         </tr>
                                     </table>
                                 </div>
