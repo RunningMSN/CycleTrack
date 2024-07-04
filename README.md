@@ -71,11 +71,11 @@ to add this in.
 ## License
 
 This project is licensed under the CycleTrack License Agreement. By accessing, viewing, or contributing to this code, 
-you agree to the terms and conditions outlined in the [LICENSE](./LICENSE) file.
+you agree to the terms and conditions outlined in the [LICENSE](./LICENSE.md) file.
 
 ### Key Points:
 - **Viewing**: You can view the source code for personal, educational, or informational purposes.
 - **Contributing**: Contributions are welcome, but by submitting, you assign all rights to Daniel Amusin (RunningMSN) and Isabelle Hua (ijhua).
 - **Restrictions**: You are not allowed to reproduce, distribute, or use the code for commercial purposes without prior written consent.
 
-For more details, please read the [LICENSE](./LICENSE) file.
+For more details, please read the [LICENSE](./LICENSE.md) file.

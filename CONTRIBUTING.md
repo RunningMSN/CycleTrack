@@ -15,6 +15,6 @@ the CycleTrack team.
 
 By submitting contributions, you agree to assign all rights, title, and interest in and to your contributions to 
 the CycleTrack team. Your contributions will be licensed under the same terms as the main codebase, as detailed in the 
-[LICENSE](./LICENSE) file.
+[LICENSE](./LICENSE.md) file.
 
 Thank you for your contributions!
