@@ -59,6 +59,7 @@ class School(db.Model):
     withdrawn = db.Column(db.DateTime(timezone=True), nullable=True)
     note = db.Column(db.Text(), nullable=True)
     school_id = db.Column(db.Integer, db.ForeignKey('school__profiles__data.school_id'))
+    hard_secondary_submission_days = db.Column(db.Integer)
 
 class School_Profiles_Data(db.Model):
     school = db.Column(db.String(150), primary_key=True)
@@ -181,6 +182,12 @@ class School_Stats(db.Model):
     phd_interview_date = db.Column(db.DateTime(timezone=True), nullable=True)
     phd_waitlist_date = db.Column(db.DateTime(timezone=True), nullable=True)
     phd_acceptance_date = db.Column(db.DateTime(timezone=True), nullable=True)
+    next_reg_historic_ii = db.Column(db.DateTime(timezone=True), nullable=True)
+    last_complete_reg_for_ii = db.Column(db.DateTime(timezone=True), nullable=True)
+    next_phd_historic_ii = db.Column(db.DateTime(timezone=True), nullable=True)
+    last_complete_phd_for_ii = db.Column(db.DateTime(timezone=True), nullable=True)
+    reg_interviewing = db.Column(db.Boolean)
+    phd_interviewing = db.Column(db.Boolean)
 
 
 class Courses(db.Model):

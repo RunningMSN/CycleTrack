@@ -3,7 +3,7 @@ from flask_login import current_user, login_required
 from . import db, form_options, mail
 from .models import Cycle, School, School_Profiles_Data, Courses, User_Profiles, School_Stats, Secondary_Costs
 import json
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 import dateutil.parser
 import re
 from .visualizations import dot, line, bar, sankey, map, gpa_graph, horz_bar
@@ -450,7 +450,9 @@ def lists():
         program_types.append('DO')
 
     # if it's the current cycle, get the most recent dates
+    missing_hard_delay_cutoff = []
     if cycle.cycle_year == form_options.VALID_CYCLES[0]:
+        # Get the most recent dates
         dates = {}
         for school in schools:
             school_stats = School_Stats.query.filter_by(school_id=school[1].school_id).first()
@@ -468,6 +470,57 @@ def lists():
                 dates[name]['acceptance'] = school_stats.reg_acceptance_date.strftime("%m-%d-%y") if school_stats.reg_acceptance_date is not None else None
                 if not school_stats.reg_interview_date and not school_stats.reg_waitlist_date and not school_stats.reg_acceptance_date:
                     dates[name]= None
+
+        # Update any entered new hard deadlines
+        for item in request.form:
+            if item.startswith("hard_delay_collect-"):
+                school_details = item.split('-')
+                edit_hard_deadline = School.query.filter_by(id=school_details[1]).first()
+                if request.form.get(item):
+                    edit_hard_deadline.hard_secondary_submission_days = request.form.get(item)
+                else:
+                    edit_hard_deadline.hard_secondary_submission_days = -1
+        db.session.commit()
+
+        secondary_submission_order = {"school": [], "profile": [], "hard_soft": [], "recommended_submission": []}
+        for school, profile in schools:
+            # Find missing hard deadlines
+            if school.secondary_received and not school.hard_secondary_submission_days:
+                missing_hard_delay_cutoff.append(school)
+
+            if school.application_complete:
+                continue
+
+            # Process list ordering
+            secondary_submission_order["school"].append(school)
+            secondary_submission_order["profile"].append(profile)
+
+            # Grab school stats entry
+            school_stats = School_Stats.query.filter_by(school_id=school.school_id).first()
+
+            # Process if hard deadline
+            if school.hard_secondary_submission_days and school.hard_secondary_submission_days != -1:
+                deadline = school.secondary_received + timedelta(days=school.hard_secondary_submission_days)
+                secondary_submission_order["recommended_submission"].append(deadline)
+                secondary_submission_order["hard_soft"].append("hard")
+            else:
+                if school.phd == False:
+                    deadline = school_stats.last_complete_reg_for_ii
+                else:
+                    deadline = school_stats.last_complete_phd_for_ii
+                secondary_submission_order["recommended_submission"].append(deadline)
+                secondary_submission_order["hard_soft"].append("soft")
+        secondary_suggestion_order = pd.DataFrame(secondary_submission_order).sort_values(by=["recommended_submission", "hard_soft"])
+        if len(secondary_suggestion_order) > 0 and not secondary_suggestion_order["recommended_submission"].isnull().all():
+            secondary_suggestion_order["recommended_submission"] = secondary_suggestion_order["recommended_submission"].dt.strftime('%b %d')
+            secondary_suggestion_unknown = secondary_suggestion_order[secondary_suggestion_order["recommended_submission"].isnull()].reset_index(drop=True)
+            secondary_suggestion_order = secondary_suggestion_order.dropna(subset=["recommended_submission"]).reset_index(drop=True)
+        elif len(secondary_suggestion_order) > 0:
+            secondary_suggestion_unknown = secondary_suggestion_order.reset_index(drop=True)
+            secondary_suggestion_order = None
+        else:
+            secondary_suggestion_order = None
+            secondary_suggestion_unknown = None
     else:
         dates = None
 
@@ -475,7 +528,9 @@ def lists():
                            usmd_school_list=form_options.get_md_schools('USA'),
                            camd_school_list=form_options.get_md_schools('CAN'),
                            do_school_list=form_options.get_do_schools(), program_types=program_types, today=datetime.today(),
-                           most_recent=dates, schools_to_add_secondary_cost=schools_to_add_secondary_cost)
+                           most_recent=dates, schools_to_add_secondary_cost=schools_to_add_secondary_cost,
+                           curr_cycle=form_options.VALID_CYCLES[0], missing_hard_delay_cutoff=missing_hard_delay_cutoff,
+                           secondary_suggestion_order=secondary_suggestion_order, secondary_suggestion_unknown=secondary_suggestion_unknown)
 
 
 
@@ -748,11 +803,11 @@ def export_list():
     def adjust_name(row):
         adjusted = f"{row['name']}"
         if row['phd'] == 1:
-            adjusted += f' {row['school_type']}-PhD'
+            adjusted += f" {row['school_type']}-PhD"
         return adjusted
 
     cycle_data['name'] = cycle_data.apply(adjust_name, axis=1)
-    # Drop unnecessary colunmns
+    # Drop unnecessary columns
     cycle_data = cycle_data.drop(['id', 'cycle_id', 'user_id', 'school_type', 'phd', 'school_id'], axis=1)
 
     # Rename headers

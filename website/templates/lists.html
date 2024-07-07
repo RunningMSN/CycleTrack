@@ -298,6 +298,15 @@ function toggleCancel() {
         </div>
         {% endif %}
     </div>
+    <div class="row">
+        <div class="col-auto">
+            {% if cycle.cycle_year == curr_cycle and cycle.schools|length > 0  %}
+            <a class="btn btn-outline-primary rounded normal_list" data-toggle="modal" data-target="#secondary-order-modal" style="margin: 3px; margin-left: 0px">
+                Essay Submission Optimization
+            </a>
+            {% endif %}
+        </div>
+    </div>
 
         <p id="no_schools" class="d-none">
             You do not have any schools that meet the filter criteria. Please edit the filters or add the school if it is missing.
@@ -350,6 +359,14 @@ function toggleCancel() {
                             {% elif school.interview_received %}
                             <div class="text-center rounded" style="1px; margin-top: 3px; background-color: #d9abff">
                                 Interview
+                            </div>
+                            {% elif school.application_complete %}
+                            <div class="text-center rounded" style="1px; margin-top: 3px; background-color: #0077b6">
+                                Complete
+                            </div>
+                            {% elif school.secondary_received %}
+                            <div class="text-center rounded" style="1px; margin-top: 3px; background-color: #00b4d8">
+                                Secondary
                             </div>
                             {% endif %}
                         </div>
@@ -666,4 +683,97 @@ function toggleCancel() {
     </div>
 </div>
 {% endfor %}
+
+<!-- SECONDARY ESSAY ORDER -->
+{% if cycle.schools|length > 0 %}
+<div class="modal fade" id="secondary-order-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form method="POST">
+                <div class="modal-header">
+                    <h5 class="modal-title">Secondary Essay Optimization</h5>
+                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <details>
+                        <summary class="h5">About This Tool</summary>
+                        <p>
+                            Submitting secondary applications in a timely manner is hard. This tool finds the next theoretical
+                            interview invitation release date based on past data, and the last date by which
+                            completing the secondary application was included in the interviewee pool. It is unique to
+                            your school list.
+                        </p>
+                        <p>
+                            By combining your individual school list with historic data, this tool is meant to provide
+                            a <strong>suggested order in which to complete applications</strong>. It will automatically
+                            update as you track data in the school list.
+                        </p>
+                    </details>
+                    <div id="hard_deadlines_entry">
+                        {% if missing_hard_delay_cutoff|length > 0 %}
+                        <hr>
+                        <p>
+                            This message only appears when you have recorded that you received new secondaries.
+                        </p>
+                        <p>
+                            Some schools have a <strong>strict deadline</strong> regarding the amount of time in which you
+                            can submit your application. If any of the following school(s) have such a deadline, enter the
+                            number of days in which the essays are due (e.g. enter 14 for 14 days). Otherwise, leave the
+                            box empty and click submit at the bottom of this pop-up. After submitting, please re-open
+                            the pop-up for an updated order.
+                        </p>
+                        <table class="table">
+                            {% for school in missing_hard_delay_cutoff %}
+                                <tr>
+                                    <td><a href="#" data-toggle="tooltip"
+                                           title="{{ school.name }}"
+                                           style="color:black;text-decoration-style:dotted">{{ school.name }} ({{ school.school_type }}{%if school.phd %}-PhD{% endif %})</a></td>
+                                    <td><input type="text" name="hard_delay_collect-{{ school.id }}" id="hard_delay_collect-{{ school.id }}" class="modalinput"}/></input></td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                        {% endif %}
+                        <input type="hidden" name="cycle_id" id="cycle_id" value="{{ cycle.id }}">
+                    </div>
+                    <div id="secondary_order_output">
+                        The following is a recommended order in which to submit your secondary essays based on historic
+                        data. <strong>Bolded lines are applications which are <u>mandatory</u> to submit based on
+                        the deadline you have entered</strong>. Unbolded dates are not hard requirements, and are
+                        purely suggested based on the last application submission in the previous cycle that yielded
+                        the next interview if it were to occur in the current year.
+
+                        {% if secondary_suggestion_order|length > 0 %}
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <td>#</td>
+                                    <td>School</td>
+                                    <td>Date</td>
+                                </tr>
+                            </thead>
+                        {% for index, row in secondary_suggestion_order.iterrows()%}
+                            <tr {% if row["hard_soft"] == "hard" %} style="font-weight:bold" {% endif %}>
+                                <td>{{ index + 1 }}</td>
+                                <td>{{ row["school"].name }} ({{  row["profile"].md_or_do }}{%if row["school"].phd %}-PhD{% endif %})</td>
+                                <td>{{ row["recommended_submission"] }}</td>
+                            </tr>
+                        {% endfor %}
+                        </table>
+                        {% endif %}
+                        {% if secondary_suggestion_unknown|length > 0%}
+                        We do not have enough data to provide suggestions for: {% for index, row in secondary_suggestion_unknown.iterrows() %}{% if index != 0 %}, {% endif %}{{ row["school"].name }} ({{ row["profile"].md_or_do }}{%if row["school"].phd %}-PhD{% endif %}){% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    {% if missing_hard_delay_cutoff|length > 0 %}
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    {% endif %}
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endif %}
 {% endblock %}

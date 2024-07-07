@@ -452,3 +452,98 @@ def remove_unused_accounts(app):
                     # Delete the user because no cycle found
                     db.session.delete(user)
         db.session.commit()
+
+def next_historic_interview(app):
+    with app.app_context():
+        from .. import db, form_options
+        from ..models import School, Cycle, School_Profiles_Data, School_Stats
+        today = datetime.today()
+
+        for school in School_Profiles_Data.query.all():
+            school_stats_entry = School_Stats.query.filter_by(school_id=school.school_id).first()
+
+            # Query for all entries
+            query = db.session.query(School, Cycle).filter(School.name == school.school, School.interview_received.isnot(None), School.application_complete.isnot(None)).join(Cycle,School.cycle_id == Cycle.id)
+            # Filter to current and past year
+            query = query.filter(Cycle.cycle_year.in_(form_options.VALID_CYCLES[0:2]))
+
+            reg = pd.read_sql(query.filter(School.phd == False).statement, db.get_engine())
+            if len(reg) > 5:
+                school_stats_entry.reg_interviewing = reg['interview_received'].max() > datetime.strptime(f"{form_options.VALID_CYCLES[0]-1}-06-01", '%Y-%m-%d')
+
+                # Adjust so that everything in current year
+                reg[['interview_received', 'application_complete']] = reg.apply(
+                    lambda row: pd.Series({
+                        'interview_received': row['interview_received'] + pd.DateOffset(years=1) if row['cycle_year'] ==
+                                                                                                    form_options.VALID_CYCLES[
+                                                                                                        1] else row[
+                            'interview_received'],
+                        'application_complete': row['application_complete'] + pd.DateOffset(years=1) if row[
+                                                                                                            'cycle_year'] ==
+                                                                                                        form_options.VALID_CYCLES[
+                                                                                                            1] else row[
+                            'application_complete']
+                    }),
+                    axis=1
+                )
+
+                # Filter to future interviews
+                reg = reg[reg['interview_received'] > today]
+
+                # Find the minimum interview_received date
+                min_interview_date = reg['interview_received'].min()
+                min_date_rows = reg[reg['interview_received'] == min_interview_date]
+
+                # Find maximum application submitted date for that interview
+                max_complete_index = min_date_rows['application_complete'].idxmax()
+                row = reg.loc[max_complete_index]
+
+                # Save data
+                school_stats_entry.next_reg_historic_ii = row['interview_received']
+                school_stats_entry.last_complete_reg_for_ii = row['application_complete']
+            else:
+                school_stats_entry.reg_interviewing = False
+                school_stats_entry.next_reg_historic_ii = None
+                school_stats_entry.last_complete_reg_for_ii = None
+
+            phd = pd.read_sql(query.filter(School.phd == True).statement, db.get_engine())
+            if len(phd) > 5:
+                school_stats_entry.phd_interviewing = phd['interview_received'].max() > datetime.strptime(
+                    f"{form_options.VALID_CYCLES[0] - 1}-06-01", '%Y-%m-%d')
+
+                # Adjust so that everything in current year
+                phd[['interview_received', 'application_complete']] = phd.apply(
+                    lambda row: pd.Series({
+                        'interview_received': row['interview_received'] + pd.DateOffset(years=1) if row['cycle_year'] ==
+                                                                                                    form_options.VALID_CYCLES[
+                                                                                                        1] else row[
+                            'interview_received'],
+                        'application_complete': row['application_complete'] + pd.DateOffset(years=1) if row[
+                                                                                                            'cycle_year'] ==
+                                                                                                        form_options.VALID_CYCLES[
+                                                                                                            1] else row[
+                            'application_complete']
+                    }),
+                    axis=1
+                )
+
+                # Filter to future interviews
+                phd = phd[phd['interview_received'] > today]
+
+                # Find the minimum interview_received date
+                min_interview_date = phd['interview_received'].min()
+                min_date_rows = phd[phd['interview_received'] == min_interview_date]
+
+                # Find maximum application submitted date for that interview
+                max_complete_index = min_date_rows['application_complete'].idxmax()
+                row = phd.loc[max_complete_index]
+
+                # Save data
+                school_stats_entry.next_phd_historic_ii = row['interview_received']
+                school_stats_entry.last_complete_phd_for_ii = row['application_complete']
+            else:
+                school_stats_entry.phd_interviewing = False
+                school_stats_entry.next_phd_historic_ii = None
+                school_stats_entry.last_complete_phd_for_ii = None
+
+            db.session.commit()

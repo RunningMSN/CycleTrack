@@ -78,12 +78,16 @@ def create_app():
     @scheduler.task('interval', id='remove_inactive_users', hours=24)
     def remove_inactive_users():
         jobs.remove_unused_accounts(app)
+    @scheduler.task('interval', id='essay_optimizer_stats', hours=4)
+    def update_essay_optimizer_stats():
+        jobs.next_historic_interview(app)
 
     scheduler.start()
     # Run calculations on startup if needed
     # jobs.update_stats(app)
     # jobs.update_map(app)
     # jobs.remove_unused_accounts(app)
+    # jobs.next_historic_interview(app)
 
     return app
 
