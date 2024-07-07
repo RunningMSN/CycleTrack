@@ -1,6 +1,7 @@
 var school_type = 'All';
 var state = 'All';
 var country = 'All';
+var search = 'All';
 
 $(document).ready(function() {
     $("#school_type").change(function() {
@@ -15,6 +16,15 @@ $(document).ready(function() {
         country = $(this).val();
         filterSettings();
     });
+     $("#searchbar").on('input', function() {
+        input = $(this).val()
+        if (input.length > 0) {
+            search = input
+        } else {
+            search = 'All'
+        }
+        filterSettings();
+    });
 });
 
 function filterSettings() {
@@ -22,6 +32,12 @@ function filterSettings() {
     var removeCount = 0;
     for (let i = 0; i < all_schools.length; i++){
         var remove = false;
+        // Check search
+        if (search != 'All') {
+            if (!all_schools[i].id.toLowerCase().includes(search.toLowerCase())) {
+                remove = true;
+            }
+        }
         // Check school type
         if (school_type != 'All') {
             if (!all_schools[i].classList.contains('school_type_' + school_type)) {
