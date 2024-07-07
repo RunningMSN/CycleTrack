@@ -485,7 +485,7 @@ def lists():
         secondary_submission_order = {"school": [], "profile": [], "hard_soft": [], "recommended_submission": []}
         for school, profile in schools:
             # Find missing hard deadlines
-            if school.secondary_received and not school.hard_secondary_submission_days:
+            if school.secondary_received and not school.application_complete and not school.hard_secondary_submission_days:
                 missing_hard_delay_cutoff.append(school)
 
             if school.application_complete:
