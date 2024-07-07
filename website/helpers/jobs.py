@@ -488,7 +488,7 @@ def next_historic_interview(app):
                 )
 
                 # Filter to future interviews
-                reg = reg[reg['interview_received'] > today]
+                reg = reg[(reg['interview_received'] > today) & (reg['application_complete'] > today)]
 
                 # Find the minimum interview_received date
                 min_interview_date = reg['interview_received'].min()
@@ -528,7 +528,7 @@ def next_historic_interview(app):
                 )
 
                 # Filter to future interviews
-                phd = phd[phd['interview_received'] > today]
+                phd = phd[(phd['interview_received'] > today) & (phd['application_complete'] > today)]
 
                 # Find the minimum interview_received date
                 min_interview_date = phd['interview_received'].min()
