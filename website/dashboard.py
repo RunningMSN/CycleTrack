@@ -516,11 +516,12 @@ def lists():
             secondary_suggestion_unknown = secondary_suggestion_order[secondary_suggestion_order["recommended_submission"].isnull()].reset_index(drop=True)
             secondary_suggestion_order = secondary_suggestion_order.dropna(subset=["recommended_submission"]).reset_index(drop=True)
         elif len(secondary_suggestion_order) > 0:
-            secondary_suggestion_unknown = secondary_suggestion_order.reset_index(drop=True)
-            secondary_suggestion_order = None
+            secondary_suggestion_unknown = secondary_suggestion_order[
+                secondary_suggestion_order["recommended_submission"].isnull()].reset_index(drop=True)
+            secondary_suggestion_order = secondary_suggestion_order.dropna(
+                subset=["recommended_submission"]).reset_index(drop=True)
         else:
-            secondary_suggestion_order = None
-            secondary_suggestion_unknown = None
+            secondary_suggestion_unknown = pd.DataFrame()
     else:
         dates = None
 

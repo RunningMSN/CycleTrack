@@ -761,7 +761,9 @@ function toggleCancel() {
                         </table>
                         {% endif %}
                         {% if secondary_suggestion_unknown|length > 0%}
-                        We do not have enough data to provide suggestions for: {% for index, row in secondary_suggestion_unknown.iterrows() %}{% if index != 0 %}, {% endif %}{{ row["school"].name }} ({{ row["profile"].md_or_do }}{%if row["school"].phd %}-PhD{% endif %}){% endfor %}
+                        <p>
+                            We do not have enough data to provide suggestions for: {% for index, row in secondary_suggestion_unknown.iterrows() %}{% if index != 0 %}, {% endif %}{{ row["school"].name }} ({{ row["profile"].md_or_do }}{%if row["school"].phd %}-PhD{% endif %}){% endfor %}
+                        </p>
                         {% endif %}
                     </div>
                 </div>
