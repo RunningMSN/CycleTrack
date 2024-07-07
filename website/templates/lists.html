@@ -695,6 +695,10 @@ function toggleCancel() {
                     <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
+                    <p class="bg-warning container" style="padding: 10px; margin-top: 5px; margin-bottom:5px" >
+                            This is a new tool and may have some bugs! Please report any bugs you find via the
+                            <a href="{{ url_for('dashboard.suggestions') }}">bugs form</a>.
+                    </p>
                     <details>
                         <summary class="h5">About This Tool</summary>
                         <p>
@@ -759,6 +763,8 @@ function toggleCancel() {
                             </tr>
                         {% endfor %}
                         </table>
+                        {% else %}
+                        <br /><br />
                         {% endif %}
                         {% if secondary_suggestion_unknown|length > 0%}
                         <p>
