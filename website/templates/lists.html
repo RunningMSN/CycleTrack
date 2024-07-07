@@ -739,13 +739,16 @@ function toggleCancel() {
                     {% endif %}
                     <div id="secondary_order_output">
                         <p>The following is a recommended order in which to submit your secondary essays based on historic
-                        data <strong>Bolded lines are applications which are <u>mandatory</u> to submit based on
-                        the deadline you have entered</strong>. <a href="#" data-toggle="tooltip"
+                        data. <strong>Bolded lines are applications which are <u>mandatory</u> to submit based on
+                        the deadline you have entered</strong>. Unbolded dates are not hard requirements, and are
+                        purely suggested based on the <a href="#" data-toggle="tooltip"
                                                                    title="Example: Imagine today is 7/8 and the next interview invitation (based on historic data) for a school was on 7/31. The suggested deadline to complete your application by is the latest application complete date out of all of the applicants who received an interview on 7/31."
                                                                    style="color:black;text-decoration-style:dotted">
-                        Unbolded dates are not hard requirements, and are
-                        purely suggested based on the last application submission in the previous cycle that yielded
-                        the next interview if it were to occur in the current year</a>.</p>
+                                last application submission in the previous cycle that yielded
+                        the next interview if it were to occur in the current year</a>. Dates in the past are provided
+                        with a <a href="#" data-toggle="tooltip"
+                                                                   title="Example: If today is 7/8 and the recommended submission date for the next historic interview for a school was 7/5, a new recommended submission date will be calculated after 7/12."
+                                                                   style="color:black;text-decoration-style:dotted">4 day margin of error before recalculating</a>.</p>
                         <p><i>*Note: We recommend completing all applications as soon as possible. This order is a
                             data-informed suggestion for how to organize your time.</i></p>
 
@@ -764,7 +767,7 @@ function toggleCancel() {
                                 <td><a href="#" data-toggle="tooltip"
                                            title="{{ row['profile'].official_name }}"
                                            style="color:black;text-decoration-style:dotted">{{ row["school"].name }} ({{  row["profile"].md_or_do }}{%if row["school"].phd %}-PhD{% endif %})</a></td>
-                                <td>{{ row["recommended_submission"] }}</td>
+                                <td>{% if row["hard_soft"] == "soft" %}~{% endif %}{{ row["recommended_submission"] }}</td>
                             </tr>
                         {% endfor %}
                         </table>
@@ -782,8 +785,8 @@ function toggleCancel() {
                             submit a <a href="{{ url_for('dashboard.suggestions') }}">bug report</a>.</p>
 
                         <small><i>CycleTrack does not guarantee the accuracy of this tool. The information
-                                presented is purely a suggestion based on other users' self-reported data, and submitting essays in
-                                this order does not guarantee medical school interviews.</i></small>
+                                presented is purely a suggestion based on users' self-reported data from the previous
+                                cycle.</i></small>
                     </div>
 
                 </div>
