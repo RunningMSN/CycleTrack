@@ -477,7 +477,10 @@ def lists():
                 school_details = item.split('-')
                 edit_hard_deadline = School.query.filter_by(id=school_details[1]).first()
                 if request.form.get(item):
-                    edit_hard_deadline.hard_secondary_submission_days = request.form.get(item)
+                    try:
+                        edit_hard_deadline.hard_secondary_submission_days = int(request.form.get(item))
+                    except:
+                        flash('Your strict deadline must be entered as an integer number of days (e.g. enter 14 NOT 14 days).', category='error')
                 else:
                     edit_hard_deadline.hard_secondary_submission_days = -1
         db.session.commit()
