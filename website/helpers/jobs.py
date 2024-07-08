@@ -228,6 +228,16 @@ def count_acceptance(df):
 def percent_interviewed_accepted(df):
     '''Returns percent of interviewed applications that received an acceptance.'''
     percent_interviewed_accepted = None
+
+    # Set rejected if did not self update, this is not perfect as rejecting users who potentially just stopped tracking
+    def reject_by_time(row):
+        if pd.isna(row['acceptance']) and datetime.today() > pd.Timestamp(f'{row['cycle_year']}-06-01'):
+            row['rejection'] = datetime.today()
+        return row
+    df = df.apply(reject_by_time, axis=1)
+    # Filter to only people who completed cycle
+    df = df[df['acceptance'].notna() | df['rejection'].notna()]
+
     # Percent of applicants who complete app interviewed
     apps_interviewed_accepted = df[['acceptance', 'interview_received']].dropna(how='all')
     apps_interviewed_accepted = apps_interviewed_accepted[
