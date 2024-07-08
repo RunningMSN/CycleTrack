@@ -524,6 +524,9 @@ def lists():
             secondary_suggestion_unknown = pd.DataFrame()
     else:
         dates = None
+        secondary_suggestion_order = None
+        secondary_suggestion_unknown = None
+
 
     return render_template('lists.html', user=current_user, cycle=cycle, schools=schools, phd_applicant=phd_applicant,
                            usmd_school_list=form_options.get_md_schools('USA'),
