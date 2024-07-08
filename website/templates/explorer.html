@@ -113,7 +113,7 @@
     </div>
     <div class="row">
         {% for key,value in schools.iterrows() %}
-        <div class="col school_entry school_type_{{ value['type'] }} state_{{ value['state'] }} country_{{ value['country'] }} applied_{{ value['applied_to'] }}" style="padding:10px; min-width: 350px;" id="{{ value['name'] }} {{ value['official_name'] }}">
+        <div class="col school_entry school_type_{{ value['type'] }} state_{{ value['state'] }} country_{{ value['country'] }} applied_{{ value['applied_to'] }}" style="padding:10px; min-width: 350px;" id="{{ value['name'] }} {{ value['official_name'] }} {{ value['intermediate_name'] }}">
             <div class="container" style="background:white; padding:10px">
                     <div class="col d-flex align-items-center justify-content-center" style="height: 100px;">
                         <a href="{{ url_for('explorer.explorer_home') }}/school/{{ value['name'] }}">
@@ -122,14 +122,7 @@
                     </div>
                     <div>
                         <center>
-                            <div style="height: 3.1em; /* Approximate height of 3 lines of text */
-                                line-height: 1.5em; /* Approximate height of 1 line of text */
-                                display: flex;
-                                align-items: center;
-                                justify-content: center;
-                                text-align: center;">
-                             <strong>{% if value['applied_to'] %}<i class="bi bi-star-fill" style="color: gold"></i> {% endif %}<a href="{{ url_for('explorer.explorer_home') }}/school/{{ value['name'] }}" data-toggle="tooltip" title="{{ value['official_name'] }} " style="color:black;text-decoration-style:dotted;" >{{ value['official_name'] }} ({{ value['type'] }})</a></strong>
-                            </div>
+                             <strong>{% if value['applied_to'] %}<i class="bi bi-star-fill" style="color: gold"></i> {% endif %}<a href="{{ url_for('explorer.explorer_home') }}/school/{{ value['name'] }}" data-toggle="tooltip" title="{{ value['official_name'] }} " style="color:black;text-decoration-style:dotted;" >{{ value['intermediate_name'] }} ({{ value['type'] }})</a></strong>
                             <br>
                             {{ value['city'] }}, {{ value['state'] }} | {{ value['envt'] }} | {{ value['pub_pri'] }} Institution
                             <br>

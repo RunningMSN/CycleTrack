@@ -79,6 +79,7 @@ class School_Profiles_Data(db.Model):
     lor_phd_link = db.Column(db.String(150))
     school_id = db.Column(db.Integer)
     official_name = db.Column(db.String(150))
+    intermediate_name = db.Column(db.String(150))
 
 
 class School_Stats(db.Model):
