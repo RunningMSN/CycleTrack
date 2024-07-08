@@ -1001,7 +1001,7 @@ def visualizations():
             cycle_data = cycle_data[cycle_data['school_type'] == 'DO']
 
         # Drop extra information
-        cycle_data.drop(['id', 'cycle_id', 'user_id', 'school_type', 'phd', 'note', 'school_id', 'pre_int_hold'], axis=1, inplace=True)
+        cycle_data.drop(['id', 'cycle_id', 'user_id', 'school_type', 'phd', 'note', 'school_id', 'pre_int_hold', 'hard_secondary_submission_days'], axis=1, inplace=True)
         # Drop empty columns
         cycle_data = cycle_data.dropna(axis=1, how='all')
 
