@@ -371,7 +371,7 @@ def lists():
                 except Exception:
                     value = None
 
-                if value and not current_user.id in secondary_cost.contributors.split(','):
+                if (value is not None) and (not current_user.id in secondary_cost.contributors.split(',')):
                     secondary_cost.contributors += f"{current_user.id},"
                     if school_details[2] == 'Reg':
                         if secondary_cost.reg_cost == value:
