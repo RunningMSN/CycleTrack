@@ -402,7 +402,7 @@ function toggleCancel() {
                         <div>
                             {% if (school.secondary_received and not school.application_complete) %}
                             {% set delay = (today - school.secondary_received)|format_days %}
-                            <a href="#" data-toggle="tooltip" title="Days since secondary received." style="color:black;text-decoration-style:dotted;font-size: 1.25rem">{{ delay }}</a>
+                            <a href="#" data-toggle="tooltip" title="Days since secondary received." style="color:black;text-decoration-style:dotted;font-size: 1.25rem">{{ delay }} Days</a>
                             {% endif %}
                         </div>
                     </center>
@@ -752,32 +752,36 @@ function toggleCancel() {
                         <p><i>*Note: We recommend completing all applications as soon as possible. This order is a
                             data-informed suggestion for how to organize your time.</i></p>
 
-                        {% if secondary_suggestion_order|length > 0 %}
-                        <table class="table">
-                            <thead>
-                                <tr style="font-weight:bold">
-                                    <td>#</td>
-                                    <td>School</td>
-                                    <td>Date</td>
+                        {% if secondary_suggestion_order is not none%}
+                            {% if secondary_suggestion_order|length > 0 %}
+                            <table class="table">
+                                <thead>
+                                    <tr style="font-weight:bold">
+                                        <td>#</td>
+                                        <td>School</td>
+                                        <td>Date</td>
+                                    </tr>
+                                </thead>
+                            {% for index, row in secondary_suggestion_order.iterrows()%}
+                                <tr {% if row["hard_soft"] == "hard" %} style="font-weight:bold" {% endif %}>
+                                    <td>{{ index + 1 }}</td>
+                                    <td><a href="#" data-toggle="tooltip"
+                                               title="{{ row['profile'].official_name }}"
+                                               style="color:black;text-decoration-style:dotted">{{ row["school"].name }} ({{  row["profile"].md_or_do }}{%if row["school"].phd %}-PhD{% endif %})</a></td>
+                                    <td>{% if row["hard_soft"] == "soft" %}~{% endif %}{{ row["recommended_submission"] }}</td>
                                 </tr>
-                            </thead>
-                        {% for index, row in secondary_suggestion_order.iterrows()%}
-                            <tr {% if row["hard_soft"] == "hard" %} style="font-weight:bold" {% endif %}>
-                                <td>{{ index + 1 }}</td>
-                                <td><a href="#" data-toggle="tooltip"
-                                           title="{{ row['profile'].official_name }}"
-                                           style="color:black;text-decoration-style:dotted">{{ row["school"].name }} ({{  row["profile"].md_or_do }}{%if row["school"].phd %}-PhD{% endif %})</a></td>
-                                <td>{% if row["hard_soft"] == "soft" %}~{% endif %}{{ row["recommended_submission"] }}</td>
-                            </tr>
-                        {% endfor %}
-                        </table>
-                        {% else %}
-                        <br /><br />
+                            {% endfor %}
+                            </table>
+                            {% else %}
+                            <br /><br />
+                            {% endif %}
                         {% endif %}
-                        {% if secondary_suggestion_unknown|length > 0%}
-                        <p>
-                            <strong>We do not have enough data to provide suggestions for:</strong> {% for index, row in secondary_suggestion_unknown.iterrows() %}{% if index != 0 %}, {% endif %}{{ row["school"].name }} ({{ row["profile"].md_or_do }}{%if row["school"].phd %}-PhD{% endif %}){% endfor %}
-                        </p>
+                        {% if secondary_suggestion_unknown is not none %}
+                            {% if secondary_suggestion_unknown|length > 0%}
+                            <p>
+                                <strong>We do not have enough data to provide suggestions for:</strong> {% for index, row in secondary_suggestion_unknown.iterrows() %}{% if index != 0 %}, {% endif %}{{ row["school"].name }} ({{ row["profile"].md_or_do }}{%if row["school"].phd %}-PhD{% endif %}){% endfor %}
+                            </p>
+                            {% endif %}
                         {% endif %}
 
                         <p class="container" style="padding: 10px; margin-top: 5px; margin-bottom:5px; background-color: #ffe9ad" >
