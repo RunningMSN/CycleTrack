@@ -815,7 +815,7 @@ def export_list():
 
     cycle_data['name'] = cycle_data.apply(adjust_name, axis=1)
     # Drop unnecessary columns
-    cycle_data = cycle_data.drop(['id', 'cycle_id', 'user_id', 'school_type', 'phd', 'school_id'], axis=1)
+    cycle_data = cycle_data.drop(['id', 'cycle_id', 'user_id', 'school_type', 'phd', 'school_id', 'hard_secondary_submission_days'], axis=1)
 
     # Rename headers
     cycle_data = cycle_data.set_axis(['Name', "Primary Submitted", "Secondary Received", "Application Complete",
