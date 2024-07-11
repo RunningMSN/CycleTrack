@@ -982,10 +982,6 @@ def visualizations():
             for filter in filters:
                 cycle_data = cycle_data.drop([filter], axis=1)
                 save_settings['filters'][filter] = True
-
-
-        # Combine all application types (aka rename the schools with a suffix)
-        
         
         # Filter by PhD
         if app_type == "All":

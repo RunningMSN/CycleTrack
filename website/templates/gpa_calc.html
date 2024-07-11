@@ -4,7 +4,7 @@
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 {% endblock %}
 {% block dash_content %}
-<div class="container" style="padding-top:10px">
+<div>
     <h2>GPA Calculator</h2>
     <li class="list-group-item">
         <div class="row">
@@ -29,9 +29,9 @@
         </div>
     </li>
     <div style="margin-top: 10px; margin-bottom: 10px">
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-course">Add Course</button>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-course">Add Course</button>
         {% if user_courses|length > 0 %}
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#gpa-graph">GPA Graph</button>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#gpa-graph">GPA Graph</button>
         {% endif %}
     </div>
     <!-- COURSE LIST -->
@@ -49,7 +49,7 @@
                 {% for course in user_courses %}
                     <tr>
                         <td style="padding-right: 0px">
-                            <button type="button" class="btn btn-link" data-toggle="modal" data-target="#edit-{{ course.id }}-modal" style="padding: 0px">
+                            <button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#edit-{{ course.id }}-modal" style="padding: 0px">
                                 <i class="bi bi-pencil-square"></i>
                             </button>
                             <button type="button" class="btn btn-link" onclick="deleteClass({{ course.id }})" style="padding: 0px">
@@ -90,14 +90,14 @@
 </div>
 
 <!-- MODAL FOR ADDING COURSES -->
-<div class="modal fade" id="add-course" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+<div class="modal fade" id="add-course" tabindex="-1" aria-labelledby="add-course" aria-hidden="true">
+    <div class="modal-dialog">
         <div class="modal-content">
             <form method="POST" action="{{ url_for('dashboard.add_course') }}">
                 <input type="hidden" name="add_course" value="true" />
                 <div class="modal-header">
                     <h5 class="modal-title">Add Course</h5>
-                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <table width="100%">
@@ -175,7 +175,7 @@
                     <input type="hidden" name="user_ud" id="user_id" value="{{ user.id }}">
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary">Add Course</button>
                 </div>
             </form>
@@ -185,15 +185,15 @@
 
 <!-- MODALS FOR EDITING COURSES -->
 {% for course in user_courses %}
-<div class="modal fade" id="edit-{{ course.id }}-modal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+<div class="modal fade" id="edit-{{ course.id }}-modal" tabindex="-1" aria-labelledby="edit-{{ course.id }}-modal" aria-hidden="true">
+    <div class="modal-dialog">
         <div class="modal-content">
             <form method="POST" action="{{ url_for('dashboard.add_course') }}">
                 <input type="hidden" name="edit_course" value="true" />
                 <input type="hidden" name="course_id" value="{{ course.id }}" />
                 <div class="modal-header">
                     <h5 class="modal-title">Edit Course</h5>
-                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <table width="100%">
@@ -286,7 +286,7 @@
                     <input type="hidden" name="user_ud" id="user_id" value="{{ user.id }}">
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-danger" onclick="deleteClass({{ course.id }})">Delete Course</button>
                     <button type="submit" class="btn btn-primary">Edit Course</button>
                 </div>
@@ -304,7 +304,7 @@
                 <input type="hidden" name="add_course" value="true" />
                 <div class="modal-header">
                     <h5 class="modal-title">GPA Graph</h5>
-                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     {% if graphJSON %}
@@ -322,7 +322,7 @@
                     {% endif %}
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 </div>
             </form>
         </div>

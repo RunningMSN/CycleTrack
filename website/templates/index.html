@@ -2,33 +2,60 @@
 {% block title %}CycleTrack{% endblock %}
 {% block additional_js %}{% endblock %}
 {% block content %}
-<div class="p-5 mb-4" style="background: #ebebeb">
+<div class="p-5 " style="background: #ebebeb">
     <div class="container-fluid py-5">
         <div class="container">
-            <h1 class="display-4">{{ app_count|format_integers_comma }} Applications. {{ school_count }} Med Schools. {{ user_count|format_integers_comma }} Future Doctors.</h1>
-            <p class="lead">CycleTrack is a simple system for tracking and visualizing your medical school applications
-            while crowdsourcing data to make the application process more transparent and less stressful.</p>
-            <a href="{{ url_for('pages.about') }}"><button class="btn btn-primary">Learn More</button></a>
-            {% if not user.is_authenticated %}<a href="{{ url_for('authentication.register') }}"><button class="btn btn-success">Join Now</button></a>{% endif %}
+            <div class="row">
+                <div class="col-12 col-md-8 my-2">
+                    <h1>CycleTrack makes medical school admissions more <span class="text-primary">accessible</span> and <span class="text-primary">transparent</span>.</h1>
+                    <p class="lead">CycleTrack is a <strong>free</strong> platform for tracking and visualizing your medical school applications.
+                    You track your application, we'll crowdsource your data to open the box on medical school admissions.</p>
+                    <a href="{{ url_for('pages.about') }}"><button class="btn btn-primary fs-5" style="border-radius: 0; margin: 5px; margin-left: 0">Learn More</button></a>
+                    <a href="{{ url_for('authentication.register') }}"><button class="btn btn-success fs-5" style="border-radius: 0; margin: 5px;">Get Started <i class="bi bi-arrow-right-short"></i></button></a>
+
+                </div>
+                <div class="col-12 col-md-4 my-2">
+                    <div class="rounded bg-warning px-4 py-4">
+                        <h2>We've tracked...</h2>
+                        <h5><strong>Users:</strong> {{ user_count|format_integers_comma }}</h5>
+                        <h5><strong>Applications:</strong> {{ app_count|format_integers_comma }}</h5>
+                        <h5><strong>Medical Schools:</strong> {{ school_count }}</h5>
+                        <h6>And we're just getting started.</h6>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
 
-<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-<div class="container d-none d-sm-none d-md-block" style="padding-top:20px">
-    <div id="agg_map" class="agg_map"></div>
-    <script>
-        fetch('{{ url_for('static', filename='agg_map/map.JSON') }}')
-            .then(response => response.json())
-            .then(data => {
-                data.config = {'responsive': true, 'displaylogo': false, 'scrollZoom': false};
-                Plotly.newPlot('agg_map', data);
-            })
-            .catch(error => console.log(error));
-    </script>
-</div>
 
+
+<div class="p-5 mb-4 d-none d-sm-none d-md-block">
+    <div class="container-fluid">
+        <div class="container">
+            <div class="row">
+                <div class="col-3">
+                    <h2>We're tracking your applications from every state with a medical school.</h2>
+                </div>
+                <div class="col-9">
+                    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+                    <div id="agg_map" class="agg_map"></div>
+                    <script>
+                        fetch('{{ url_for('static', filename='agg_map/map.JSON') }}')
+                            .then(response => response.json())
+                            .then(data => {
+                                data.config = {'responsive': true, 'displaylogo': false, 'scrollZoom': false};
+                                Plotly.newPlot('agg_map', data);
+                            })
+                            .catch(error => console.log(error));
+                    </script>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
 
 
 {% endblock %}

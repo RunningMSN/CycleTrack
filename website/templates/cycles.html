@@ -3,20 +3,20 @@
 {% block additional_js %}
 <script src="{{ url_for('static', filename='/js/dashboard.js') }}"></script>
 <script>
-        $(function () {
-          $('[data-toggle="tooltip"]').tooltip()
-        })
+    $(function () {
+      $('[data-toggle="tooltip"]').tooltip()
+    })
 </script>
 {% endblock %}
 {% block dash_content %}
 <!-- SETUP MODAL FOR ADDING A NEW CYCLE -->
-<div class="modal fade" id="add_cycle_modal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+<div class="modal fade" id="add_cycle_modal" tabindex="-1" aria-labelledby="add_cycle_modal" aria-hidden="true">
+    <div class="modal-dialog">
         <div class="modal-content">
             <form method="POST">
                 <div class="modal-header">
                     <h5 class="modal-title">New Application Cycle</h5>
-                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <table class="table">
@@ -33,396 +33,517 @@
                     <div style="padding-bottom: 10px">
                         You have the option to provide additional information about your application cycle. This
                         information is de-identified and aggregated to help make medical school application more
-                        transparent.<br /> <br />
-                        You may skip this section or leave any questions blank if you don't feel comfortable sharing. For
+                        transparent.<br/> <br/>
+                        You may skip this section or leave any questions blank if you don't feel comfortable sharing.
+                        For
                         privacy information, see our <a href="{{ url_for('pages.privacy') }}">privacy policy</a>.
                     </div>
                     <div>
-                                <div>
+                        <div>
 
-                                    <table class="table">
-                                        <tr><td colspan="2"><h5>Demographics</h5></td></tr>
-                                        <tr>
-                                            <td>Home State</td>
-                                            <td>
-                                                <select name="home_state" id="home_state" class="btn-sm modalinput">
-                                                    <option value=""></option>
-                                                    {% for state in state_options %}
-                                                    <option value="{{ state }}">{{ state }}</option>
-                                                    {% endfor %}
-                                                </select>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td><a href="#" data-toggle="tooltip" title="This is the age you will be when you would start medical school." style="color:black;text-decoration-style:dotted">Age at Matriculation</a></td>
-                                            <td><input type="text" name="age" id="age" class="modalinput" /></input></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Gender</td>
-                                            <td>
-                                                <select name="gender" id="gender_new" class="btn-sm modalinput" onchange="toggleOtherGender('new')">
-                                                    <option value=""></option>
-                                                    {% for gender in gender_options %}
-                                                    <option value="{{ gender }}">{{ gender }}</option>
-                                                    {% endfor %}
-                                                </select>
-                                            </td>
-                                        </tr>
-                                        <tr class="d-none" id="other_gender_new">
-                                            <td>&nbsp;&nbsp;&nbsp;Other</td>
-                                            <td>
-                                                <input type="text" name="other_gender" class="modalinput"/></input>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td><a href="#" data-toggle="tooltip" title="We ask about biological sex because this is a variable commonly reported by medical schools." style="color:black;text-decoration-style:dotted">Biological Sex</a></td>
-                                            <td>
-                                                <select name="sex" id="sex_new" class="btn-sm modalinput" onchange="toggleOtherSex('new')">
-                                                    <option value=""></option>
-                                                    {% for sex in sex_options %}
-                                                    <option value="{{ sex }}">{{ sex }}</option>
-                                                    {% endfor %}
-                                                </select>
-                                            </td>
-                                        </tr>
-                                        <tr class="d-none" id="other_sex_new">
-                                            <td>&nbsp;&nbsp;&nbsp;Other</td>
-                                            <td>
-                                                <input type="text" name="other_sex" class="modalinput"/></input>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Race/Ethnicity</td>
-                                            <td>
-                                                <select name="race_ethnicity" id="race_ethnicity_new" class="btn-sm modalinput" onchange="toggleOtherRaceEthnicity('new')">
-                                                    <option value=""></option>
-                                                    {% for race_ethnicity in race_ethnicity_options %}
-                                                    <option value="{{ race_ethnicity }}">{{ race_ethnicity }}</option>
-                                                    {% endfor %}
-                                                </select>
-                                            </td>
-                                        </tr>
-                                        <tr class="d-none" id="other_race_ethnicity_new">
-                                            <td>&nbsp;&nbsp;&nbsp;Other</td>
-                                            <td>
-                                                <input type="text" name="other_race_ethnicity" class="modalinput" /></input>
-                                            </td>
-                                        </tr>
-                                        <tr><td colspan="2"><h5>GPA</h5></td></tr>
-                                        <tr>
-                                            <td>Cumulative GPA</td>
-                                            <td><input type="text" name="cgpa" id="cgpa" class="modalinput" /></input></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Science GPA</td>
-                                            <td><input type="text" name="sgpa" id="sgpa" class="modalinput"/></input></td>
-                                        </tr>
-                                        <tr><td colspan="2"><h5>MCAT</h5></td></tr>
-                                        <tr>
-                                            <td>Total MCAT Score</td>
-                                            <td><input type="text" name="mcat_total" id="mcat_total" class="modalinput"/></input></td>
-                                        </tr>
-                                        <tr>
-                                            <td><a href="#" data-toggle="tooltip" title="Chemical and Physical Foundations of Biological Systems" style="color:black;text-decoration-style:dotted">C/P Score</a></td>
-                                            <td><input type="text" name="mcat_cp" id="mcat_cp" class="modalinput" /></input></td>
-                                        </tr>
-                                        <tr>
-                                            <td><a href="#" data-toggle="tooltip" title="Critical Analysis and Reasoning Skills" style="color:black;text-decoration-style:dotted">CARS Score</a></td>
-                                            <td><input type="text" name="mcat_cars" id="mcat_cars" class="modalinput" /></input></td>
-                                        </tr>
-                                        <tr>
-                                            <td><a href="#" data-toggle="tooltip" title="Biological and Biochemical Foundations of Living Systems" style="color:black;text-decoration-style:dotted">B/B Score</a></td>
-                                            <td><input type="text" name="mcat_bb" id="mcat_bb" class="modalinput" /></input></td>
-                                        </tr>
-                                        <tr>
-                                            <td><a href="#" data-toggle="tooltip" title="Psychological, Social, and Biological Foundations of Behavior" style="color:black;text-decoration-style:dotted">P/S Score</a></td>
-                                            <td><input type="text" name="mcat_ps" id="mcat_ps" class="modalinput" /></input></td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="2">
-                                                <h5>Situational Judgement</h5>
-                                                <small>Leave empty if exam not taken</small>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td><a href="#" data-toggle="tooltip" title="Casper score can be an integer 1-4" style="color:black;text-decoration-style:dotted">Casper Quartile</a></td>
-                                            <td><input type="text" name="casper" id="casper" class="modalinput"/></input></td>
-                                        </tr>
-                                         <tr>
-                                            <td><a href="#" data-toggle="tooltip" title="PREview score can be an integer 1-9" style="color:black;text-decoration-style:dotted">PREview Score</a></td>
-                                            <td><input type="text" name="preview_score" id="preview_score" class="modalinput"/></input></td>
-                                        </tr>
-                                        <tr>
-                                            <td><a href="#" data-toggle="tooltip" title="PREview percentile can be an integer 0-100" style="color:black;text-decoration-style:dotted">PREview Percentile</a></td>
-                                            <td><input type="text" name="preview_percentile" id="preview_percentile" class="modalinput"/></input></td>
-                                        </tr>
-                                    </table>
-                                </div>
+                            <table class="table">
+                                <tr>
+                                    <td colspan="2"><h5>Demographics</h5></td>
+                                </tr>
+                                <tr>
+                                    <td>Home State</td>
+                                    <td>
+                                        <select name="home_state" id="home_state" class="btn-sm modalinput">
+                                            <option value=""></option>
+                                            {% for state in state_options %}
+                                            <option value="{{ state }}">{{ state }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><a href="#" data-toggle="tooltip"
+                                           title="This is the age you will be when you would start medical school."
+                                           style="color:black;text-decoration-style:dotted">Age at Matriculation</a>
+                                    </td>
+                                    <td><input type="text" name="age" id="age" class="modalinput"/></input></td>
+                                </tr>
+                                <tr>
+                                    <td>Gender</td>
+                                    <td>
+                                        <select name="gender" id="gender_new" class="btn-sm modalinput"
+                                                onchange="toggleOtherGender('new')">
+                                            <option value=""></option>
+                                            {% for gender in gender_options %}
+                                            <option value="{{ gender }}">{{ gender }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr class="d-none" id="other_gender_new">
+                                    <td>&nbsp;&nbsp;&nbsp;Other</td>
+                                    <td>
+                                        <input type="text" name="other_gender" class="modalinput"/></input>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><a href="#" data-toggle="tooltip"
+                                           title="We ask about biological sex because this is a variable commonly reported by medical schools."
+                                           style="color:black;text-decoration-style:dotted">Biological Sex</a></td>
+                                    <td>
+                                        <select name="sex" id="sex_new" class="btn-sm modalinput"
+                                                onchange="toggleOtherSex('new')">
+                                            <option value=""></option>
+                                            {% for sex in sex_options %}
+                                            <option value="{{ sex }}">{{ sex }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr class="d-none" id="other_sex_new">
+                                    <td>&nbsp;&nbsp;&nbsp;Other</td>
+                                    <td>
+                                        <input type="text" name="other_sex" class="modalinput"/></input>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Race/Ethnicity</td>
+                                    <td>
+                                        <select name="race_ethnicity" id="race_ethnicity_new" class="btn-sm modalinput"
+                                                onchange="toggleOtherRaceEthnicity('new')">
+                                            <option value=""></option>
+                                            {% for race_ethnicity in race_ethnicity_options %}
+                                            <option value="{{ race_ethnicity }}">{{ race_ethnicity }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr class="d-none" id="other_race_ethnicity_new">
+                                    <td>&nbsp;&nbsp;&nbsp;Other</td>
+                                    <td>
+                                        <input type="text" name="other_race_ethnicity" class="modalinput"/></input>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2"><h5>GPA</h5></td>
+                                </tr>
+                                <tr>
+                                    <td>Cumulative GPA</td>
+                                    <td><input type="text" name="cgpa" id="cgpa" class="modalinput"/></input></td>
+                                </tr>
+                                <tr>
+                                    <td>Science GPA</td>
+                                    <td><input type="text" name="sgpa" id="sgpa" class="modalinput"/></input></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2"><h5>MCAT</h5></td>
+                                </tr>
+                                <tr>
+                                    <td>Total MCAT Score</td>
+                                    <td><input type="text" name="mcat_total" id="mcat_total"
+                                               class="modalinput"/></input></td>
+                                </tr>
+                                <tr>
+                                    <td><a href="#" data-toggle="tooltip"
+                                           title="Chemical and Physical Foundations of Biological Systems"
+                                           style="color:black;text-decoration-style:dotted">C/P Score</a></td>
+                                    <td><input type="text" name="mcat_cp" id="mcat_cp" class="modalinput"/></input></td>
+                                </tr>
+                                <tr>
+                                    <td><a href="#" data-toggle="tooltip" title="Critical Analysis and Reasoning Skills"
+                                           style="color:black;text-decoration-style:dotted">CARS Score</a></td>
+                                    <td><input type="text" name="mcat_cars" id="mcat_cars" class="modalinput"/></input>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><a href="#" data-toggle="tooltip"
+                                           title="Biological and Biochemical Foundations of Living Systems"
+                                           style="color:black;text-decoration-style:dotted">B/B Score</a></td>
+                                    <td><input type="text" name="mcat_bb" id="mcat_bb" class="modalinput"/></input></td>
+                                </tr>
+                                <tr>
+                                    <td><a href="#" data-toggle="tooltip"
+                                           title="Psychological, Social, and Biological Foundations of Behavior"
+                                           style="color:black;text-decoration-style:dotted">P/S Score</a></td>
+                                    <td><input type="text" name="mcat_ps" id="mcat_ps" class="modalinput"/></input></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <h5>Situational Judgement</h5>
+                                        <small>Leave empty if exam not taken</small>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><a href="#" data-toggle="tooltip" title="Casper score can be an integer 1-4"
+                                           style="color:black;text-decoration-style:dotted">Casper Quartile</a></td>
+                                    <td><input type="text" name="casper" id="casper" class="modalinput"/></input></td>
+                                </tr>
+                                <tr>
+                                    <td><a href="#" data-toggle="tooltip" title="PREview score can be an integer 1-9"
+                                           style="color:black;text-decoration-style:dotted">PREview Score</a></td>
+                                    <td><input type="text" name="preview_score" id="preview_score"
+                                               class="modalinput"/></input></td>
+                                </tr>
+                                <tr>
+                                    <td><a href="#" data-toggle="tooltip"
+                                           title="PREview percentile can be an integer 0-100"
+                                           style="color:black;text-decoration-style:dotted">PREview Percentile</a></td>
+                                    <td><input type="text" name="preview_percentile" id="preview_percentile"
+                                               class="modalinput"/></input></td>
+                                </tr>
+                            </table>
                         </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
-
-
-<!-- CYCLE MANAGEMENT -->
-<div id="cycles" class="container" style="padding-top:10px">
-    <h2>My Application Cycles</h2>
-
+<div id="cycles">
+    <h2>My CycleTrack Dashboard</h2>
     <!-- WARNING MESSAGE IF NO CYCLE INFO FILLED IN -->
     {% if empty_cycles|length > 0 %}
-    <div class="bg-warning container" style="padding: 10px; margin-top: 10px; margin-bottom:10px">
+    <div class="bg-warning container rounded" style="padding: 10px; margin-top: 10px; margin-bottom:10px">
         You have not filled in the cycle profile section for the following cycle(s): {{ empty_cycles }}. This
         information is very helpful for increasing application cycle transparency and would greatly benefit other
         applicants. However, if you don't feel comfortable sharing, please feel free to ignore this message!
     </div>
     {% endif %}
 
-    {% if user.cycles|length > 0 %}
-    {% for cycle in user.cycles %}
-    <!-- SETUP MODAL FOR EDITING EACH CYCLE -->
-    <div class="modal fade" id="{{ cycle.cycle_year }}-modal_edit" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <form method="POST">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Edit {{ cycle.cycle_year }} Cycle Information</h5>
-                        <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div style="padding-bottom: 10px">
-                            You may leave any questions blank if you don't feel comfortable sharing. We collect this
-                            information for additional context around your application data. For privacy information,
-                            see our
-                            <a href="{{ url_for('pages.privacy') }}">privacy policy</a>.
-                            </div>
-                        <div>
-                                <input type="hidden" id="cycle_id_edit" name="cycle_id_edit" value="{{ cycle.id }}">
-                                <div>
-
-                                    <table class="table">
-                                        <tr><td colspan="2"><h5>Demographics</h5></td></tr>
-                                        <tr>
-                                            <td>Home State</td>
-                                            <td>
-                                                <select name="home_state" id="home_state" class="btn-sm modalinput">
-                                                    <option value=""></option>
-                                                    {% for state in state_options %}
-                                                    {% if state == cycle.home_state %}
-                                                    <option selected="{{ cycle.home_state }}">{{ cycle.home_state }}</option>
-                                                    {% else %}
-                                                    <option value="{{ state }}">{{ state }}</option>
-                                                    {% endif %}
-                                                    {% endfor %}
-                                                </select>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td><a href="#" data-toggle="tooltip" title="This is the age you will be when you would start medical school." style="color:black;text-decoration-style:dotted">Age at Matriculation</a></td>
-                                            <td><input type="text" name="age" id="age" class="modalinput" {% if cycle.age %}value="{{ cycle.age }}"{% endif %}/></input></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Gender</td>
-                                            <td>
-                                                <select name="gender" id="gender_{{ cycle.cycle_year }}" class="btn-sm modalinput" onchange="toggleOtherGender({{ cycle.cycle_year }})">
-                                                    <option value=""></option>
-                                                    {% for gender in gender_options %}
-                                                    {% if gender == cycle.gender %}
-                                                    <option selected="{{ cycle.gender }}">{{ cycle.gender }}</option>
-                                                    {% else %}
-                                                    <option value="{{ gender }}">{{ gender }}</option>
-                                                    {% endif %}
-                                                    {% endfor %}
-                                                </select>
-                                            </td>
-                                        </tr>
-                                        <tr class="{% if cycle.gender != 'Other' %}d-none{% endif %}" id="other_gender_{{cycle.cycle_year}}">
-                                            <td>&nbsp;&nbsp;&nbsp;Other</td>
-                                            <td>
-                                                <input type="text" name="other_gender" class="modalinput" {% if cycle.other_gender %}value="{{ cycle.other_gender }}"{% endif %}/></input>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td><a href="#" data-toggle="tooltip" title="We ask about biological sex because this is a variable commonly reported by medical schools." style="color:black;text-decoration-style:dotted">Biological Sex</a></td>
-                                            <td>
-                                                <select name="sex" id="sex_{{ cycle.cycle_year }}" class="btn-sm modalinput" onchange="toggleOtherSex({{ cycle.cycle_year }})">
-                                                    <option value=""></option>
-                                                    {% for sex in sex_options %}
-                                                    {% if sex == cycle.sex %}
-                                                    <option selected="{{ cycle.sex }}">{{ cycle.sex }}</option>
-                                                    {% else %}
-                                                    <option value="{{ sex }}">{{ sex }}</option>
-                                                    {% endif %}
-                                                    {% endfor %}
-                                                </select>
-                                            </td>
-                                        </tr>
-                                        <tr class="{% if cycle.sex != 'Other' %}d-none{% endif %}" id="other_sex_{{cycle.cycle_year}}">
-                                            <td>&nbsp;&nbsp;&nbsp;Other</td>
-                                            <td>
-                                                <input type="text" name="other_sex" class="modalinput" {% if cycle.other_sex %}value="{{ cycle.other_sex }}"{% endif %}/></input>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Race/Ethnicity</td>
-                                            <td>
-                                                <select name="race_ethnicity" id="race_ethnicity_{{ cycle.cycle_year }}" class="btn-sm modalinput" onchange="toggleOtherRaceEthnicity({{ cycle.cycle_year }})">
-                                                    <option value=""></option>
-                                                    {% for race_ethnicity in race_ethnicity_options %}
-                                                    {% if race_ethnicity == cycle.race_ethnicity %}
-                                                    <option selected="{{ cycle.race_ethnicity }}">{{ cycle.race_ethnicity }}</option>
-                                                    {% else %}
-                                                    <option value="{{ race_ethnicity }}">{{ race_ethnicity }}</option>
-                                                    {% endif %}
-                                                    {% endfor %}
-                                                </select>
-                                            </td>
-                                        </tr>
-                                        <tr class="{% if cycle.race_ethnicity != 'Other' %}d-none{% endif %}" id="other_race_ethnicity_{{cycle.cycle_year}}">
-                                            <td>&nbsp;&nbsp;&nbsp;Other</td>
-                                            <td>
-                                                <input type="text" name="other_race_ethnicity" class="modalinput" {% if cycle.other_race_ethnicity %}value="{{ cycle.other_race_ethnicity }}"{% endif %}/></input>
-                                            </td>
-                                        </tr>
-                                        <tr><td colspan="2"><h5>GPA</h5></td></tr>
-                                        <tr>
-                                            <td>Cumulative GPA</td>
-                                            <td><input type="text" name="cgpa" id="cgpa" class="modalinput" {% if cycle.cgpa %}value="{{ cycle.cgpa }}"{% endif %}/></input></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Science GPA</td>
-                                            <td><input type="text" name="sgpa" id="sgpa" class="modalinput" {% if cycle.sgpa %}value="{{ cycle.sgpa }}"{% endif %}/></input></td>
-                                        </tr>
-                                        <tr><td colspan="2"><h5>MCAT</h5></td></tr>
-                                        <tr>
-                                            <td>Total MCAT Score</td>
-                                            <td><input type="text" name="mcat_total" id="mcat_total" class="modalinput" {% if cycle.mcat_total %}value="{{ cycle.mcat_total }}"{% endif %}/></input></td>
-                                        </tr>
-                                        <tr>
-                                            <td><a href="#" data-toggle="tooltip" title="Chemical and Physical Foundations of Biological Systems" style="color:black;text-decoration-style:dotted">C/P Score</a></td>
-                                            <td><input type="text" name="mcat_cp" id="mcat_cp" class="modalinput" {% if cycle.mcat_cp %}value="{{ cycle.mcat_cp }}"{% endif %}/></input></td>
-                                        </tr>
-                                        <tr>
-                                            <td><a href="#" data-toggle="tooltip" title="Critical Analysis and Reasoning Skills" style="color:black;text-decoration-style:dotted">CARS Score</a></td>
-                                            <td><input type="text" name="mcat_cars" id="mcat_cars" class="modalinput" {% if cycle.mcat_cars %}value="{{ cycle.mcat_cars }}"{% endif %}/></input></td>
-                                        </tr>
-                                        <tr>
-                                            <td><a href="#" data-toggle="tooltip" title="Biological and Biochemical Foundations of Living Systems" style="color:black;text-decoration-style:dotted">B/B Score</a></td>
-                                            <td><input type="text" name="mcat_bb" id="mcat_bb" class="modalinput" {% if cycle.mcat_bb %}value="{{ cycle.mcat_bb }}"{% endif %}/></input></td>
-                                        </tr>
-                                        <tr>
-                                            <td><a href="#" data-toggle="tooltip" title="Psychological, Social, and Biological Foundations of Behavior" style="color:black;text-decoration-style:dotted">P/S Score</a></td>
-                                            <td><input type="text" name="mcat_ps" id="mcat_ps" class="modalinput" {% if cycle.mcat_ps %}value="{{ cycle.mcat_ps }}"{% endif %}/></input></td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="2">
-                                                <h5>Situational Judgement</h5>
-                                                <small>Leave empty if exam not taken</small>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td><a href="#" data-toggle="tooltip" title="Casper score can be an integer 1-4" style="color:black;text-decoration-style:dotted">Casper Quartile</a></td>
-                                            <td><input type="text" name="casper" id="casper" class="modalinput" {% if cycle.casper %}value="{{ cycle.casper }}"{% endif %}/></input></td>
-                                        </tr>
-                                         <tr>
-                                            <td><a href="#" data-toggle="tooltip" title="PREview score can be an integer 1-9" style="color:black;text-decoration-style:dotted">PREview Score</a></td>
-                                            <td><input type="text" name="preview_score" id="preview_score" class="modalinput" {% if cycle.preview_score %}value="{{ cycle.preview_score }}"{% endif %}/></input></td>
-                                        </tr>
-                                        <tr>
-                                            <td><a href="#" data-toggle="tooltip" title="PREview percentile can be an integer 0-100" style="color:black;text-decoration-style:dotted">PREview Percentile</a></td>
-                                            <td><input type="text" name="preview_percentile" id="preview_percentile" class="modalinput" {% if cycle.preview_percentile %}value="{{ cycle.preview_percentile }}"{% endif %}/></input></td>
-                                        </tr>
-                                    </table>
-                                </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Save Changes</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <!-- SETUP MODAL FOR DELETION WARNING -->
-    <div class="modal fade" id="{{ cycle.cycle_year }}-modal_delete" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Delete {{ cycle.cycle_year }} Cycle</h5>
-                        <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div style="padding: 10px;">
-                            Are you sure you want to delete this cycle? Deleting the cycle will permanently remove any
-                            school list and information associated with it.
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-danger" onclick="deleteCycle({{ cycle.id }})">Delete Cycle</button>
-                    </div>
-            </div>
-        </div>
-    </div>
-
-    <li class="list-group-item">
-        <table>
-            <tr>
-                <td><strong>{{ cycle.cycle_year }}</strong></td>
-                <td>
-                    <form method="POST" action="{{ url_for('dashboard.lists') }}">
-                        <input type="hidden" id="view_cycle_id" name="cycle_id" value="{{ cycle.id }}">
-                        <button type="submit" class="btn btn-link">View School List</button>
-                    </form>
-                </td>
-                <td>
-                    <button type="button" class="btn btn-link" data-toggle="modal" data-target="#{{ cycle.cycle_year }}-modal_edit">
-                        Edit Cycle Info
-                    </button>
-                </td>
-                <td>
-                    <form method="POST" action="{{ url_for('dashboard.visualizations') }}">
-                        <input type="hidden" id="cycle_year_vis" name="cycle_id" value="{{ cycle.id }}">
-                        <button type="submit" class="btn btn-link">
-                            Visualize
-                        </button>
-                    </form>
-                </td>
-                <td>
-                    <button type="button" class="btn btn-link" data-toggle="modal" data-target="#{{ cycle.cycle_year }}-modal_delete">
-                        Delete Cycle
-                    </button>
-                </td>
-            </tr>
-        </table>
-    </li>
-    {% endfor %}
-    {% else %}
+    {% if user.cycles|length == 0 %}
     <p>You have not added any application cycles. Get started by adding a cycle using the button below.</p>
     {% endif %}
-    <!-- Add Cycles -->
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add_cycle_modal" style="margin-top: 10px">
-        Add New Cycle
-    </button>
+
+    <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 ">
+        <div class="col my-2">
+            <div class="card h-100">
+                <div class="card-body d-flex align-items-center">
+                    <a type="button" class="mx-auto" data-bs-toggle="modal" data-bs-target="#add_cycle_modal"
+                       style="margin-top: 10px">
+                        <p class="card-text text-center mx-auto text-secondary"><i class="bi bi-plus-lg fs-1"></i></p>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        {% for cycle in user.cycles|reverse %}
+        <div class="col my-2">
+            <div class="card h-100">
+                <div class="card-body">
+                    <div class="card-title d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">{{ cycle.cycle_year }} Cycle</h5>
+                        <a type="button" class="ms-auto" data-bs-toggle="modal"
+                           data-bs-target="#modal_delete_{{ cycle.cycle_year }}">
+                            <p class="card-text text-right mx-auto text-secondary mb-0"><i class="bi bi-x fs-2"></i></p>
+                        </a>
+                    </div>
+                    <p class="card-text">
+                        Create your school list and track your progress. See that your data is making a difference
+                        through the <a href="{{ url_for('explorer.explorer_home') }}">explorer</a>.</p>
+                        <div class="mt-auto">
+                        <form method="POST" action="{{ url_for('dashboard.lists') }}">
+                            <input type="hidden" id="view_cycle_id" name="cycle_id" value="{{ cycle.id }}">
+                            <button type="submit" class="btn btn-primary my-1 w-100">
+                               Edit School List  <i class="bi bi-list text-white" style="color: black"></i>
+                            </button>
+                        </form>
+                        <button type="button" class="btn btn-primary my-1 w-100" data-bs-toggle="modal"
+                                data-bs-target="#modal_edit_{{ cycle.cycle_year }}">
+                                Edit Cycle Data  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-gear" viewBox="0 0 16 16">
+                                  <path d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4m.256 7a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1zm3.63-4.54c.18-.613 1.048-.613 1.229 0l.043.148a.64.64 0 0 0 .921.382l.136-.074c.561-.306 1.175.308.87.869l-.075.136a.64.64 0 0 0 .382.92l.149.045c.612.18.612 1.048 0 1.229l-.15.043a.64.64 0 0 0-.38.921l.074.136c.305.561-.309 1.175-.87.87l-.136-.075a.64.64 0 0 0-.92.382l-.045.149c-.18.612-1.048.612-1.229 0l-.043-.15a.64.64 0 0 0-.921-.38l-.136.074c-.561.305-1.175-.309-.87-.87l.075-.136a.64.64 0 0 0-.382-.92l-.148-.045c-.613-.18-.613-1.048 0-1.229l.148-.043a.64.64 0 0 0 .382-.921l-.074-.136c-.306-.561.308-1.175.869-.87l.136.075a.64.64 0 0 0 .92-.382zM14 12.5a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0"/>
+                                </svg>
+                        </button>
+                        <form method="POST" action="{{ url_for('dashboard.visualizations') }}">
+                            <input type="hidden" id="cycle_year_vis" name="cycle_id" value="{{ cycle.id }}">
+                            <button type="submit" class="btn btn-primary my-1 w-100">
+                                Visualize <i class="bi bi-graph-up text-white" style="color: black"></i>
+                            </button>
+                        </form>
+                </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+        <div class="col my-2">
+            <div class="card h-100">
+                <div class="card-body d-flex flex-column">
+                    <div class="card-title d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Profile Builder</h5>
+                        <a type="button" class="ms-auto" data-bs-toggle="modal"
+                           data-bs-target="">
+                            <p class="card-text text-right mx-auto text-white mb-0"><i class="bi bi-x fs-2"></i></p>
+                        </a>
+                    </div>
+                    <p class="card-text">Want to share your cycle(s) with an advisor, friends, or on social media? Use Profile Builder to generate and publish custom pages. </p>
+                    <div class="mt-auto">
+                        <a class="btn btn-primary w-100" href="{{ url_for('profile.profile_home') }}">Edit Profile <i class="bi bi-pencil text-white"></i></a></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col my-2">
+            <div class="card h-100">
+                <div class="card-body d-flex flex-column">
+                    <div class="card-title d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">GPA Calculator</h5>
+                        <a type="button" class="ms-auto" data-bs-toggle="modal"
+                           data-bs-target="">
+                            <p class="card-text text-right mx-auto text-white mb-0"><i class="bi bi-x fs-2"></i></p>
+                        </a>
+                    </div>
+                    <p class="card-text">The GPA calculator allows you to calculate your cumulative and science GPA
+                        using the same rules used by medical school applications (AMCAS/AACOMAS/TMDSAS).</p>
+                    <div class="mt-auto">
+                        <a class="btn btn-primary w-100" href="{{ url_for('dashboard.gpa') }}">GPA Calculator <i class="bi bi-calculator text-white"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
 </div>
 
-<!-- OTHER TOOLS -->
-<div id="tools" class="container" style="padding-top:10px">
-    <h2>Application Tools</h2>
-    <div class="row row-cols-auto">
-        <div class="col">
-            <a class="btn btn-primary btn-md" href="{{ url_for('dashboard.gpa') }}">GPA Calculator</a>
-        </div>
-        <div class="col">
-            <a class="btn btn-primary btn-md" href="{{ url_for('profile.profile_home') }}">My Profile</a>
+{% for cycle in user.cycles %}
+<!-- SETUP MODAL FOR EDITING EACH CYCLE -->
+<div class="modal fade" id="modal_edit_{{ cycle.cycle_year }}" tabindex="-1"
+     aria-labelledby="modal_edit_{{ cycle.cycle_year }}" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="POST">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit {{ cycle.cycle_year }} Cycle Information</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div style="padding-bottom: 10px">
+                        You may leave any questions blank if you don't feel comfortable sharing. We collect this
+                        information for additional context around your application data. For privacy information,
+                        see our
+                        <a href="{{ url_for('pages.privacy') }}">privacy policy</a>.
+                    </div>
+                    <div>
+                        <input type="hidden" id="cycle_id_edit" name="cycle_id_edit" value="{{ cycle.id }}">
+                        <div>
+
+                            <table class="table">
+                                <tr>
+                                    <td colspan="2"><h5>Demographics</h5></td>
+                                </tr>
+                                <tr>
+                                    <td>Home State</td>
+                                    <td>
+                                        <select name="home_state" id="home_state" class="btn-sm modalinput">
+                                            <option value=""></option>
+                                            {% for state in state_options %}
+                                            {% if state == cycle.home_state %}
+                                            <option selected="{{ cycle.home_state }}">{{ cycle.home_state }}</option>
+                                            {% else %}
+                                            <option value="{{ state }}">{{ state }}</option>
+                                            {% endif %}
+                                            {% endfor %}
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><a href="#" data-toggle="tooltip"
+                                           title="This is the age you will be when you would start medical school."
+                                           style="color:black;text-decoration-style:dotted">Age at Matriculation</a>
+                                    </td>
+                                    <td><input type="text" name="age" id="age" class="modalinput" {% if cycle.age
+                                               %}value="{{ cycle.age }}" {% endif %}/></input></td>
+                                </tr>
+                                <tr>
+                                    <td>Gender</td>
+                                    <td>
+                                        <select name="gender" id="gender_{{ cycle.cycle_year }}"
+                                                class="btn-sm modalinput"
+                                                onchange="toggleOtherGender({{ cycle.cycle_year }})">
+                                            <option value=""></option>
+                                            {% for gender in gender_options %}
+                                            {% if gender == cycle.gender %}
+                                            <option selected="{{ cycle.gender }}">{{ cycle.gender }}</option>
+                                            {% else %}
+                                            <option value="{{ gender }}">{{ gender }}</option>
+                                            {% endif %}
+                                            {% endfor %}
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr class="{% if cycle.gender != 'Other' %}d-none{% endif %}"
+                                    id="other_gender_{{cycle.cycle_year}}">
+                                    <td>&nbsp;&nbsp;&nbsp;Other</td>
+                                    <td>
+                                        <input type="text" name="other_gender" class="modalinput" {% if
+                                               cycle.other_gender %}value="{{ cycle.other_gender }}" {% endif
+                                               %}/></input>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><a href="#" data-toggle="tooltip"
+                                           title="We ask about biological sex because this is a variable commonly reported by medical schools."
+                                           style="color:black;text-decoration-style:dotted">Biological Sex</a></td>
+                                    <td>
+                                        <select name="sex" id="sex_{{ cycle.cycle_year }}" class="btn-sm modalinput"
+                                                onchange="toggleOtherSex({{ cycle.cycle_year }})">
+                                            <option value=""></option>
+                                            {% for sex in sex_options %}
+                                            {% if sex == cycle.sex %}
+                                            <option selected="{{ cycle.sex }}">{{ cycle.sex }}</option>
+                                            {% else %}
+                                            <option value="{{ sex }}">{{ sex }}</option>
+                                            {% endif %}
+                                            {% endfor %}
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr class="{% if cycle.sex != 'Other' %}d-none{% endif %}"
+                                    id="other_sex_{{cycle.cycle_year}}">
+                                    <td>&nbsp;&nbsp;&nbsp;Other</td>
+                                    <td>
+                                        <input type="text" name="other_sex" class="modalinput" {% if cycle.other_sex
+                                               %}value="{{ cycle.other_sex }}" {% endif %}/></input>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Race/Ethnicity</td>
+                                    <td>
+                                        <select name="race_ethnicity" id="race_ethnicity_{{ cycle.cycle_year }}"
+                                                class="btn-sm modalinput"
+                                                onchange="toggleOtherRaceEthnicity({{ cycle.cycle_year }})">
+                                            <option value=""></option>
+                                            {% for race_ethnicity in race_ethnicity_options %}
+                                            {% if race_ethnicity == cycle.race_ethnicity %}
+                                            <option selected="{{ cycle.race_ethnicity }}">{{ cycle.race_ethnicity }}
+                                            </option>
+                                            {% else %}
+                                            <option value="{{ race_ethnicity }}">{{ race_ethnicity }}</option>
+                                            {% endif %}
+                                            {% endfor %}
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr class="{% if cycle.race_ethnicity != 'Other' %}d-none{% endif %}"
+                                    id="other_race_ethnicity_{{cycle.cycle_year}}">
+                                    <td>&nbsp;&nbsp;&nbsp;Other</td>
+                                    <td>
+                                        <input type="text" name="other_race_ethnicity" class="modalinput" {% if
+                                               cycle.other_race_ethnicity %}value="{{ cycle.other_race_ethnicity }}" {%
+                                               endif %}/></input>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2"><h5>GPA</h5></td>
+                                </tr>
+                                <tr>
+                                    <td>Cumulative GPA</td>
+                                    <td><input type="text" name="cgpa" id="cgpa" class="modalinput" {% if cycle.cgpa
+                                               %}value="{{ cycle.cgpa }}" {% endif %}/></input></td>
+                                </tr>
+                                <tr>
+                                    <td>Science GPA</td>
+                                    <td><input type="text" name="sgpa" id="sgpa" class="modalinput" {% if cycle.sgpa
+                                               %}value="{{ cycle.sgpa }}" {% endif %}/></input></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2"><h5>MCAT</h5></td>
+                                </tr>
+                                <tr>
+                                    <td>Total MCAT Score</td>
+                                    <td><input type="text" name="mcat_total" id="mcat_total" class="modalinput" {% if
+                                               cycle.mcat_total %}value="{{ cycle.mcat_total }}" {% endif %}/></input>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><a href="#" data-toggle="tooltip"
+                                           title="Chemical and Physical Foundations of Biological Systems"
+                                           style="color:black;text-decoration-style:dotted">C/P Score</a></td>
+                                    <td><input type="text" name="mcat_cp" id="mcat_cp" class="modalinput" {% if
+                                               cycle.mcat_cp %}value="{{ cycle.mcat_cp }}" {% endif %}/></input></td>
+                                </tr>
+                                <tr>
+                                    <td><a href="#" data-toggle="tooltip" title="Critical Analysis and Reasoning Skills"
+                                           style="color:black;text-decoration-style:dotted">CARS Score</a></td>
+                                    <td><input type="text" name="mcat_cars" id="mcat_cars" class="modalinput" {% if
+                                               cycle.mcat_cars %}value="{{ cycle.mcat_cars }}" {% endif %}/></input>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><a href="#" data-toggle="tooltip"
+                                           title="Biological and Biochemical Foundations of Living Systems"
+                                           style="color:black;text-decoration-style:dotted">B/B Score</a></td>
+                                    <td><input type="text" name="mcat_bb" id="mcat_bb" class="modalinput" {% if
+                                               cycle.mcat_bb %}value="{{ cycle.mcat_bb }}" {% endif %}/></input></td>
+                                </tr>
+                                <tr>
+                                    <td><a href="#" data-toggle="tooltip"
+                                           title="Psychological, Social, and Biological Foundations of Behavior"
+                                           style="color:black;text-decoration-style:dotted">P/S Score</a></td>
+                                    <td><input type="text" name="mcat_ps" id="mcat_ps" class="modalinput" {% if
+                                               cycle.mcat_ps %}value="{{ cycle.mcat_ps }}" {% endif %}/></input></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <h5>Situational Judgement</h5>
+                                        <small>Leave empty if exam not taken</small>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><a href="#" data-toggle="tooltip" title="Casper score can be an integer 1-4"
+                                           style="color:black;text-decoration-style:dotted">Casper Quartile</a></td>
+                                    <td><input type="text" name="casper" id="casper" class="modalinput" {% if
+                                               cycle.casper %}value="{{ cycle.casper }}" {% endif %}/></input></td>
+                                </tr>
+                                <tr>
+                                    <td><a href="#" data-toggle="tooltip" title="PREview score can be an integer 1-9"
+                                           style="color:black;text-decoration-style:dotted">PREview Score</a></td>
+                                    <td><input type="text" name="preview_score" id="preview_score" class="modalinput" {%
+                                               if cycle.preview_score %}value="{{ cycle.preview_score }}" {% endif
+                                               %}/></input></td>
+                                </tr>
+                                <tr>
+                                    <td><a href="#" data-toggle="tooltip"
+                                           title="PREview percentile can be an integer 0-100"
+                                           style="color:black;text-decoration-style:dotted">PREview Percentile</a></td>
+                                    <td><input type="text" name="preview_percentile" id="preview_percentile"
+                                               class="modalinput" {% if cycle.preview_percentile
+                                               %}value="{{ cycle.preview_percentile }}" {% endif %}/></input></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
+
+<!-- SETUP MODAL FOR DELETION WARNING -->
+<div class="modal fade" id="modal_delete_{{ cycle.cycle_year }}" tabindex="-1"
+     aria-labelledby="modal_delete_{{ cycle.cycle_year }}" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Delete {{ cycle.cycle_year }} Cycle</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div style="padding: 10px;">
+                    Are you sure you want to delete this cycle? Deleting the cycle will permanently remove any
+                    school list and information associated with it.
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-danger" onclick="deleteCycle({{ cycle.id }})">Delete Cycle</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endfor %}
 {% endblock %}

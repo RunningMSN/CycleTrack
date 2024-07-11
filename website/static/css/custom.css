@@ -30,3 +30,12 @@
 .accordion-button:focus {
     box-shadow: none;
 }
+
+.cookie-footer {
+    position: sticky;
+    width: 100%;
+    background-color: #FFB6C1;
+    bottom: 0;
+    padding-top: 1%;
+    padding-bottom: 1%;
+}

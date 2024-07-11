@@ -31,7 +31,7 @@
         </div>
     </div>
 
-    <div class="container" style="padding:20px;background:#ebebeb">
+    <div class="container rounded" style="padding:20px;background:#ebebeb">
         <h4>Settings</h4>
         <form method="POST">
             <input type="hidden" name="cycle_id" id="cycle_id" value="{{ cycle.id }}">
@@ -250,7 +250,7 @@
 
         {% if graphJSON %}
         {% if sankeymatic %}
-        <div class="row-flex container" style="margin-top:15px; background:white; padding:10px">
+        <div class="row-flex container rounded" style="margin-top:15px; background:white; padding:10px">
             <details>
                 <summary class="h4">SankeyMATIC</summary>
                 <p style="vertical-align: middle">
@@ -258,14 +258,14 @@
                     diagrams. If you would like to customize your graph beyond what is shown below, you can copy and
                     paste the following code into SankeyMATIC to quickly generate your graph (<btn id="copy-sankey-button" class="btn btn-link" style="padding: 0px; margin: 0px; vertical-align:top" onclick="copySankeymatic('{{ sankeymatic }}')">copy</btn>).
                 </p>
-                <div class="container border border-dark rounded">
+                <div class="container border border rounded">
                     {{ sankeymatic|safe }}
                 </div>
             </details>
         </div>
         {% endif %}
         <div class="row-flex" style="margin-top:15px">
-            <div class="container" style="background:white; padding:10px">
+            <div class="container rounded" style="background:white; padding:10px">
                 <center>
                     <div id="chart" class="chart"></div>
                 </center>

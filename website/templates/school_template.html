@@ -2,11 +2,6 @@
 {% block title %} {{ school_info.school }} {% endblock %}
 {% block additional_js %}
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <script>
-        $(function () {
-          $('[data-toggle="tooltip"]').tooltip()
-        })
-    </script>
 {% endblock %}
 {% block content %}
 <div class="container" style="padding-top:10px">
@@ -35,21 +30,21 @@
             {% if school_info.msar_choosedo_link|length > 0 %}
             <a href="{{ school_info.msar_choosedo_link }}" target="_blank">
             {% else %}
-            <a href="#" data-toggle="tooltip" title="Currently unavailable." style="color:gray;text-decoration-style:dotted">
+            <a href="#" data-bs-toggle="tooltip" title="Currently unavailable." style="color:gray;text-decoration-style:dotted">
             {% endif %}
             {% if school_info.md_or_do == 'MD' %}MSAR{% else %}Choose DO Explorer{% endif %}
             </a>
             <br />
             <strong>Letters of Recommendation: </strong>
             {% if school_info.lor_reg_link == 'unk' %}
-            <a href="#" data-toggle="tooltip" title="We do not currently have the LOR requirement link for this school. If you find the requirements, please send us the link at admin@cycletrack.org." style="text-decoration-style: dotted; color:gray">{{ school_info.md_or_do }}</a>
+            <a href="#" data-bs-toggle="tooltip" title="We do not currently have the LOR requirement link for this school. If you find the requirements, please send us the link at admin@cycletrack.org." style="text-decoration-style: dotted; color:gray">{{ school_info.md_or_do }}</a>
             {% else %}
             <a href="{{ school_info.lor_reg_link }}" target="_blank">{{ school_info.md_or_do }}</a>
             {% endif %}
             {% if school_info.phd_website %}
              |
             {% if school_info.lor_phd_link == 'unk' %}
-            <a href="#" data-toggle="tooltip" title="We do not currently have the LOR requirement link for this school. If you find the requirements, please send us the link at admin@cycletrack.org." style="text-decoration-style: dotted; color:gray">{{ school_info.md_or_do }}-PhD</a>
+            <a href="#" data-bs-toggle="tooltip" title="We do not currently have the LOR requirement link for this school. If you find the requirements, please send us the link at admin@cycletrack.org." style="text-decoration-style: dotted; color:gray">{{ school_info.md_or_do }}-PhD</a>
             {% else %}
             <a href="{{ school_info.lor_phd_link }}" target="_blank">{{ school_info.md_or_do }}-PhD</a>
             {% endif %}
@@ -83,14 +78,14 @@
             <!-- TAB LIST -->
             <ul class="nav nav-tabs" id="myTab" role="tablist">
                 {% if reg_info['app_count'] > 0 %}
-                <li class="nav-item">
-                    <a class="nav-link active" id="md-tab" data-toggle="tab" href="#md" role="tab" aria-controls="md"
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link active" id="md-tab" data-bs-toggle="tab" data-bs-target="#md" type="button" role="tab" aria-controls="md"
                        aria-selected="true"><h6>{{ school_info.md_or_do }}</h6></a>
                 </li>
                 {% endif %}
-                {% if phd_info['app_count'] > 0 %}
-                <li class="nav-item">
-                    <a class="nav-link" id="mdphd-tab" data-toggle="tab" href="#mdphd" role="tab" aria-controls="mdphd"
+                {% if phd_info['app_count'] > 0 and school_info.phd_website %}
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link" id="mdphd-tab" data-bs-toggle="tab" data-bs-target="#mdphd" type="button" role="tab" aria-controls="mdphd"
                        aria-selected="false"><h6>{{ school_info.md_or_do }}-PhD</h6></a>
                 </li>
                 {% endif %}
@@ -122,12 +117,12 @@
                         information we can display on this page, please contact us!</p>
                         <!-- INTERNAL TABS W/ INTERVIEW + ACCEPTANCE INFO -->
                         <ul class="nav nav-tabs" id="reg_tabs" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link active" id="reg_interviews_tab" data-toggle="tab" href="#reg_interviews" role="tab" aria-controls="reg_interviews"
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link active" id="reg_interviews_tab" data-bs-toggle="tab" data-bs-target="#reg_interviews" type="button" role="tab" aria-controls="reg_interviews"
                                    aria-selected="true">Interviews</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link" id="reg_acceptances_tab" data-toggle="tab" href="#reg_acceptances" role="tab" aria-controls="reg_acceptances"
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" id="reg_acceptances_tab" data-bs-toggle="tab" data-bs-target="#reg_acceptances" type="button" role="tab" aria-controls="reg_acceptances"
                                    aria-selected="false">Acceptances</a>
                             </li>
                         </ul>
@@ -139,49 +134,49 @@
                                 {% if reg_info['n_percent_interviewed'] > 4 %}
                                 {{ "%.2f"|format(reg_info['percent_interviewed']|float) }}%, (n={{ reg_info['n_percent_interviewed'] }})
                                 {% else %}
-                                <a href="#" data-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">XX.XX</a>
+                                <a href="#" data-bs-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">XX.XX</a>
                                 {% endif %}
                                 <br />
                                 <strong>Median cGPA (Range): </strong>
                                 {% if reg_info['n_interviewed_cgpa'] > 4 %}
                                 {{ "%.2f"|format(reg_info['interviewed_cgpa']|float) }} ({{ reg_info['interviewed_cgpa_range'] }}), (n={{ reg_info['n_interviewed_cgpa'] }})
                                 {% else %}
-                                <a href="#" data-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">X.XX</a>
+                                <a href="#" data-bs-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">X.XX</a>
                                 {% endif %}
                                 <br />
                                 <strong>Median sGPA (Range): </strong>
                                 {% if reg_info['n_interviewed_sgpa'] > 4 %}
                                 {{ "%.2f"|format(reg_info['interviewed_sgpa']|float) }} ({{ reg_info['interviewed_sgpa_range'] }}), (n={{ reg_info['n_interviewed_sgpa'] }})
                                 {% else %}
-                                <a href="#" data-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">X.XX</a>
+                                <a href="#" data-bs-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">X.XX</a>
                                 {% endif %}
                                 <br />
                                 <strong>Median MCAT (Range): </strong>
                                 {% if reg_info['n_interviewed_mcat'] > 4 %}
                                 {{ "%.2f"|format(reg_info['interviewed_mcat']|float) }} ({{ reg_info['interviewed_mcat_range'] }}), (n={{ reg_info['n_interviewed_mcat'] }})
                                 {% else %}
-                                <a href="#" data-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">XXX.X</a>
+                                <a href="#" data-bs-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">XXX.X</a>
                                 {% endif %}
                                 <br />
                                 <strong>Days Secondary Submitted to Interview Invite</strong>:
                                 {% if reg_info["secondary_to_ii_n"] > 4 %}
                                 {{reg_info["secondary_to_ii"]}} ({{reg_info["secondary_to_ii_range"]}})
                                 {% else %}
-                                <a href="#" data-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">XX.XX</a>
+                                <a href="#" data-bs-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">XX.XX</a>
                                 {% endif %}
                                 <br />
                                 <strong>Days Interview to Waitlist: </strong>
                                 {% if reg_info["interview_to_wl_n"] > 4 %}
                                 {{reg_info["interview_to_wl"]}} ({{reg_info["interview_to_wl_range"]}})
                                 {% else %}
-                                <a href="#" data-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">XX.XX</a>
+                                <a href="#" data-bs-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">XX.XX</a>
                                 {% endif %}
                                 <br />
                                 <strong>Days Interview to Rejection: </strong>
                                 {% if reg_info["interview_to_r_n"] > 4 %}
                                 {{reg_info["interview_to_r"]}} ({{reg_info["interview_to_r_range"]}})
                                 {% else %}
-                                <a href="#" data-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">XX.XX</a>
+                                <a href="#" data-bs-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">XX.XX</a>
                                 {% endif %}
                                 <br />
                                 <strong>Interview Invites Over Time: </strong><br />
@@ -197,49 +192,49 @@
                                 {% if reg_info['n_percent_interview_accepted'] > 4 %}
                                 {{ "%.2f"|format(reg_info['percent_interview_accepted']|float) }}%, (n={{ reg_info['n_percent_interview_accepted'] }})
                                 {% else %}
-                                <a href="#" data-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">XX.XX</a>
+                                <a href="#" data-bs-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">XX.XX</a>
                                 {% endif %}
                                 <br />
                                 <strong>Percent Accepted From Waitlist: </strong>
                                 {% if reg_info['n_percent_waitlist_accepted'] > 4 %}
                                 {{ "%.2f"|format(reg_info['percent_waitlist_accepted']|float) }}%, (n={{ reg_info['n_percent_waitlist_accepted'] }})
                                 {% else %}
-                                <a href="#" data-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">XX.XX</a>
+                                <a href="#" data-bs-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">XX.XX</a>
                                 {% endif %}
                                 <br />
                                 <strong>Median cGPA (Range): </strong>
                                 {% if reg_info['n_accepted_cgpa'] > 4 %}
                                 {{ "%.2f"|format(reg_info['accepted_cgpa']|float) }} ({{ reg_info['accepted_cgpa_range'] }}), (n={{ reg_info['n_accepted_cgpa'] }})
                                 {% else %}
-                                <a href="#" data-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">X.XX</a>
+                                <a href="#" data-bs-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">X.XX</a>
                                 {% endif %}
                                 <br />
                                 <strong>Median sGPA (Range): </strong>
                                 {% if reg_info['n_accepted_sgpa'] > 4 %}
                                 {{ "%.2f"|format(reg_info['accepted_sgpa']|float) }} ({{ reg_info['accepted_sgpa_range'] }}), (n={{ reg_info['n_accepted_sgpa'] }})
                                 {% else %}
-                                <a href="#" data-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">X.XX</a>
+                                <a href="#" data-bs-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">X.XX</a>
                                 {% endif %}
                                 <br />
                                 <strong>Median MCAT (Range): </strong>
                                 {% if reg_info['n_accepted_mcat'] > 4 %}
                                 {{ "%.2f"|format(reg_info['accepted_mcat']|float) }} ({{ reg_info['accepted_mcat_range'] }}), (n={{ reg_info['n_accepted_mcat'] }})
                                 {% else %}
-                                <a href="#" data-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">XXX.X</a>
+                                <a href="#" data-bs-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">XXX.X</a>
                                 {% endif %}
                                 <br />
                                 <strong>Days Interview to Acceptance: </strong>
                                 {% if reg_info["interview_to_a_n"] > 4%}
                                 {{reg_info["interview_to_a"]}} ({{reg_info["interview_to_a_range"]}} )
                                 {% else %}
-                                <a href="#" data-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">XX.XX</a>
+                                <a href="#" data-bs-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">XX.XX</a>
                                 {% endif %}
                                 <br />
                                 <strong>Days Waitlist to Acceptance: </strong>
                                 {% if reg_info["wl_to_a_n"] > 4 %}
                                 {{reg_info["wl_to_a"]}} ({{reg_info["wl_to_a_range"]}})
                                 {% else %}
-                                <a href="#" data-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">XX.XX</a>
+                                <a href="#" data-bs-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">XX.XX</a>
                                 {% endif %}
                                 <br />
                                 <strong>Acceptance Offers Over Time: </strong><br />
@@ -280,11 +275,11 @@
                         <!-- INTERNAL TABS W/ INTERVIEW + ACCEPTANCE INFO -->
                         <ul class="nav nav-tabs" id="phd_tabs" role="tablist">
                             <li class="nav-item">
-                                <a class="nav-link active" id="phd_interviews_tab" data-toggle="tab" href="#phd_interviews" role="tab" aria-controls="reg_interviews"
+                                <a class="nav-link active" id="phd_interviews_tab" data-bs-toggle="tab" data-bs-target="#phd_interviews" type="button" role="tab" aria-controls="reg_interviews"
                                    aria-selected="true">Interviews</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" id="phd_acceptances_tab" data-toggle="tab" href="#phd_acceptances" role="tab" aria-controls="reg_acceptances"
+                                <a class="nav-link" id="phd_acceptances_tab" data-bs-toggle="tab" data-bs-target="#phd_acceptances" type="button" role="tab" aria-controls="reg_acceptances"
                                    aria-selected="false">Acceptances</a>
                             </li>
                         </ul>
@@ -296,49 +291,49 @@
                                 {% if phd_info['n_percent_interviewed'] > 4 %}
                                 {{ "%.2f"|format(phd_info['percent_interviewed']|float) }}%, (n={{ phd_info['n_percent_interviewed'] }})
                                 {% else %}
-                                <a href="#" data-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">XX.XX</a>
+                                <a href="#" data-bs-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">XX.XX</a>
                                 {% endif %}
                                 <br />
                                 <strong>Median cGPA (Range): </strong>
                                 {% if phd_info['n_interviewed_cgpa'] > 4 %}
                                 {{ "%.2f"|format(phd_info['interviewed_cgpa']|float) }} ({{ phd_info['interviewed_cgpa_range'] }}), (n={{ phd_info['n_interviewed_cgpa'] }})
                                 {% else %}
-                                <a href="#" data-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">X.XX</a>
+                                <a href="#" data-bs-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">X.XX</a>
                                 {% endif %}
                                 <br />
                                 <strong>Median sGPA (Range): </strong>
                                 {% if phd_info['n_interviewed_sgpa'] > 4 %}
                                 {{ "%.2f"|format(phd_info['interviewed_sgpa']|float) }} ({{ phd_info['interviewed_sgpa_range'] }}), (n={{ phd_info['n_interviewed_sgpa'] }})
                                 {% else %}
-                                <a href="#" data-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">X.XX</a>
+                                <a href="#" data-bs-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">X.XX</a>
                                 {% endif %}
                                 <br />
                                 <strong>Median MCAT (Range): </strong>
                                 {% if phd_info['n_interviewed_mcat'] > 4 %}
                                 {{ "%.2f"|format(phd_info['interviewed_mcat']|float) }} ({{ phd_info['interviewed_mcat_range'] }}), (n={{ phd_info['n_interviewed_mcat'] }})
                                 {% else %}
-                                <a href="#" data-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">XXX.X</a>
+                                <a href="#" data-bs-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">XXX.X</a>
                                 {% endif %}
                                 <br />
                                 <strong>Days Secondary Submitted to Interview Invite</strong>:
                                 {% if phd_info["secondary_to_ii_n"] > 4 %}
                                 {{phd_info["secondary_to_ii"]}} ({{phd_info["secondary_to_ii_range"]}})
                                 {% else %}
-                                <a href="#" data-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">XX.XX</a>
+                                <a href="#" data-bs-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">XX.XX</a>
                                 {% endif %}
                                 <br />
                                 <strong>Days Interview to Waitlist: </strong>
                                 {% if phd_info["interview_to_wl_n"] > 4 %}
                                 {{phd_info["interview_to_wl"]}} ({{phd_info["interview_to_wl_range"]}})
                                 {% else %}
-                                <a href="#" data-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">XX.XX</a>
+                                <a href="#" data-bs-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">XX.XX</a>
                                 {% endif %}
                                 <br />
                                 <strong>Days Interview to Rejection: </strong>
                                 {% if phd_info["interview_to_r_n"] > 4 %}
                                 {{phd_info["interview_to_r"]}} ({{phd_info["interview_to_r_range"]}})
                                 {% else %}
-                                <a href="#" data-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">XX.XX</a>
+                                <a href="#" data-bs-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">XX.XX</a>
                                 {% endif %}
                                 <br />
                                 <strong>Interview Invites Over Time: </strong><br />
@@ -355,49 +350,49 @@
                                 {% if phd_info['n_percent_interview_accepted'] > 4 %}
                                 {{ "%.2f"|format(phd_info['percent_interview_accepted']|float) }}%, (n={{ phd_info['n_percent_interview_accepted'] }})
                                 {% else %}
-                                <a href="#" data-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">XX.XX</a>
+                                <a href="#" data-bs-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">XX.XX</a>
                                 {% endif %}
                                 <br />
                                 <strong>Percent Accepted From Waitlist: </strong>
                                 {% if phd_info['n_percent_waitlist_accepted'] > 4 %}
                                 {{ "%.2f"|format(phd_info['percent_waitlist_accepted']|float) }}%, (n={{ phd_info['n_percent_waitlist_accepted'] }})
                                 {% else %}
-                                <a href="#" data-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">XX.XX</a>
+                                <a href="#" data-bs-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">XX.XX</a>
                                 {% endif %}
                                 <br />
                                 <strong>Median cGPA (Range): </strong>
                                 {% if phd_info['n_accepted_cgpa'] > 4 %}
                                 {{ "%.2f"|format(phd_info['accepted_cgpa']|float) }} ({{ phd_info['accepted_cgpa_range'] }}), (n={{ phd_info['n_accepted_cgpa'] }})
                                 {% else %}
-                                <a href="#" data-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">X.XX</a>
+                                <a href="#" data-bs-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">X.XX</a>
                                 {% endif %}
                                 <br />
                                 <strong>Median sGPA (Range): </strong>
                                 {% if phd_info['n_accepted_sgpa'] > 4 %}
                                 {{ "%.2f"|format(phd_info['accepted_sgpa']|float) }} ({{ phd_info['accepted_sgpa_range'] }}), (n={{ phd_info['n_accepted_sgpa'] }})
                                 {% else %}
-                                <a href="#" data-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">X.XX</a>
+                                <a href="#" data-bs-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">X.XX</a>
                                 {% endif %}
                                 <br />
                                 <strong>Median MCAT (Range): </strong>
                                 {% if phd_info['n_accepted_mcat'] > 4 %}
                                 {{ "%.2f"|format(phd_info['accepted_mcat']|float) }} ({{ phd_info['accepted_mcat_range'] }}), (n={{ phd_info['n_accepted_mcat'] }})
                                 {% else %}
-                                <a href="#" data-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">XXX.X</a>
+                                <a href="#" data-bs-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">XXX.X</a>
                                 {% endif %}
                                 <br />
                                 <strong>Days Interview to Acceptance: </strong>
                                 {% if phd_info["interview_to_a_n"] > 4%}
                                 {{phd_info["interview_to_a"]}} ({{phd_info["interview_to_a_range"]}} )
                                 {% else %}
-                                <a href="#" data-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">XX.XX</a>
+                                <a href="#" data-bs-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">XX.XX</a>
                                 {% endif %}
                                 <br />
                                 <strong>Days Waitlist to Acceptance: </strong>
                                 {% if phd_info["wl_to_a_n"] > 4 %}
                                 {{phd_info["wl_to_a"]}} ({{phd_info["wl_to_a_range"]}} )
                                 {% else %}
-                                <a href="#" data-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">XX.XX</a>
+                                <a href="#" data-bs-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">XX.XX</a>
                                 {% endif %}
                                 <br />
                                 <strong>Acceptance Offers Over Time: </strong><br />

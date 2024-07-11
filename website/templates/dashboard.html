@@ -1,69 +1,73 @@
 {% extends 'base.html' %}
 {% block content %}
 {% if user.email_verified %}
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container">
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#dashnav"
-                aria-controls="dashnav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="dashnav">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link text-light" aria-current="page" href="{{ url_for('dashboard.cycles') }}">Cycles</a>
-                </li>
-                {% if user.cycles|length > 0 %}
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle text-light" href="#" id="navbarDropdown" role="button"
-                       data-bs-toggle="dropdown" aria-expanded="false">
-                        School Lists
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        {% for cycle in user.cycles %}
-                        <li>
-                            <form method="POST" action="{{ url_for('dashboard.lists') }}">
-                                <input type="hidden" id="cycle_year" name="cycle_id" value="{{ cycle.id }}">
+<!-- Grab maximum cycle for use in nav -->
+{% set max_cycle = user.cycles | max(attribute='cycle_year') %}
 
-                                <a class="dropdown-item">
-                                    <button type="submit" class="btn btn-link text-decoration-none text-dark">
-                                        {{ cycle.cycle_year }}
-                                    </button>
-                                </a>
-                            </form>
-                        </li>
-                        {% endfor %}
-                    </ul>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle text-light" href="#" id="visDrop" role="button"
-                       data-bs-toggle="dropdown" aria-expanded="false">
-                        Visualizations
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="visDrop">
-                        {% for cycle in user.cycles %}
-                        <li>
-                            <form method="POST" action="{{ url_for('dashboard.visualizations') }}">
-                                <input type="hidden" id="cycle_year_vis" name="cycle_id" value="{{ cycle.id }}">
-                                <a class="dropdown-item">
-                                    <button type="submit" class="btn btn-link text-decoration-none text-dark">
-                                        {{ cycle.cycle_year }}
-                                    </button>
-                                </a>
-                            </form>
-                        </li>
-                        {% endfor %}
-                    </ul>
-                </li>
-              {% endif %}
-                <li class="nav-item">
-                    <a class="nav-link text-light" href="{{ url_for('dashboard.suggestions') }}">Suggestions & Bugs</a>
-                </li>
-            </ul>
+<div class="container" style="margin-top: 5px">
+    <div class="row">
+        <div class="col-sm-auto bg-light sticky-top bg-white">
+            <div class="d-flex flex-sm-column flex-row flex-nowrap bg-light align-items-center sticky-top bg-light rounded" style="margin-top:20px">
+                <ul class="nav nav-pills nav-flush flex-sm-column flex-row flex-nowrap mb-auto mx-auto text-center justify-content-between w-100 px-0 align-items-center">
+                    <li style="margin: 10px">
+                        <a href="{{ url_for('dashboard.cycles') }}" class="py-5 px-0" title="" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="Dashboard">
+                            <button class="btn btn-link text-decoration-none text-dark">
+                                <i class="bi-house fs-2" style="color: black"></i>
+                            </button>
+                        </a>
+                    </li>
+                    {% if user.cycles|length > 0 %}
+                    <li style="margin-top: 10px">
+                        <form method="POST" action="{{ url_for('dashboard.lists') }}">
+                            <input type="hidden" id="cycle_year" name="cycle_id" value="{{ max_cycle.id }}">
+                            <a class="py-5 px-0" title="" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="School List">
+                                <button type="submit" class="btn btn-link text-decoration-none text-dark">
+                                    <i class="bi bi-list fs-2" style="color: black"></i>
+                                </button>
+                            </a>
+                        </form>
+                    </li>
+                    <li style="margin-top: 10px">
+                        <form method="POST" action="{{ url_for('dashboard.visualizations') }}">
+                            <input type="hidden" id="cycle_year_vis" name="cycle_id" value="{{ max_cycle.id }}">
+                            <a class="py-5 px-0" title="" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="Visualize">
+                                <button type="submit" class="btn btn-link text-decoration-none text-dark">
+                                    <i class="bi bi-graph-up fs-2" style="color: black"></i>
+                                </button>
+                            </a>
+                        </form>
+                    </li>
+                    {% endif %}
+                    <li style="margin-top: 10px">
+                        <a href="{{ url_for('dashboard.suggestions') }}" class="py-3 px-0" title="" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="Suggestions & Bug Reports">
+                            <button class="btn btn-link text-decoration-none text-dark">
+                                <i class="bi bi-lightbulb fs-2" style="color: black"></i>
+                            </button>
+                        </a>
+                    </li>
+                    <li style="margin-top: 10px">
+                        <a href="{{ url_for('authentication.settings') }}" class="py-3 px-0" title="" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title="Account Settings">
+                            <button class="btn btn-link text-decoration-none text-dark">
+                                <i class="bi bi-gear fs-2" style="color: black"></i>
+                            </button>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-sm p-3 min-vh-100">
+            {% block dash_content %}
+            {% endblock %}
         </div>
     </div>
-</nav>
-{% block dash_content %}
-{% endblock %}
+</div>
+
+
+
+
+
+
+
 {% else %}
 <div class="container" style="padding-top: 10px">
     <h2>Hi! We're so glad you're here!</h2>

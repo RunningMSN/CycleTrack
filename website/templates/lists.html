@@ -138,20 +138,15 @@ function toggleCancel() {
     location.reload(true);
 }
 </script>
-<script>
-        $(function () {
-          $('[data-toggle="tooltip"]').tooltip()
-        })
-</script>
 <script src="{{ url_for('static', filename='/js/list_bulk_add.js') }}"></script>
 {% endblock %}
 {% block dash_content %}
 
-<div id="lists" class="container" style="padding-top:10px">
+<div id="lists" class="container">
     <h2>My {{ cycle.cycle_year }} School List</h2>
     {% if phd_applicant %}
     <p>
-        <a href="#" data-toggle="tooltip" title="If you are being considered for MD/DO-only as well, please add an MD/DO-only second entry. If this consideration
+        <a href="#" data-bs-toggle="tooltip" title="If you are being considered for MD/DO-only as well, please add an MD/DO-only second entry. If this consideration
         is after you have been rejected from the MD/DO-PhD program, please use your rejection date as the new application
                 complete date." style="color:black;text-decoration-style:dotted">
             <span><i class="bi bi-info-circle-fill btn-link"></i></span>
@@ -163,13 +158,13 @@ function toggleCancel() {
         <div class="col">
         {% if schools_to_add_secondary_cost|length > 0%}
         <!-- SETUP COST MODAL -->
-        <div class="modal fade" id="add-cost-modal" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+        <div class="modal fade" id="add-cost-modal" tabindex="-1" aria-labelledby="add-cost-modal" aria-hidden="true">
+        <div class="modal-dialog">
             <div class="modal-content">
                     <form method="POST">
                         <div class="modal-header">
                             <h5 class="modal-title">Secondary Costs</h5>
-                            <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
                             <p>
@@ -213,7 +208,7 @@ function toggleCancel() {
                             </table>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </div>
                     </form>
@@ -221,11 +216,11 @@ function toggleCancel() {
             </div>
         </div>
         <!-- ASK TO ENTER -->
-        <div class="container" style="padding: 10px; margin-top: 10px; margin-bottom:10px; background-color: #90EE90" >
+        <div class="container rounded" style="padding: 10px; margin-top: 10px; margin-bottom:10px; background-color: #90EE90" >
             <span style="vertical-align: middle">
                 We are collecting the costs of secondary applications to help future applicants anticipate cost. If you are
                 willing, please share the cost of secondary applications to some of your schools by clicking
-                <btn class="btn btn-link" data-toggle="modal" data-target="#add-cost-modal" style="padding: 0px; margin: 0px; vertical-align:top">here</btn>. We
+                <btn class="btn btn-link" data-bs-toggle="modal" data-bs-target="#add-cost-modal" style="padding: 0px; margin: 0px; vertical-align:top">here</btn>. We
                 will only ask you for costs that other applicants have not already shared.
             </span>
         </div>
@@ -236,7 +231,7 @@ function toggleCancel() {
     <div class="row">
         <div class="col-auto">
             <!-- EDIT SCHOOL LIST BUTTONS -->
-            <button type="button" class="btn btn-primary rounded normal_list" data-toggle="modal" data-target="#add-school-modal" style="margin: 3px; margin-left: 0px">
+            <button type="button" class="btn btn-primary rounded normal_list" data-bs-toggle="modal" data-bs-target="#add-school-modal" style="margin: 3px; margin-left: 0px">
                 Add School
             </button>
             {% if cycle.schools|length > 0 %}
@@ -301,7 +296,7 @@ function toggleCancel() {
     <div class="row">
         <div class="col-auto">
             {% if cycle.cycle_year == curr_cycle and cycle.schools|length > 0  %}
-            <a class="btn btn-outline-primary rounded normal_list" data-toggle="modal" data-target="#secondary-order-modal" style="margin: 3px; margin-left: 0px">
+            <a class="btn btn-outline-primary rounded normal_list" data-bs-toggle="modal" data-bs-target="#secondary-order-modal" style="margin: 3px; margin-left: 0px">
                 Essay Submission Optimization
             </a>
             {% endif %}
@@ -326,11 +321,10 @@ function toggleCancel() {
             {% elif school.primary %}primary
             {%endif%}">
 
-            <div class="row rows-cols-2">
+            <div class="row row-cols-2 py-2">
                 <!-- SCHOOL LOGO AREA ON LEFT -->
-                <div class="col-lg-1">
+                <div class="col-2 order-sm-1" style="text-align: center">
                     <!-- LOGO -->
-                    <center>
                         <div class="row">
                             <a href="{{ url_for('explorer.explorer_home') }}/school/{{ school['name'] }}" class="normal_list">
                                 <img src="{{ url_for('static', filename='images/school_logos/' + profile.logo_file_name) }}" style="max-width:100px;max-height:100px" width="100%" height="auto">
@@ -339,10 +333,10 @@ function toggleCancel() {
                                 <img src="{{ url_for('static', filename='images/school_logos/' + profile.logo_file_name) }}" style="max-width:100px;max-height:100px" width="100%" height="auto">
                             </a>
                         </div>
-                        <div class="row" style="margin-top: 5px">
+                        <div class="mx-2 d-none d-md-block" style="margin-top: 5px">
                             {% if school.acceptance %}
                             <div class="text-center rounded" style="margin-top: 3px; background-color: #6af799">
-                                Accepted
+                                <span style="margin-top: 3px; background-color: #6af799"> Accepted</span>
                             </div>
                             {% elif school.withdrawn %}
                             <div class="text-center rounded" style="margin-top: 3px; background-color: #d1d1d1">
@@ -376,13 +370,13 @@ function toggleCancel() {
                                 <summary>Most recent:</summary>
                                 <p>
                                     {% if most_recent[school.name]["interview"]%}
-                                    <a href="#" data-toggle="tooltip" title="Most recent reported interview invitation." style="color:black;text-decoration-style:dotted;" >II: {{most_recent[school.name]["interview"]}}</a><br>
+                                    <a href="#" data-bs-toggle="tooltip" title="Most recent reported interview invitation." style="color:black;text-decoration-style:dotted;" >II: {{most_recent[school.name]["interview"]}}</a><br>
                                     {% endif %}
                                     {% if most_recent[school.name]["waitlist"] %}
-                                    <a href="#" data-toggle="tooltip" title="Most recent reported waitlist." style="color:black;text-decoration-style:dotted;">WL: {{most_recent[school.name]["waitlist"]}}</a><br>
+                                    <a href="#" data-bs-toggle="tooltip" title="Most recent reported waitlist." style="color:black;text-decoration-style:dotted;">WL: {{most_recent[school.name]["waitlist"]}}</a><br>
                                     {% endif %}
                                     {% if most_recent[school.name]["acceptance"]%}
-                                    <a href="#" data-toggle="tooltip" title="Most recent reported acceptance." style="color:black;text-decoration-style:dotted;">A: {{most_recent[school.name]["acceptance"]}}</a>
+                                    <a href="#" data-bs-toggle="tooltip" title="Most recent reported acceptance." style="color:black;text-decoration-style:dotted;">A: {{most_recent[school.name]["acceptance"]}}</a>
                                     {% endif %}
                                 </p>
                             </details>
@@ -393,23 +387,22 @@ function toggleCancel() {
                         <!-- ICONS -->
                         <div style="padding-top:5px">
                             <a href="{{ url_for('explorer.explorer_home') }}/school/{{ school.name }}" class="btn btn-link" style="padding: 1px">
-                                <i class="bi bi-search"></i>
+                                <i class="bi bi-search fs-5"></i>
                             </a>
-                            <button type="button" class="btn btn-link" data-toggle="modal" data-target="#{{ school.name }}-{{ school.phd }}-delete" style="padding: 1px">
-                                <i class="bi bi-trash"></i>
+                            <button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#{{ school.name }}-{{ school.phd }}-delete" style="padding: 1px">
+                                <i class="bi bi-trash fs-5"></i>
                             </button>
                         </div>
                         <div>
                             {% if (school.secondary_received and not school.application_complete) %}
                             {% set delay = (today - school.secondary_received)|format_days %}
-                            <a href="#" data-toggle="tooltip" title="Days since secondary received." style="color:black;text-decoration-style:dotted;font-size: 1.25rem">{{ delay }} Days</a>
+                            <a href="#" data-bs-toggle="tooltip" title="Days since secondary received." style="color:black;text-decoration-style:dotted;font-size: 1.25rem">{{ delay }} Days</a>
                             {% endif %}
                         </div>
-                    </center>
                 </div>
 
                 <!-- SCHOOL TEXT AREA ON RIGHT -->
-                <div class="col-lg">
+                <div class="col-lg order-sm-2">
                     <a class="normal_list" href="{{ url_for('explorer.explorer_home') }}/school/{{ school.name }}"
                        style="color:black;text-decoration: none">
                         <h5>{{ school.name }} ({{ school.school_type }}{% if school.phd %}-PhD{% endif %})</h5>
@@ -417,14 +410,14 @@ function toggleCancel() {
                     <a class="bulk_list d-none" style="color:black;text-decoration: none">
                         <h5>{{ school.name }} ({{ school.school_type }}{% if school.phd %}-PhD{% endif %})</h5>
                     </a>
-                    <div class="row" style="padding-bottom: 10px">
+                    <div class="row">
                         {% if not profile.country == 'CAN' %}
                         <div class="col-lg-2">
                             <strong>Primary Submitted:</strong><br>
                             <span class="normal_list">
                             {% if school.primary %}
                                 {% if school.primary.date() > today.date() %}
-                                <i class="bi bi-exclamation-circle-fill text-warning" data-toggle="tooltip" data-placement="top" title="This date is in the future"></i>
+                                <i class="bi bi-exclamation-circle-fill text-warning" data-bs-toggle="tooltip" data-placement="top" title="This date is in the future"></i>
                                 {% endif %}
                             {{ school.primary.strftime('%m/%d/%Y') }}
                             {% else %}
@@ -440,7 +433,7 @@ function toggleCancel() {
                             <span class="normal_list">
                             {% if school.secondary_received %}
                                 {% if school.secondary_received.date() > today.date() %}
-                                <i class="bi bi-exclamation-circle-fill text-warning" data-toggle="tooltip" data-placement="top" title="This date is in the future"></i>
+                                <i class="bi bi-exclamation-circle-fill text-warning" data-bs-toggle="tooltip" data-placement="top" title="This date is in the future"></i>
                                 {% endif %}
                             {{ school.secondary_received.strftime('%m/%d/%Y') }}
                             {% else %}
@@ -457,7 +450,7 @@ function toggleCancel() {
                             <span class="normal_list">
                             {% if school.application_complete %}
                                 {% if school.application_complete.date() > today.date() %}
-                                <i class="bi bi-exclamation-circle-fill text-warning" data-toggle="tooltip" data-placement="top" title="This date is in the future"></i>
+                                <i class="bi bi-exclamation-circle-fill text-warning" data-bs-toggle="tooltip" data-placement="top" title="This date is in the future"></i>
                                 {% endif %}
                             {{ school.application_complete.strftime('%m/%d/%Y') }}
                             {% else %}
@@ -473,7 +466,7 @@ function toggleCancel() {
                             <span class="normal_list">
                             {% if school.pre_int_hold %}
                                 {% if school.pre_int_hold.date() > today.date() %}
-                                <i class="bi bi-exclamation-circle-fill text-warning" data-toggle="tooltip" data-placement="top" title="This date is in the future"></i>
+                                <i class="bi bi-exclamation-circle-fill text-warning" data-bs-toggle="tooltip" data-placement="top" title="This date is in the future"></i>
                                 {% endif %}
                             {{ school.pre_int_hold.strftime('%m/%d/%Y') }}
                             {% else %}
@@ -489,7 +482,7 @@ function toggleCancel() {
                             <span class="normal_list">
                             {% if school.interview_received %}
                                 {% if school.interview_received.date() > today.date() %}
-                                <i class="bi bi-exclamation-circle-fill text-warning" data-toggle="tooltip" data-placement="top" title="This date is in the future"></i>
+                                <i class="bi bi-exclamation-circle-fill text-warning" data-bs-toggle="tooltip" data-placement="top" title="This date is in the future"></i>
                                 {% endif %}
                             {{ school.interview_received.strftime('%m/%d/%Y') }}
                             {% else %}
@@ -500,12 +493,14 @@ function toggleCancel() {
                                 <input onclick = "editedSchool('{{ school.id }}', 'interview_received')" class="datepicker" type="text" data-cycle="{{cycle.cycle_year}}" value="{%- if school.interview_received -%}{{ school.interview_received.strftime('%Y-%m-%d') }}{%- endif -%}" name="interview_received-{{school.id}}">
                             </span>
                         </div>
+                    </div>
+                    <div class="row py-2">
                         <div class="col-lg-2">
                             <strong>Interview Date:</strong><br>
                             <span class="normal_list">
                             {% if school.interview_date %}
                                 {% if school.interview_date.date() > today.date() %}
-                                <i class="bi bi-exclamation-circle-fill text-warning" data-toggle="tooltip" data-placement="top" title="This date is in the future"></i>
+                                <i class="bi bi-exclamation-circle-fill text-warning" data-bs-toggle="tooltip" data-placement="top" title="This date is in the future"></i>
                                 {% endif %}
                             {{ school.interview_date.strftime('%m/%d/%Y') }}
                             {% else %}
@@ -521,7 +516,7 @@ function toggleCancel() {
                             <span class="normal_list">
                             {% if school.rejection %}
                                 {% if school.rejection.date() > today.date() %}
-                                <i class="bi bi-exclamation-circle-fill text-warning" data-toggle="tooltip" data-placement="top" title="This date is in the future"></i>
+                                <i class="bi bi-exclamation-circle-fill text-warning" data-bs-toggle="tooltip" data-placement="top" title="This date is in the future"></i>
                                 {% endif %}
                             {{ school.rejection.strftime('%m/%d/%Y') }}
                             {% else %}
@@ -537,7 +532,7 @@ function toggleCancel() {
                             <span class="normal_list">
                             {% if school.waitlist %}
                                 {% if school.waitlist.date() > today.date() %}
-                                <i class="bi bi-exclamation-circle-fill text-warning" data-toggle="tooltip" data-placement="top" title="This date is in the future"></i>
+                                <i class="bi bi-exclamation-circle-fill text-warning" data-bs-toggle="tooltip" data-placement="top" title="This date is in the future"></i>
                                 {% endif %}
                             {{ school.waitlist.strftime('%m/%d/%Y') }}
                             {% else %}
@@ -553,7 +548,7 @@ function toggleCancel() {
                             <span class="normal_list">
                             {% if school.acceptance %}
                                 {% if school.acceptance.date() > today.date() %}
-                                <i class="bi bi-exclamation-circle-fill text-warning" data-toggle="tooltip" data-placement="top" title="This date is in the future"></i>
+                                <i class="bi bi-exclamation-circle-fill text-warning" data-bs-toggle="tooltip" data-placement="top" title="This date is in the future"></i>
                                 {% endif %}
                             {{ school.acceptance.strftime('%m/%d/%Y') }}
                             {% else %}
@@ -569,7 +564,7 @@ function toggleCancel() {
                             <span class="normal_list">
                                 {% if school.withdrawn %}
                                     {% if school.withdrawn.date() > today.date() %}
-                                    <i class="bi bi-exclamation-circle-fill text-warning" data-toggle="tooltip" data-placement="top" title="This date is in the future"></i>
+                                    <i class="bi bi-exclamation-circle-fill text-warning" data-bs-toggle="tooltip" data-placement="top" title="This date is in the future"></i>
                                     {% endif %}
                                 {{ school.withdrawn.strftime('%m/%d/%Y') }}
                                 {% else %}
@@ -610,13 +605,13 @@ function toggleCancel() {
 </div>
 
 <!-- ADD SCHOOL MENU -->
-<div class="modal fade" id="add-school-modal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+<div class="modal fade" id="add-school-modal" tabindex="-1" aria-labelledby="add-school-modal" aria-hidden="true">
+    <div class="modal-dialog">
         <div class="modal-content">
             <form method="POST">
                 <div class="modal-header">
                     <h5 class="modal-title">Add Schools</h5>
-                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     
@@ -646,7 +641,7 @@ function toggleCancel() {
                 </div>
                 <div id="add_schools_list"></div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </div>
             </form>
@@ -656,13 +651,13 @@ function toggleCancel() {
 
 {% for school, profile in schools %}
 <!-- SETUP DELETION WARNINGS -->
-<div class="modal fade" id="{{ school.name }}-{{ school.phd }}-delete" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+<div class="modal fade" id="{{ school.name }}-{{ school.phd }}-delete" tabindex="-1" aria-labelledby="{{ school.name }}-{{ school.phd }}-delete" aria-hidden="true">
+    <div class="modal-dialog">
         <div class="modal-content">
             <form method="POST">
                 <div class="modal-header">
                     <h5 class="modal-title">Remove {{ school.name }}</h5>
-                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                         <div style="padding: 10px;">
@@ -673,7 +668,7 @@ function toggleCancel() {
                         </div>
                     </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-danger"
                             onclick="deleteSchool({{ school.id }}, {{ cycle.id }})">Delete School
                     </button>
@@ -686,20 +681,20 @@ function toggleCancel() {
 
 <!-- SECONDARY ESSAY ORDER -->
 {% if cycle.schools|length > 0 %}
-<div class="modal fade" id="secondary-order-modal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+<div class="modal fade" id="secondary-order-modal" tabindex="-1" aria-labelledby="secondary-order-modal" aria-hidden="true">
+    <div class="modal-dialog">
         <div class="modal-content">
             <form method="POST">
                 <div class="modal-header">
                     <h5 class="modal-title">Secondary Essay Optimization</h5>
-                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <details>
                         <summary class="h5">About This Tool</summary>
                         <p>
                             Submitting secondary applications in a timely manner is hard. This tool uses historic data
-                            to find the <a href="#" data-toggle="tooltip"
+                            to find the <a href="#" data-bs-toggle="tooltip"
                                            title="Example: Imagine today is 7/8 and the next interview invitation (based on historic data) for a school was on 7/31. The suggested deadline to complete your application by is the latest application complete date out of all of the applicants who received an interview on 7/31."
                                            style="color:black;text-decoration-style:dotted">
                             latest date by which a completed application was included in the next interview
@@ -741,12 +736,12 @@ function toggleCancel() {
                         <p>The following is a recommended order in which to submit your secondary essays based on historic
                         data. <strong>Bolded lines are applications which are <u>mandatory</u> to submit based on
                         the deadline you have entered</strong>. Unbolded dates are not hard requirements, and are
-                        purely suggested based on the <a href="#" data-toggle="tooltip"
+                        purely suggested based on the <a href="#" data-bs-toggle="tooltip"
                                                                    title="Example: Imagine today is 7/8 and the next interview invitation (based on historic data) for a school was on 7/31. The suggested deadline to complete your application by is the latest application complete date out of all of the applicants who received an interview on 7/31."
                                                                    style="color:black;text-decoration-style:dotted">
                                 last application submission in the previous cycle that yielded
                         the next interview if it were to occur in the current year</a>. Dates in the past are provided
-                        with a <a href="#" data-toggle="tooltip"
+                        with a <a href="#" data-bs-toggle="tooltip"
                                                                    title="Example: If today is 7/8 and the recommended submission date for the next historic interview for a school was 7/5, a new recommended submission date will be calculated after 7/12."
                                                                    style="color:black;text-decoration-style:dotted">4 day margin of error before recalculating</a>.</p>
                         <p><i>*Note: We recommend completing all applications as soon as possible. This order is a
@@ -765,7 +760,7 @@ function toggleCancel() {
                             {% for index, row in secondary_suggestion_order.iterrows()%}
                                 <tr {% if row["hard_soft"] == "hard" %} style="font-weight:bold" {% endif %}>
                                     <td>{{ index + 1 }}</td>
-                                    <td><a href="#" data-toggle="tooltip"
+                                    <td><a href="#" data-bs-toggle="tooltip"
                                                title="{{ row['profile'].official_name }}"
                                                style="color:black;text-decoration-style:dotted">{{ row["school"].name }} ({{  row["profile"].md_or_do }}{%if row["school"].phd %}-PhD{% endif %})</a></td>
                                     <td>{% if row["hard_soft"] == "soft" %}~{% endif %}{{ row["recommended_submission"] }}</td>
@@ -795,7 +790,7 @@ function toggleCancel() {
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     {% if missing_hard_delay_cutoff|length > 0 %}
                         <button type="submit" class="btn btn-primary">Submit</button>
                     {% endif %}

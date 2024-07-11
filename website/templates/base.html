@@ -1,125 +1,96 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-10TP3T8LQ8"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="CycleTrack is a free system for tracking and visualizing medical school applications while crowdsourcing data to make admissions more transparent." />
+        <title>{% block title %}CycleTrack{% endblock %}</title>
+        <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/favicon.ico') }}" />
+        <!-- Bootstrap icons + CSS-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+        <!-- Custom CSS -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}" />
+        <!-- Jquery CSS -->
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+    </head>
+</html>
+<body>
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+<!-- Custom Functions -->
+<script src="{{ url_for('static', filename='/js/functions.js') }}"></script>
+<!-- Jquery -->
+<script src="https://code.jquery.com/jquery-3.7.1.slim.min.js" integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script>
 
-      gtag('config', 'G-10TP3T8LQ8');
-    </script>
-
-    <meta charset="UTF-8"/>
-    <meta name="description" content="CycleTrack is a free system for tracking and visualizing medical school applications while crowdsourcing data to make admissions more transparent." />
-    <meta name="viewport" content="width=device-width, initial-scale = 1"/>
-
-    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}" />
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}" />
-    <!--<link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">-->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
-
-    <title>{% block title %}CycleTrack{% endblock %}</title>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-    <script src="{{ url_for('static', filename='/js/functions.js') }}"></script>
-    <script
-      src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-      integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-      crossorigin="anonymous"
-    ></script>
-    <!--<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-    <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>-->
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-      integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-      integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-      crossorigin="anonymous"
-    ></script>
-    <!--<script>
-        $(function () {
-          $('[data-toggle="tooltip"]').tooltip()
-        })
-    </script>-->
-    {% block additional_js %}{% endblock %}
-</head>
-
-<body class="d-flex flex-column min-vh-100">
-<!-- NAVBAR -->
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container">
-        <a class="navbar-brand" href="{{ url_for('pages.index') }}">
-            <img src="{{ url_for('static', filename='images/Docs2Be.webp') }}" height="30px" width="auto"/>
-            CycleTrack
+{% block additional_js %}{% endblock %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm" id="mainNav">
+    <div class="container px-5">
+        <a class="navbar-brand fw-bold" href="{{ url_for('pages.index') }}">
+            <img src="{{ url_for('static', filename='images/Docs2Be.webp') }}" height="30px" width="auto"/> CycleTrack
         </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar">
-            <span class="navbar-toggler-icon"></span>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive"
+                aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi-list"></i>
         </button>
-        <div class="collapse navbar-collapse" id="navbar">
-            <div class="navbar-nav">
-                <a class="nav-item nav-link" id="home" href="{{ url_for('pages.index') }}">Home</a>
-                {% if user.is_authenticated %}
-                <a class="nav-item nav-link" id="dashboard" href="{{ url_for('dashboard.cycles') }}">Dashboard</a>
-                {% endif %}
-                <a class="nav-item nav-link" id="explorer" href="{{ url_for('explorer.explorer_home') }}">Explorer</a>
-                {% if user.is_authenticated %}
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
-                       data-bs-toggle="dropdown" aria-expanded="false">
-                        Account
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <li><a class="dropdown-item" href="{{ url_for('authentication.settings') }}">Settings</a></li>
-                        <li><a class="dropdown-item" href="{{ url_for('authentication.logout') }}">Logout</a></li>
-                    </ul>
-                </li>
-                {% else %}
-                <a class="nav-item nav-link" id="login" href="{{ url_for('authentication.login') }}">Login</a>
-                <a class="nav-item nav-link" id="signUp" href="{{ url_for('authentication.register') }}">Register</a>
-                {% endif %}
-            </div>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ms-auto me-4 my-3 my-lg-0">
+                <li class="nav-item"><a class="nav-link me-lg-3" href="{{ url_for('dashboard.cycles') }}">Dashboard</a></li>
+                <li class="nav-item"><a class="nav-link me-lg-3" href="{{ url_for('explorer.explorer_home') }}">Explore Live Data</a></li>
+            </ul>
+            {% if user.is_authenticated %}
+            <a class="btn btn-primary rounded-pill px-3 mb-2 mb-lg-0" href="{{ url_for('authentication.logout') }}">
+                        <span class="d-flex align-items-center">
+                            <i class="bi bi-person-circle me-2"></i>
+                            <span class="small">Logout</span>
+                        </span>
+            </a>
+            {% else %}
+
+            <button class="btn btn-primary rounded-pill px-3 mb-2 mb-lg-0" data-bs-toggle="modal" data-bs-target="#login">
+                <span class="d-flex align-items-center">
+                    <i class="bi bi-person-circle me-2"></i><span class="small">Login</span>
+                </span>
+            </button>
+            {% endif %}
         </div>
     </div>
 </nav>
 
-{% with messages = get_flashed_messages(with_categories=true) %}
-{% if messages %}
-{% for category, message in messages %}
-{% if category == 'error' %}
-<div class="alert alert-danger alert-dismissable fade show" role="alert" style="margin: 0;">
-    <div class="container">
-        {{ message }}
-        <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close" style="float: right"></button>
-    </div>
-</div>
-{% elif category == 'warning' %}
-<div class="alert alert-warning alert-dismissable fade show" role="alert" style="margin: 0;">
-    <div class="container">
-        {{ message }}
-        <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close" style="float: right"></button>
-    </div>
-</div>
-{% else %}
-<div class="alert alert-success alert-dismissable fade show" role="alert" style="margin: 0;">
-    <div class="container">
-        {{ message }}
-        <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close" style="float: right"></button>
-    </div>
-</div>
-{% endif %}
-{% endfor %}
-{% endif %}
-{% endwith %}
-
-
 {% block content %}
 {% endblock %}
+
+<!-- LOGIN -->
+<div class="modal fade" id="login" tabindex="-1" aria-labelledby="login" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Login</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+            <form method="POST" action="{{ url_for('authentication.login') }}" method="POST">
+                <div class="modal-body">
+                    <p>Please sign-in to access CycleTrack tools. If you do not have an account, you can register your
+                    free account by clicking <a href="{{ url_for('authentication.register') }}">here</a>.</p>
+                    <div class="form-group" style="padding-bottom:10px">
+                        <label for="email">Email Address</label>
+                        <input type="email" class="form-control" id="email" name="email" placeholder="Enter email" />
+                    </div>
+                    <div class="form-group" style="padding-bottom:10px">
+                        <label for="password">Password</label>
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Enter password" />
+                        <small><a href="{{ url_for('authentication.forgot_password') }}">Forgot Password?</a></small>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Login</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 
 <!-- FOOTER -->
 <footer class="py-3 my-4 mt-auto" id="footer">
@@ -137,16 +108,16 @@
     </div>
 
 
-    <button type="button" class="btn rounded-circle btn-sm" data-toggle="modal" data-target="#support-modal" style="position: fixed; bottom: 20px; right: 20px; font-size: 2em; color: #fb94c5">
+    <button type="button" class="btn rounded-circle btn-sm" data-bs-toggle="modal" data-bs-target="#support-modal" style="position: fixed; bottom: 20px; right: 20px; font-size: 2em; color: #fb94c5">
         <i class="bi bi-heart-fill"></i>
     </button>
 
-    <div class="modal fade" id="support-modal" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+    <div class="modal fade" id="support-modal" tabindex="-1" aria-labelledby="support-modal" aria-hidden="true">
+        <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Support CycleTrack</h5>
-                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <p>Making medical school admissions more transparent and accessible for
@@ -193,7 +164,7 @@
                     </button>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
@@ -228,18 +199,8 @@
     </script>
 </footer>
 {% endif %}
-
+<script>
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+</script>
 </body>
-</html>
-
-
-<style>
-    .cookie-footer {
-        position: sticky;
-        width: 100%;
-        background-color: #FFB6C1;
-        bottom: 0;
-        padding-top: 1%;
-        padding-bottom: 1%;
-    }
-</style>

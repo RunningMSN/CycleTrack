@@ -6,380 +6,626 @@
 {% block content %}
 <div class="container">
     <h1 style="padding-top: 10px">CycleTrack is your application companion</h1>
-    <p>We are a <strong>free</strong> platform designed to help you keep track of your med school applications,
-        visualize your data, and make the application process more transparent and accessible.</p>
-    <h4>Application Tracking</h4>
-    <p>
-        For any cycle you apply, generate your school list or import one from a spreadsheet. Throughout the cycle, keep
-        track of your applications by entering dates of actions such as submission of secondary applications or
-        interviews. Your data will anonymously join that of other applicants in the
-        <a href="{{ url_for('explorer.explorer_home') }}">school explorer</a> where you can see a real-time summary of
-        application actions or school statistics.
-    </p>
-    <div style="padding-bottom:10px">
-        <a class="btn btn-primary" data-toggle="collapse" href="#sample_schools" role="button" aria-expanded="true"
-           aria-controls="sample_schools" style="margin:1px">
-            Sample List
-        </a>
-        <div class="collapse" id="sample_schools" style="margin-top: 10px">
-            <li class="list-group-item border">
-                <div class="row rows-cols-2">
-                    <!-- SCHOOL LOGO AREA ON LEFT -->
-                    <div class="col-lg-1">
-                        <!-- LOGO -->
-                        <center>
-                            <div class="row">
-                                <a href="/explorer/Northwestern" class="normal_list">
-                                    <img src="/static/images/school_logos/northwestern.webp"
-                                         style="max-width:100px;max-height:100px" width="100%" height="auto">
-                                </a>
-                                <a class="bulk_list d-none">
-                                    <img src="/static/images/school_logos/northwestern.webp"
-                                         style="max-width:100px;max-height:100px" width="100%" height="auto">
-                                </a>
-                            </div>
-                            <div class="row" style="margin-top: 5px">
-                                <div class="text-center rounded" style="margin-top: 3px; background-color: #6af799">
-                                    Accepted
-                                </div>
-                            </div>
-                            <!-- ICONS -->
-                            <div style="padding-top:5px">
-                                <button type="button" class="btn btn-link" data-toggle="modal"
-                                        data-target="#Northwestern-True-modal" style="padding: 1px">
-                                    <i class="bi bi-pencil-square"></i>
-                                </button>
-                                <a href="/explorer/Northwestern" class="btn btn-link" style="padding: 1px">
-                                    <i class="bi bi-search"></i>
-                                </a>
-                                <button type="button" class="btn btn-link" data-toggle="modal"
-                                        data-target="#Northwestern-True-delete" style="padding: 1px">
-                                    <i class="bi bi-trash"></i>
-                                </button>
-                            </div>
-                            <div>
+    <p class="lead">We are a <span class="text-primary">free platform</span> designed to help you keep <span
+            class="text-primary">track</span> of your medical school applications,
+        <span class="text-primary">visualize</span> your data, and <span class="text-primary">make the application process more accessible and transparent for
+        all applicants</span>.</p>
 
-                            </div>
-                        </center>
-                    </div>
-                    <!-- SCHOOL TEXT AREA ON RIGHT -->
-                    <div class="col-lg">
-                        <a class="normal_list" href="/explorer/Northwestern" style="color:black;text-decoration: none">
-                            <h5>Northwestern (MD-PhD)</h5>
-                        </a>
-                        <div class="row" style="padding-bottom: 10px">
-                            <div class="col-lg-2">
-                                <strong>Primary Submitted:</strong><br>
-                                <span class="normal_list">
-                            06/28/2021
-                            </span>
-                            </div>
-                            <div class="col-lg-2">
-                                <strong>Secondary Received:</strong><br>
-                                <span class="normal_list">
-                            07/20/2021
-                            </span>
-                            </div>
-                            <div class="col-lg-2">
-                                <strong>Application Complete:</strong><br>
-                                <span class="normal_list">
-                            08/09/2021
-                            </span>
-                            </div>
-                            <div class="col-lg-2">
-                                <strong>Interview Received:</strong><br>
-                                <span class="normal_list">
-                            09/28/2021
-                            </span>
-                            </div>
-                            <div class="col-lg-2">
-                                <strong>Interview Date:</strong><br>
-                                <span class="normal_list">
-                            11/10/2021
-                            </span>
-                            </div>
-                            <div class="col-lg-2">
-                                <strong>Rejected:</strong><br>
-                                <span class="normal_list">
-                            -
-                            </span>
-                            </div>
-                            <div class="col-lg-2">
-                                <strong>Waitlisted:</strong><br>
-                                <span class="normal_list">
-                            -
-                            </span>
-                            </div>
-                            <div class="col-lg-2">
-                                <strong>Accepted:</strong><br>
-                                <span class="normal_list">
-                            2/22/2022
-                            </span>
-                            </div>
-                            <div class="col-lg-2">
-                                <strong>Withdrawn:</strong><br>
-                                <span class="normal_list">
-                                -
-                            </span>
-                            </div>
-                        </div>
+    <button class="btn btn-primary rounded-pill" style="margin:5px" onclick="switchToPlatform()">Our Platform</button>
+    <button class="btn btn-success rounded-pill" style="margin:5px" onclick="switchToTeam()">Meet Our Team</button>
+
+    <!-- TEAM MEMBERS -->
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 d-none" id="team_row">
+        <div class="col my-2">
+            <div class="card h-100">
+                <div class="card-body d-flex flex-column">
+                    <img class="mx-auto" src="{{ url_for('static', filename='/images/team/daniel.png') }}"
+                         style="max-width: 150px; max-height: 100%;"/>
+                    <h4 class="card-title text-center my-0">Daniel Amusin</h4>
+                    <small class="text-center text-secondary my-0"><strong>Northwestern University</strong></small>
+                    <p class="card-text my-1">Daniel is a third-year MD-PhD student in the Northwestern University
+                        Medical
+                        Scientist Training Program. His research explores virulence factors contributing to
+                        outcomes in patients with <i>Staphylococcus aureus</i> pneumonia. During his time as an
+                        MD-PhD applicant, he noticed a gap in public and freely available data regarding the admissions
+                        process which spurred his development of CycleTrack.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col my-2">
+            <div class="card h-100">
+                <div class="card-body d-flex flex-column">
+                    <img class="mx-auto" src="{{ url_for('static', filename='/images/team/isabelle.png') }}"
+                         style="max-width: 150px; max-height: 100%;"/>
+                    <h4 class="card-title text-center my-0">Isabelle Hua</h4>
+                    <small class="text-center text-secondary my-0"><strong>University of Colorado</strong></small>
+                    <p class="card-text my-1">Isabelle Hua is a third-year MD-PhD student at the University of Colorado
+                        School of Medicine with research and clinical interests broadly in connecting biological
+                        function with its neural basis and improving patients’ day-to-day functional status. As a
+                        medical school applicant, Isabelle joined Daniel in developing CycleTrack, contributing to its
+                        codebase and vision. She was drawn to its mission to promote accessibility to information
+                        about medical education.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col my-2">
+            <div class="card h-100">
+                <div class="card-body d-flex flex-column">
+                    <img class="mx-auto" src="{{ url_for('static', filename='/images/team/arthi.png') }}"
+                         style="max-width: 150px; max-height: 100%;"/>
+                    <h4 class="card-title text-center my-0">Arthi Kozhumam</h4>
+                    <small class="text-center text-secondary my-0"><strong>Northwestern University</strong></small>
+                    <p class="card-text my-1">Arthi Kozhumam is a third-year MD-PhD student at Northwestern University
+                        with expertise and a PhD focus in implementation science, qualitative coding,
+                        geospatial analysis, and global health systems. She contributes to CycleTrack's freely available
+                        resources through a social sciences lens.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col my-2">
+            <div class="card h-100">
+                <div class="card-body d-flex flex-column">
+                    <img class="mx-auto" src="{{ url_for('static', filename='/images/team/you.png') }}"
+                         style="max-width: 150px; max-height: 100%;"/>
+                    <h4 class="card-title text-center my-0">You?</h4>
+                    <small class="text-center text-secondary my-0 text-white">&nbsp;</small>
+                    <p class="card-text my-1">We're always looking for fresh ideas and faces on team CycleTrack.
+                        Whether you want to help with a smaller project, or a larger feature, shoot us a message
+                        at <a href="mailto:admin@cycletrack.org">admin@cycletrack.org</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SAMPLE GRAPHS -->
+    <div class="card h-100 d-none my-2" id="graph_card"
+         style="display: flex; justify-content: center; align-items: center; text-align: center;">
+        <div class="card-body d-flex flex-column justify-content-center align-items-center">
+            <h4 class="card-title">Sample Visualization</h4>
+            <div style="margin: 0; padding: 0; width: 100%; height: 100%;">
+                <div id="line_graph" class="graph d-none"></div>
+                <div id="bar_graph" class="graph d-none"></div>
+                <div id="timeline_graph" class="graph d-none"></div>
+                <div id="dot_graph" class="graph d-none"></div>
+                <div id="sankey_graph" class="graph d-none"></div>
+                <div id="map_graph" class="graph d-none"></div>
+            </div>
+            <div style="width: 100%; display: flex; flex-wrap: wrap; justify-content: center; align-items: center;">
+                <button class="btn btn-primary mx-1 my-1" style="border-radius: 0" onclick="hideGraph()">Hide Graph
+                </button>
+                <button class="btn btn-primary mx-1 my-1" style="border-radius: 0" onclick="displayGraph('line_graph')">
+                    Line
+                </button>
+                <button class="btn btn-primary mx-1 my-1" style="border-radius: 0" onclick="displayGraph('bar_graph')">
+                    Bar
+                </button>
+                <button class="btn btn-primary mx-1 my-1" style="border-radius: 0"
+                        onclick="displayGraph('timeline_graph')">Timeline
+                </button>
+                <button class="btn btn-primary mx-1 my-1" style="border-radius: 0" onclick="displayGraph('dot_graph')">
+                    Dot
+                </button>
+                <button class="btn btn-primary mx-1 my-1" style="border-radius: 0"
+                        onclick="displayGraph('sankey_graph')">Sankey
+                </button>
+                <button class="btn btn-primary mx-1 my-1" style="border-radius: 0" onclick="displayGraph('map_graph')">
+                    Map
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PLATFORM FEATURES -->
+    <div class="row row-cols-1 row-cols-md-3 row-cols-lg-3" id="platform_row">
+
+        <div class="col my-2">
+            <div class="card h-100">
+                <div class="card-body d-flex flex-column">
+                    <h4 class="card-title">Track Your Applications</h4>
+                    <p class="card-text">For any cycle you apply, generate your school list or import one from a
+                        spreadsheet. Throughout the cycle, keep track of your applications by entering dates of actions.
+                        Your data will anonymously join that
+                        of other applicants in the <a href="{{ url_for('explorer.explorer_home') }}">school explorer</a>
+                        where you can see a real-time summary of application
+                        actions or school statistics.</p>
+                    <div class="mt-auto">
+                        <button class="btn btn-primary d-none d-md-block" style="border-radius: 0" id="sample_list_button"
+                                onclick="sampleList()">Show Sample List
+                        </button>
                     </div>
                 </div>
-            </li>
-            <li class="list-group-item border school_entry type_MD phd_false
-            status_rejection
-            ">
-                <div class="row rows-cols-2">
-                    <!-- SCHOOL LOGO AREA ON LEFT -->
-                    <div class="col-lg-1">
-                        <!-- LOGO -->
-                        <center>
-                            <div class="row">
-                                <a href="/explorer/Iowa" class="normal_list">
-                                    <img src="/static/images/school_logos/iowa.webp"
-                                         style="max-width:100px;max-height:100px" width="100%" height="auto">
-                                </a>
-                                <a class="bulk_list d-none">
-                                    <img src="/static/images/school_logos/iowa.webp"
-                                         style="max-width:100px;max-height:100px" width="100%" height="auto">
-                                </a>
-                            </div>
-                            <div class="row" style="margin-top: 5px">
+            </div>
+        </div>
 
-                                <div class="text-center rounded"
-                                     style="1px; margin-top: 3px; background-color: #ff8282">
-                                    Rejected
+        <div class="col-4 col-md-8 col-lg-8 my-2 d-none" id="sample_list">
+            <div class="card h-100">
+                <div class="card-body d-flex flex-column">
+                    <h4 class="card-title">Sample List</h4>
+                    <li class="list-group-item border school_entry type_MD phd_false status_withdrawn">
+                        <div class="row row-cols-2 py-2">
+                            <!-- SCHOOL LOGO AREA ON LEFT -->
+                            <div class="col-2 order-sm-1" style="text-align: center">
+                                <!-- LOGO -->
+                                <div class="row">
+                                    <a href="/explorer/school/Case Western" class="normal_list">
+                                        <img src="/static/images/school_logos/case.webp"
+                                             style="max-width:100px;max-height:100px" width="100%" height="auto">
+                                    </a>
+                                    <a class="bulk_list d-none">
+                                        <img src="/static/images/school_logos/case.webp"
+                                             style="max-width:100px;max-height:100px" width="100%" height="auto">
+                                    </a>
+                                </div>
+                                <div class="mx-2 d-none d-md-block" style="margin-top: 5px">
+
+                                    <div class="text-center rounded" style="margin-top: 3px; background-color: #d1d1d1">
+                                        Withdrawn
+                                    </div>
+
                                 </div>
 
+                                <!-- ICONS -->
+                                <div style="padding-top:5px">
+                                    <a href="/explorer/school/Case Western" class="btn btn-link" style="padding: 1px">
+                                        <i class="bi bi-search fs-5"></i>
+                                    </a>
+                                    <button type="button" class="btn btn-link" data-bs-toggle="modal"
+                                            data-bs-target="#Case Western-False-delete" style="padding: 1px">
+                                        <i class="bi bi-trash fs-5"></i>
+                                    </button>
+                                </div>
+                                <div>
+
+                                </div>
                             </div>
-                            <!-- ICONS -->
-                            <div style="padding-top:5px">
-                                <button type="button" class="btn btn-link" data-toggle="modal"
-                                        data-target="#Iowa-False-modal" style="padding: 1px">
-                                    <i class="bi bi-pencil-square"></i>
-                                </button>
-                                <a href="/explorer/Iowa" class="btn btn-link" style="padding: 1px">
-                                    <i class="bi bi-search"></i>
+
+                            <!-- SCHOOL TEXT AREA ON RIGHT -->
+                            <div class="col-lg order-sm-2">
+                                <a class="normal_list" href="/explorer/school/Case Western"
+                                   style="color:black;text-decoration: none">
+                                    <h5>Case Western (MD)</h5>
                                 </a>
-                                <button type="button" class="btn btn-link" data-toggle="modal"
-                                        data-target="#Iowa-False-delete" style="padding: 1px">
-                                    <i class="bi bi-trash"></i>
-                                </button>
-                            </div>
-                            <div>
-
-                            </div>
-                        </center>
-                    </div>
-
-                    <!-- SCHOOL TEXT AREA ON RIGHT -->
-                    <div class="col-lg">
-                        <a class="normal_list" href="/explorer/Iowa" style="color:black;text-decoration: none">
-                            <h5>Iowa (MD)</h5>
-                        </a>
-                        <a class="bulk_list d-none" style="color:black;text-decoration: none">
-                            <h5>Iowa (MD)</h5>
-                        </a>
-                        <div class="row" style="padding-bottom: 10px">
-                            <div class="col-lg-2">
-                                <strong>Primary Submitted:</strong><br>
-                                <span class="normal_list">
+                                <a class="bulk_list d-none" style="color:black;text-decoration: none">
+                                    <h5>Case Western (MD)</h5>
+                                </a>
+                                <div class="row">
+                                    <div class="col-lg-2">
+                                        <strong>Primary Submitted:</strong><br>
+                                        <span class="normal_list">
                             06/25/2021
                             </span>
-                            </div>
-                            <div class="col-lg-2">
-                                <strong>Secondary Received:</strong><br>
-                                <span class="normal_list">
-                            07/06/2021
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <strong>Secondary Received:</strong><br>
+                                        <span class="normal_list">
+                            07/09/2021
                             </span>
+                                    </div>
+
+                                    <div class="col-lg-2">
+                                        <strong>Application Complete:</strong><br>
+                                        <span class="normal_list">
+                            07/23/2021
+                            </span>
+                                        <span class="bulk_list d-none">
+                                <input onclick="editedSchool('165043', 'application_complete')"
+                                       class="datepicker hasDatepicker" type="text" data-cycle="2022" value="2021-07-23"
+                                       name="application_complete-165043" id="dp1720653703551">
+                            </span>
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <strong>Pre-Int Hold:</strong><br>
+                                        <span class="normal_list">
+                            -
+                            </span>
+                                        <span class="bulk_list d-none">
+                                <input onclick="editedSchool('165043', 'pre_int_hold')" class="datepicker hasDatepicker"
+                                       type="text" data-cycle="2022" value="" name="pre_int_hold-165043"
+                                       id="dp1720653703552">
+                            </span>
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <strong>Interview Received:</strong><br>
+                                        <span class="normal_list">
+                            -
+                            </span>
+                                    </div>
+                                </div>
+                                <div class="row py-2">
+                                    <div class="col-lg-2">
+                                        <strong>Interview Date:</strong><br>
+                                        <span class="normal_list">
+                            -
+                            </span>
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <strong>Rejected:</strong><br>
+                                        <span class="normal_list">
+                            -
+                            </span>
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <strong>Waitlisted:</strong><br>
+                                        <span class="normal_list">
+                            -
+                            </span>
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <strong>Accepted:</strong><br>
+                                        <span class="normal_list">
+                            -
+                            </span>
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <strong>Withdrawn:</strong><br>
+                                        <span class="normal_list">
+                                05/11/2022
+                            </span>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-lg-2">
-                                <strong>Application Complete:</strong><br>
-                                <span class="normal_list">
+                        </div>
+                    </li>
+                    <li class="list-group-item border school_entry type_MD phd_false
+            status_acceptance
+            ">
+
+                        <div class="row row-cols-2 py-2">
+                            <!-- SCHOOL LOGO AREA ON LEFT -->
+                            <div class="col-2 order-sm-1" style="text-align: center">
+                                <!-- LOGO -->
+                                <div class="row">
+                                    <a href="/explorer/school/Indiana" class="normal_list">
+                                        <img src="/static/images/school_logos/indiana.webp"
+                                             style="max-width:100px;max-height:100px" width="100%" height="auto">
+                                    </a>
+                                    <a class="bulk_list d-none">
+                                        <img src="/static/images/school_logos/indiana.webp"
+                                             style="max-width:100px;max-height:100px" width="100%" height="auto">
+                                    </a>
+                                </div>
+                                <div class="mx-2 d-none d-md-block" style="margin-top: 5px">
+
+                                    <div class="text-center rounded" style="margin-top: 3px; background-color: #6af799">
+                                        <span style="margin-top: 3px; background-color: #6af799"> Accepted</span>
+                                    </div>
+
+                                </div>
+
+                                <!-- ICONS -->
+                                <div style="padding-top:5px">
+                                    <a href="/explorer/school/Indiana" class="btn btn-link" style="padding: 1px">
+                                        <i class="bi bi-search fs-5"></i>
+                                    </a>
+                                    <button type="button" class="btn btn-link" data-bs-toggle="modal"
+                                            data-bs-target="#Indiana-False-delete" style="padding: 1px">
+                                        <i class="bi bi-trash fs-5"></i>
+                                    </button>
+                                </div>
+                                <div>
+
+                                </div>
+                            </div>
+
+                            <!-- SCHOOL TEXT AREA ON RIGHT -->
+                            <div class="col-lg order-sm-2">
+                                <a class="normal_list" href="/explorer/school/Indiana"
+                                   style="color:black;text-decoration: none">
+                                    <h5>Indiana (MD)</h5>
+                                </a>
+                                <a class="bulk_list d-none" style="color:black;text-decoration: none">
+                                    <h5>Indiana (MD)</h5>
+                                </a>
+                                <div class="row">
+
+                                    <div class="col-lg-2">
+                                        <strong>Primary Submitted:</strong><br>
+                                        <span class="normal_list">
+                            06/25/2021
+                            </span>
+                                        <span class="bulk_list d-none">
+                                <input onclick="editedSchool('165050', 'primary')" class="datepicker hasDatepicker"
+                                       type="text" data-cycle="2022" value="2021-06-25" name="primary-165050"
+                                       id="dp1720654109561">
+                            </span>
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <strong>Secondary Received:</strong><br>
+                                        <span class="normal_list">
+                            -
+                            </span>
+                                    </div>
+
+                                    <div class="col-lg-2">
+                                        <strong>Application Complete:</strong><br>
+                                        <span class="normal_list">
+                            08/09/2021
+                            </span>
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <strong>Pre-Int Hold:</strong><br>
+                                        <span class="normal_list">
+                            -
+                            </span>
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <strong>Interview Received:</strong><br>
+                                        <span class="normal_list">
                             08/12/2021
                             </span>
-                            </div>
-                            <div class="col-lg-2">
-                                <strong>Interview Received:</strong><br>
-                                <span class="normal_list">
-                            11/10/2021
+                                    </div>
+                                </div>
+                                <div class="row py-2">
+                                    <div class="col-lg-2">
+                                        <strong>Interview Date:</strong><br>
+                                        <span class="normal_list">
+                            11/03/2021
                             </span>
-                            </div>
-                            <div class="col-lg-2">
-                                <strong>Interview Date:</strong><br>
-                                <span class="normal_list">
-                            12/22/2021
-                            </span>
-                            </div>
-                            <div class="col-lg-2">
-                                <strong>Rejected:</strong><br>
-                                <span class="normal_list">
-                            02/11/2022
-                            </span>
-                            </div>
-                            <div class="col-lg-2">
-                                <strong>Waitlisted:</strong><br>
-                                <span class="normal_list">
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <strong>Rejected:</strong><br>
+                                        <span class="normal_list">
                             -
                             </span>
-                            </div>
-                            <div class="col-lg-2">
-                                <strong>Accepted:</strong><br>
-                                <span class="normal_list">
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <strong>Waitlisted:</strong><br>
+                                        <span class="normal_list">
                             -
                             </span>
-                            </div>
-                            <div class="col-lg-2">
-                                <strong>Withdrawn:</strong><br>
-                                <span class="normal_list">
-                                -
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <strong>Accepted:</strong><br>
+                                        <span class="normal_list">
+                            12/18/2021
                             </span>
-                            </div>
-                        </div>
-                        <div class="row" style="padding-top: 10px">
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <strong>Withdrawn:</strong><br>
+                                        <span class="normal_list">
+                                12/23/2021
+                            </span>
+                                    </div>
+                                </div>
+                                <!-- NOTES -->
+
+                                <div class="row" style="padding-top: 10px">
+                        <span class="normal_list">
                             <details open="">
                                 <summary><strong>Notes:</strong></summary>
-                                <p style="white-space:pre-wrap; word-wrap:break-word">Update letter sent: 10/14/2021</p>
+                                <p style="white-space:pre-wrap; word-wrap:break-word">Particularly enjoyed interview day.</p>
                             </details>
+                        </span>
+
+                                </div>
+
+                                <div class="row" style="padding-top: 10px">
+                    <span class="bulk_list d-none">
+                        <strong>Notes:</strong>
+                        <input onclick="editedSchool('165050', 'note')" class="form-control" type="text"
+                               data-cycle="2022" value="Particularly enjoyed interview day." name="note-165050">
+                    </span>
+                                </div>
+                            </div>
                         </div>
+                    </li>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col my-2">
+            <div class="card h-100">
+                <div class="card-body d-flex flex-column">
+                    <h4 class="card-title">Keep Pace with Your Schools</h4>
+                    <p class="card-text">
+                        Using crowdsourced data about interview invitations from past cycles, CycleTrack helps you
+                        decided
+                        which order to complete your essays.</p>
+                    <div class="mt-auto">
+                        <button class="btn btn-primary" style="border-radius: 0" data-bs-toggle="modal" data-bs-target="#secondary-order-modal">View Example</button>
                     </div>
                 </div>
-            </li>
-        </div>
-    </div>
-    <h4>Making Your Data Beautiful</h4>
-    <p>
-        Visualizing your cycle progress has never been easier. Use the visualization tool to quickly generate interactive
-        graphs of the data entered into your school list. Click the buttons below to see some examples.
-    </p>
-    <div style="padding-bottom:10px">
-        <a class="btn btn-primary" data-toggle="collapse" href="#line" role="button" aria-expanded="true"
-           aria-controls="line" style="margin:1px">
-            Line
-        </a>
-        <div class="collapse" id="line">
-            <div class="card container" style="margin-top:10px; margin-bottom:10px">
-                <center>
-                    <div id="line_graph"></div>
-                </center>
             </div>
         </div>
-        <a class="btn btn-primary" data-toggle="collapse" href="#bar" role="button" aria-expanded="false"
-           aria-controls="bar" style="margin:1px">
-            Bar
-        </a>
-        <div class="collapse" id="bar">
-            <div class="card container" style="margin-top:10px; margin-bottom:10px">
-                <center>
-                    <div id="bar_graph"></div>
-                </center>
+
+        <div class="col my-2">
+            <div class="card h-100">
+                <div class="card-body d-flex flex-column">
+                    <h4 class="card-title">Make Your Data Beautiful</h4>
+                    <p class="card-text">Visualizing your application progress has never been easier. Use the
+                        visualization tool to quickly generate interactive graphs your data. Click the buttons below
+                        to see some examples. </p>
+                    <div class="mt-auto d-none d-md-block">
+                        <a href="#" class="btn btn-primary mx-1 my-1 graph_button" style="border-radius: 0" onclick="displayGraph('line_graph')">Line</a>
+                        <a href="#" class="btn btn-primary mx-1 my-1 graph_button" style="border-radius: 0" onclick="displayGraph('bar_graph')">Bar</a>
+                        <a href="#" class="btn btn-primary mx-1 my-1 graph_button" style="border-radius: 0" onclick="displayGraph('timeline_graph')">Timeline</a>
+                        <a href="#" class="btn btn-primary mx-1 my-1 graph_button" style="border-radius: 0" onclick="displayGraph('dot_graph')">Dot</a>
+                        <a href="#" class="btn btn-primary mx-1 my-1 graph_button" style="border-radius: 0" onclick="displayGraph('sankey_graph')">Sankey</a>
+                        <a href="#" class="btn btn-primary mx-1 my-1 graph_button" style="border-radius: 0" onclick="displayGraph('map_graph')">Map</a>
+                        <a href="#" class="btn btn-primary mx-1 my-1 d-none" style="border-radius: 0" id="hide_graph_button" onclick="hideGraph()">Hide Graph</a>
+                    </div>
+                </div>
             </div>
         </div>
-        <a class="btn btn-primary" data-toggle="collapse" href="#timeline" role="button" aria-expanded="false"
-           aria-controls="bar" style="margin:1px">
-            Timeline
-        </a>
-        <div class="collapse" id="timeline">
-            <div class="card container" style="margin-top:10px; margin-bottom:10px">
-                <center>
-                    <div id="timeline_graph"></div>
-                </center>
+
+        <div class="col my-2">
+            <div class="card h-100">
+                <div class="card-body d-flex flex-column">
+                    <h4 class="card-title">Contribute to Knowledge</h4>
+                    <p class="card-text">The school explorer presents aggregated de-identified data about the progress
+                        and statistics of individual medical schools. Additionally, data may be used for research about
+                        the medical school application process. We always de-identify all applicant information to
+                        maintain privacy.</p>
+                    <div class="mt-auto">
+                        <a href="{{ url_for('explorer.explorer_home') }}" class="btn btn-primary" style="border-radius: 0">Visit Explorer</a>
+                    </div>
+                </div>
             </div>
         </div>
-        <a class="btn btn-primary" data-toggle="collapse" href="#dot" role="button" aria-expanded="false"
-           aria-controls="bar" style="margin:1px">
-            Dot
-        </a>
-        <div class="collapse" id="dot">
-            <div class="card container" style="margin-top:10px; margin-bottom:10px">
-                <center>
-                    <div id="dot_graph"></div>
-                </center>
+
+        <div class="col my-2">
+            <div class="card h-100">
+                <div class="card-body d-flex flex-column">
+                    <h4 class="card-title">Create a Profile</h4>
+                    <p class="card-text">Sharing data about your application cycle is just a few clicks away.
+                        CycleTrack's profiles allow you to generate custom reports for analyzing your cycle or sharing
+                        with friends or advisors.
+                    </p>
+                    <div class="mt-auto">
+
+                    </div>
+                </div>
             </div>
         </div>
-        <a class="btn btn-primary" data-toggle="collapse" href="#sankey" role="button" aria-expanded="false"
-           aria-controls="sankey" style="margin:1px">
-            Sankey
-        </a>
-        <div class="collapse" id="sankey">
-            <div class="card container" style="margin-top:10px; margin-bottom:10px">
-                <center>
-                    <div id="sankey_graph"></div>
-                </center>
-            </div>
-        </div>
-        <a class="btn btn-primary" data-toggle="collapse" href="#map" role="button" aria-expanded="false"
-           aria-controls="map" style="margin:1px">
-            Map
-        </a>
-        <div class="collapse" id="map">
-            <div class="card container" style="margin-top:10px; margin-bottom:10px">
-                <center>
-                    <div id="map_plot"></div>
-                </center>
+
+        <div class="col my-2">
+            <div class="card h-100">
+                <div class="card-body d-flex flex-column">
+                    <h4 class="card-title">And more...</h4>
+                    <p class="card-text">CycleTrack features additional tools such as a GPA calculator to help you
+                        use AMCAS, AACOMAS, or TMDSAS criteria to understand how schools see your cumulative or science
+                        GPA.
+                    </p>
+                    <div class="mt-auto">
+                       <a href="{{ url_for('authentication.register') }}" class="btn btn-success" style="border-radius: 0">Get Started <i class="bi bi-arrow-right-short"></i></a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <h4>Crowdsourcing Data</h4>
-    <p>
-        Data entered into CycleTrack is used to make applications more transparent and more accessible. The
-        <a href="{{ url_for('explorer.explorer_home') }}">school explorer</a> presents aggregated de-identified data about
-        the progress and statistics of individual medical schools. Additionally, data may be used for research about
-        the medical school application process. We always de-identify all applicant information to maintain privacy.
-    </p>
+    <!-- GENERATE GRAPHS -->
+    <script>
+        fetch('{{ url_for('static', filename='sample_graphs/line.JSON') }}')
+            .then(response => response.json())
+            .then(data => {
+                data.config = {'responsive': true, 'displaylogo': false};
+                Plotly.newPlot('line_graph', data);
+            })
+            .catch(error => console.log(error));
+        fetch('{{ url_for('static', filename='sample_graphs/bar.JSON') }}')
+            .then(response => response.json())
+            .then(data => {
+                data.config = {'responsive': true, 'displaylogo': false};
+                Plotly.newPlot('bar_graph', data);
+            })
+            .catch(error => console.log(error));
+        fetch('{{ url_for('static', filename='sample_graphs/timeline.JSON') }}')
+            .then(response => response.json())
+            .then(data => {
+                data.config = {'responsive': true, 'displaylogo': false};
+                Plotly.newPlot('timeline_graph', data);
+            })
+            .catch(error => console.log(error));
+        fetch('{{ url_for('static', filename='sample_graphs/dot.JSON') }}')
+            .then(response => response.json())
+            .then(data => {
+                data.config = {'responsive': true, 'displaylogo': false};
+                Plotly.newPlot('dot_graph', data);
+            })
+            .catch(error => console.log(error));
+        fetch('{{ url_for('static', filename='sample_graphs/sankey.JSON') }}')
+            .then(response => response.json())
+            .then(data => {
+                data.config = {'responsive': true, 'displaylogo': false};
+                Plotly.newPlot('sankey_graph', data);
+            })
+            .catch(error => console.log(error));
+        fetch('{{ url_for('static', filename='sample_graphs/map.JSON') }}')
+            .then(response => response.json())
+            .then(data => {
+                data.config = {'responsive': true, 'displaylogo': false};
+                Plotly.newPlot('map_graph', data);
+            })
+            .catch(error => console.log(error));
+    </script>
+    <script src="{{ url_for('static', filename='/js/about_page.js') }}"></script>
 
-    <h4>Other Tools</h4>
-    <p>
-        We currently offer a GPA calculator for calculating cumulative/science/non-science GPA using criteria specified by
-        AMCAS, AACOMAS and TMDSAS.
-    </p>
+
+    <!-- SECONDARY OPTIMIZATION SAMPLE -->
+    <div class="modal fade" id="secondary-order-modal" tabindex="-1" aria-labelledby="secondary-order-modal" aria-hidden="true">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="POST">
+                <div class="modal-header">
+                    <h5 class="modal-title">Secondary Essay Optimization</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <details>
+                        <summary class="h5">About This Tool</summary>
+                        <p>
+                            Submitting secondary applications in a timely manner is hard. This tool uses historic data
+                            to find the <a href="#" data-bs-toggle="tooltip" style="color:black;text-decoration-style:dotted" data-bs-original-title="Example: Imagine today is 7/8 and the next interview invitation (based on historic data) for a school was on 7/31. The suggested deadline to complete your application by is the latest application complete date out of all of the applicants who received an interview on 7/31.">
+                            latest date by which a completed application was included in the next interview
+                            invitation pool</a>. It is unique to your school list.
+                        </p>
+                        <p>
+                            By combining your individual school list with historic data, this tool is meant to provide
+                            a <strong>suggested order in which to complete applications</strong>. It will automatically
+                            update as you track data in the school list.
+                        </p>
+                    </details>
+                    <hr>
+
+                    <div id="secondary_order_output">
+                        <p>The following is a recommended order in which to submit your secondary essays based on historic
+                        data. <strong>Bolded lines are applications which are <u>mandatory</u> to submit based on
+                        the deadline you have entered</strong>. Unbolded dates are not hard requirements, and are
+                        purely suggested based on the <a href="#" data-bs-toggle="tooltip" style="color:black;text-decoration-style:dotted" data-bs-original-title="Example: Imagine today is 7/8 and the next interview invitation (based on historic data) for a school was on 7/31. The suggested deadline to complete your application by is the latest application complete date out of all of the applicants who received an interview on 7/31.">
+                                last application submission in the previous cycle that yielded
+                        the next interview if it were to occur in the current year</a>. Dates in the past are provided
+                        with a <a href="#" data-bs-toggle="tooltip" style="color:black;text-decoration-style:dotted" data-bs-original-title="Example: If today is 7/8 and the recommended submission date for the next historic interview for a school was 7/5, a new recommended submission date will be calculated after 7/12.">4 day margin of error before recalculating</a>.</p>
+                        <p><i>*Note: We recommend completing all applications as soon as possible. This order is a
+                            data-informed suggestion for how to organize your time.</i></p>
+                            <table class="table">
+                                <thead>
+                                    <tr style="font-weight:bold">
+                                        <td>#</td>
+                                        <td>School</td>
+                                        <td>Date</td>
+                                    </tr>
+                                </thead>
+                                <tbody><tr>
+                                    <td>1</td>
+                                    <td><a href="#" data-bs-toggle="tooltip" style="color:black;text-decoration-style:dotted" data-bs-original-title="A.T. Still University-School of Osteopathic Medicine in Arizona">A.T. Still - Arizona (DO)</a></td>
+                                    <td>~Jul 16</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td><a href="#" data-bs-toggle="tooltip" style="color:black;text-decoration-style:dotted" data-bs-original-title="University of Chicago The Pritzker School of Medicine">Chicago (MD)</a></td>
+                                    <td>~Jul 17</td>
+                                </tr>
+                                <tr style="font-weight:bold">
+                                    <td>3</td>
+                                    <td><a href="#" data-bs-toggle="tooltip" style="color:black;text-decoration-style:dotted" data-bs-original-title="University of California, Los Angeles David Geffen School of Medicine">University of California Los Angeles (MD)</a></td>
+                                    <td>Jul 22</td>
+                                </tr>
+                                <tr>
+                                    <td>4</td>
+                                    <td><a href="#" data-bs-toggle="tooltip" style="color:black;text-decoration-style:dotted" data-bs-original-title="University of Alabama at Birmingham Marnix E. Heersink School of Medicine">Alabama (MD)</a></td>
+                                    <td>~Aug 04</td>
+                                </tr>
+                            </tbody></table>
+                            <p>
+                                <strong>We do not have enough data to provide suggestions for:</strong> Baylor (MD-PhD)
+                            </p>
+                        <p class="container" style="padding: 10px; margin-top: 5px; margin-bottom:5px; background-color: #ffe9ad">
+                            As this is a new tool, it may still have some bugs. If something doesn't look right, please
+                            submit a <a href="/suggestions">bug report</a>.</p>
+
+                        <small><i>CycleTrack does not guarantee the accuracy of this tool. The information
+                                presented is purely a suggestion based on users' self-reported data from the previous
+                                cycle.</i></small>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
-
-<!-- GENERATE GRAPHS -->
-<script>
-    fetch('{{ url_for('static', filename='sample_graphs/line.JSON') }}')
-        .then(response => response.json())
-        .then(data => {
-            data.config = {'responsive': true, 'displaylogo': false};
-            Plotly.newPlot('line_graph', data);
-        })
-        .catch(error => console.log(error));
-    fetch('{{ url_for('static', filename='sample_graphs/bar.JSON') }}')
-        .then(response => response.json())
-        .then(data => {
-            data.config = {'responsive': true, 'displaylogo': false};
-            Plotly.newPlot('bar_graph', data);
-        })
-        .catch(error => console.log(error));
-    fetch('{{ url_for('static', filename='sample_graphs/timeline.JSON') }}')
-        .then(response => response.json())
-        .then(data => {
-            data.config = {'responsive': true, 'displaylogo': false};
-            Plotly.newPlot('timeline_graph', data);
-        })
-        .catch(error => console.log(error));
-    fetch('{{ url_for('static', filename='sample_graphs/dot.JSON') }}')
-        .then(response => response.json())
-        .then(data => {
-            data.config = {'responsive': true, 'displaylogo': false};
-            Plotly.newPlot('dot_graph', data);
-        })
-        .catch(error => console.log(error));
-    fetch('{{ url_for('static', filename='sample_graphs/sankey.JSON') }}')
-        .then(response => response.json())
-        .then(data => {
-            data.config = {'responsive': true, 'displaylogo': false};
-            Plotly.newPlot('sankey_graph', data);
-        })
-        .catch(error => console.log(error));
-    fetch('{{ url_for('static', filename='sample_graphs/map.JSON') }}')
-        .then(response => response.json())
-        .then(data => {
-            data.config = {'responsive': true, 'displaylogo': false};
-            Plotly.newPlot('map_plot', data);
-        })
-        .catch(error => console.log(error));
-
-</script>
-{% endblock %}
+    {% endblock %}

@@ -3,7 +3,9 @@
 {% block content %}
 <div class="container">
     <form method="POST">
-        <h2 style="padding-top: 10px">Login</h2>
+        <h2 style="padding-top: 10px">Login Required</h2>
+        <p>An account is required to access CycleTrack tools. If you do not have an account, please register your free
+        account by clicking <a href="{{ url_for('authentication.register') }}">here</a>.</p>
         <div class="form-group" style="padding-bottom:10px">
             <label for="email">Email Address</label>
             <input type="email" class="form-control" id="email" name="email" placeholder="Enter email" />

@@ -20,15 +20,15 @@
     <!-- TAB LIST -->
     <ul class="nav nav-tabs" id="myTab" role="tablist">
         <li class="nav-item">
-            <a class="nav-link active" id="md-tab" data-toggle="tab" href="#md" role="tab" aria-controls="md"
+            <a class="nav-link active" id="md-tab" data-bs-toggle="tab" data-bs-target="#md" type="button" role="tab" aria-controls="md"
                aria-selected="true"><h6>USA MD</h6></a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" id="do-tab" data-toggle="tab" href="#do" role="tab" aria-controls="do"
+            <a class="nav-link" id="do-tab" data-bs-toggle="tab" data-bs-target="#do" type="button" role="tab" aria-controls="do"
                aria-selected="false"><h6>DO</h6></a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" id="ca-tab" data-toggle="tab" href="#ca" role="tab" aria-controls="ca"
+            <a class="nav-link" id="ca-tab" data-bs-toggle="tab" data-bs-target="#ca" type="button" role="tab" aria-controls="ca"
                aria-selected="true"><h6>CAN MD</h6></a>
         </li>
     </ul>
@@ -36,20 +36,20 @@
     <div class="tab-content" id="myTabContent" style="padding:10px; border-style: none solid solid; border-color:#dee2e6; border-width:1px">
         <!-- MD SCHOOLS -->
         <div class="tab-pane fade show active" id="md" role="tabpanel" aria-labelledby="md-tab">
+            <table class="table">
             {% for school in usmd_schools %}
-            <li class="list-group-item">
-                <div class="row">
-                    <div class="col">
-                        {{ school.school }}
-                    </div>
-                    <div class="col">
+            <tr>
+                    <td>
+                        {{ school.intermediate_name }}
+                    </td>
+                    <td>
                         {% if school.lor_reg_link != 'unk' %}
                         <a href="{{ school.lor_reg_link }}" target="_blank">MD Requirements</a>
                         {% else %}
                         <a href="#" data-toggle="tooltip" title="We do not currently have the requirements for this program. Please send us the link for this program at admin@cycletrack.org." style="text-decoration-style: dotted; color:gray">MD Requirements</a>
                         {% endif %}
-                    </div>
-                    <div class="col">
+                    </td>
+                    <td>
                         {% if school.phd_website %}
                             {% if school.lor_phd_link != 'unk' %}
                             <a href="{{ school.lor_phd_link }}" target="_blank">MD-PhD Requirements</a>
@@ -57,28 +57,25 @@
                             <a href="#" data-toggle="tooltip" title="We do not currently have the requirements for this program. Please send us the link for this program at admin@cycletrack.org." style="text-decoration-style: dotted; color:gray">MD-PhD Requirements</a>
                             {% endif %}
                         {% endif %}
-                    </div>
-                </div>
-            </li>
+                    </td>
+            </tr>
             {% endfor %}
+            </table>
         </div>
 
         <!-- DO SCHOOLS -->
         <div class="tab-pane fade" id="do" role="tabpanel" aria-labelledby="do-tab">
+            <table class="table">
             {% for school in do_schools %}
-            <li class="list-group-item">
-                <div class="row">
-                    <div class="col">
-                        {{ school.school }}
-                    </div>
-                    <div class="col">
-                        {% if school.lor_reg_link != 'unk' %}
+                <tr>
+                    <td>{{ school.intermediate_name }}</td>
+                    <td>{% if school.lor_reg_link != 'unk' %}
                         <a href="{{ school.lor_reg_link }}" target="_blank">DO Requirements</a>
                         {% else %}
-                        <a href="#" data-toggle="tooltip" title="We do not currently have the requirements for this program. Please send us the link for this program at admin@cycletrack.org." style="text-decoration-style: dotted; color:gray">DO Requirements</a>
+                        <a href="#" data-bs-toggle="tooltip" title="We do not currently have the requirements for this program. Please send us the link for this program at admin@cycletrack.org." style="text-decoration-style: dotted; color:gray">DO Requirements</a>
                         {% endif %}
-                    </div>
-                    <div class="col">
+                    </td>
+                    <td>
                         {% if school.phd_website %}
                             {% if school.lor_phd_link != 'unk' %}
                             <a href="{{ school.lor_phd_link }}" target="_blank">DO-PhD Requirements</a>
@@ -86,28 +83,28 @@
                             <a href="#" data-toggle="tooltip" title="We do not currently have the requirements for this program. Please send us the link for this program at admin@cycletrack.org." style="text-decoration-style: dotted; color:gray">DO-PhD Requirements</a>
                             {% endif %}
                         {% endif %}
-                    </div>
-                </div>
-            </li>
+                    </td>
+                </tr>
             {% endfor %}
+            </table>
         </div>
 
         <!-- CANADA SCHOOLS -->
         <div class="tab-pane fade" id="ca" role="tabpanel" aria-labelledby="ca-tab">
+            <table class="table">
             {% for school in camd_schools %}
-            <li class="list-group-item">
-                <div class="row">
-                    <div class="col">
-                        {{ school.school }}
-                    </div>
-                    <div class="col">
+            <tr>
+                    <td>
+                        {{ school.intermediate_name }}
+                    </td>
+                    <td>
                         {% if school.lor_reg_link != 'unk' %}
                         <a href="{{ school.lor_reg_link }}" target="_blank">MD Requirements</a>
                         {% else %}
                         <a href="#" data-toggle="tooltip" title="We do not currently have the requirements for this program. Please send us the link for this program at admin@cycletrack.org." style="text-decoration-style: dotted; color:gray">MD Requirements</a>
                         {% endif %}
-                    </div>
-                    <div class="col">
+                    </td>
+                    <td>
                         {% if school.phd_website %}
                             {% if school.lor_phd_link != 'unk' %}
                             <a href="{{ school.lor_phd_link }}" target="_blank">MD-PhD Requirements</a>
@@ -115,10 +112,10 @@
                             <a href="#" data-toggle="tooltip" title="We do not currently have the requirements for this program. Please send us the link for this program at admin@cycletrack.org." style="text-decoration-style: dotted; color:gray">MD-PhD Requirements</a>
                             {% endif %}
                         {% endif %}
-                    </div>
-                </div>
-            </li>
+                    </td>
+            </tr>
             {% endfor %}
+            </table>
         </div>
     </div>
 

@@ -27,10 +27,10 @@
         A list of letter of recommendation requirements is located <a href="{{ url_for('pages.lors') }}">here</a>.
     </p>
 </div>
-<div class="container" style="padding:20px;padding-top:10px;padding-bottom:10px;background:#ebebeb">
+<div class="container rounded" style="padding:20px;padding-top:10px;padding-bottom:10px;background:#ebebeb">
     <div class="row">
         <div class="col" style="padding: 10px;">
-            <div class="container" style="background:white; padding:10px">
+            <div class="container rounded" style="background:white; padding:10px">
                 <h4>Filter Schools</h4>
                 <div class="row" style="padding-top:5px;padding-bottom:5px">
                     <div class="col">
@@ -114,7 +114,7 @@
     <div class="row">
         {% for key,value in schools.iterrows() %}
         <div class="col school_entry school_type_{{ value['type'] }} state_{{ value['state'] }} country_{{ value['country'] }} applied_{{ value['applied_to'] }}" style="padding:10px; min-width: 350px;" id="{{ value['name'] }} {{ value['official_name'] }} {{ value['intermediate_name'] }}">
-            <div class="container" style="background:white; padding:10px">
+            <div class="container rounded" style="background:white; padding:10px">
                     <div class="col d-flex align-items-center justify-content-center" style="height: 100px;">
                         <a href="{{ url_for('explorer.explorer_home') }}/school/{{ value['name'] }}">
                             <img src="{{ url_for('static', filename='images/school_logos/' + value['logo_link']) }}" style="max-width:100px;max-height:100px" width="100%" height="auto">
