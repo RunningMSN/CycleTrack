@@ -480,13 +480,13 @@ def next_historic_interview(app):
             # PROCESS FOR REGULAR APPLICATIONS
             reg = pd.read_sql(query.filter(School.phd == False).statement, db.get_engine())
             # Check if currently interviewing for this cycle
-            if len(reg) >0:
+            if len(reg) > 0:
                 school_stats_entry.reg_interviewing = reg['interview_received'].max() > datetime.strptime(
                     f"{form_options.VALID_CYCLES[0] - 1}-06-01", '%Y-%m-%d')
             else:
                 school_stats_entry.reg_interviewing = False
             # Need at least 5 recorded interviews to find suggested dates
-            if len(reg) > 5:
+            if len(reg) >= 5:
                 # Adjust so that everything in current year
                 reg[['interview_received', 'application_complete']] = reg.apply(
                     lambda row: pd.Series({
@@ -523,53 +523,53 @@ def next_historic_interview(app):
                 school_stats_entry.next_reg_historic_ii = None
                 school_stats_entry.last_complete_reg_for_ii = None
 
-                # PROCESS FOR PHD APPLICATIONS
-                phd = pd.read_sql(query.filter(School.phd == True).statement, db.get_engine())
-                # Check if currently interviewing for this cycle
-                if len(phd) > 0:
-                    school_stats_entry.phd_interviewing = reg['interview_received'].max() > datetime.strptime(
-                        f"{form_options.VALID_CYCLES[0] - 1}-06-01", '%Y-%m-%d')
-                else:
-                    school_stats_entry.phd_interviewing = False
-                # Need at least 5 recorded interviews to find suggested dates
-                if len(phd) > 5:
-                    # Adjust so that everything in current year
-                    phd[['interview_received', 'application_complete']] = phd.apply(
-                        lambda row: pd.Series({
-                            'interview_received': row['interview_received'] + pd.DateOffset(years=1) if row[
+            # PROCESS FOR PHD APPLICATIONS
+            phd = pd.read_sql(query.filter(School.phd == True).statement, db.get_engine())
+            # Check if currently interviewing for this cycle
+            if len(phd) > 0:
+                school_stats_entry.phd_interviewing = reg['interview_received'].max() > datetime.strptime(
+                    f"{form_options.VALID_CYCLES[0] - 1}-06-01", '%Y-%m-%d')
+            else:
+                school_stats_entry.phd_interviewing = False
+            # Need at least 5 recorded interviews to find suggested dates
+            if len(phd) >= 5:
+                # Adjust so that everything in current year
+                phd[['interview_received', 'application_complete']] = phd.apply(
+                    lambda row: pd.Series({
+                        'interview_received': row['interview_received'] + pd.DateOffset(years=1) if row[
+                                                                                                        'cycle_year'] ==
+                                                                                                    form_options.VALID_CYCLES[
+                                                                                                        1] else row[
+                            'interview_received'],
+                        'application_complete': row['application_complete'] + pd.DateOffset(years=1) if row[
                                                                                                             'cycle_year'] ==
                                                                                                         form_options.VALID_CYCLES[
-                                                                                                            1] else row[
-                                'interview_received'],
-                            'application_complete': row['application_complete'] + pd.DateOffset(years=1) if row[
-                                                                                                                'cycle_year'] ==
-                                                                                                            form_options.VALID_CYCLES[
-                                                                                                                1] else
-                            row[
-                                'application_complete']
-                        }),
-                        axis=1
-                    )
+                                                                                                            1] else
+                        row[
+                            'application_complete']
+                    }),
+                    axis=1
+                )
 
-                    # Find next future interview with applications complete after today with buffer of 4 days
-                    phd_future = phd[(phd['interview_received'] > today) & (
-                                phd['application_complete'] > (today) - timedelta(days=4))]
-                    if len(phd_future) > 0:
-                        # Grab minimum next interview date
-                        min_interview_date = phd_future['interview_received'].min()
-                        # Get all data of apps complete up to min interview date
-                        min_date_rows = phd[phd['interview_received'] <= min_interview_date]
-                        # Find maximum application submitted date for that interview
-                        max_complete_index = min_date_rows['application_complete'].idxmax()
-                        row = min_date_rows.loc[max_complete_index]
-                        # Save data
-                        school_stats_entry.next_phd_historic_ii = row['interview_received']
-                        school_stats_entry.last_complete_phd_for_ii = row['application_complete']
-                    else:
-                        school_stats_entry.next_phd_historic_ii = None
-                        school_stats_entry.last_complete_phd_for_ii = None
+                # Find next future interview with applications complete after today with buffer of 4 days
+                phd_future = phd[(phd['interview_received'] > today) & (
+                            phd['application_complete'] > (today) - timedelta(days=4))]
+                if len(phd_future) > 0:
+                    # Grab minimum next interview date
+                    min_interview_date = phd_future['interview_received'].min()
+                    # Get all data of apps complete up to min interview date
+                    min_date_rows = phd[phd['interview_received'] <= min_interview_date]
+                    # Find maximum application submitted date for that interview
+                    max_complete_index = min_date_rows['application_complete'].idxmax()
+                    row = min_date_rows.loc[max_complete_index]
+                    # Save data
+                    school_stats_entry.next_phd_historic_ii = row['interview_received']
+                    school_stats_entry.last_complete_phd_for_ii = row['application_complete']
                 else:
                     school_stats_entry.next_phd_historic_ii = None
                     school_stats_entry.last_complete_phd_for_ii = None
+            else:
+                school_stats_entry.next_phd_historic_ii = None
+                school_stats_entry.last_complete_phd_for_ii = None
 
             db.session.commit()
