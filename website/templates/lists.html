@@ -389,7 +389,7 @@ function toggleCancel() {
                             <a href="{{ url_for('explorer.explorer_home') }}/school/{{ school.name }}" class="btn btn-link" style="padding: 1px">
                                 <i class="bi bi-search fs-5"></i>
                             </a>
-                            <button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#{{ school.name }}-{{ school.phd }}-delete" style="padding: 1px">
+                            <button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#delete_{{ school.id }}" style="padding: 1px">
                                 <i class="bi bi-trash fs-5"></i>
                             </button>
                         </div>
@@ -651,7 +651,7 @@ function toggleCancel() {
 
 {% for school, profile in schools %}
 <!-- SETUP DELETION WARNINGS -->
-<div class="modal fade" id="{{ school.name }}-{{ school.phd }}-delete" tabindex="-1" aria-labelledby="{{ school.name }}-{{ school.phd }}-delete" aria-hidden="true">
+<div class="modal fade" id="delete_{{ school.id }}" tabindex="-1" aria-labelledby="delete_{{ school.id }}" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <form method="POST">
