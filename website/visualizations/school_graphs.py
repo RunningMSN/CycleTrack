@@ -8,7 +8,7 @@ from ..form_options import VALID_CYCLES, CURRENT_CYCLE
 
 def cycle_progress(data, cycle_year):
     # Select relevant columns and drop any empty rows
-    data = data[['secondary_received', 'interview_received', 'acceptance','rejection']]
+    data = data[['secondary_received', 'interview_received', 'acceptance','rejection','waitlist']]
     data = data.dropna(axis=0, how='all')
 
     min = pd.to_datetime(str(cycle_year-1) + "-05-01")
@@ -26,10 +26,17 @@ def cycle_progress(data, cycle_year):
     # Build traces
     fig = go.Figure()
     fig.add_trace(go.Histogram(x=data.secondary_received,
-                               name='Secondary Received',
+                               name='Secondary',
                                xbins=dict(size=86400000),
                                autobinx=False,
                                marker_color = converters.palette["default"]["secondary_received"],
+                               opacity=0.75,
+                               hovertemplate = "%{x}<br>%{y}<extra></extra>",))
+    fig.add_trace(go.Histogram(x=data.interview_received,
+                               name='Interview',
+                               xbins=dict(size=86400000),
+                               autobinx=False,
+                               marker_color = converters.palette["default"]["interview_received"],
                                opacity=0.75,
                                hovertemplate = "%{x}<br>%{y}<extra></extra>",))
     fig.add_trace(go.Histogram(x=data.rejection,
@@ -39,15 +46,15 @@ def cycle_progress(data, cycle_year):
                                marker_color = converters.palette["default"]["rejection"],
                                opacity=0.75,
                                hovertemplate = "%{x}<br>%{y}<extra></extra>",))
-    fig.add_trace(go.Histogram(x=data.interview_received,
-                               name='Interview Received',
+    fig.add_trace(go.Histogram(x=data.waitlist,
+                               name='Waitlist',
                                xbins=dict(size=86400000),
                                autobinx=False,
-                               marker_color = converters.palette["default"]["interview_received"],
+                               marker_color = converters.palette["default"]["waitlist"],
                                opacity=0.75,
                                hovertemplate = "%{x}<br>%{y}<extra></extra>",))
     fig.add_trace(go.Histogram(x=data.acceptance,
-                               name='Acceptance Received',
+                               name='Acceptance',
                                xbins=dict(size=86400000),
                                autobinx=False,
                                marker_color = converters.palette["default"]["acceptance"],
@@ -55,7 +62,7 @@ def cycle_progress(data, cycle_year):
                                hovertemplate = "%{x}<br>%{y}<extra></extra>",))
 
     # Overlay both histograms
-    fig.update_layout(barmode='overlay', bargap=0, margin=dict(l=0, r=0, t=0, b=0), height=200, autosize=True, legend=dict(y=0.5))
+    fig.update_layout(barmode='overlay', bargap=0, margin=dict(l=0, r=0, t=0, b=0), height=300, autosize=True, legend=dict(orientation="h", yanchor="bottom", y=1.02))
     
     # Find the maximum number of date repeated in each column; current threshold for log scale on any date is 10 actions
     max_count = data.apply(pd.Series.value_counts).max()
