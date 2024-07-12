@@ -76,7 +76,7 @@ def explorer_home():
 def explore_school(school_name):
     # Find school
     school_name = school_name.replace('%20', ' ')
-    if school_name not in form_options.get_md_schools() and school_name not in form_options.get_do_schools():
+    if school_name not in form_options.get_md_schools_names() and school_name not in form_options.get_do_schools_names():
         flash(f'Could not find {school_name}. Please navigate to your school using the explorer.', category='error')
         return redirect(url_for('explorer.explorer_home'))
 

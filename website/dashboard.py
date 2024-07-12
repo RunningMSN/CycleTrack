@@ -679,8 +679,8 @@ def import_list():
                     flash('Your spreadsheet must have a column with school names. Please try again.', category='error')
                     return redirect(url_for('dashboard.cycles'))
                 return render_template('import-list.html', user=current_user, cycle=cycle, tableJSON=tableJSON,
-                                       school_names=cycle_data['name'], md_school_list=form_options.get_md_schools(),
-                                       do_school_list=form_options.get_do_schools(), best_matches=best_matches)
+                                       school_names=cycle_data['name'], md_school_list=form_options.get_md_schools_names(),
+                                       do_school_list=form_options.get_do_schools_names(), best_matches=best_matches)
             # Final processing step
             if request.form.get('named-schools'):
                 # Hold corrected names and schools with dual degree phd
@@ -706,9 +706,9 @@ def import_list():
                     else:
                         dual_degree_phd = False
                     # Get program type
-                    if school_name in form_options.get_md_schools():
+                    if school_name in form_options.get_md_schools_names():
                         school_type = 'MD'
-                    elif school_name in form_options.get_do_schools():
+                    elif school_name in form_options.get_do_schools_names():
                         school_type = 'DO'
 
                     # Obtain all other dates

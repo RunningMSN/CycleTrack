@@ -8,6 +8,23 @@ VALID_CYCLES = [2025, 2024, 2023, 2022, 2021, 2020, 2019, 2018, 2017, 2016, 2015
 CURRENT_CYCLE = 2022
 
 # List of schools for adding to profile
+def get_md_schools_names(country = None):
+    '''Returns list of all available MD schools'''
+    if country == 'USA':
+        md_schools = School_Profiles_Data.query.filter_by(md_or_do='MD', country='USA').all()
+    elif country == 'CAN':
+        md_schools = School_Profiles_Data.query.filter_by(md_or_do='MD', country='CAN').all()
+    else:
+        md_schools = School_Profiles_Data.query.filter_by(md_or_do='MD').all()
+    names = sorted([school.school for school in md_schools])
+    return names
+def get_do_schools_names():
+    '''Returns list of all available DO schools'''
+    do_schools = School_Profiles_Data.query.filter_by(md_or_do='DO').all()
+    names = sorted([school.school for school in do_schools])
+    return names
+
+# List of profiles
 def get_md_schools(country = None):
     '''Returns list of all available MD schools'''
     if country == 'USA':
