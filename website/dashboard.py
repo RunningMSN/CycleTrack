@@ -451,6 +451,7 @@ def lists():
 
     # if it's the current cycle, get the most recent dates
     missing_hard_delay_cutoff = []
+    edit_hard_delay_cutoff = []
     if cycle.cycle_year == form_options.VALID_CYCLES[0]:
         # Get the most recent dates
         dates = {}
@@ -490,6 +491,8 @@ def lists():
             # Find missing hard deadlines
             if school.secondary_received and not school.application_complete and not school.hard_secondary_submission_days:
                 missing_hard_delay_cutoff.append(school)
+            elif school.secondary_received and not school.application_complete and school.hard_secondary_submission_days >= -1:
+                edit_hard_delay_cutoff.append(school)
 
             if school.application_complete:
                 continue
@@ -537,7 +540,8 @@ def lists():
                            do_school_list=form_options.get_do_schools(), program_types=program_types, today=datetime.today(),
                            most_recent=dates, schools_to_add_secondary_cost=schools_to_add_secondary_cost,
                            curr_cycle=form_options.VALID_CYCLES[0], missing_hard_delay_cutoff=missing_hard_delay_cutoff,
-                           secondary_suggestion_order=secondary_suggestion_order, secondary_suggestion_unknown=secondary_suggestion_unknown)
+                           secondary_suggestion_order=secondary_suggestion_order, secondary_suggestion_unknown=secondary_suggestion_unknown,
+                           edit_hard_delay_cutoff=edit_hard_delay_cutoff)
 
 
 

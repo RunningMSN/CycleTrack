@@ -723,13 +723,27 @@ function toggleCancel() {
                             {% for school in missing_hard_delay_cutoff %}
                                 <tr>
                                     <td>{{ school.name }} ({{ school.school_type }}{%if school.phd %}-PhD{% endif %})</td>
-                                    <td><input type="text" name="hard_delay_collect-{{ school.id }}" id="hard_delay_collect-{{ school.id }}" class="modalinput"}/></input></td>
+                                    <td><input type="text" name="hard_delay_collect-{{ school.id }}" id="hard_delay_collect-{{ school.id }}" class="modalinput text-center"/></input></td>
                                 </tr>
                             {% endfor %}
                         </table>
-
-                        <input type="hidden" name="cycle_id" id="cycle_id" value="{{ cycle.id }}">
                     </div>
+                    <hr>
+                    {% endif %}
+                    {% if edit_hard_delay_cutoff|length > 0 %}
+                    <details>
+                        <summary class="h5">Edit Mandatory Submission Deadline</summary>
+                        <p>You may edit any mandatory submission deadlines using the table below. Enter the number of days
+                        for the deadline as integer (e.g. 14 <u>not</u> 14 days). Skip any schools without a hard deadline.</p>
+                        <table class="table">
+                            {% for school in edit_hard_delay_cutoff %}
+                                <tr>
+                                    <td>{{ school.name }} ({{ school.school_type }}{%if school.phd %}-PhD{% endif %})</td>
+                                    <td><input type="text" name="hard_delay_collect-{{ school.id }}" id="hard_delay_collect-{{ school.id }}" class="modalinput text-center" value="{% if school.hard_secondary_submission_days > 0 %}{{ school.hard_secondary_submission_days }}{% endif %}"/></input></td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </details>
                     <hr>
                     {% endif %}
                     <div id="secondary_order_output">
@@ -791,7 +805,8 @@ function toggleCancel() {
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    {% if missing_hard_delay_cutoff|length > 0 %}
+                    {% if missing_hard_delay_cutoff|length > 0 or edit_hard_delay_cutoff|length > 0%}
+                        <input type="hidden" name="cycle_id" id="cycle_id" value="{{ cycle.id }}">
                         <button type="submit" class="btn btn-primary">Submit</button>
                     {% endif %}
                 </div>
