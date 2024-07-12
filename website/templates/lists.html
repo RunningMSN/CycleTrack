@@ -326,7 +326,7 @@ function toggleCancel() {
                 <div class="col-2 order-sm-1" style="text-align: center">
                     <!-- LOGO -->
                         <div class="row">
-                            <a href="{{ url_for('explorer.explorer_home') }}/school/{{ school['name'] }}" class="normal_list">
+                            <a href="{{ url_for('explorer.explorer_home') }}/school/{{ profile.school }}" class="normal_list">
                                 <img src="{{ url_for('static', filename='images/school_logos/' + profile.logo_file_name) }}" style="max-width:100px;max-height:100px" width="100%" height="auto">
                             </a>
                             <a class="bulk_list d-none">
@@ -386,7 +386,7 @@ function toggleCancel() {
                         {% endif %}
                         <!-- ICONS -->
                         <div style="padding-top:5px">
-                            <a href="{{ url_for('explorer.explorer_home') }}/school/{{ school.name }}" class="btn btn-link" style="padding: 1px">
+                            <a href="{{ url_for('explorer.explorer_home') }}/school/{{ profile.name }}" class="btn btn-link" style="padding: 1px">
                                 <i class="bi bi-search fs-5"></i>
                             </a>
                             <button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#delete_{{ school.id }}" style="padding: 1px">
@@ -405,10 +405,10 @@ function toggleCancel() {
                 <div class="col-lg order-sm-2">
                     <a class="normal_list" href="{{ url_for('explorer.explorer_home') }}/school/{{ school.name }}"
                        style="color:black;text-decoration: none">
-                        <h5>{{ school.name }} ({{ school.school_type }}{% if school.phd %}-PhD{% endif %})</h5>
+                        <h5>{{ profile.intermediate_name }} ({{ profile.md_or_do }}{% if school.phd %}-PhD{% endif %})</h5>
                     </a>
                     <a class="bulk_list d-none" style="color:black;text-decoration: none">
-                        <h5>{{ school.name }} ({{ school.school_type }}{% if school.phd %}-PhD{% endif %})</h5>
+                        <h5>{{ profile.intermediate_name }} ({{ profile.md_or_do }}{% if school.phd %}-PhD{% endif %})</h5>
                     </a>
                     <div class="row">
                         {% if not profile.country == 'CAN' %}
@@ -614,19 +614,18 @@ function toggleCancel() {
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    
                     <div class="form-group">
                         <label for="type">Choose a School</label>
                         <br/>
                         <select id="add_school" name="add_school" class="selectpicker border border-secondary rounded" data-live-search="true">
                             <optgroup label="US MD">
-                                {% for school in usmd_school_list %}<option value='{{ school }}'>{{ school }}</option>{% endfor %}
+                                {% for profile in usmd_school_list %}<option value='{{ profile.school }}'>{{ profile.intermediate_name }}</option>{% endfor %}
                             </optgroup>
                             <optgroup label="US DO">
-                                {% for school in do_school_list %}<option value='{{ school }}'>{{ school }}</option>{% endfor %}
+                                {% for profile in do_school_list %}<option value='{{ profile.school }}'>{{ profile.intermediate_name }}</option>{% endfor %}
                             </optgroup>
                             <optgroup label="CAN MD">
-                                {% for school in camd_school_list %}<option value='{{ school }}'>{{ school }}</option>{% endfor %}
+                                {% for profile in camd_school_list %}<option value='{{ profile.school }}'>{{ profile.intermediate_name }}</option>{% endfor %}
                             </optgroup>
                           </select>
                     </div>

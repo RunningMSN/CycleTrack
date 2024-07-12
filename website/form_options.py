@@ -16,13 +16,11 @@ def get_md_schools(country = None):
         md_schools = School_Profiles_Data.query.filter_by(md_or_do='MD', country='CAN').all()
     else:
         md_schools = School_Profiles_Data.query.filter_by(md_or_do='MD').all()
-    names = sorted([school.school for school in md_schools])
-    return names
+    return md_schools
 def get_do_schools():
     '''Returns list of all available DO schools'''
     do_schools = School_Profiles_Data.query.filter_by(md_or_do='DO').all()
-    names = sorted([school.school for school in do_schools])
-    return names
+    return do_schools
 
 # Options for cycle profile page
 SEX_OPTIONS = ["Male", "Female", "Other"]
