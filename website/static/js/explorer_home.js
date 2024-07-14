@@ -17,11 +17,11 @@ $(document).ready(function() {
         filterSettings();
     });
      $("#searchbar").on('input', function() {
-        input = $(this).val()
+        input = $(this).val();
         if (input.length > 0) {
-            search = input
+            search = input;
         } else {
-            search = 'All'
+            search = 'All';
         }
         filterSettings();
     });
