@@ -62,7 +62,13 @@ def cycle_progress(data, cycle_year):
                                hovertemplate = "%{x}<br>%{y}<extra></extra>",))
 
     # Overlay both histograms
-    fig.update_layout(barmode='overlay', bargap=0, margin=dict(l=0, r=0, t=0, b=0), height=300, autosize=True, legend=dict(orientation="h", yanchor="bottom", y=1.02))
+    fig.update_layout(barmode='overlay',
+                      bargap=0,
+                      margin=dict(l=0, r=0, t=0, b=0),
+                      height=300,
+                      autosize=True,
+                      legend=dict(orientation="h", yanchor="bottom", y=1.02),
+                      xaxis=dict(tickformat='%b %d'))
     
     # Find the maximum number of date repeated in each column; current threshold for log scale on any date is 10 actions
     max_count = data.apply(pd.Series.value_counts).max()
@@ -116,10 +122,14 @@ def interview_acceptance_histogram(df, column_name):
                                hoverinfo='skip'))
 
     # Overlay both histograms
-    fig.update_layout(barmode='overlay', bargap=0, margin=dict(l=0, r=0, t=0, b=0), height=200, autosize=True)
+    fig.update_layout(barmode='overlay',
+                      bargap=0,
+                      margin=dict(l=0, r=0, t=0, b=0),
+                      height=300,
+                      autosize=True,
+                      legend=dict(orientation="v", y=0.5),
+                      xaxis=dict(tickformat='%b'))
 
-    # center legend vertically
-    fig.update_layout(legend=dict(y=0.5))
 
     graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
     return graphJSON
