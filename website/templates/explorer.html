@@ -114,22 +114,22 @@
     <div class="row">
         {% for key,value in schools.iterrows() %}
         <div class="col school_entry school_type_{{ value['type'] }} state_{{ value['state'] }} country_{{ value['country'] }} applied_{{ value['applied_to'] }}" style="padding:10px; min-width: 350px;" id="{{ value['name'] }} {{ value['official_name'] }} {{ value['intermediate_name'] }}">
-            <div class="container rounded" style="background:white; padding:10px">
-                    <div class="col d-flex align-items-center justify-content-center" style="height: 100px;">
-                        <a href="{{ url_for('explorer.explorer_home') }}/school/{{ value['name'] }}">
-                            <img src="{{ url_for('static', filename='images/school_logos/' + value['logo_link']) }}" style="max-width:100px;max-height:100px" width="100%" height="auto">
-                        </a>
-                    </div>
-                    <div>
-                        <center>
-                             <strong>{% if value['applied_to'] %}<i class="bi bi-star-fill" style="color: gold"></i> {% endif %}<a href="{{ url_for('explorer.explorer_home') }}/school/{{ value['name'] }}" style="color:black; text-decoration: none;" >{{ value['intermediate_name'] }}</a></strong>
-                            <br>
-                            {{ value['city'] }}, {{ value['state'] }} | {{ value['envt'] }} | {{ value['pub_pri'] }} Institution |  {{ value['type'] }}
-                            <br>
-                            {{ "{:,}".format(value['reg_apps'] + value['phd_apps']) }} Applications Tracked {% if value['phd_apps'] > 0 %}({{ "{:,}".format(value['phd_apps']) }} {{ value['type'] }}-PhD){% endif %}
-                        </center>
-                    </div>
-            </div>
+            <a href="{{ url_for('explorer.explorer_home') }}/school/{{ value['name'] }}">
+                <div class="container rounded" style="background:white; padding:10px; transition: box-shadow 0.1s;" onmouseover="this.style.boxShadow='0 4px 8px 0 rgba(0, 0, 0, 0.2)';" onmouseout="this.style.boxShadow='none';">
+                        <div class="col d-flex align-items-center justify-content-center" style="height: 100px;">
+                                <img src="{{ url_for('static', filename='images/school_logos/' + value['logo_link']) }}" style="max-width:100px;max-height:100px" width="100%" height="auto">
+                        </div>
+                        <div>
+                            <center>
+                                 <strong>{% if value['applied_to'] %}<i class="bi bi-star-fill" style="color: gold"></i> {% endif %}<a href="{{ url_for('explorer.explorer_home') }}/school/{{ value['name'] }}" style="color:black; text-decoration: none;" >{{ value['intermediate_name'] }}</a></strong>
+                                <br>
+                                {{ value['city'] }}, {{ value['state'] }} | {{ value['envt'] }} | {{ value['pub_pri'] }} Institution |  {{ value['type'] }}
+                                <br>
+                                {{ "{:,}".format(value['reg_apps'] + value['phd_apps']) }} Applications Tracked {% if value['phd_apps'] > 0 %}({{ "{:,}".format(value['phd_apps']) }} {{ value['type'] }}-PhD){% endif %}
+                            </center>
+                        </div>
+                </div>
+            </a>
         </div>
         {% endfor %}
         <div id="no_schools" class="col d-none" style="padding:10px;">
