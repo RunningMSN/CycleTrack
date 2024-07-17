@@ -16,7 +16,7 @@ $(document).ready(function() {
         country = $(this).val();
         filterSettings();
     });
-     $("#searchbar").on('input', function() {
+    $("#searchbar").on('input keyup', function() {
         input = $(this).val();
         if (input.length > 0) {
             search = input;
