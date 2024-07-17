@@ -214,13 +214,16 @@
     {% elif user.cycles|length > 0 and user.research_contact == None%}
         <div class="card h-100" id="research_invite">
             <div class="card-body">
-                <h5>Your voice can improve admissions for future students!</h5>
-                 <p>Behind the scenes, our team is working on research to improve medical school admissions for all.
-                        The voices of applicants such as yourself can truly make a difference. Can we contact
-                        your email in the future with an invitation to participate in a short survey or focus group?
-                        We are asking for permission to contact you later, and you will always be welcome to
-                        decline participation at that time. (P.S. we hope
-                        to be able to compensate participants if we can!)</p>
+                 <h5>Can we contact your email in the future with an invitation to participate in a short survey or
+                     focus group?</h5>
+                  <p>
+                     Our team is actively working on research projects to improve medical school admissions for all.
+                     The voices of applicants such as yourself can truly make a difference.
+                     Our goal is to produce publications that <u>change pre-medical advising</u> and <u>encourage policy
+                     that increases admissions data transparency</u>. Note, your answer here is non-binding, we are
+                     simply collecting a list of users we can contact in future. We aim to be able to compensate
+                     research participants.
+                 </p>
                 <button class="btn btn-outline-success" onclick="research('agree')">Of course!</button>
                 <button class="btn btn-outline-danger" onclick="research('disagree')">No thanks.</button>
                 <form id="research_form" action="{{ url_for('dashboard.research_form_submit') }}">
