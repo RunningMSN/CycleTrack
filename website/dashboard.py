@@ -1185,3 +1185,12 @@ def delete_class():
         db.session.commit()
         return jsonify({})
 
+@dashboard.route('/research-form-submit', methods=['POST'])
+def research_form_submit():
+    answer = request.form.get('research_answer')
+    if answer == 'agree':
+        current_user.research_contact = True
+    else:
+        current_user.research_contact = False
+    db.session.commit()
+    return jsonify({})

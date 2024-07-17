@@ -12,6 +12,7 @@ class User(db.Model, UserMixin):
     public_profile = db.Column(db.Boolean, default=False)
     url_hash = db.Column(db.String(150))
     privacy_announce = db.Column(db.Boolean, default=False)
+    research_contact = db.Column(db.Boolean)
 
 class Cycle(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -189,7 +190,6 @@ class School_Stats(db.Model):
     last_complete_phd_for_ii = db.Column(db.DateTime(timezone=True), nullable=True)
     reg_interviewing = db.Column(db.Boolean)
     phd_interviewing = db.Column(db.Boolean)
-
 
 class Courses(db.Model):
     id = db.Column(db.Integer, primary_key=True)

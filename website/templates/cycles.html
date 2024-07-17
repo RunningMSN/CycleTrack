@@ -1,7 +1,7 @@
 {% extends 'dashboard.html' %}
 {% block title %} Dashboard {% endblock %}
 {% block additional_js %}
-<script src="{{ url_for('static', filename='/js/dashboard.js') }}"></script>
+<script src="{{ url_for('static', filename='/js/dashboard.js') }}?v=20240717"></script>
 <script>
     $(function () {
       $('[data-toggle="tooltip"]').tooltip()
@@ -203,7 +203,7 @@
     <!-- WARNING MESSAGE IF NO CYCLE INFO FILLED IN -->
     {% if empty_cycles|length > 0 %}
     <div class="bg-warning container rounded" style="padding: 10px; margin-top: 10px; margin-bottom:10px">
-        You have not filled in the cycle profile section for the following cycle(s): {{ empty_cycles }}. This
+        You have not filled in the cycle data section for the following cycle(s): {{ empty_cycles }}. This
         information is very helpful for increasing application cycle transparency and would greatly benefit other
         applicants. However, if you don't feel comfortable sharing, please feel free to ignore this message!
     </div>
@@ -211,6 +211,23 @@
 
     {% if user.cycles|length == 0 %}
     <p>You have not added any application cycles. Get started by adding a cycle using the button below.</p>
+    {% elif user.cycles|length > 0 and user.research_contact == None%}
+        <div class="card h-100" id="research_invite">
+            <div class="card-body">
+                <h5>Your voice can improve admissions for future students!</h5>
+                 <p>Behind the scenes, our team is working on research to improve medical school admissions for all.
+                        The voices of applicants such as yourself can truly make a difference. Can we contact
+                        your email in the future with an invitation to participate in a short survey or focus group?
+                        We are asking for permission to contact you later, and you will always be welcome to
+                        decline participation at that time. (P.S. we hope
+                        to be able to compensate participants if we can!)</p>
+                <button class="btn btn-outline-success" onclick="research('agree')">Of course!</button>
+                <button class="btn btn-outline-danger" onclick="research('disagree')">No thanks.</button>
+                <form id="research_form" action="{{ url_for('dashboard.research_form_submit') }}">
+                    <input type="hidden" id="research_answer" name="research_answer" value=""/>
+                </form>
+            </div>
+        </div>
     {% endif %}
 
     <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 ">

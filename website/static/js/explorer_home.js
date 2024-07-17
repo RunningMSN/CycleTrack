@@ -82,3 +82,24 @@ function filterSettings() {
         noSchools.classList.add("d-none");
     }
 }
+
+async function research(answer) {
+    var research_invite = document.getElementById("research_invite");
+    var research_form = document.getElementById("research_form");
+    var research_answer = document.getElementById("research_answer");
+
+    research_answer.value = answer;
+
+    var formData = new FormData(research_form);
+
+    try {
+        const response = await fetch(research_form.action, {
+            method: 'POST',
+            body: formData
+        });
+    } catch (error) {
+        console.error('Form submission error:', error);
+    }
+
+    research_invite.classList.add("d-none");
+}

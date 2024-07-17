@@ -4,7 +4,7 @@
     <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
     <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
-    <script src="{{ url_for('static', filename='/js/explorer_home.js') }}"></script>
+    <script src="{{ url_for('static', filename='/js/explorer_home.js') }}?v=20240717"></script>
     <script>
             $(function () {
               $('[data-toggle="tooltip"]').tooltip()
@@ -28,6 +28,26 @@
     </p>
 </div>
 <div class="container rounded" style="padding:20px;padding-top:10px;padding-bottom:10px;background:#ebebeb">
+    <div class="row">
+        {% if user.is_authenticated and user.cycles|length > 0 and user.research_contact == None%}
+            <div class="col" style="padding:10px; min-width: 350px;"  id="research_invite">
+                <div class="container rounded" style="background:white; padding:10px;" >
+                    <h5>Your voice can improve admissions for future students!</h5>
+                    <p>Behind the scenes, our team is working on research to improve medical school admissions for all.
+                        The voices of applicants such as yourself can truly make a difference. Can we contact
+                        your email in the future with an invitation to participate in a short survey or focus group?
+                        We are asking for permission to contact you later, and you will always be welcome to
+                        decline participation at that time. (P.S. we hope
+                        to be able to compensate participants if we can!)</p>
+                    <button class="btn btn-outline-success" onclick="research('agree')">Of course!</button>
+                    <button class="btn btn-outline-danger" onclick="research('disagree')">No thanks.</button>
+                    <form id="research_form" action="{{ url_for('dashboard.research_form_submit') }}">
+                        <input type="hidden" id="research_answer" name="research_answer" value=""/>
+                    </form>
+                </div>
+            </div>
+        {% endif %}
+    </div>
     <div class="row">
         <div class="col" style="padding: 10px;">
             <div class="container rounded" style="background:white; padding:10px">
