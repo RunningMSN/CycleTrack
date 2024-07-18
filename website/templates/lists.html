@@ -135,7 +135,27 @@ function toggleBulkEdit(){
 
 // Cancel bulk edit
 function toggleCancel() {
-    location.reload(true);
+    var cycleId = {{ cycle.id }}; // Replace with the actual value from your template or JavaScript context
+
+    // Create form
+    var form = document.createElement('form');
+    form.method = 'POST';
+    form.action = "{{ url_for('dashboard.lists') }}";
+
+    // Create input element
+    var cycleIdInput = document.createElement('input');
+    cycleIdInput.type = 'hidden';
+    cycleIdInput.name = 'cycle_id';
+    cycleIdInput.value = cycleId;
+
+    // Append the input element
+    form.appendChild(cycleIdInput);
+
+    //Append form to body
+    document.body.appendChild(form);
+
+    // Submit the form
+    form.submit();
 }
 </script>
 <script src="{{ url_for('static', filename='/js/list_bulk_add.js') }}"></script>
