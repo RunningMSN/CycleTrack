@@ -5,7 +5,7 @@ from os import path
 from flask_login import LoginManager
 from flask_mail import Mail
 from . import site_settings
-from website.helpers import jobs
+from website.helpers import jobs, backup
 
 db = SQLAlchemy()
 DB_NAME = site_settings.DB_NAME
@@ -81,13 +81,17 @@ def create_app():
     @scheduler.task('interval', id='essay_optimizer_stats', hours=4)
     def update_essay_optimizer_stats():
         jobs.next_historic_interview(app)
+    @scheduler.task('interval', id='backup', hours=4)
+    def backup_db():
+        backup.backup_db()
 
     scheduler.start()
     # Run calculations on startup if needed
-    # jobs.update_stats(app)
+    jobs.update_stats(app)
     # jobs.update_map(app)
     # jobs.remove_unused_accounts(app)
     # jobs.next_historic_interview(app)
+    # backup.backup_db()
 
     return app
 
