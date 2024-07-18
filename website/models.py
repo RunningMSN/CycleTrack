@@ -190,6 +190,11 @@ class School_Stats(db.Model):
     last_complete_phd_for_ii = db.Column(db.DateTime(timezone=True), nullable=True)
     reg_interviewing = db.Column(db.Boolean)
     phd_interviewing = db.Column(db.Boolean)
+    reg_states_map = db.Column(db.Boolean)
+    phd_states_map = db.Column(db.Boolean)
+    reg_mcat_gpa = db.Column(db.Boolean)
+    phd_mcat_gpa = db.Column(db.Boolean)
+
 
 class Courses(db.Model):
     id = db.Column(db.Integer, primary_key=True)

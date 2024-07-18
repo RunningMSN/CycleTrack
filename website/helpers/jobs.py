@@ -93,10 +93,14 @@ def update_stats(app):
                 school_stats_entry.phd_med_accepted_mcat, school_stats_entry.phd_med_accepted_mcat_range, school_stats_entry.phd_med_accepted_mcat_n = mcat_accepted(
                     phd_data)
                 school_stats_entry.reg_interview_date, school_stats_entry.reg_waitlist_date, school_stats_entry.reg_acceptance_date, school_stats_entry.phd_interview_date, school_stats_entry.phd_waitlist_date, school_stats_entry.phd_acceptance_date = most_recent(reg_data,phd_data)
+                school_stats_entry.first_curr_cycle_secondary_reg, school_stats_entry.first_curr_cycle_interview_reg, school_stats_entry.first_curr_cycle_acceptance_reg, school_stats_entry.first_curr_cycle_secondary_phd, school_stats_entry.first_curr_cycle_interview_phd, school_stats_entry.first_curr_cycle_acceptance_phd = first_of_cycle(
+                    reg_data, phd_data)
 
                 # Generate graphs
                 cycle_status_graphs(reg_data, phd_data, school_stats_entry)
                 interview_acceptance_graphs(reg_data, phd_data, school_stats_entry)
+                states_graph(reg_data, phd_data, school_stats_entry)
+                mcat_vs_gpa(reg_data, phd_data, school_stats_entry)
 
                 db.session.commit()
             except Exception as e:
@@ -434,6 +438,48 @@ def most_recent(reg_df,phd_df):
     return reg_interviews, reg_waitlist, reg_acceptances, phd_interviews, phd_waitlist, phd_acceptances
 
 
+def first_of_cycle(reg_df, phd_df):
+    '''Returns the most recent dates of interview and waitlist and acceptance for the school: regular and phd.'''
+    import numpy as np
+    from ..form_options import VALID_CYCLES
+    # Most recent cycle
+    reg_df = reg_df[reg_df['cycle_year'] == VALID_CYCLES[0]]
+    phd_df = phd_df[phd_df['cycle_year'] == VALID_CYCLES[0]]
+    # First secondary date reg
+    reg_secondary = reg_df['secondary_received'].dropna().min()
+    reg_secondary = reg_secondary.to_pydatetime()
+    # First interview date reg
+    reg_interviews = reg_df['interview_received'].dropna().min()
+    reg_interviews = reg_interviews.to_pydatetime()
+    # First acceptance date reg
+    reg_acceptances = reg_df['acceptance'].dropna().min()
+    reg_acceptances = reg_acceptances.to_pydatetime()
+
+    # First secondary date phd
+    phd_secondary = phd_df['secondary_received'].dropna().min()
+    phd_secondary = phd_secondary.to_pydatetime()
+    # First interview date phd
+    phd_interviews = phd_df['interview_received'].dropna().min()
+    phd_interviews = phd_interviews.to_pydatetime()
+    # First acceptance date phd
+    phd_acceptances = phd_df['acceptance'].dropna().min()
+    phd_acceptances = phd_acceptances.to_pydatetime()
+
+    if pd.isna(reg_secondary):
+        reg_secondary = None
+    if pd.isna(reg_interviews):
+        reg_interviews = None
+    if pd.isna(reg_acceptances):
+        reg_acceptances = None
+    if pd.isna(phd_secondary):
+        phd_secondary = None
+    if pd.isna(phd_interviews):
+        phd_interviews = None
+    if pd.isna(phd_acceptances):
+        phd_acceptances = None
+
+    return reg_secondary, reg_interviews, reg_acceptances, phd_secondary, phd_interviews, phd_acceptances
+
 def update_map(app):
     from ..visualizations import agg_map
     with app.app_context():
@@ -573,3 +619,70 @@ def next_historic_interview(app):
                 school_stats_entry.last_complete_phd_for_ii = None
 
             db.session.commit()
+
+
+def states_graph(reg_df, phd_df, school_stats_entry):
+    from ..visualizations import school_graphs
+    from ..form_options import VALID_CYCLES
+
+    school_id = school_stats_entry.school_id
+    # Current year
+    map_reg = school_graphs.states_applied(reg_df[reg_df['cycle_year'].isin(VALID_CYCLES[0:3])])
+    map_phd = school_graphs.states_applied(phd_df[phd_df['cycle_year'].isin(VALID_CYCLES[0:3])])
+
+    if map_reg:
+        path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "static", "explorer_graphs", f"map_{school_id}_reg.JSON")
+        # Remove existing graphs
+        if os.path.exists(path):
+            os.remove(path)
+        # Add new graph
+        with open(path, "w") as graph_file:
+            graph_file.write(map_reg)
+        school_stats_entry.reg_states_map = True
+    else:
+        school_stats_entry.reg_states_map = False
+
+    if map_phd:
+        path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "static", "explorer_graphs", f"map_{school_id}_phd.JSON")
+        # Remove existing graphs
+        if os.path.exists(path):
+            os.remove(path)
+        # Add new graph
+        with open(path, "w") as graph_file:
+            graph_file.write(map_phd)
+        school_stats_entry.phd_states_map = True
+    else:
+        school_stats_entry.phd_states_map = False
+
+def mcat_vs_gpa(reg_df, phd_df, school_stats_entry):
+    from ..visualizations import school_graphs
+    from ..form_options import VALID_CYCLES
+
+    school_id = school_stats_entry.school_id
+    # Current year
+    graph_reg = school_graphs.mcat_vs_gpa(reg_df[reg_df['cycle_year'].isin(VALID_CYCLES[0:3])])
+    graph_phd = school_graphs.mcat_vs_gpa(phd_df[phd_df['cycle_year'].isin(VALID_CYCLES[0:3])])
+
+    if graph_reg:
+        path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "static", "explorer_graphs", f"mcat_gpa_{school_id}_reg.JSON")
+        # Remove existing graphs
+        if os.path.exists(path):
+            os.remove(path)
+        # Add new graph
+        with open(path, "w") as graph_file:
+            graph_file.write(graph_reg)
+        school_stats_entry.reg_mcat_gpa = True
+    else:
+        school_stats_entry.reg_mcat_gpa = False
+
+    if graph_phd:
+        path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "static", "explorer_graphs", f"mcat_gpa_{school_id}_phd.JSON")
+        # Remove existing graphs
+        if os.path.exists(path):
+            os.remove(path)
+        # Add new graph
+        with open(path, "w") as graph_file:
+            graph_file.write(graph_phd)
+        school_stats_entry.phd_mcat_gpa = True
+    else:
+        school_stats_entry.phd_mcat_gpa = False

@@ -456,6 +456,88 @@
                     </div>
                 </div>
             </div>
+
+            <div class="row">
+                <!-- MD DATA -->
+                <div class="col-12 col-lg-6 md_info">
+                    <div class="px-2 py-1 mx-1 my-1">
+                        <h5 class="text-center mt-3">Applicant Map</h5>
+                        {% if reg_info['map'] %}
+                        <div id="reg_map"></div>
+                        <script>
+                            fetch('{{ url_for('static', filename='explorer_graphs/map_'+ school_id|string + '_reg.JSON') }}')
+                                .then(response => response.json())
+                                .then(data => {
+                                    data.config = {'responsive': true, 'displaylogo': false, 'displayModeBar': false, 'scrollZoom': false};
+                                    Plotly.newPlot('reg_map', data);
+                                })
+                                .catch(error => console.log(error));
+                        </script>
+                        {% else %}
+                            <p>We currently do not have enough data points to display a graph of where users apply from.</p>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="col-12 col-lg-6 md_info">
+                    <div class="px-2 py-1 mx-1 my-1">
+                        <h5 class="text-center mt-3">Stats and Outcomes</h5>
+                        {% if reg_info['map'] %}
+                        <div id="reg_mcat_gpa"></div>
+                        <script>
+                            fetch('{{ url_for('static', filename='explorer_graphs/mcat_gpa_'+ school_id|string + '_reg.JSON') }}')
+                                .then(response => response.json())
+                                .then(data => {
+                                    data.config = {'responsive': true, 'displaylogo': false, 'displayModeBar': false, 'scrollZoom': false};
+                                    Plotly.newPlot('reg_mcat_gpa', data);
+                                })
+                                .catch(error => console.log(error));
+                        </script>
+                        {% else %}
+                            <p>We currently do not have enough data points to display a graph of user stats vs. outcomes.</p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- PHD DATA -->
+                <div class="col-12 col-lg-6 phd_info">
+                    <div class="px-2 py-1 mx-1 my-1">
+                        <h5 class="text-center">Applicant Map</h5>
+                        {% if reg_info['map'] %}
+                        <div id="phd_map"></div>
+                        <script>
+                            fetch('{{ url_for('static', filename='explorer_graphs/map_'+ school_id|string + '_phd.JSON') }}')
+                                .then(response => response.json())
+                                .then(data => {
+                                    data.config = {'responsive': true, 'displaylogo': false, 'displayModeBar': false, 'scrollZoom': false};
+                                    Plotly.newPlot('phd_map', data);
+                                })
+                                .catch(error => console.log(error));
+                        </script>
+                        {% else %}
+                            <p>We currently do not have enough data points to display a graph of where users apply from.</p>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="col-12 col-lg-6 phd_info">
+                    <div class="px-2 py-1 mx-1 my-1">
+                        <h5 class="text-center mt-3">Stats and Outcomes</h5>
+                        {% if reg_info['map'] %}
+                        <div id="phd_mcat_gpa"></div>
+                        <script>
+                            fetch('{{ url_for('static', filename='explorer_graphs/mcat_gpa_'+ school_id|string + '_phd.JSON') }}')
+                                .then(response => response.json())
+                                .then(data => {
+                                    data.config = {'responsive': true, 'displaylogo': false, 'displayModeBar': false, 'scrollZoom': false};
+                                    Plotly.newPlot('phd_mcat_gpa', data);
+                                })
+                                .catch(error => console.log(error));
+                        </script>
+                        {% else %}
+                            <p>We currently do not have enough data points to display a graph of user stats vs. outcomes.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
         </div>
 
     </div>

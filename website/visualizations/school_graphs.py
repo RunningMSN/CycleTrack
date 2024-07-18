@@ -3,7 +3,7 @@ import plotly
 import plotly.graph_objects as go
 import json
 from . import converters
-from ..form_options import VALID_CYCLES, CURRENT_CYCLE
+from ..form_options import VALID_CYCLES, CURRENT_CYCLE, STATE_ABBREV
 
 
 def cycle_progress(data, cycle_year):
@@ -133,3 +133,86 @@ def interview_acceptance_histogram(df, column_name):
 
     graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
     return graphJSON
+
+def states_applied(df):
+    counts = df['home_state'].value_counts().reset_index()
+    if len(counts) == 0:
+        return None
+    else:
+        counts.columns = ['home_state', 'count']
+        # Don't show if <5 users
+        if counts['count'].sum() < 5:
+            return None
+        else:
+            counts['abbrev'] = counts['home_state'].map(STATE_ABBREV)
+            total_count = counts['count'].sum()
+            counts['percent'] = (counts['count'] / total_count) * 100
+            counts['label'] = counts['percent'].apply(lambda x: f"{x:.1f}%")
+
+            fig = go.Figure(data=go.Choropleth(
+                locations=counts['abbrev'],
+                z=counts['percent'].astype(float),
+                locationmode='USA-states',
+                colorscale='blues',
+                colorbar=None,
+                showscale=False,
+                hoverinfo="text",
+                text=counts['abbrev'] + ": " + counts['label']
+            ))
+
+            fig.update_layout(
+                geo_scope='usa',
+                margin=dict(l=0, r=0, t=0, b=0),
+                height = 300
+            )
+
+            graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+            return graphJSON
+
+def mcat_vs_gpa(df):
+    df = df[['cgpa', 'mcat_total', 'interview_received', 'acceptance']].dropna(subset=['cgpa', 'mcat_total'])
+
+    if len(df) < 5:
+        return None
+    else:
+        fig = go.Figure()
+        # Add points where neither interview nor acceptance
+        fig.add_trace(go.Scatter(
+            x=df[(df['interview_received'].isnull()) & (df['acceptance'].isnull())]['cgpa'],
+            y=df[(df['interview_received'].isnull()) & (df['acceptance'].isnull())]['mcat_total'],
+            mode='markers',
+            name='Applied',
+            marker=dict(color='gray')
+        ))
+
+        # Add points where interview received
+        fig.add_trace(go.Scatter(
+            x=df[df['interview_received'].notna()]['cgpa'],
+            y=df[df['interview_received'].notna()]['mcat_total'],
+            mode='markers',
+            name='Interview Received',
+            marker=dict(color=converters.palette["default"]["interview_received"])
+        ))
+
+        # Add points where acceptance
+        fig.add_trace(go.Scatter(
+            x=df[df['acceptance'].notna()]['cgpa'],
+            y=df[df['acceptance'].notna()]['mcat_total'],
+            mode='markers',
+            name='Accepted',
+            marker=dict(color=converters.palette["default"]["acceptance"])
+        ))
+
+        # Update layout
+        fig.update_layout(
+            xaxis_title='cGPA',
+            yaxis_title='MCAT',
+            legend=dict(orientation="h", yanchor="bottom", y=1.02),
+            hovermode='closest',
+            autosize=True,
+            margin=dict(l=0, r=0, t=0, b=0),
+            height=300
+        )
+
+        graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+        return graphJSON

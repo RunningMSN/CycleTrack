@@ -61,4 +61,10 @@ function switchToPhd() {
     if (document.getElementById("phd_acceptance_graph")) {
         Plotly.Plots.resize("phd_acceptance_graph");
     }
+    if (document.getElementById("phd_map")) {
+        Plotly.Plots.resize("phd_map");
+    }
+    if (document.getElementById("phd_mcat_gpa")) {
+        Plotly.Plots.resize("phd_mcat_gpa");
+    }
 }
