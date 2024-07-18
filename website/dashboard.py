@@ -391,46 +391,56 @@ def lists():
                     db.session.commit()
 
     # Check if there are schools person can add secondary cost to
-    schools_to_add_secondary_cost = pd.DataFrame(columns=['school_id', 'name', 'type', 'prog_type'])
+    school_ids = [school.school_id for school, profile in schools]
+    secondary_costs = {cost.school_id: cost for cost in Secondary_Costs.query.filter(
+        Secondary_Costs.school_id.in_(school_ids),
+        Secondary_Costs.cycle_year == cycle.cycle_year
+    ).all()}
+    # Fetch phd_check and reg_check data
+    phd_checks = {school.school_id: school for school in School.query.filter(
+        School.school_id.in_(school_ids),
+        School.phd == True,
+        School.cycle_id == cycle.id
+    ).all()}
+    reg_checks = {school.school_id: school for school in School.query.filter(
+        School.school_id.in_(school_ids),
+        School.phd == False,
+        School.cycle_id == cycle.id
+    ).all()}
+
+    # List to collect new rows
+    new_rows = []
+
     for school, profile in schools:
-        # Check if cost entry exists
-        secondary_cost = Secondary_Costs.query.filter_by(school_id=school.school_id, cycle_year=cycle.cycle_year).first()
-        # If cost entry doesn't exist, create one for the school
+        # Check if cost entry exists, if not create one
+        secondary_cost = secondary_costs.get(school.school_id)
         if not secondary_cost:
             secondary_cost = Secondary_Costs(school_id=school.school_id, cycle_year=cycle.cycle_year, contributors="")
             db.session.add(secondary_cost)
             db.session.commit()
+            secondary_costs[school.school_id] = secondary_cost  # Update the dictionary
+
         # Check if user has contributed to cost entry already
         cost_contributors = secondary_cost.contributors.split(',')
-        if not str(current_user.id) in cost_contributors:
-            # If applying PhD
+        if str(current_user.id) not in cost_contributors:
             if school.phd and not secondary_cost.phd_cost_confirmed and school.application_complete:
-                new_row = pd.DataFrame({'school_id': [school.school_id],
-                                        'name': [school.name],
-                                        'type': ['PhD'],
-                                        'prog_type': [school.school_type]})
-                schools_to_add_secondary_cost = pd.concat([schools_to_add_secondary_cost, new_row], ignore_index=True)
+                new_rows.append({'school_id': school.school_id, 'name': school.name, 'type': 'PhD',
+                                 'prog_type': school.school_type})
 
-                # Assume it is concurrent application to 2 programs if the application complete date is the same for both
-                reg_check = School.query.filter_by(school_id=school.school_id, phd=False, cycle_id=school.cycle_id,
-                                                   application_complete=school.application_complete).first()
+                # Check for concurrent application to 2 programs
+                reg_check = reg_checks.get(school.school_id)
                 if reg_check and not secondary_cost.reg_to_phd_confirmed and reg_check.application_complete:
-                    new_row = pd.DataFrame({'school_id': [school.school_id],
-                                            'name': [school.name],
-                                            'type': ['Reg_to_PhD'],
-                                            'prog_type': [school.school_type]})
-                    schools_to_add_secondary_cost = pd.concat([schools_to_add_secondary_cost, new_row],
-                                                              ignore_index=True)
+                    new_rows.append({'school_id': school.school_id, 'name': school.name, 'type': 'Reg_to_PhD',
+                                     'prog_type': school.school_type})
             else:
-                # Make sure don't have PhD application, if have a PhD application, move on
-                phd_check = School.query.filter_by(school_id=school.school_id, phd=True, cycle_id=school.cycle_id).first()
+                # Ensure no PhD application
+                phd_check = phd_checks.get(school.school_id)
                 if not phd_check and not secondary_cost.reg_cost_confirmed and school.application_complete:
-                    new_row = pd.DataFrame({'school_id': [school.school_id],
-                                            'name': [school.name],
-                                            'type': ['Reg'],
-                                            'prog_type': [school.school_type]})
-                    schools_to_add_secondary_cost = pd.concat([schools_to_add_secondary_cost, new_row],
-                                                              ignore_index=True)
+                    new_rows.append({'school_id': school.school_id, 'name': school.name, 'type': 'Reg',
+                                     'prog_type': school.school_type})
+
+    # Create df from the collected rows
+    schools_to_add_secondary_cost = pd.DataFrame(new_rows, columns=['school_id', 'name', 'type', 'prog_type'])
 
     # Check if PhD applicant for message about MD/DO-only consideration
     if School.query.filter_by(cycle_id=cycle.id, phd=True).first():
@@ -438,61 +448,82 @@ def lists():
     else:
         phd_applicant = False
 
-    # Grab list of programs types for filtering
-    program_types = []
-    if School.query.filter_by(cycle_id=cycle.id, school_type='MD', phd=True).first():
-        program_types.append('MD-PhD')
-    if School.query.filter_by(cycle_id=cycle.id, school_type='DO', phd=True).first():
-        program_types.append('DO-PhD')
-    if School.query.filter_by(cycle_id=cycle.id, school_type='MD', phd=False).first():
-        program_types.append('MD')
-    if School.query.filter_by(cycle_id=cycle.id, school_type='DO', phd=False).first():
-        program_types.append('DO')
+    # Get program types
+    program_types_set = set()
+    for school, profile in schools:
+        if school.school_type == 'MD' and school.phd:
+            program_types_set.add('MD-PhD')
+        elif school.school_type == 'DO' and school.phd:
+            program_types_set.add('DO-PhD')
+        elif school.school_type == 'MD' and not school.phd:
+            program_types_set.add('MD')
+        elif school.school_type == 'DO' and not school.phd:
+            program_types_set.add('DO')
 
-    # if it's the current cycle, get the most recent dates
+    # Most recent information and secondary optimization
     missing_hard_delay_cutoff = []
     edit_hard_delay_cutoff = []
+    secondary_submission_order = {"school": [], "profile": [], "hard_soft": [], "recommended_submission": []}
+
     if cycle.cycle_year == form_options.VALID_CYCLES[0]:
-        # Get the most recent dates
+        # Fetch all necessary data in a single query
+        school_ids = [school[1].school_id for school in schools]
+        school_stats_list = School_Stats.query.filter(School_Stats.school_id.in_(school_ids)).all()
+        school_stats_dict = {stat.school_id: stat for stat in school_stats_list}
+
         dates = {}
         for school in schools:
-            school_stats = School_Stats.query.filter_by(school_id=school[1].school_id).first()
+            school_id = school[1].school_id
+            school_stats = school_stats_dict.get(school_id)
             name = school[0].name
             dates[name] = {}
-            if school[0].phd == True:
-                dates[name]['interview'] = school_stats.phd_interview_date.strftime("%m-%d-%y") if school_stats.phd_interview_date is not None else None 
-                dates[name]['waitlist'] = school_stats.phd_waitlist_date.strftime("%m-%d-%y") if school_stats.phd_waitlist_date is not None else None
-                dates[name]['acceptance'] = school_stats.phd_acceptance_date.strftime("%m-%d-%y") if school_stats.phd_acceptance_date is not None else None
-                if not school_stats.phd_interview_date and not school_stats.phd_waitlist_date and not school_stats.phd_acceptance_date:
-                    dates[name]= None
+
+            if school[0].phd:
+                dates[name]['interview'] = school_stats.phd_interview_date.strftime(
+                    "%m-%d-%y") if school_stats and school_stats.phd_interview_date else None
+                dates[name]['waitlist'] = school_stats.phd_waitlist_date.strftime(
+                    "%m-%d-%y") if school_stats and school_stats.phd_waitlist_date else None
+                dates[name]['acceptance'] = school_stats.phd_acceptance_date.strftime(
+                    "%m-%d-%y") if school_stats and school_stats.phd_acceptance_date else None
+                if not school_stats or (
+                        not school_stats.phd_interview_date and not school_stats.phd_waitlist_date and not school_stats.phd_acceptance_date):
+                    dates[name] = None
             else:
-                dates[name]['interview'] = school_stats.reg_interview_date.strftime("%m-%d-%y") if school_stats.reg_interview_date is not None else None
-                dates[name]['waitlist'] = school_stats.reg_waitlist_date.strftime("%m-%d-%y") if school_stats.reg_waitlist_date is not None else None
-                dates[name]['acceptance'] = school_stats.reg_acceptance_date.strftime("%m-%d-%y") if school_stats.reg_acceptance_date is not None else None
-                if not school_stats.reg_interview_date and not school_stats.reg_waitlist_date and not school_stats.reg_acceptance_date:
-                    dates[name]= None
+                dates[name]['interview'] = school_stats.reg_interview_date.strftime(
+                    "%m-%d-%y") if school_stats and school_stats.reg_interview_date else None
+                dates[name]['waitlist'] = school_stats.reg_waitlist_date.strftime(
+                    "%m-%d-%y") if school_stats and school_stats.reg_waitlist_date else None
+                dates[name]['acceptance'] = school_stats.reg_acceptance_date.strftime(
+                    "%m-%d-%y") if school_stats and school_stats.reg_acceptance_date else None
+                if not school_stats or (
+                        not school_stats.reg_interview_date and not school_stats.reg_waitlist_date and not school_stats.reg_acceptance_date):
+                    dates[name] = None
 
         # Update any entered new hard deadlines
         for item in request.form:
             if item.startswith("hard_delay_collect-"):
                 school_details = item.split('-')
-                edit_hard_deadline = School.query.filter_by(id=school_details[1]).first()
-                if request.form.get(item):
+                school_id = school_details[1]
+                edit_hard_deadline = School.query.get(school_id)
+
+                if edit_hard_deadline:
                     try:
-                        edit_hard_deadline.hard_secondary_submission_days = int(request.form.get(item))
-                    except:
-                        flash('Your strict deadline must be entered as an integer number of days (e.g. enter 14 NOT 14 days).', category='error')
-                else:
-                    edit_hard_deadline.hard_secondary_submission_days = -1
+                        edit_hard_deadline.hard_secondary_submission_days = int(
+                            request.form.get(item)) if request.form.get(item) else -1
+                    except ValueError:
+                        flash(
+                            'Your strict deadline must be entered as an integer number of days (e.g. enter 14 NOT 14 days).',
+                            category='error')
+
         db.session.commit()
 
-        secondary_submission_order = {"school": [], "profile": [], "hard_soft": [], "recommended_submission": []}
         for school, profile in schools:
             # Find missing hard deadlines
-            if school.secondary_received and not school.application_complete and not school.hard_secondary_submission_days:
-                missing_hard_delay_cutoff.append(school)
-            elif school.secondary_received and not school.application_complete and school.hard_secondary_submission_days >= -1:
-                edit_hard_delay_cutoff.append(school)
+            if school.secondary_received and not school.application_complete:
+                if not school.hard_secondary_submission_days:
+                    missing_hard_delay_cutoff.append(school)
+                elif school.hard_secondary_submission_days >= -1:
+                    edit_hard_delay_cutoff.append(school)
 
             if school.application_complete:
                 continue
@@ -502,7 +533,7 @@ def lists():
             secondary_submission_order["profile"].append(profile)
 
             # Grab school stats entry
-            school_stats = School_Stats.query.filter_by(school_id=school.school_id).first()
+            school_stats = school_stats_dict.get(school.school_id)
 
             # Process if hard deadline
             if school.hard_secondary_submission_days and school.hard_secondary_submission_days != -1:
@@ -511,21 +542,28 @@ def lists():
                 secondary_submission_order["hard_soft"].append("hard")
             else:
                 if school.phd == False:
-                    deadline = school_stats.last_complete_reg_for_ii
+                    deadline = school_stats.last_complete_reg_for_ii if school_stats else None
                 else:
-                    deadline = school_stats.last_complete_phd_for_ii
+                    deadline = school_stats.last_complete_phd_for_ii if school_stats else None
                 secondary_submission_order["recommended_submission"].append(deadline)
                 secondary_submission_order["hard_soft"].append("soft")
-        secondary_suggestion_order = pd.DataFrame(secondary_submission_order).sort_values(by=["recommended_submission", "hard_soft"])
-        if len(secondary_suggestion_order) > 0 and not secondary_suggestion_order["recommended_submission"].isnull().all():
-            secondary_suggestion_order["recommended_submission"] = secondary_suggestion_order["recommended_submission"].dt.strftime('%b %d')
-            secondary_suggestion_unknown = secondary_suggestion_order[secondary_suggestion_order["recommended_submission"].isnull()].reset_index(drop=True)
-            secondary_suggestion_order = secondary_suggestion_order.dropna(subset=["recommended_submission"]).reset_index(drop=True)
-        elif len(secondary_suggestion_order) > 0:
-            secondary_suggestion_unknown = secondary_suggestion_order[
-                secondary_suggestion_order["recommended_submission"].isnull()].reset_index(drop=True)
-            secondary_suggestion_order = secondary_suggestion_order.dropna(
-                subset=["recommended_submission"]).reset_index(drop=True)
+
+        secondary_suggestion_order = pd.DataFrame(secondary_submission_order).sort_values(
+            by=["recommended_submission", "hard_soft"])
+
+        if len(secondary_suggestion_order) > 0:
+            if not secondary_suggestion_order["recommended_submission"].isnull().all():
+                secondary_suggestion_order["recommended_submission"] = pd.to_datetime(
+                    secondary_suggestion_order["recommended_submission"]).dt.strftime('%b %d')
+                secondary_suggestion_unknown = secondary_suggestion_order[
+                    secondary_suggestion_order["recommended_submission"].isnull()].reset_index(drop=True)
+                secondary_suggestion_order = secondary_suggestion_order.dropna(
+                    subset=["recommended_submission"]).reset_index(drop=True)
+            else:
+                secondary_suggestion_unknown = secondary_suggestion_order[
+                    secondary_suggestion_order["recommended_submission"].isnull()].reset_index(drop=True)
+                secondary_suggestion_order = secondary_suggestion_order.dropna(
+                    subset=["recommended_submission"]).reset_index(drop=True)
         else:
             secondary_suggestion_unknown = pd.DataFrame()
     else:
@@ -533,11 +571,10 @@ def lists():
         secondary_suggestion_order = None
         secondary_suggestion_unknown = None
 
-
     return render_template('lists.html', user=current_user, cycle=cycle, schools=schools, phd_applicant=phd_applicant,
                            usmd_school_list=form_options.get_md_schools('USA'),
                            camd_school_list=form_options.get_md_schools('CAN'),
-                           do_school_list=form_options.get_do_schools(), program_types=program_types, today=datetime.today(),
+                           do_school_list=form_options.get_do_schools(), program_types=program_types_set, today=datetime.today(),
                            most_recent=dates, schools_to_add_secondary_cost=schools_to_add_secondary_cost,
                            curr_cycle=form_options.VALID_CYCLES[0], missing_hard_delay_cutoff=missing_hard_delay_cutoff,
                            secondary_suggestion_order=secondary_suggestion_order, secondary_suggestion_unknown=secondary_suggestion_unknown,
