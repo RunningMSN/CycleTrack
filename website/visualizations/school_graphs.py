@@ -182,7 +182,7 @@ def mcat_vs_gpa(df):
             y=df[(df['interview_received'].isnull()) & (df['acceptance'].isnull())]['mcat_total'],
             mode='markers',
             name='Applied',
-            marker=dict(color='gray')
+            marker=dict(color='gray', opacity=0.33)
         ))
 
         # Add points where interview received
