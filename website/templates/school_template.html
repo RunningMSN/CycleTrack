@@ -483,6 +483,12 @@
                         <h5 class="text-center mt-3">Stats and Outcomes</h5>
                         {% if reg_info['map'] %}
                         <div id="reg_mcat_gpa"></div>
+                        <p>
+                            <strong>Note:</strong> Not all applicants who enter an application in CycleTrack finish tracking the entire
+                            cycle. Some applicants who are shown as 'Applied' may have received an interview or acceptance,
+                            but did not track it. Therefore, this graph is better used as a representation of ranges of
+                            stats interviewed or accepted.
+                        </p>
                         <script>
                             fetch('{{ url_for('static', filename='explorer_graphs/mcat_gpa_'+ school_id|string + '_reg.JSON') }}')
                                 .then(response => response.json())
@@ -523,6 +529,12 @@
                         <h5 class="text-center mt-3">Stats and Outcomes</h5>
                         {% if reg_info['map'] %}
                         <div id="phd_mcat_gpa"></div>
+                        <p>
+                            <strong>Note:</strong> Not all applicants who enter an application in CycleTrack finish tracking the entire
+                            cycle. Some applicants who are shown as 'Applied' may have received an interview or acceptance,
+                            but did not track it. Therefore, this graph is better used as a representation of ranges of
+                            stats interviewed or accepted.
+                        </p>
                         <script>
                             fetch('{{ url_for('static', filename='explorer_graphs/mcat_gpa_'+ school_id|string + '_phd.JSON') }}')
                                 .then(response => response.json())
