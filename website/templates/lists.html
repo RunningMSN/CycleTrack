@@ -609,10 +609,10 @@ function toggleCancel() {
                     </div>
                     {% endif %}
                     <div class="row" style="padding-top: 10px">
-                    <span class="bulk_list d-none">
-                        <strong>Notes:</strong>
-                        <input onclick = "editedSchool('{{ school.id }}', 'note')" class="form-control" type="text" data-cycle="{{cycle.cycle_year}}" value="{%- if school.note -%}{{ school.note }}{%- endif -%}" name="note-{{school.id}}">
-                    </span>
+                        <span class="bulk_list d-none">
+                            <strong>Notes:</strong>
+                            <textarea onclick = "editedSchool('{{ school.id }}', 'note')" class="form-control" type="text" data-cycle="{{cycle.cycle_year}}" name="note-{{school.id}}">{%- if school.note -%}{{ school.note }}{%- endif -%}</textarea>
+                        </span>
                     </div>
             </div>
         </li>
