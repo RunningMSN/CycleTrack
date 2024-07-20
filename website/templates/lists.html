@@ -355,6 +355,13 @@ function toggleCancel() {
                                 <img src="{{ url_for('static', filename='images/school_logos/' + profile.logo_file_name) }}" style="max-width:100px;max-height:100px" width="100%" height="auto">
                             </a>
                         </div>
+                        <!-- DAYS SINCE SECONDARY -->
+                        <div class="my-1">
+                            {% if (school.secondary_received and not school.application_complete) %}
+                            {% set delay = (today - school.secondary_received)|format_days %}
+                            <a href="#" data-bs-toggle="tooltip" title="Days since secondary received." style="color:black;text-decoration-style:dotted;font-size: 1.25rem">{{ delay }} Days</a>
+                            {% endif %}
+                        </div>
                         <div class="mx-2 d-none d-md-block" style="margin-top: 5px">
                             {% if school.acceptance %}
                             <div class="text-center rounded" style="margin-top: 3px; background-color: #6af799">
@@ -386,25 +393,14 @@ function toggleCancel() {
                             </div>
                             {% endif %}
                         </div>
-                        {% if most_recent[school.name] %}
-                        <div class="row" style="font-size: 70%;">
-                            <details>
-                                <summary>Most recent:</summary>
-                                <p>
-                                    {% if most_recent[school.name]["interview"]%}
-                                    <a href="#" data-bs-toggle="tooltip" title="Most recent reported interview invitation." style="color:black;text-decoration-style:dotted;" >II: {{most_recent[school.name]["interview"]}}</a><br>
-                                    {% endif %}
-                                    {% if most_recent[school.name]["waitlist"] %}
-                                    <a href="#" data-bs-toggle="tooltip" title="Most recent reported waitlist." style="color:black;text-decoration-style:dotted;">WL: {{most_recent[school.name]["waitlist"]}}</a><br>
-                                    {% endif %}
-                                    {% if most_recent[school.name]["acceptance"]%}
-                                    <a href="#" data-bs-toggle="tooltip" title="Most recent reported acceptance." style="color:black;text-decoration-style:dotted;">A: {{most_recent[school.name]["acceptance"]}}</a>
-                                    {% endif %}
-                                </p>
-                            </details>
-                            
-                        </div>
-
+                        <!-- MOST RECENT DATA -->
+                        {% if cycle.cycle_year == curr_cycle %}
+                            <div id="most_recent" class="my-1" style="font-size: 85%">
+                                Most Recent: <br />
+                                <a href="#" data-bs-toggle="tooltip" title="Most recent reported interview invitation." style="color:black;text-decoration-style:dotted;" >II: {% if most_recent[school.name]["interview"]%}{{most_recent[school.name]["interview"]}}{% else %}None{% endif %}</a><br>
+                                <a href="#" data-bs-toggle="tooltip" title="Most recent reported waitlist." style="color:black;text-decoration-style:dotted;">WL: {% if most_recent[school.name]["waitlist"] %}{{most_recent[school.name]["waitlist"]}}{% else %}None{% endif %}</a><br>
+                                <a href="#" data-bs-toggle="tooltip" title="Most recent reported acceptance." style="color:black;text-decoration-style:dotted;">A: {% if most_recent[school.name]["acceptance"]%}{{most_recent[school.name]["acceptance"]}}{% else %}None{% endif %}</a>
+                            </div>
                         {% endif %}
                         <!-- ICONS -->
                         <div style="padding-top:5px">
@@ -417,12 +413,6 @@ function toggleCancel() {
                             <button type="button" class="btn btn-link normal_list" data-bs-toggle="modal" data-bs-target="#delete_{{ school.id }}" style="padding: 1px">
                                 <i class="bi bi-trash fs-5"></i>
                             </button>
-                        </div>
-                        <div>
-                            {% if (school.secondary_received and not school.application_complete) %}
-                            {% set delay = (today - school.secondary_received)|format_days %}
-                            <a href="#" data-bs-toggle="tooltip" title="Days since secondary received." style="color:black;text-decoration-style:dotted;font-size: 1.25rem">{{ delay }} Days</a>
-                            {% endif %}
                         </div>
                 </div>
 
