@@ -159,6 +159,8 @@ function toggleCancel() {
 }
 </script>
 <script src="{{ url_for('static', filename='/js/list_bulk_add.js') }}"></script>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script src="{{ url_for('static', filename='/js/list.js') }}"></script>
 {% endblock %}
 {% block dash_content %}
 
@@ -406,10 +408,13 @@ function toggleCancel() {
                         {% endif %}
                         <!-- ICONS -->
                         <div style="padding-top:5px">
-                            <a href="{{ url_for('explorer.explorer_home') }}/school/{{ profile.school }}" class="btn btn-link" style="padding: 1px">
+                            <a href="{{ url_for('explorer.explorer_home') }}/school/{{ profile.school }}" class="btn btn-link normal_list" style="padding: 1px">
                                 <i class="bi bi-search fs-5"></i>
                             </a>
-                            <button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#delete_{{ school.id }}" style="padding: 1px">
+                            <button type="button" class="btn btn-link normal_list" data-bs-toggle="modal" data-bs-target="#mini_explorer" style="padding: 1px" onclick="mini_explore('{{ school.school_id }}', '{{ school.phd }}', '{{ profile.school }}', '{{ profile.intermediate_name }}', '{{ profile.md_or_do }}', '{{ url_for('''static''', filename='''explorer_graphs''')}}', '{{ url_for('''explorer.explorer_home''')}}')">
+                                <i class="bi bi-bar-chart-line-fill fs-5"></i>
+                            </button>
+                            <button type="button" class="btn btn-link normal_list" data-bs-toggle="modal" data-bs-target="#delete_{{ school.id }}" style="padding: 1px">
                                 <i class="bi bi-trash fs-5"></i>
                             </button>
                         </div>
@@ -664,6 +669,34 @@ function toggleCancel() {
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </div>
             </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal modal-lg fade" id="mini_explorer" tabindex="-1" aria-labelledby="mini_explorer" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="mini_explorer_title"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div style="padding: 10px;">
+                        <h5 class="curr_cycle_status mini_explorer_graph_area">{{ curr_cycle-1 }}-{{ curr_cycle }} Cycle Status</h5>
+                        <div class="curr_cycle_status mini_explorer_graph_area graph_image" id="mini_cycle_status_curr"></div>
+
+                        <h5 class="prev_cycle_status mini_explorer_graph_area d-none">{{ curr_cycle-2 }}-{{ curr_cycle-1 }} Cycle</h5>
+                        <div class="prev_cycle_status mini_explorer_graph_area graph_image d-none" id="mini_cycle_status_prev"></div>
+
+                        <p>Our graphs are interactive! Click and drag your mouse across the graph to zoom in. Double
+                            click to zoom out. Click on a status in the legend to hide it, or double-click to highlight
+                            nly that status.</p>
+
+                        <button class="btn btn-primary mx-1 my-1" style="border-radius: 0" onclick="switchGraph('curr_cycle')">Current Cycle Data</button>
+                        <button class="btn btn-primary mx-1 my-1" style="border-radius: 0" onclick="switchGraph('prev_cycle')">Previous Cycle Data</button>
+                        <a href="" class="btn btn-success mx-1 my-1" style="border-radius: 0" id="explorer_link_button">Explore All Data</a>
+                    </div>
+                </div>
         </div>
     </div>
 </div>
