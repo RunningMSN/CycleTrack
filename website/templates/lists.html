@@ -390,13 +390,14 @@ function toggleCancel() {
                         <!-- ICONS -->
                         <div style="padding-top:5px">
                             <a href="{{ url_for('explorer.explorer_home') }}/school/{{ profile.school }}" class="btn btn-link normal_list" style="padding: 1px">
-                                <i class="bi bi-search fs-5"></i>
+                                <span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="View School Explorer"><i class="bi bi-search fs-5"></i></span>
                             </a>
-                            <button type="button" class="btn btn-link normal_list" data-bs-toggle="modal" data-bs-target="#mini_explorer" style="padding: 1px" onclick="mini_explore('{{ school.school_id }}', '{{ school.phd }}', '{{ profile.school }}', '{{ profile.intermediate_name }}', '{{ profile.md_or_do }}', '{{ url_for('''static''', filename='''explorer_graphs''')}}', '{{ url_for('''explorer.explorer_home''')}}')">
-                                <i class="bi bi-bar-chart-line-fill fs-5"></i>
+
+                            <button type="button" class="btn btn-link normal_list" data-bs-toggle="modal" data-bs-target="#mini_explorer" style="padding: 1px" onclick="mini_explore('{{ school.school_id }}', '{{ school.phd }}', '{{ profile.school }}', '{{ profile.intermediate_name }}', '{{ profile.md_or_do }}', '{{ url_for('''static''', filename='''explorer_graphs''')}}', '{{ url_for('''explorer.explorer_home''')}}')" >
+                                <span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="View School Graphs"><i class="bi bi-bar-chart-line-fill fs-5"></i></span>
                             </button>
                             <button type="button" class="btn btn-link normal_list" data-bs-toggle="modal" data-bs-target="#delete_{{ school.id }}" style="padding: 1px">
-                                <i class="bi bi-trash fs-5"></i>
+                                <span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Delete School"><i class="bi bi-trash fs-5"></i></span>
                             </button>
                         </div>
                         <!-- MOST RECENT DATA -->
