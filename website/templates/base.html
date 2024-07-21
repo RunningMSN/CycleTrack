@@ -196,15 +196,15 @@
 
 <!-- COOKIES MESSAGE -->
 {% if not cookies_check() %}
-<footer id="cookie-footer" class="cookie-footer">
+<footer id="cookie-footer" class="cookie-footer" style="z-index: 1050; position: fixed;">
     {# show a cookie consent banner #}
     <div id="cookie-consent-container" class="container">
         <div class="row">
-            <div class="col-auto">
-                <h3>Cookies |</h3>
-            </div>
+            <h3>Cookies</h3>
+        </div>
+        <div class="row">
             <div class="col-9">
-                    This website uses cookies to ensure the best experience on our website. We only use cookies for site
+                This website uses cookies to ensure the best experience on our website. We only use cookies for site
             functionality and analytics. To find out more, read our <a href="{{ url_for('pages.privacy') }}" class="text-muted">Privacy Policy</a>.
             </div>
             <div class="col-auto">
