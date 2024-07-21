@@ -355,13 +355,6 @@ function toggleCancel() {
                                 <img src="{{ url_for('static', filename='images/school_logos/' + profile.logo_file_name) }}" style="max-width:100px;max-height:100px" width="100%" height="auto">
                             </a>
                         </div>
-                        <!-- DAYS SINCE SECONDARY -->
-                        <div class="my-1">
-                            {% if (school.secondary_received and not school.application_complete) %}
-                            {% set delay = (today - school.secondary_received)|format_days %}
-                            <a href="#" data-bs-toggle="tooltip" title="Days since secondary received." style="color:black;text-decoration-style:dotted;font-size: 1.25rem">{{ delay }} Days</a>
-                            {% endif %}
-                        </div>
                         <div class="mx-2 d-none d-md-block" style="margin-top: 5px">
                             {% if school.acceptance %}
                             <div class="text-center rounded" style="margin-top: 3px; background-color: #6af799">
@@ -388,20 +381,12 @@ function toggleCancel() {
                                 Complete
                             </div>
                             {% elif school.secondary_received %}
+                            {% set delay = (today - school.secondary_received)|format_days %}
                             <div class="text-center rounded" style="1px; margin-top: 3px; background-color: #00b4d8">
-                                Secondary
+                                Secondary: <a href="#" data-bs-toggle="tooltip" title="Days since secondary received." style="color:black;text-decoration-style:dotted;">{{ delay }}d</a>
                             </div>
                             {% endif %}
                         </div>
-                        <!-- MOST RECENT DATA -->
-                        {% if cycle.cycle_year == curr_cycle %}
-                            <div id="most_recent" class="my-1" style="font-size: 85%">
-                                Most Recent: <br />
-                                <a href="#" data-bs-toggle="tooltip" title="Most recent reported interview invitation." style="color:black;text-decoration-style:dotted;" >II: {% if most_recent[school.name]["interview"]%}{{most_recent[school.name]["interview"]}}{% else %}None{% endif %}</a><br>
-                                <a href="#" data-bs-toggle="tooltip" title="Most recent reported waitlist." style="color:black;text-decoration-style:dotted;">WL: {% if most_recent[school.name]["waitlist"] %}{{most_recent[school.name]["waitlist"]}}{% else %}None{% endif %}</a><br>
-                                <a href="#" data-bs-toggle="tooltip" title="Most recent reported acceptance." style="color:black;text-decoration-style:dotted;">A: {% if most_recent[school.name]["acceptance"]%}{{most_recent[school.name]["acceptance"]}}{% else %}None{% endif %}</a>
-                            </div>
-                        {% endif %}
                         <!-- ICONS -->
                         <div style="padding-top:5px">
                             <a href="{{ url_for('explorer.explorer_home') }}/school/{{ profile.school }}" class="btn btn-link normal_list" style="padding: 1px">
@@ -414,6 +399,15 @@ function toggleCancel() {
                                 <i class="bi bi-trash fs-5"></i>
                             </button>
                         </div>
+                        <!-- MOST RECENT DATA -->
+                        {% if cycle.cycle_year == curr_cycle %}
+                            <div id="most_recent" class="my-1" style="font-size: 85%">
+                                Most Recent: <br />
+                                <a href="#" data-bs-toggle="tooltip" title="Most recent reported interview invitation." style="color:black;text-decoration-style:dotted;" >II: {% if most_recent[school.name]["interview"]%}{{most_recent[school.name]["interview"]}}{% else %}None{% endif %}</a><br>
+                                <a href="#" data-bs-toggle="tooltip" title="Most recent reported waitlist." style="color:black;text-decoration-style:dotted;">WL: {% if most_recent[school.name]["waitlist"] %}{{most_recent[school.name]["waitlist"]}}{% else %}None{% endif %}</a><br>
+                                <a href="#" data-bs-toggle="tooltip" title="Most recent reported acceptance." style="color:black;text-decoration-style:dotted;">A: {% if most_recent[school.name]["acceptance"]%}{{most_recent[school.name]["acceptance"]}}{% else %}None{% endif %}</a>
+                            </div>
+                        {% endif %}
                 </div>
 
                 <!-- SCHOOL TEXT AREA ON RIGHT -->
