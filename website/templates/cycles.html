@@ -245,6 +245,7 @@
             </div>
         </div>
 
+        {% if user.cycles|length != 0 %}
         {% for cycle in user.cycles|reverse %}
         <div class="col my-2">
             <div class="card h-100">
@@ -301,6 +302,7 @@
                 </div>
             </div>
         </div>
+        {% endif %}
 
         <div class="col my-2">
             <div class="card h-100">
