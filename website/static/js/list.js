@@ -9,13 +9,13 @@ function mini_explore(school_id, phd, name, int_name, md_or_do, plot_loc, explor
                 data.config = {'responsive': true, 'displaylogo': false, 'displayModeBar': false};
                 Plotly.newPlot('mini_cycle_status_curr', data);
             })
-            .catch(error => console.log(error));
+            .catch(error => console.log("No graph available."));
         fetch(plot_loc + "/status_" + school_id + "_phd_prev.JSON").then(response => response.json())
             .then(data => {
                 data.config = {'responsive': true, 'displaylogo': false, 'displayModeBar': false};
                 Plotly.newPlot('mini_cycle_status_prev', data);
             })
-            .catch(error => console.log(error));
+            .catch(error => console.log("No graph available."));
 
     } else {
         title_string = int_name + ' (' + md_or_do + ')';
@@ -24,13 +24,13 @@ function mini_explore(school_id, phd, name, int_name, md_or_do, plot_loc, explor
                 data.config = {'responsive': true, 'displaylogo': false, 'displayModeBar': false};
                 Plotly.newPlot('mini_cycle_status_curr', data);
             })
-            .catch(error => console.log(error));
+            .catch(error => console.log("No graph available."));
         fetch(plot_loc + "/status_" + school_id + "_reg_prev.JSON").then(response => response.json())
             .then(data => {
                 data.config = {'responsive': true, 'displaylogo': false, 'displayModeBar': false};
                 Plotly.newPlot('mini_cycle_status_prev', data);
             })
-            .catch(error => console.log(error));
+            .catch(error => console.log("No graph available."));
     }
     title.innerHTML = title_string;
     var explorerLinkButton = document.getElementById("explorer_link_button");
