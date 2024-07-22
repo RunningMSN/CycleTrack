@@ -545,7 +545,8 @@ def lists():
                     deadline = school_stats.last_complete_reg_for_ii if school_stats else None
                 else:
                     deadline = school_stats.last_complete_phd_for_ii if school_stats else None
-                if deadline < datetime.today():
+
+                if deadline and deadline < datetime.today():
                     deadline = datetime.today()
                 secondary_submission_order["recommended_submission"].append(deadline)
                 secondary_submission_order["hard_soft"].append("soft")
