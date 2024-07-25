@@ -1,0 +1,744 @@
+{% extends 'dashboard.html' %}
+{% block title %} {{ cycle.cycle_year }} School List {% endblock %}
+{% block additional_js %}
+<script>
+$(document).ready(function(){
+    var val = $(this).val();
+    var current = new Date(val);
+    var current_utc = new Date(current.getUTCFullYear(), current.getUTCMonth(), current.getUTCDate());
+    var timestamp = Date.parse(val);
+    var cycle_year = $(this).data("cycle");
+    var cycle_min = new Date(cycle_year - 1, 4, 1);
+    var cycle_max = new Date(cycle_year, 7, 31);
+
+    $(".datepicker").datepicker({
+        showOtherMonths: true,
+        selectOtherMonths: true,
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'mm/dd/y',
+        minDate: cycle_min,
+        maxDate: cycle_max,
+        showButtonPanel: true,
+        closeText: "Clear",
+        onClose: function(dateText, inst) {
+            var input = $(this);
+
+            function isDonePressed() {
+                return $('#ui-datepicker-div').html().indexOf('ui-datepicker-close ui-state-default ui-priority-primary ui-corner-all ui-state-hover') > -1;
+            }
+
+            if (isDonePressed()) {
+                input.datepicker('setDate', null);
+            }
+
+            // Trigger the change event
+            input.trigger('change');
+        }
+    });
+});
+</script>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+{% endblock %}
+{% block dash_content %}
+{% set edit_url = url_for('dashboard.edit_school') %}
+<div id="lists" class="container">
+    <h2 class="my-2">{{ cycle.cycle_year - 1 }}-{{ (cycle.cycle_year|string)[-2:] }} School List</h2>
+    {% if phd_applicant %}
+    <p>
+        <a href="#" data-bs-toggle="tooltip" title="If you are being considered for MD/DO-only as well, please add an MD/DO-only second entry. If this consideration
+        is after you have been rejected from the MD/DO-PhD program, please use your rejection date as the new application
+                complete date." style="color:black;text-decoration-style:dotted">
+            <span><i class="bi bi-info-circle-fill btn-link"></i></span>
+            Note for Dual Degree Applicants
+        </a>
+    </p>
+    {% endif %}
+
+    <!-- SECONDARY COST ENTRY -->
+    {% if schools_to_add_secondary_cost|length > 0%}
+    <div class="row" id="cost_message">
+        <div class="col">
+            <div class="container rounded py-2 px-3" style="background-color: #90EE90">
+                <span style="vertical-align: middle">
+                    We are collecting the costs of secondary applications to help future applicants anticipate cost. If you are
+                    willing, please share the cost of secondary applications to some of your schools by clicking
+                    <btn class="btn btn-link" data-bs-toggle="modal" data-bs-target="#add-cost-modal"
+                         style="padding: 0px; margin: 0px; vertical-align:top">here</btn>. We will only ask you for costs that other applicants have not already
+                    shared.
+                </span>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- MENU BUTTONS -->
+    <div class="row mt-2">
+        <div class="col-auto">
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-schools-modal" style="position: relative; display:inline; margin: 3px; margin-left: 0px;">Add School</button>
+            <!--{% if cycle.schools|length > 0 %}
+                <button class="btn btn-primary" style="position: relative; display:inline;  margin: 3px;">Edit</button>
+            {% endif %}-->
+
+            <form method="POST" action="{{ url_for('dashboard.import_list') }}" style="position: relative; display:inline;">
+                <input type="hidden" id="import_cycle_id" name="cycle_id" value="{{ cycle.id }}"/>
+                <button type="submit" class="btn btn-primary" style="margin: 3px;">
+                    Import From Spreadsheet
+                </button>
+            </form>
+            {% if cycle.schools|length > 0 %}
+            <form method="POST" action="{{ url_for('dashboard.export_list') }}" style="position: relative; display:inline;">
+                <input type="hidden" id="export_cycle_id" name="cycle_id" value="{{ cycle.id }}"/>
+                <button type="submit" class="btn btn-primary" style=" margin: 3px;">
+                    Export To Spreadsheet
+                </button>
+            </form>
+            {% endif %}
+        </div>
+
+        {% if cycle.schools|length > 0 %}
+        <div class="col d-flex justify-content-end">
+                <select class="btn-md form-control text-center" id="status_select" style="width: 150px; margin: 3px; position: relative; display:inline;" onchange="filterSchools()">
+                    <option value="all">Current Status</option>
+                    <option value="primary">Primary Submitted</option>
+                    <option value="secondary">Secondary Received</option>
+                    <option value="complete">App Complete</option>
+                    <option value="hold">Pre-Interview Hold</option>
+                    <option value="interview">Interviewed</option>
+                    <option value="rejection">Rejected</option>
+                    <option value="waitlist">Waitlist</option>
+                    <option value="acceptance">Accepted</option>
+                    <option value="withdrawn">Withdrawn</option>
+                </select>
+                {% if program_types|length > 1 %}
+                <select class="btn-md form-control text-center" id="program_select" style="width: 150px; margin: 3px; margin-right: 0px; position: relative; display:inline;" onchange="filterSchools()">
+                    <option>School Type</option>
+                    {% for program in program_types %}
+                    <option value="{{ program }}">{{ program }}</option>
+                    {% endfor %}
+                </select>
+                {% endif %}
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="row mb-2">
+        {% if cycle.cycle_year == current_cycle and cycle.schools|length > 0  %}
+        <div class="col-auto">
+            <a class="btn btn-outline-primary rounded normal_list" data-bs-toggle="modal" data-bs-target="#secondary-order-modal" style="margin-left: 0px">
+                Essay Submission Optimization
+            </a>
+
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- SCHOOL LIST -->
+    <div class="row my-2">
+        <div class="col">
+            {% if cycle.schools|length == 0 %}
+                <p>You haven't added any schools yet. Get started by adding a school or importing from a spreadsheet.</p>
+            {% else %}
+                <p id="no_schools" class="d-none">
+                    You do not have any schools that meet the filter criteria. Please edit the filters or add the school if it is missing.
+                </p>
+                <ul class="list-group ">
+                {% for school, profile in schools %}
+                    <li class="list-group-item school_entry type_{{ school.school_type }} {% if school.phd %}phd_true{% else %}phd_false{% endif %}
+                        status_{%if school.acceptance %}acceptance
+                        {% elif school.withdrawn%}withdrawn
+                        {% elif school.rejection%}rejection
+                        {% elif school.waitlist %}waitlist
+                        {% elif school.interview_received %}interview
+                        {% elif school.pre_int_hold %}hold
+                        {% elif school.application_complete %}complete
+                        {% elif school.secondary_received %}secondary
+                        {% elif school.primary %}primary
+                        {%endif%}" id="{{ school.id }}_item" style="position: relative;">
+                        <div class="row">
+                            <div class="col-md-2 col-sm-12 d-flex flex-column align-items-center">
+                                <!-- LOGO -->
+                                <img src="{{ url_for('static', filename='images/school_logos/' + profile.logo_file_name) }}" class="mx-auto" style="max-width:100px; max-height:100px; width: auto; height: auto;">
+
+                                <!-- NAME FOR SMALL SCREENS  -->
+                                <h5 class="d-flex col-auto justify-content-center w-100 d-md-none mt-1">{{ profile.intermediate_name }} ({{ profile.md_or_do }}{% if school.phd %}-PhD{% endif%})</h5>
+
+                                <!-- STATUS PIPE -->
+                                <div class="d-flex col-auto justify-content-center w-100 mt-2 mb-1">
+                                    {% if school.acceptance %}
+                                    <div class="text-center rounded px-3 w-100" style="background-color: #6af799">
+                                        <span style="margin-top: 3px; background-color: #6af799">Accepted</span>
+                                    </div>
+                                    {% elif school.withdrawn %}
+                                    <div class="text-center rounded px-3 w-100" style="background-color: #d1d1d1">
+                                        Withdrawn
+                                    </div>
+                                    {% elif school.waitlist %}
+                                    <div class="text-center rounded px-3 w-100" style="background-color: #ffca80">
+                                        Waitlist
+                                    </div>
+                                    {% elif school.rejection %}
+                                    <div class="text-center rounded px-3 w-100" style="background-color: #ff8282">
+                                        Rejected
+                                    </div>
+                                    {% elif school.interview_received %}
+                                    <div class="text-center rounded px-3 w-100" style="background-color: #d9abff">
+                                        Interview
+                                    </div>
+                                    {% elif school.application_complete %}
+                                    <div class="text-center rounded px-3 w-100" style="background-color: #0077b6">
+                                        Complete
+                                    </div>
+                                    {% elif school.secondary_received %}
+                                    {% set delay = (today - school.secondary_received)|format_days %}
+                                    <div class="text-center rounded px-3 w-100" style="background-color: #00b4d8">
+                                        Secondary: <a href="#" data-bs-toggle="tooltip" title="Days since secondary received." style="color:black;text-decoration-style:dotted;">{{ delay }}d</a>
+                                    </div>
+                                    {% elif school.primary %}
+                                    <div class="text-center rounded px-3 w-100" style="background-color: lightgray">
+                                        Applied
+                                    </div>
+                                    {% endif %}
+                                </div>
+
+                                <!-- ACTION BUTTONS -->
+                                <div class="w-100 d-flex justify-content-center">
+                                    <a href="{{ url_for('explorer.explorer_home') }}/school/{{ profile.school }}" class="btn btn-link mx-1" style="padding: 2px;" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="View School Explorer">
+                                        <i class="bi bi-search fs-5"></i>
+                                    </a>
+                                    <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="View School Data">
+                                        <button type="button" class="btn btn-link mx-1" data-bs-toggle="modal" data-bs-target="#mini_explorer" style="padding: 2px;" onclick="mini_explore('{{ school.school_id }}', '{{ school.phd }}', '{{ profile.school }}', '{{ profile.intermediate_name }}', '{{ profile.md_or_do }}', '{{ url_for('static', filename='explorer_graphs') }}', '{{ url_for('explorer.explorer_home') }}')">
+                                            <i class="bi bi-bar-chart-line-fill fs-5"></i>
+                                        </button>
+                                    </span>
+                                    <span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="Delete School">
+                                        <button type="button" class="btn btn-link d-md-none mx-1" data-bs-toggle="modal" data-bs-target="#delete_{{ school.id }}" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Delete School" style="padding: 2px;">
+                                            <i class="bi bi-trash fs-5"></i>
+                                        </button>
+                                    </span>
+                                </div>
+
+                            </div>
+                            <div class="col-md-10 col-sm-12 d-flex flex-column align-items-start position-relative">
+                                <!-- NAME AND DELETION -->
+                                <div class="w-100 position-relative">
+                                    <h5 class="d-flex justify-content-start d-none d-md-block" style="margin-right: 40px; position: relative; top: 50%; transform: translateY(-50%);">{{ profile.intermediate_name }} ({{ profile.md_or_do }}{% if school.phd %}-PhD{% endif%})</h5>
+                                    <button type="button" class="btn btn-link position-absolute top-50 end-0 translate-middle-y d-none d-md-block" data-bs-toggle="modal" data-bs-target="#delete_{{ school.id }}">
+                                        <span data-bs-toggle="tooltip" data-bs-placement="left" data-bs-original-title="Delete School">
+                                            <i class="bi bi-x-lg fs-5" style="color: gray"></i>
+                                        </span>
+                                    </button>
+                                </div>
+                                <!-- MOST RECENT -->
+                                {% if cycle.cycle_year == current_cycle %}
+                                    <div id="most_recent" class="my-0" style="font-size: 95%">
+                                        Most Recent:
+                                        <a href="#" data-bs-toggle="tooltip" title="Most recent reported interview invitation." style="color:black;text-decoration-style:dotted;" >II: {% if most_recent[school.name]["interview"]%}{{most_recent[school.name]["interview"] }}{% else %}None{% endif %}</a>,
+                                        <a href="#" data-bs-toggle="tooltip" title="Most recent reported waitlist." style="color:black;text-decoration-style:dotted;">WL: {% if most_recent[school.name]["waitlist"] %}{{most_recent[school.name]["waitlist"]}}{% else %}None{% endif %}</a>,
+                                        <a href="#" data-bs-toggle="tooltip" title="Most recent reported acceptance." style="color:black;text-decoration-style:dotted;">A: {% if most_recent[school.name]["acceptance"]%}{{most_recent[school.name]["acceptance"]}}{% else %}None{% endif %}</a>
+                                    </div>
+                                {% endif %}
+                                <!-- SCHOOL DATA -->
+                                <div class="w-100 mt-2">
+                                    <div class="row">
+                                        <div class="col-lg-2 col-md-4 col-6 mb-2">
+                                            <strong>
+                                                {% if school.primary %}
+                                                    {% if school.primary.date() > today.date() %}
+                                                        <i class="bi bi-exclamation-circle-fill text-warning" data-bs-toggle="tooltip" data-bs-placement="top" title="This date is in the future"></i>
+                                                    {% endif %}
+                                                {% endif %}Primary <br />Submitted:
+                                            </strong><br>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control datepicker" id="primary_{{ school.id }}" placeholder="-" value="{%- if school.primary -%}{{ school.primary.strftime('%m/%d/%y') }}{%- endif -%}" name="primary-{{school.id}}" onchange="editSchool('{{ school.id }}', 'primary', '{{ edit_url }}')">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2 col-md-4 col-6 mb-2">
+                                            <strong>
+                                                {% if school.secondary_received %}
+                                                    {% if school.secondary_received.date() > today.date() %}
+                                                        <i class="bi bi-exclamation-circle-fill text-warning" data-bs-toggle="tooltip" data-bs-placement="top" title="This date is in the future"></i>
+                                                    {% endif %}
+                                                {% endif %}Secondary <br />Received:
+                                            </strong><br>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control datepicker" id="secondary_{{ school.id }}" placeholder="-" value="{%- if school.secondary_received -%}{{ school.secondary_received.strftime('%m/%d/%y') }}{%- endif -%}" name="secondary_received-{{school.id}}" onchange="editSchool('{{ school.id }}', 'secondary', '{{ edit_url }}')">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2 col-md-4 col-6 mb-2">
+                                            <strong>
+                                                {% if school.application_complete %}
+                                                    {% if school.application_complete.date() > today.date() %}
+                                                        <i class="bi bi-exclamation-circle-fill text-warning" data-bs-toggle="tooltip" data-bs-placement="top" title="This date is in the future"></i>
+                                                    {% endif %}
+                                                {% endif %}Application <br />Complete:
+                                            </strong><br>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control datepicker" id="complete_{{ school.id }}" placeholder="-" value="{%- if school.application_complete -%}{{ school.application_complete.strftime('%m/%d/%y') }}{%- endif -%}" name="application_complete-{{school.id}}" onchange="editSchool('{{ school.id }}', 'complete', '{{ edit_url }}')">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2 col-md-4 col-6 mb-2">
+                                            <strong>
+                                                {% if school.pre_int_hold %}
+                                                    {% if school.pre_int_hold.date() > today.date() %}
+                                                        <i class="bi bi-exclamation-circle-fill text-warning" data-bs-toggle="tooltip" data-bs-placement="top" title="This date is in the future"></i>
+                                                    {% endif %}
+                                                {% endif %}Pre-Interview <br />Hold:
+                                            </strong><br>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control datepicker" id="hold_{{ school.id }}" placeholder="-" value="{%- if school.pre_int_hold -%}{{ school.pre_int_hold.strftime('%m/%d/%y') }}{%- endif -%}" name="pre_int_hold-{{school.id}}" onchange="editSchool('{{ school.id }}', 'hold', '{{ edit_url }}')">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2 col-md-4 col-6 mb-2">
+                                            <strong>
+                                                {% if school.interview_received %}
+                                                    {% if school.interview_received.date() > today.date() %}
+                                                        <i class="bi bi-exclamation-circle-fill text-warning" data-bs-toggle="tooltip" data-bs-placement="top" title="This date is in the future"></i>
+                                                    {% endif %}
+                                                {% endif %}Interview <br />Received:
+                                            </strong><br>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control datepicker" id="int_received_{{ school.id }}" placeholder="-" value="{%- if school.interview_received -%}{{ school.interview_received.strftime('%m/%d/%Y') }}{%- endif -%}" name="interview_received-{{school.id}}" onchange="editSchool('{{ school.id }}', 'int_received', '{{ edit_url }}')">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2 col-md-4 col-6 mb-2">
+                                            <strong>
+                                                Interview <br />Date:
+                                            </strong><br>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control datepicker" id="int_date_{{ school.id }}" placeholder="-" value="{%- if school.interview_date -%}{{ school.interview_date.strftime('%m/%d/%y') }}{%- endif -%}" name="interview_date-{{school.id}}" onchange="editSchool('{{ school.id }}', 'int_date', '{{ edit_url }}')">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2 col-md-4 col-6 mb-2">
+                                            <strong>
+                                                {% if school.rejection %}
+                                                    {% if school.rejection.date() > today.date() %}
+                                                        <i class="bi bi-exclamation-circle-fill text-warning" data-bs-toggle="tooltip" data-bs-placement="top" title="This date is in the future"></i>
+                                                    {% endif %}
+                                                {% endif %}Rejected:
+                                            </strong><br>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control datepicker" id="rejection_{{ school.id }}" placeholder="-" value="{%- if school.rejection -%}{{ school.rejection.strftime('%m/%d/%y') }}{%- endif -%}" name="rejection-{{school.id}}" onchange="editSchool('{{ school.id }}', 'rejection', '{{ edit_url }}')">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2 col-md-4 col-6 mb-2">
+                                            <strong>
+                                                {% if school.waitlist %}
+                                                    {% if school.waitlist.date() > today.date() %}
+                                                        <i class="bi bi-exclamation-circle-fill text-warning" data-bs-toggle="tooltip" data-bs-placement="top" title="This date is in the future"></i>
+                                                    {% endif %}
+                                                {% endif %}Waitlisted:
+                                            </strong><br>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control datepicker" id="waitlist_{{ school.id }}" placeholder="-" value="{%- if school.waitlist -%}{{ school.waitlist.strftime('%m/%d/%y') }}{%- endif -%}" name="waitlist-{{school.id}}" onchange="editSchool('{{ school.id }}', 'waitlist', '{{ edit_url }}')">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2 col-md-4 col-6 mb-2">
+                                            <strong>
+                                                {% if school.acceptance %}
+                                                    {% if school.acceptance.date() > today.date() %}
+                                                        <i class="bi bi-exclamation-circle-fill text-warning" data-bs-toggle="tooltip" data-bs-placement="top" title="This date is in the future"></i>
+                                                    {% endif %}
+                                                {% endif %}Accepted:
+                                            </strong><br>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control datepicker" id="acceptance_{{ school.id }}" placeholder="-" value="{%- if school.acceptance -%}{{ school.acceptance.strftime('%m/%d/%y') }}{%- endif -%}" name="acceptance-{{school.id}}" onchange="editSchool('{{ school.id }}', 'acceptance', '{{ edit_url }}')">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2 col-md-4 col-6 mb-2">
+                                            <strong>
+                                                {% if school.withdrawn %}
+                                                    {% if school.withdrawn.date() > today.date() %}
+                                                        <i class="bi bi-exclamation-circle-fill text-warning" data-bs-toggle="tooltip" data-bs-placement="top" title="This date is in the future"></i>
+                                                    {% endif %}
+                                                {% endif %}Withdrawn:
+                                            </strong><br>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control datepicker" id="withdrawn_{{ school.id }}" placeholder="-" value="{%- if school.withdrawn -%}{{ school.withdrawn.strftime('%m/%d/%y') }}{%- endif -%}" name="withdrawn-{{school.id}}" onchange="editSchool('{{ school.id }}', 'withdrawn', '{{ edit_url }}')">
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <details {% if school.note %}open{% endif %}>
+                                                <summary><strong>Notes:</strong></summary>
+                                                <textarea class="form-control" type="text" data-cycle="{{cycle.cycle_year}}" id="note_{{ school.id }}" name="note_{{school.id}}" onkeyup="submitNote('{{ school.id }}', '{{ edit_url }}')">{% if school.note %}{{ school.note }}{% endif %}</textarea>
+                                            </details>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </li>
+
+
+                {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- ADD SCHOOL MENU -->
+<div class="modal fade" id="add-schools-modal" tabindex="-1" aria-labelledby="add-schools-modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="POST" action="{{ url_for('dashboard.add_schools') }}">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Schools</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <select class="form-select" aria-label="Choose School Type" id="school_picker" onchange="displaySchools()">
+                        <option disabled selected>Choose School Type</option>
+                        <option value="md">MD</option>
+                        <option value="do">DO</option>
+                        <option value="mdphd">MD-PhD</option>
+                        <option value="dophd">DO-PhD</option>
+                    </select>
+                    <input class="form-control my-2 d-none" type="search" placeholder="Search" aria-label="Search" id="search_schools" onkeyup="searchAdd()">
+                    <div id="md_schools" class="overflow-y-scroll my-2 d-none" style="height: 60vh">
+                        <table class="table">
+                            {% for profile in md_profiles %}
+                                <tr class="school_listing" id="{{ profile.school }} {{ profile.intermediate_name }} {{ profile.official_name }}">
+                                    <td class="my-0 py-1"><img src="{{ url_for('static', filename='images/school_logos/' + profile.logo_file_name) }}" style="max-width:50px;max-height:50px" width="auto" height="100%"></td>
+                                    <td class="my-0 py-1">
+                                        <p class="my-0 py-0">{{ profile.intermediate_name }}</p>
+                                        <p class="my-0 py-0">
+                                            <div class="form-check">
+                                                {% set string_to_check = profile.school_id|string + '-False' %}
+                                                <input class="form-check-input" id="{{ profile.school_id }}_False" type="checkbox" value="true" {%if string_to_check in program_checker %}checked disabled="true"{% else %}onclick="addSchool('{{ string_to_check }}')"{% endif %}>
+                                                <label class="form-check-label" for="{{ profile.school_id }}_False">Add to School List</label>
+                                            </div>
+                                        </p>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                    <div id="do_schools" class="overflow-y-scroll my-2 d-none" style="height: 60vh">
+                        <table class="table">
+                            {% for profile in do_profiles %}
+                                <tr class="school_listing" id="{{ profile.school }} {{ profile.intermediate_name }} {{ profile.official_name }}">
+                                    <td class="my-0 py-1"><img src="{{ url_for('static', filename='images/school_logos/' + profile.logo_file_name) }}" style="max-width:50px;max-height:50px" width="auto" height="100%"></td>
+                                    <td class="my-0 py-1">
+                                        <p class="my-0 py-0">{{ profile.intermediate_name }}</p>
+                                        <p class="my-0 py-0">
+                                            <div class="form-check">
+                                                {% set string_to_check = profile.school_id|string + '-False' %}
+                                                <input class="form-check-input" id="{{ profile.school_id }}_False" type="checkbox" value="true" {%if string_to_check in program_checker %}checked disabled="true"{% else %}onclick="addSchool('{{ string_to_check }}')"{% endif %}>
+                                                <label class="form-check-label" for="{{ profile.school_id }}_False">Add to School List</label>
+                                            </div>
+                                        </p>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                    <div id="mdphd_schools" class="overflow-y-scroll my-2 d-none" style="height: 60vh">
+                        <table class="table">
+                            {% for profile in mdphd_profiles %}
+                                <tr class="school_listing" id="{{ profile.school }} {{ profile.intermediate_name }} {{ profile.official_name }}">
+                                    <td class="my-0 py-1"><img src="{{ url_for('static', filename='images/school_logos/' + profile.logo_file_name) }}" style="max-width:50px;max-height:50px" width="auto" height="100%"></td>
+                                    <td class="my-0 py-1">
+                                        <p class="my-0 py-0">{{ profile.intermediate_name }}</p>
+                                        <p class="my-0 py-0">
+                                            <div class="form-check">
+                                                {% set string_to_check = profile.school_id|string + '-True' %}
+                                                <input class="form-check-input" id="{{ profile.school_id }}_True" type="checkbox" value="true" {%if string_to_check in program_checker %}checked disabled="true"{% else %}onclick="addSchool('{{ string_to_check }}')"{% endif %}>
+                                                <label class="form-check-label" for="{{ profile.school_id }}_True">Add to School List</label>
+                                            </div>
+                                        </p>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                    <div id="dophd_schools" class="overflow-y-scroll my-2 d-none" style="height: 60vh">
+                        <table class="table">
+                            {% for profile in dophd_profiles %}
+                                <tr class="school_listing" id="{{ profile.school }} {{ profile.intermediate_name }} {{ profile.official_name }}">
+                                    <td class="my-0 py-1"><img src="{{ url_for('static', filename='images/school_logos/' + profile.logo_file_name) }}" style="max-width:50px;max-height:50px" width="auto" height="100%"></td>
+                                    <td class="my-0 py-1">
+                                        <p class="my-0 py-0">{{ profile.intermediate_name }}</p>
+                                        <p class="my-0 py-0">
+                                            <div class="form-check">
+                                                {% set string_to_check = profile.school_id|string + '-True' %}
+                                                <input class="form-check-input" id="{{ profile.school_id }}_True" type="checkbox" value="true" {%if string_to_check in program_checker %}checked disabled="true"{% else %}onclick="addSchool('{{ string_to_check }}')"{% endif %}>
+                                                <label class="form-check-label" for="{{ profile.school_id }}_True">Add to School List</label>
+                                            </div>
+                                        </p>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <input type="hidden" id="cycle_id" name="cycle_id" value="{{ cycle.id }}"/>
+                    <input type="hidden" id="added_schools" name="added_schools" value=""/>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- REMOVE SCHOOL WARNINGS -->
+{% for school, profile in schools %}
+<div class="modal fade" id="delete_{{ school.id }}" tabindex="-1" aria-labelledby="delete_{{ school.id }}" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="POST">
+                <div class="modal-header">
+                    <h5 class="modal-title">Remove {{ school.name }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                        <div style="padding: 10px;">
+                            Are you sure you want to delete <strong>{{ school.name }} ({{ school.school_type }}{% if school.phd %}-PhD{% endif %})</strong> from your list?
+                            Deleting it is <strong>permanent</strong>. You will need to re-add {{ school.name }}
+                            ({{ school.school_type }}{% if school.phd %}-PhD{% endif %}) and any
+                            associated information if you change your mind.
+                        </div>
+                    </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    {% set del_url = url_for('dashboard.delete_school') %}
+                    <button type="button" class="btn btn-danger"
+                            onclick="deleteSchool({{ school.id }}, '{{ del_url }}', '{{ profile.school_id }}', '{{ school.phd }}')" data-bs-dismiss="modal">Delete School
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+<!-- MINI EXPLORER -->
+<div class="modal modal-lg fade" id="mini_explorer" tabindex="-1" aria-labelledby="mini_explorer" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="mini_explorer_title"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div style="padding: 10px;">
+                        <h5 class="curr_cycle_status mini_explorer_graph_area">{{ current_cycle - 1 }}-{{ (current_cycle|string)[-2:] }} Cycle Status</h5>
+                        <div class="curr_cycle_status mini_explorer_graph_area graph_image" id="mini_cycle_status_curr"></div>
+
+                        <h5 class="prev_cycle_status mini_explorer_graph_area d-none">{{ current_cycle -2 }}-{{ ((current_cycle - 1)|string)[-2:] }} Cycle</h5>
+                        <div class="prev_cycle_status mini_explorer_graph_area graph_image d-none" id="mini_cycle_status_prev"></div>
+
+                        <p>Our graphs are interactive! Click and drag your mouse across the graph to zoom in. Double
+                            click to zoom out. Click on a status in the legend to hide it, or double-click to highlight
+                            only that status.</p>
+
+                        <button class="btn btn-primary mx-1 my-1" style="border-radius: 0" onclick="switchGraph('curr_cycle')">Current Cycle Data</button>
+                        <button class="btn btn-primary mx-1 my-1" style="border-radius: 0" onclick="switchGraph('prev_cycle')">Previous Cycle Data</button>
+                        <a href="" class="btn btn-success mx-1 my-1" style="border-radius: 0" id="explorer_link_button">Explore All Data</a>
+                    </div>
+                </div>
+        </div>
+    </div>
+</div>
+
+<!-- SECONDARY COST MODAL -->
+{% if schools_to_add_secondary_cost|length > 0%}
+<div class="modal fade" id="add-cost-modal" tabindex="-1" aria-labelledby="add-cost-modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="POST" action="{{ url_for('dashboard.submit_cost') }}" id="submitCostForm">
+                <div class="modal-header">
+                    <h5 class="modal-title">Secondary Costs</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Please enter the cost of the secondary application as an integer (e.g. 100 rather than $100).
+                        If you qualified for fee assistance at a school, please skip the school or enter the price it
+                        would have cost without it.</p>
+                    <p>Enter as many or few costs as you would like. We (and future applicants) greatly thank you!</p>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <td>School</td>
+                                <td class="float-end" style="width: 100%">Secondary Cost ($)</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for index, school in schools_to_add_secondary_cost.iterrows() %}
+                            <tr>
+                                <td>
+                                    {% if school['type'] == 'Reg_to_PhD' %}
+                                    You applied to {{ school['name'] }} as {{ school['prog_type'] }}-PhD and
+                                    regular {{ school['prog_type'] }}. What was the additional cost of applying to the
+                                    regular
+                                    {{ school['prog_type'] }} program? If no additional cost, enter 0.
+                                    {% else %}
+                                    {{ school['name'] }} ({{ school['prog_type'] }}{% if school['type'] == 'PhD'
+                                    %}-PhD{% endif %})
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <input type="text" name="cost-{{ school['school_id'] }}-{{ school['type'] }}"
+                                           id="cost-{{ school['school_id'] }}-{{ school['type'] }}" class="modalinput w-100"/>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <input type="hidden" name="cycle_year" id="cycle_year" value="{{ cycle.cycle_year }}" />
+                    {% set cost_url = url_for('dashboard.submit_cost') %}
+                    <button class="btn btn-primary" data-bs-dismiss="modal" onclick="submitCost('{{ cost_url }}')">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- SECONDARY ESSAY ORDER -->
+{% if cycle.schools|length > 0 %}
+<div class="modal fade" id="secondary-order-modal" tabindex="-1" aria-labelledby="secondary-order-modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="POST">
+                <div class="modal-header">
+                    <h5 class="modal-title">Secondary Essay Optimization</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <details>
+                        <summary class="h5">About This Tool</summary>
+                        <p>
+                            Submitting secondary applications in a timely manner is hard. This tool uses historic data
+                            to find the <a href="#" data-bs-toggle="tooltip"
+                                           title="Example: Imagine today is 7/8 and the next interview invitation (based on historic data) for a school was on 7/31. The suggested deadline to complete your application by is the latest application complete date out of all of the applicants who received an interview on 7/31."
+                                           style="color:black;text-decoration-style:dotted">
+                            latest date by which a completed application was included in the next interview
+                            invitation pool</a>. It is unique to your school list.
+                        </p>
+                        <p>
+                            By combining your individual school list with historic data, this tool is meant to provide
+                            a <strong>suggested order in which to complete applications</strong>. It will automatically
+                            update as you track data in the school list.
+                        </p>
+                    </details>
+                    <hr>
+                    {% if missing_hard_delay_cutoff|length > 0 %}
+                    <div id="hard_deadlines_entry">
+                        <p>
+                            This message only appears when you have recorded that you received new secondaries.
+                        </p>
+                        <p>
+                            Some schools have a <strong>strict deadline</strong> regarding the amount of time in which you
+                            can submit your application. If any of the following school(s) have such a deadline, enter the
+                            number of days in which the essays are due (e.g. enter 14 for 14 days). Otherwise, leave the
+                            box empty and click submit at the bottom of this pop-up. After submitting, please re-open
+                            the pop-up for an updated order.
+                        </p>
+                        <table class="table">
+                            {% for school in missing_hard_delay_cutoff %}
+                                <tr>
+                                    <td>{{ school.name }} ({{ school.school_type }}{%if school.phd %}-PhD{% endif %})</td>
+                                    <td><input type="text" name="hard_delay_collect-{{ school.id }}" id="hard_delay_collect-{{ school.id }}" class="modalinput text-center"/></input></td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                    <hr>
+                    {% endif %}
+                    {% if edit_hard_delay_cutoff|length > 0 %}
+                    <details>
+                        <summary class="h5">Edit Mandatory Submission Deadline</summary>
+                        <p>You may edit any mandatory submission deadlines using the table below. Enter the number of days
+                        for the deadline as integer (e.g. 14 <u>not</u> 14 days). Skip any schools without a hard deadline.</p>
+                        <table class="table">
+                            {% for school in edit_hard_delay_cutoff %}
+                                <tr>
+                                    <td>{{ school.name }} ({{ school.school_type }}{%if school.phd %}-PhD{% endif %})</td>
+                                    <td><input type="text" name="hard_delay_collect-{{ school.id }}" id="hard_delay_collect-{{ school.id }}" class="modalinput text-center" value="{% if school.hard_secondary_submission_days > 0 %}{{ school.hard_secondary_submission_days }}{% endif %}"/></input></td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </details>
+                    <hr>
+                    {% endif %}
+                    <div id="secondary_order_output">
+                        <p>The following is a recommended order in which to submit your secondary essays based on historic
+                        data. <strong>Bolded lines are applications which are <u>mandatory</u> to submit based on
+                        the deadline you have entered</strong>. Unbolded dates are not hard requirements, and are
+                        purely suggested based on the <a href="#" data-bs-toggle="tooltip"
+                                                                   title="Example: Imagine today is 7/8 and the next interview invitation (based on historic data) for a school was on 7/31. The suggested deadline to complete your application by is the latest application complete date out of all of the applicants who received an interview on 7/31."
+                                                                   style="color:black;text-decoration-style:dotted">
+                                last application submission in the previous cycle that yielded
+                        the next interview if it were to occur in the current year</a>. Dates are provided
+                        with a <a href="#" data-bs-toggle="tooltip"
+                                                                   title="Example: If today is 7/8 and the recommended submission date for the next historic interview for a school was 7/5, a new recommended submission date will be calculated after 7/9."
+                                                                   style="color:black;text-decoration-style:dotted">4 day margin of error before recalculating</a>.</p>
+                        <p><i>*Note: We recommend completing all applications as soon as possible. This order is a
+                            data-informed suggestion for how to organize your time.</i></p>
+
+                        {% if secondary_suggestion_order is not none%}
+                            {% if secondary_suggestion_order|length > 0 %}
+                            <table class="table">
+                                <thead>
+                                    <tr style="font-weight:bold">
+                                        <td>#</td>
+                                        <td>School</td>
+                                        <td>Date</td>
+                                    </tr>
+                                </thead>
+                            {% for index, row in secondary_suggestion_order.iterrows()%}
+                                <tr {% if row["hard_soft"] == "hard" %} style="font-weight:bold" {% endif %}>
+                                    <td>{{ index + 1 }}</td>
+                                    <td><a href="#" data-bs-toggle="tooltip"
+                                               title="{{ row['profile'].official_name }}"
+                                               style="color:black;text-decoration-style:dotted">{{ row["school"].name }} ({{  row["profile"].md_or_do }}{%if row["school"].phd %}-PhD{% endif %})</a></td>
+                                    <td>{% if row["hard_soft"] == "soft" %}~{% endif %}{{ row["recommended_submission"] }}</td>
+                                </tr>
+                            {% endfor %}
+                            </table>
+                            {% else %}
+                            <br /><br />
+                            {% endif %}
+                        {% endif %}
+                        {% if secondary_suggestion_unknown is not none %}
+                            {% if secondary_suggestion_unknown|length > 0%}
+                            <p>
+                                <strong>We do not have enough data to provide suggestions for:</strong> {% for index, row in secondary_suggestion_unknown.iterrows() %}{% if index != 0 %}, {% endif %}{{ row["school"].name }} ({{ row["profile"].md_or_do }}{%if row["school"].phd %}-PhD{% endif %}){% endfor %}
+                            </p>
+                            {% endif %}
+                        {% endif %}
+
+                        <p class="container" style="padding: 10px; margin-top: 5px; margin-bottom:5px; background-color: #ffe9ad" >
+                            As this is a new tool, it may still have some bugs. If something doesn't look right, please
+                            submit a <a href="{{ url_for('dashboard.suggestions') }}">bug report</a>.</p>
+
+                        <small><i>CycleTrack does not guarantee the accuracy of this tool. The information
+                                presented is purely a suggestion based on users' self-reported data from the previous
+                                cycle.</i></small>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    {% if missing_hard_delay_cutoff|length > 0 or edit_hard_delay_cutoff|length > 0%}
+                        <input type="hidden" name="cycle_id" id="cycle_id" value="{{ cycle.id }}">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    {% endif %}
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<script src="{{ url_for('static', filename='js/list.js') }}?v=07252024"></script>
+<script>displaySchools(); filterSchools()</script>
+{% endblock %}

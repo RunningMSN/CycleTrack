@@ -392,7 +392,6 @@ function toggleCancel() {
                             <a href="{{ url_for('explorer.explorer_home') }}/school/{{ profile.school }}" class="btn btn-link normal_list" style="padding: 1px">
                                 <span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="View School Explorer"><i class="bi bi-search fs-5"></i></span>
                             </a>
-
                             <button type="button" class="btn btn-link normal_list" data-bs-toggle="modal" data-bs-target="#mini_explorer" style="padding: 1px" onclick="mini_explore('{{ school.school_id }}', '{{ school.phd }}', '{{ profile.school }}', '{{ profile.intermediate_name }}', '{{ profile.md_or_do }}', '{{ url_for('''static''', filename='''explorer_graphs''')}}', '{{ url_for('''explorer.explorer_home''')}}')" >
                                 <span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="View School Graphs"><i class="bi bi-bar-chart-line-fill fs-5"></i></span>
                             </button>
@@ -400,15 +399,6 @@ function toggleCancel() {
                                 <span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Delete School"><i class="bi bi-trash fs-5"></i></span>
                             </button>
                         </div>
-                        <!-- MOST RECENT DATA -->
-                        {% if cycle.cycle_year == curr_cycle %}
-                            <div id="most_recent" class="my-1" style="font-size: 85%">
-                                Most Recent: <br />
-                                <a href="#" data-bs-toggle="tooltip" title="Most recent reported interview invitation." style="color:black;text-decoration-style:dotted;" >II: {% if most_recent[school.name]["interview"]%}{{most_recent[school.name]["interview"]}}{% else %}None{% endif %}</a><br>
-                                <a href="#" data-bs-toggle="tooltip" title="Most recent reported waitlist." style="color:black;text-decoration-style:dotted;">WL: {% if most_recent[school.name]["waitlist"] %}{{most_recent[school.name]["waitlist"]}}{% else %}None{% endif %}</a><br>
-                                <a href="#" data-bs-toggle="tooltip" title="Most recent reported acceptance." style="color:black;text-decoration-style:dotted;">A: {% if most_recent[school.name]["acceptance"]%}{{most_recent[school.name]["acceptance"]}}{% else %}None{% endif %}</a>
-                            </div>
-                        {% endif %}
                 </div>
 
                 <!-- SCHOOL TEXT AREA ON RIGHT -->
@@ -420,6 +410,15 @@ function toggleCancel() {
                     <a class="bulk_list d-none" style="color:black;text-decoration: none">
                         <h5>{{ profile.intermediate_name }} ({{ profile.md_or_do }}{% if school.phd %}-PhD{% endif %})</h5>
                     </a>
+                    <!-- MOST RECENT DATA -->
+                    {% if cycle.cycle_year == curr_cycle %}
+                        <div id="most_recent" class="my-1" style="font-size: 95%">
+                            Most Recent:
+                            <a href="#" data-bs-toggle="tooltip" title="Most recent reported interview invitation." style="color:black;text-decoration-style:dotted;" >II: {% if most_recent[school.name]["interview"]%}{{most_recent[school.name]["interview"]}}{% else %}None{% endif %}</a>,
+                            <a href="#" data-bs-toggle="tooltip" title="Most recent reported waitlist." style="color:black;text-decoration-style:dotted;">WL: {% if most_recent[school.name]["waitlist"] %}{{most_recent[school.name]["waitlist"]}}{% else %}None{% endif %}</a>,
+                            <a href="#" data-bs-toggle="tooltip" title="Most recent reported acceptance." style="color:black;text-decoration-style:dotted;">A: {% if most_recent[school.name]["acceptance"]%}{{most_recent[school.name]["acceptance"]}}{% else %}None{% endif %}</a>
+                        </div>
+                    {% endif %}
                     <div class="row">
                         {% if not profile.country == 'CAN' %}
                         <div class="col-lg-2">
@@ -595,7 +594,6 @@ function toggleCancel() {
                                 <p style="white-space:pre-wrap; word-wrap:break-word">{{ school.note }}</p>
                             </details>
                         </span>
-                        
                     </div>
                     {% endif %}
                     <div class="row" style="padding-top: 10px">

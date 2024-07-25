@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, flash, jsonify, redirect, url_for, Response, Markup, escape
+from flask import Blueprint, render_template, request, flash, jsonify, redirect, url_for, Response, Markup, escape, render_template_string
 from flask_login import current_user, login_required
 from . import db, form_options, mail
 from .models import Cycle, School, School_Profiles_Data, Courses, User_Profiles, School_Stats, Secondary_Costs
@@ -10,6 +10,7 @@ from .visualizations import dot, line, bar, sankey, map, gpa_graph, horz_bar
 import pandas as pd
 from .helpers import import_list_funcs, categorize_stats, gpa_calculators, combine_app_types
 from flask_mail import Message
+from sqlalchemy import func
 
 dashboard = Blueprint('dashboard', __name__)
 
@@ -234,10 +235,354 @@ def cycles():
                            race_ethnicity_options=form_options.RACE_ETHNICITY_OPTIONS,
                            state_options=form_options.STATE_OPTIONS, empty_cycles=", ".join(empty_cycles))
 
+@dashboard.route('/edit-school', methods=['POST'])
+def edit_school():
+    school_id = request.form.get("school_id")
+    action = request.form.get("action")
+    data = request.form.get("data")
+    if action != "note":
+        try:
+            date = datetime.strptime(data, '%m/%d/%y')
+        except ValueError:
+            date = None
+    school = School.query.get(school_id)
+
+    if school:
+        if school.user_id == current_user.id:
+            if action == 'primary':
+                school.primary = date
+            elif action == 'secondary':
+                school.secondary_received = date
+            elif action == 'complete':
+                school.application_complete = date
+            elif action == 'hold':
+                school.pre_int_hold = date
+            elif action == 'int_received':
+                school.interview_received = date
+            elif action == 'int_date':
+                school.interview_date = date
+            elif action == 'rejection':
+                school.rejection = date
+            elif action == 'waitlist':
+                school.waitlist = date
+            elif action == 'acceptance':
+                school.acceptance = date
+            elif action == 'withdrawn':
+                school.withdrawn = date
+            elif action == 'note':
+                school.note = data
+            db.session.commit()
+            return jsonify({})
+    else:
+        return jsonify({})
+
+@dashboard.route('/add-schools', methods=['POST'])
+def add_schools():
+    cycle_id = request.form.get('cycle_id')
+    added_schools = request.form.get('added_schools').split(",")
+    for school in added_schools:
+        school_id = school.split("-")[0]
+        if (school.split("-")[1] == "True"):
+            phd = True
+        else:
+            phd = False
+
+        school = School.query.filter_by(school_id=school_id, cycle_id=cycle_id, phd=phd).first()
+        if (not school):
+            school_profile = School_Profiles_Data.query.filter_by(school_id=school_id).first()
+            db.session.add(
+                School(name=school_profile.school, cycle_id=cycle_id, user_id=current_user.id, phd=phd,
+                       school_type=school_profile.md_or_do, school_id=school_id))
+            db.session.commit()
+
+    return render_template_string('''
+            <form id="redirectForm" action="{{ url_for('dashboard.lists') }}" method="POST">
+                <input type="hidden" name="cycle_id" value="{{ cycle_id }}">
+            </form>
+            <script type="text/javascript">
+                document.getElementById("redirectForm").submit();
+            </script>
+        ''', cycle_id=cycle_id)
+
+@dashboard.route('/submit-cost', methods=['POST'])
+def submit_cost():
+    cycle_year = request.form.get("cycle_year")
+    for item in request.form:
+        if item.startswith("cost-"):
+            school_details = item.split('-')
+            secondary_cost = Secondary_Costs.query.filter_by(school_id=school_details[1],
+                                                             cycle_year=cycle_year).first()
+            try:
+                value = int(request.form.get(item))
+            except Exception:
+                value = None
+
+            if (value is not None) and (not current_user.id in secondary_cost.contributors.split(',')):
+                secondary_cost.contributors += f"{current_user.id},"
+                if school_details[2] == 'Reg':
+                    if secondary_cost.reg_cost == value:
+                        secondary_cost.reg_cost_confirmed = True
+                    else:
+                        secondary_cost.reg_cost = value
+                elif school_details[2] == 'PhD':
+                    if secondary_cost.phd_cost == value:
+                        secondary_cost.phd_cost_confirmed = True
+                    else:
+                        secondary_cost.phd_cost = value
+                elif school_details[2] == 'Reg_to_PhD':
+                    if secondary_cost.reg_to_phd == value:
+                        secondary_cost.reg_to_phd_confirmed = True
+                    else:
+                        secondary_cost.reg_to_phd = value
+                db.session.commit()
+    return jsonify({})
 
 @dashboard.route('/list', methods=['GET', 'POST'])
 @login_required
 def lists():
+    # If GET request then did not provide a school
+    if request.method == 'GET':
+        if len(current_user.cycles) > 1:
+            flash('Please select a cycle before viewing your school list.', category='error')
+            return redirect(url_for('dashboard.cycles'))
+        elif len(current_user.cycles) == 0:
+            flash('Please add a cycle first.', category='error')
+            return redirect(url_for('dashboard.cycles'))
+        else:
+            cycle_id = current_user.cycles[0].id
+    # If POST then grab cycle ID
+    else:
+        cycle_id = request.form.get('cycle_id')
+
+    # Get cycle
+    cycle = Cycle.query.filter_by(id=cycle_id).first()
+    # Get list of schools in cycle combined with their profile data
+    schools = db.session.query(School, School_Profiles_Data).filter(School.cycle_id == cycle_id) \
+        .join(School, School.name == School_Profiles_Data.school).order_by(School.rejection.asc(),
+                                                                           School.withdrawn.asc(),
+                                                                           School.acceptance.asc(), School.name.asc())
+    # Identify specific program types for adding to school list
+    md_profiles = School_Profiles_Data.query.filter(School_Profiles_Data.md_or_do == 'MD').order_by(School_Profiles_Data.intermediate_name).all()
+    do_profiles = School_Profiles_Data.query.filter(School_Profiles_Data.md_or_do == 'DO').order_by(School_Profiles_Data.intermediate_name).all()
+    mdphd_profiles = School_Profiles_Data.query.filter(
+        School_Profiles_Data.md_or_do == 'MD',
+        School_Profiles_Data.phd_website.isnot(None),
+        func.length(School_Profiles_Data.phd_website) > 0
+    ).order_by(School_Profiles_Data.intermediate_name).all()
+    dophd_profiles = School_Profiles_Data.query.filter(
+        School_Profiles_Data.md_or_do == 'DO',
+        School_Profiles_Data.phd_website.isnot(None),
+        func.length(School_Profiles_Data.phd_website) > 0
+    ).order_by(School_Profiles_Data.intermediate_name).all()
+
+    # Checker for seeing which schools a person already has added
+    program_checker = [str(school.school_id) + "-" + str(school.phd) for school, profile in schools]
+
+    # Check if PhD applicant for message about MD/DO-only consideration
+    if School.query.filter_by(cycle_id=cycle.id, phd=True).first():
+        phd_applicant = True
+    else:
+        phd_applicant = False
+
+    # Get program types
+    program_types_set = set()
+    for school, profile in schools:
+        if school.school_type == 'MD' and school.phd:
+            program_types_set.add('MD-PhD')
+        elif school.school_type == 'DO' and school.phd:
+            program_types_set.add('DO-PhD')
+        elif school.school_type == 'MD' and not school.phd:
+            program_types_set.add('MD')
+        elif school.school_type == 'DO' and not school.phd:
+            program_types_set.add('DO')
+
+    # Check if there are schools person can add secondary cost to
+    school_ids = [school.school_id for school, profile in schools]
+    secondary_costs = {cost.school_id: cost for cost in Secondary_Costs.query.filter(
+        Secondary_Costs.school_id.in_(school_ids),
+        Secondary_Costs.cycle_year == cycle.cycle_year
+    ).all()}
+    # Fetch phd_check and reg_check data
+    phd_checks = {school.school_id: school for school in School.query.filter(
+        School.school_id.in_(school_ids),
+        School.phd == True,
+        School.cycle_id == cycle.id
+    ).all()}
+    reg_checks = {school.school_id: school for school in School.query.filter(
+        School.school_id.in_(school_ids),
+        School.phd == False,
+        School.cycle_id == cycle.id
+    ).all()}
+
+    # List to collect new rows
+    new_rows = []
+    for school, profile in schools:
+        # Check if cost entry exists, if not create one
+        secondary_cost = secondary_costs.get(school.school_id)
+        if not secondary_cost:
+            secondary_cost = Secondary_Costs(school_id=school.school_id, cycle_year=cycle.cycle_year,
+                                             contributors="")
+            db.session.add(secondary_cost)
+            db.session.commit()
+            secondary_costs[school.school_id] = secondary_cost  # Update the dictionary
+
+        # Check if user has contributed to cost entry already
+        cost_contributors = secondary_cost.contributors.split(',')
+        if str(current_user.id) not in cost_contributors:
+            if school.phd and not secondary_cost.phd_cost_confirmed and school.application_complete:
+                new_rows.append({'school_id': school.school_id, 'name': school.name, 'type': 'PhD',
+                                 'prog_type': school.school_type})
+
+                # Check for concurrent application to 2 programs
+                reg_check = reg_checks.get(school.school_id)
+                if reg_check and not secondary_cost.reg_to_phd_confirmed and reg_check.application_complete:
+                    new_rows.append({'school_id': school.school_id, 'name': school.name, 'type': 'Reg_to_PhD',
+                                     'prog_type': school.school_type})
+            else:
+                # Ensure no PhD application
+                phd_check = phd_checks.get(school.school_id)
+                if not phd_check and not secondary_cost.reg_cost_confirmed and school.application_complete:
+                    new_rows.append({'school_id': school.school_id, 'name': school.name, 'type': 'Reg',
+                                     'prog_type': school.school_type})
+
+    # Create df from the collected rows
+    schools_to_add_secondary_cost = pd.DataFrame(new_rows, columns=['school_id', 'name', 'type', 'prog_type'])
+
+    # Most recent information and secondary optimization
+    missing_hard_delay_cutoff = []
+    edit_hard_delay_cutoff = []
+    secondary_submission_order = {"school": [], "profile": [], "hard_soft": [], "recommended_submission": []}
+
+    if cycle.cycle_year == form_options.VALID_CYCLES[0]:
+        # Fetch all necessary data in a single query
+        school_ids = [school[1].school_id for school in schools]
+        school_stats_list = School_Stats.query.filter(School_Stats.school_id.in_(school_ids)).all()
+        school_stats_dict = {stat.school_id: stat for stat in school_stats_list}
+
+        dates = {}
+        for school in schools:
+            school_id = school[1].school_id
+            school_stats = school_stats_dict.get(school_id)
+            name = school[0].name
+            dates[name] = {}
+
+            if school[0].phd:
+                dates[name]['interview'] = school_stats.phd_interview_date.strftime(
+                    "%m/%d") if school_stats and school_stats.phd_interview_date else None
+                dates[name]['waitlist'] = school_stats.phd_waitlist_date.strftime(
+                    "%m/%d") if school_stats and school_stats.phd_waitlist_date else None
+                dates[name]['acceptance'] = school_stats.phd_acceptance_date.strftime(
+                    "%m/%d") if school_stats and school_stats.phd_acceptance_date else None
+                if not school_stats or (
+                        not school_stats.phd_interview_date and not school_stats.phd_waitlist_date and not school_stats.phd_acceptance_date):
+                    dates[name] = None
+            else:
+                dates[name]['interview'] = school_stats.reg_interview_date.strftime(
+                    "%m/%d") if school_stats and school_stats.reg_interview_date else None
+                dates[name]['waitlist'] = school_stats.reg_waitlist_date.strftime(
+                    "%m/%d") if school_stats and school_stats.reg_waitlist_date else None
+                dates[name]['acceptance'] = school_stats.reg_acceptance_date.strftime(
+                    "%m/%d") if school_stats and school_stats.reg_acceptance_date else None
+                if not school_stats or (
+                        not school_stats.reg_interview_date and not school_stats.reg_waitlist_date and not school_stats.reg_acceptance_date):
+                    dates[name] = None
+
+        # Update any entered new hard deadlines
+        for item in request.form:
+            if item.startswith("hard_delay_collect-"):
+                school_details = item.split('-')
+                school_id = school_details[1]
+                edit_hard_deadline = School.query.get(school_id)
+
+                if edit_hard_deadline:
+                    try:
+                        edit_hard_deadline.hard_secondary_submission_days = int(
+                            request.form.get(item)) if request.form.get(item) else -1
+                    except ValueError:
+                        flash(
+                            'Your strict deadline must be entered as an integer number of days (e.g. enter 14 NOT 14 days).',
+                            category='error')
+
+        db.session.commit()
+
+        for school, profile in schools:
+            # Find missing hard deadlines
+            if school.secondary_received and not school.application_complete:
+                if not school.hard_secondary_submission_days:
+                    missing_hard_delay_cutoff.append(school)
+                elif school.hard_secondary_submission_days >= -1:
+                    edit_hard_delay_cutoff.append(school)
+
+            if school.application_complete:
+                continue
+
+            # Process list ordering
+            secondary_submission_order["school"].append(school)
+            secondary_submission_order["profile"].append(profile)
+
+            # Grab school stats entry
+            school_stats = school_stats_dict.get(school.school_id)
+
+            # Process if hard deadline
+            if school.hard_secondary_submission_days and school.hard_secondary_submission_days != -1:
+                deadline = school.secondary_received + timedelta(days=school.hard_secondary_submission_days)
+                secondary_submission_order["recommended_submission"].append(deadline)
+                secondary_submission_order["hard_soft"].append("hard")
+            else:
+                if school.phd == False:
+                    deadline = school_stats.last_complete_reg_for_ii if school_stats else None
+                else:
+                    deadline = school_stats.last_complete_phd_for_ii if school_stats else None
+
+                if deadline and deadline < datetime.today():
+                    deadline = datetime.today()
+                secondary_submission_order["recommended_submission"].append(deadline)
+                secondary_submission_order["hard_soft"].append("soft")
+
+        secondary_suggestion_order = pd.DataFrame(secondary_submission_order).sort_values(
+            by=["recommended_submission", "hard_soft"])
+
+        if len(secondary_suggestion_order) > 0:
+            if not secondary_suggestion_order["recommended_submission"].isnull().all():
+                secondary_suggestion_order["recommended_submission"] = pd.to_datetime(
+                    secondary_suggestion_order["recommended_submission"]).dt.strftime('%b %d')
+                secondary_suggestion_unknown = secondary_suggestion_order[
+                    secondary_suggestion_order["recommended_submission"].isnull()].reset_index(drop=True)
+                secondary_suggestion_order = secondary_suggestion_order.dropna(
+                    subset=["recommended_submission"]).reset_index(drop=True)
+            else:
+                secondary_suggestion_unknown = secondary_suggestion_order[
+                    secondary_suggestion_order["recommended_submission"].isnull()].reset_index(drop=True)
+                secondary_suggestion_order = secondary_suggestion_order.dropna(
+                    subset=["recommended_submission"]).reset_index(drop=True)
+        else:
+            secondary_suggestion_unknown = pd.DataFrame()
+    else:
+        dates = None
+        secondary_suggestion_order = None
+        secondary_suggestion_unknown = None
+
+
+
+    return render_template('lists_new.html', user=current_user, cycle=cycle, schools=schools,
+                           md_profiles=md_profiles, do_profiles=do_profiles, mdphd_profiles=mdphd_profiles,
+                           dophd_profiles=dophd_profiles, program_checker=program_checker, phd_applicant=phd_applicant,
+                           program_types=program_types_set, today=datetime.today(),
+                           schools_to_add_secondary_cost=schools_to_add_secondary_cost,
+                           current_cycle=form_options.VALID_CYCLES[0], most_recent=dates,
+                           missing_hard_delay_cutoff=missing_hard_delay_cutoff,
+                           secondary_suggestion_order=secondary_suggestion_order,
+                           secondary_suggestion_unknown=secondary_suggestion_unknown,
+                           edit_hard_delay_cutoff=edit_hard_delay_cutoff)
+
+
+
+
+
+
+@dashboard.route('/list_old', methods=['GET', 'POST'])
+@login_required
+def lists_old():
     # If GET request then did not provide a school
     if request.method == 'GET':
         if len(current_user.cycles) > 1:
@@ -918,9 +1263,8 @@ def delete_cycle():
 
 @dashboard.route('/delete-school', methods=['POST'])
 def delete_school():
-    school = json.loads(request.data)
-    schoolId = school['schoolId']
-    school = School.query.get(schoolId)
+    school_id = request.form.get("school_id")
+    school = School.query.get(school_id)
     if school:
         if school.user_id == current_user.id:
             db.session.delete(school)
