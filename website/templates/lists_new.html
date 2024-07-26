@@ -184,7 +184,7 @@ $(document).ready(function(){
                                         Complete
                                     </div>
                                     <div class="text-center rounded px-3 w-100 {% if status != 'secondary' %}d-none{% endif %}" style="background-color: #00b4d8;" id="pipe_secondary_{{ school.id }}">
-                                        Secondary
+                                        Secondary{% if school.secondary_received %}{% set delay = (today - school.secondary_received)|format_days %}: <a data-bs-toggle="tooltip" title="Days since secondary received." style="color:black;text-decoration-style:dotted;">{{ delay }}d</a>{% endif %}
                                     </div>
                                     <div class="text-center rounded px-3 w-100 {% if status != 'primary' %}d-none{% endif %}" style="background-color: lightgray;" id="pipe_primary_{{ school.id }}">
                                         Applied
