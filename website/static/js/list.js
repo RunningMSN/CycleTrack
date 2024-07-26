@@ -45,12 +45,79 @@ function editSchool(schoolId, action, edit_url) {
         body: formData
     })
     .then(response => response.json())
-    .then(data => {
-        console.log('Success:', data);
+    .then(responseData => {
+        console.log('Success:', responseData);
+        var school_entry = document.getElementById(schoolId + "_item");
+        if (action != "note") {
+            if (data) {
+                updateStatus(school_entry, action, schoolId);
+            } else {
+                revertStatus(school_entry, schoolId);
+            }
+        }
     })
     .catch(error => {
         console.error('Error:', error);
     });
+}
+
+var statusHierarchy = [
+    "primary",
+    "secondary",
+    "complete",
+    "hold",
+    "interview",
+    "waitlist",
+    "rejection",
+    "withdrawn",
+    "acceptance"
+];
+
+function getCurrentStatus(element) {
+    for (let status of statusHierarchy) {
+        if (element.classList.contains(`status_${status}`)) {
+            return status;
+        }
+    }
+    return null;
+}
+
+function updateStatus(element, newStatus, schoolId) {
+    const currentStatus = getCurrentStatus(element);
+    if (currentStatus === null || statusHierarchy.indexOf(newStatus) > statusHierarchy.indexOf(currentStatus)) {
+        if (currentStatus !== null) {
+            element.classList.remove(`status_${currentStatus}`);
+            document.getElementById(`pipe_${currentStatus}_${schoolId}`).classList.add('d-none');
+        }
+        element.classList.add(`status_${newStatus}`);
+        document.getElementById(`pipe_${newStatus}_${schoolId}`).classList.remove('d-none');
+    }
+}
+
+function revertStatus(element, schoolId) {
+    const currentStatus = getCurrentStatus(element);
+
+    // Remove current status
+    if (currentStatus !== null) {
+        element.classList.remove(`status_${currentStatus}`);
+        document.getElementById(`pipe_${currentStatus}_${schoolId}`).classList.add('d-none');
+    }
+
+    // Find last status with data
+    let lastStatusWithData = null;
+    for (let status of statusHierarchy.slice().reverse()) {
+        let input = document.getElementById(`${status}_${schoolId}`);
+        if (input && input.value) {
+            lastStatusWithData = status;
+            break;
+        }
+    }
+
+    // Update to last status with data
+    if (lastStatusWithData !== null) {
+        element.classList.add(`status_${lastStatusWithData}`);
+        document.getElementById(`pipe_${lastStatusWithData}_${schoolId}`).classList.remove('d-none');
+    }
 }
 
 var added_schools = [];
@@ -66,7 +133,6 @@ function addSchool(school) {
     var added_schools_form = document.getElementById("added_schools");
     added_schools_form.value = added_schools;
 }
-
 
 function searchAdd() {
     var schoolListings = document.getElementsByClassName("school_listing");

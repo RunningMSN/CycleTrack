@@ -104,7 +104,7 @@ $(document).ready(function(){
                     <option value="secondary">Secondary Received</option>
                     <option value="complete">App Complete</option>
                     <option value="hold">Pre-Interview Hold</option>
-                    <option value="interview">Interviewed</option>
+                    <option value="interview">Interview</option>
                     <option value="rejection">Rejected</option>
                     <option value="waitlist">Waitlist</option>
                     <option value="acceptance">Accepted</option>
@@ -144,17 +144,18 @@ $(document).ready(function(){
                 </p>
                 <ul class="list-group ">
                 {% for school, profile in schools %}
+                    {% set status = 'none' %}
+                    {% if school.primary %}{% set status = 'primary' %}{% endif %}
+                    {% if school.secondary_received %}{% set status = 'secondary' %}{% endif %}
+                    {% if school.application_complete %}{% set status = 'complete' %}{% endif %}
+                    {% if school.pre_int_hold %}{% set status = 'hold' %}{% endif %}
+                    {% if school.interview_received %}{% set status = 'interview' %}{% endif %}
+                    {% if school.waitlist %}{% set status = 'waitlist' %}{% endif %}
+                    {% if school.rejection %}{% set status = 'rejection' %}{% endif %}
+                    {% if school.withdrawn %}{% set status = 'withdrawn' %}{% endif %}
+                    {% if school.acceptance %}{% set status = 'acceptance' %}{% endif %}
                     <li class="list-group-item school_entry type_{{ school.school_type }} {% if school.phd %}phd_true{% else %}phd_false{% endif %}
-                        status_{%if school.acceptance %}acceptance
-                        {% elif school.withdrawn%}withdrawn
-                        {% elif school.rejection%}rejection
-                        {% elif school.waitlist %}waitlist
-                        {% elif school.interview_received %}interview
-                        {% elif school.pre_int_hold %}hold
-                        {% elif school.application_complete %}complete
-                        {% elif school.secondary_received %}secondary
-                        {% elif school.primary %}primary
-                        {%endif%}" id="{{ school.id }}_item" style="position: relative;">
+                        status_{{status}}" id="{{ school.id }}_item" style="position: relative;">
                         <div class="row">
                             <div class="col-md-2 col-sm-12 d-flex flex-column align-items-center">
                                 <!-- LOGO -->
@@ -165,40 +166,30 @@ $(document).ready(function(){
 
                                 <!-- STATUS PIPE -->
                                 <div class="d-flex col-auto justify-content-center w-100 mt-2 mb-1">
-                                    {% if school.acceptance %}
-                                    <div class="text-center rounded px-3 w-100" style="background-color: #6af799">
+                                    <div class="text-center rounded px-3 w-100 {% if status != 'acceptance' %}d-none{% endif %}" style="background-color: #6af799;" id="pipe_acceptance_{{ school.id }}">
                                         <span style="margin-top: 3px; background-color: #6af799">Accepted</span>
                                     </div>
-                                    {% elif school.withdrawn %}
-                                    <div class="text-center rounded px-3 w-100" style="background-color: #d1d1d1">
+                                    <div class="text-center rounded px-3 w-100 {% if status != 'withdrawn' %}d-none{% endif %}" style="background-color: #d1d1d1;" id="pipe_withdrawn_{{ school.id }}">
                                         Withdrawn
                                     </div>
-                                    {% elif school.waitlist %}
-                                    <div class="text-center rounded px-3 w-100" style="background-color: #ffca80">
+                                    <div class="text-center rounded px-3 w-100 {% if status != 'waitlist' %}d-none{% endif %}" style="background-color: #ffca80;" id="pipe_waitlist_{{ school.id }}">
                                         Waitlist
                                     </div>
-                                    {% elif school.rejection %}
-                                    <div class="text-center rounded px-3 w-100" style="background-color: #ff8282">
+                                    <div class="text-center rounded px-3 w-100 {% if status != 'rejection' %}d-none{% endif %}" style="background-color: #ff8282;" id="pipe_rejection_{{ school.id }}">
                                         Rejected
                                     </div>
-                                    {% elif school.interview_received %}
-                                    <div class="text-center rounded px-3 w-100" style="background-color: #d9abff">
+                                    <div class="text-center rounded px-3 w-100 {% if status != 'interview' %}d-none{% endif %}" style="background-color: #d9abff;" id="pipe_interview_{{ school.id }}">
                                         Interview
                                     </div>
-                                    {% elif school.application_complete %}
-                                    <div class="text-center rounded px-3 w-100" style="background-color: #0077b6">
+                                    <div class="text-center rounded px-3 w-100 {% if status != 'complete' %}d-none{% endif %}" style="background-color: #0077b6;" id="pipe_complete_{{ school.id }}">
                                         Complete
                                     </div>
-                                    {% elif school.secondary_received %}
-                                    {% set delay = (today - school.secondary_received)|format_days %}
-                                    <div class="text-center rounded px-3 w-100" style="background-color: #00b4d8">
-                                        Secondary: <a href="#" data-bs-toggle="tooltip" title="Days since secondary received." style="color:black;text-decoration-style:dotted;">{{ delay }}d</a>
+                                    <div class="text-center rounded px-3 w-100 {% if status != 'secondary' %}d-none{% endif %}" style="background-color: #00b4d8;" id="pipe_secondary_{{ school.id }}">
+                                        Secondary
                                     </div>
-                                    {% elif school.primary %}
-                                    <div class="text-center rounded px-3 w-100" style="background-color: lightgray">
+                                    <div class="text-center rounded px-3 w-100 {% if status != 'primary' %}d-none{% endif %}" style="background-color: lightgray;" id="pipe_primary_{{ school.id }}">
                                         Applied
                                     </div>
-                                    {% endif %}
                                 </div>
 
                                 <!-- ACTION BUTTONS -->
@@ -298,7 +289,7 @@ $(document).ready(function(){
                                                 {% endif %}Interview <br />Received:
                                             </strong><br>
                                             <div class="form-group">
-                                                <input type="text" class="form-control datepicker" id="int_received_{{ school.id }}" placeholder="-" value="{%- if school.interview_received -%}{{ school.interview_received.strftime('%m/%d/%Y') }}{%- endif -%}" name="interview_received-{{school.id}}" onchange="editSchool('{{ school.id }}', 'int_received', '{{ edit_url }}')">
+                                                <input type="text" class="form-control datepicker" id="interview_{{ school.id }}" placeholder="-" value="{%- if school.interview_received -%}{{ school.interview_received.strftime('%m/%d/%y') }}{%- endif -%}" name="interview_received-{{school.id}}" onchange="editSchool('{{ school.id }}', 'interview', '{{ edit_url }}')">
                                             </div>
                                         </div>
                                         <div class="col-lg-2 col-md-4 col-6 mb-2">
@@ -739,6 +730,6 @@ $(document).ready(function(){
 </div>
 {% endif %}
 
-<script src="{{ url_for('static', filename='js/list.js') }}?v=07252024"></script>
+<script src="{{ url_for('static', filename='js/list.js') }}?v=07262024"></script>
 <script>displaySchools(); filterSchools()</script>
 {% endblock %}
