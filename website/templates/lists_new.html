@@ -110,14 +110,13 @@ $(document).ready(function(){
                     <option value="acceptance">Accepted</option>
                     <option value="withdrawn">Withdrawn</option>
                 </select>
-                {% if program_types|length > 1 %}
-                <select class="btn-md form-control text-center" id="program_select" style="width: 150px; margin: 3px; margin-right: 0px; position: relative; display:inline;" onchange="filterSchools()">
-                    <option>School Type</option>
+
+                <select class="btn-md form-control text-center {% if not program_types|length > 1 %}d-none{% endif %}" id="program_select" style="width: 150px; margin: 3px; margin-right: 0px; position: relative; display:inline;" onchange="filterSchools()">
+                    <option value="all">School Type</option>
                     {% for program in program_types %}
                     <option value="{{ program }}">{{ program }}</option>
                     {% endfor %}
                 </select>
-                {% endif %}
         </div>
         {% endif %}
     </div>
