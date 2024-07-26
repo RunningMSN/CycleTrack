@@ -1,9 +1,10 @@
 {% extends 'base.html' %}
 {% block title %} CycleTrack Profile {% endblock %}
 {% block additional_js %}
-<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
 {% endblock %}
 {% block content %}
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 <!-- Check privacy settings -->
 {% if not (public_setting or user.id == profile_user_id) %}
     <div class="container" style="padding-top:10px">
