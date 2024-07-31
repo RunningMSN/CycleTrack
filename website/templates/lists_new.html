@@ -124,10 +124,14 @@ $(document).ready(function(){
     <div class="row mb-2">
         {% if cycle.cycle_year == current_cycle and cycle.schools|length > 0  %}
         <div class="col-auto">
+            {% if no_primary|length > 0 %}
+            <a class="btn btn-outline-primary rounded normal_list" id="bulk-primary-button" data-bs-toggle="modal" data-bs-target="#bulk-primary" style="margin-left: 0px">
+                Quick-Add Primary Submission
+            </a>
+            {% endif %}
             <a class="btn btn-outline-primary rounded normal_list" data-bs-toggle="modal" data-bs-target="#secondary-order-modal" style="margin-left: 0px">
                 Essay Submission Optimization
             </a>
-
         </div>
         {% endif %}
     </div>
@@ -729,6 +733,45 @@ $(document).ready(function(){
 </div>
 {% endif %}
 
-<script src="{{ url_for('static', filename='js/list.js') }}?v=07262024"></script>
+<!-- BULK PRIMARY -->
+{% if no_primary|length > 0 %}
+<div class="modal fade" id="bulk-primary" tabindex="-1" aria-labelledby="bulk-primary" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Quick Primary Submission</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <p>
+                        Enter the date of your primary application submission and associated schools to quickly update
+                        your school list.
+                    </p>
+                    <div class="form-group">
+                        <input type="text" class="form-control datepicker" id="bulk-primary-date" name="bulk-primary-date" placeholder="Date of Primary Application Submission">
+                    </div>
+                    <div class="overflow-y-scroll my-2" style="max-height: 40vh">
+                        <h6>Select schools:</h6>
+                        {% for school in no_primary %}
+                            <div class="form-check">
+                                <input class="form-check-input bulk-primary-checkbox" id="{{ school.id }}-bulk-primary" type="checkbox" value="{{ school.id }}">
+                                <label class="form-check-label" for="{{ school.id }}-bulk-primary">{{ school.name }} ({{ school.school_type }}{% if school.phd %}-PhD{% endif %})</label>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                {% set edit_url = url_for('dashboard.edit_school') %}
+                <button class="btn btn-primary" onclick="bulkPrimary('{{ edit_url }}')" data-bs-dismiss="modal" >Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<script src="{{ url_for('static', filename='js/list.js') }}?v=07302024"></script>
 <script>displaySchools(); filterSchools()</script>
 {% endblock %}

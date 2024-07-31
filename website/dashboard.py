@@ -414,9 +414,12 @@ def lists():
         School.cycle_id == cycle.id
     ).all()}
 
-    # List to collect new rows
-    new_rows = []
+
+    new_rows = []  # List to collect new rows
+    no_primary = [] # List for schools w/o primary
     for school, profile in schools:
+        if not school.primary:
+            no_primary.append(school)
         # Check if cost entry exists, if not create one
         secondary_cost = secondary_costs.get(school.school_id)
         if not secondary_cost:
@@ -573,7 +576,7 @@ def lists():
                            missing_hard_delay_cutoff=missing_hard_delay_cutoff,
                            secondary_suggestion_order=secondary_suggestion_order,
                            secondary_suggestion_unknown=secondary_suggestion_unknown,
-                           edit_hard_delay_cutoff=edit_hard_delay_cutoff)
+                           edit_hard_delay_cutoff=edit_hard_delay_cutoff, no_primary=no_primary)
 
 
 

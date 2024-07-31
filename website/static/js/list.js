@@ -33,6 +33,25 @@ function submitNote(schoolId, edit_url) {
     }, delay);
 }
 
+function bulkPrimary(edit_url) {
+    var checks = document.getElementsByClassName("bulk-primary-checkbox");
+    var date = document.getElementById("bulk-primary-date");
+    var btn = document.getElementById("bulk-primary-button");
+    var done = false;
+    for (let i = 0; i < checks.length; i++) {
+        if (checks[i].checked) {
+            var primary_area = document.getElementById("primary_" + checks[i].value);
+            primary_area.value = date.value;
+            editSchool(checks[i].value, "primary", edit_url)
+            done = true;
+        }
+    }
+
+    if (done){
+        btn.classList.add("d-none");
+    }
+}
+
 function editSchool(schoolId, action, edit_url) {
     var formData = new FormData();
     formData.append('school_id', schoolId);
