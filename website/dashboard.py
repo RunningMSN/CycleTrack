@@ -527,7 +527,7 @@ def lists():
             school_stats = school_stats_dict.get(school.school_id)
 
             # Process if hard deadline
-            if school.hard_secondary_submission_days and school.hard_secondary_submission_days != -1:
+            if school.hard_secondary_submission_days and school.secondary_received and school.hard_secondary_submission_days != -1:
                 deadline = school.secondary_received + timedelta(days=school.hard_secondary_submission_days)
                 secondary_submission_order["recommended_submission"].append(deadline)
                 secondary_submission_order["hard_soft"].append("hard")
