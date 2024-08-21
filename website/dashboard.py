@@ -1077,6 +1077,8 @@ def import_list():
                 for item in request.form:
                     if item.startswith('corrected_name->'):
                         correct_names[item.split('->')[1]] = request.form.get(item)
+                        with open("instance/import_memory.txt", 'a') as file:
+                            file.write(f"{current_user.id}\t{item.split('->')[1]}\t{request.form.get(item)}\t{datetime.today()}\n")
                     elif item.startswith('phd->'):
                         phds.append(item.split('->')[1])
                 # Reconstruct table
