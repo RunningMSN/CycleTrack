@@ -2,11 +2,8 @@ from bs4 import BeautifulSoup
 import requests
 import pandas as pd
 from flask import flash
-import dateutil.parser
 import jellyfish
 import re
-
-school_nicknames_dict = pd.read_csv('./website/static/csv/school_names_nicknames.csv').set_index('Key').to_dict()['Value']
 
 def read_google(link):
     '''Converts a google sheets link to a pandas dataframe.'''

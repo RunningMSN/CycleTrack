@@ -1054,11 +1054,12 @@ def import_list():
 
                 # Grab list of best matches
                 best_matches = {}
+                school_nicknames_dict = pd.read_csv('./website/static/csv/school_names_nicknames.csv').set_index('Key').to_dict()['Value']
                 for school in cycle_data['name']:
-                    best_match = import_list_funcs.best_match(school, import_list_funcs.school_nicknames_dict.keys(),
+                    best_match = import_list_funcs.best_match(school, school_nicknames_dict.keys(),
                                                               0.7)
                     if best_match:
-                        best_matches[school] = import_list_funcs.school_nicknames_dict[best_match]
+                        best_matches[school] = school_nicknames_dict[best_match]
                     else:
                         best_matches[school] = None
 
