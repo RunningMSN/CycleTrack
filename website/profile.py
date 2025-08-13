@@ -73,7 +73,7 @@ def profile_home():
             selected_cycle_year = request.form.get('cycle_year')
             if selected_cycle_year:
                 block.cycle_year = selected_cycle_year
-                block.cycle_id = Cycle.query.filter_by(user_id=userid).first().id
+                block.cycle_id = Cycle.query.filter_by(user_id=userid, cycle_year=selected_cycle_year).first().id
             else:
                 block.cycle_year = None
                 block.cycle_id = None
