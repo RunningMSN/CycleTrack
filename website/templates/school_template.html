@@ -243,59 +243,56 @@
                 <div class="col-12 col-lg-6 md_info">
                     <div class="px-2 py-1 mx-1">
                         <h5 class="text-center">{{ school_info.md_or_do }} Acceptances</h5>
-                        <h6><a class="btn" data-bs-toggle="collapse" href="#school_acceptance_info" role="button" aria-expanded="false" aria-controls="school_acceptance_info"><i class="bi bi-chevron-right"></i>Detailed Stats</a></h6>
-                        <div class="collapse" id="school_acceptance_info">
-                            <strong>Total Acceptances Tracked: </strong>{{ reg_info['acceptance_count'] }}<br />
-                            <strong>Percent Accepted Post-Interview: </strong>
-                            {% if reg_info['n_percent_interview_accepted'] > 4 %}
-                            {{ "%.2f"|format(reg_info['percent_interview_accepted']|float) }}%, (n={{ reg_info['n_percent_interview_accepted'] }})
-                            {% else %}
-                            <a href="#" data-bs-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">XX.XX</a>
-                            {% endif %}
-                            <br />
-                            <strong>Percent Accepted From Waitlist: </strong>
-                            {% if reg_info['n_percent_waitlist_accepted'] > 4 %}
-                            {{ "%.2f"|format(reg_info['percent_waitlist_accepted']|float) }}%, (n={{ reg_info['n_percent_waitlist_accepted'] }})
-                            {% else %}
-                            <a href="#" data-bs-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">XX.XX</a>
-                            {% endif %}
-                            <br />
-                            <strong>Median cGPA (Range): </strong>
-                            {% if reg_info['n_accepted_cgpa'] > 4 %}
-                            {{ "%.2f"|format(reg_info['accepted_cgpa']|float) }} ({{ reg_info['accepted_cgpa_range'] }}), (n={{ reg_info['n_accepted_cgpa'] }})
-                            {% else %}
-                            <a href="#" data-bs-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">X.XX</a>
-                            {% endif %}
-                            <br />
-                            <strong>Median sGPA (Range): </strong>
-                            {% if reg_info['n_accepted_sgpa'] > 4 %}
-                            {{ "%.2f"|format(reg_info['accepted_sgpa']|float) }} ({{ reg_info['accepted_sgpa_range'] }}), (n={{ reg_info['n_accepted_sgpa'] }})
-                            {% else %}
-                            <a href="#" data-bs-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">X.XX</a>
-                            {% endif %}
-                            <br />
-                            <strong>Median MCAT (Range): </strong>
-                            {% if reg_info['n_accepted_mcat'] > 4 %}
-                            {{ "%.2f"|format(reg_info['accepted_mcat']|float) }} ({{ reg_info['accepted_mcat_range'] }}), (n={{ reg_info['n_accepted_mcat'] }})
-                            {% else %}
-                            <a href="#" data-bs-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">XXX.X</a>
-                            {% endif %}
-                            <br />
-                            <strong>Days Interview to Acceptance: </strong>
-                            {% if reg_info["interview_to_a_n"] > 4%}
-                            {{reg_info["interview_to_a"]}} ({{reg_info["interview_to_a_range"]}} )
-                            {% else %}
-                            <a href="#" data-bs-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">XX.XX</a>
-                            {% endif %}
-                            <br />
-                            <strong>Days Waitlist to Acceptance: </strong>
-                            {% if reg_info["wl_to_a_n"] > 4 %}
-                            {{reg_info["wl_to_a"]}} ({{reg_info["wl_to_a_range"]}})
-                            {% else %}
-                            <a href="#" data-bs-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">XX.XX</a>
-                            {% endif %}
-                            <br />
-                        </div>
+                        <strong>Total Acceptances Tracked: </strong>{{ reg_info['acceptance_count'] }}<br />
+                        <strong>Percent Accepted Post-Interview: </strong>
+                        {% if reg_info['n_percent_interview_accepted'] > 4 %}
+                        {{ "%.2f"|format(reg_info['percent_interview_accepted']|float) }}%, (n={{ reg_info['n_percent_interview_accepted'] }})
+                        {% else %}
+                        <a href="#" data-bs-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">XX.XX</a>
+                        {% endif %}
+                        <br />
+                        <strong>Percent Accepted From Waitlist: </strong>
+                        {% if reg_info['n_percent_waitlist_accepted'] > 4 %}
+                        {{ "%.2f"|format(reg_info['percent_waitlist_accepted']|float) }}%, (n={{ reg_info['n_percent_waitlist_accepted'] }})
+                        {% else %}
+                        <a href="#" data-bs-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">XX.XX</a>
+                        {% endif %}
+                        <br />
+                        <strong>Median cGPA (Range): </strong>
+                        {% if reg_info['n_accepted_cgpa'] > 4 %}
+                        {{ "%.2f"|format(reg_info['accepted_cgpa']|float) }} ({{ reg_info['accepted_cgpa_range'] }}), (n={{ reg_info['n_accepted_cgpa'] }})
+                        {% else %}
+                        <a href="#" data-bs-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">X.XX</a>
+                        {% endif %}
+                        <br />
+                        <strong>Median sGPA (Range): </strong>
+                        {% if reg_info['n_accepted_sgpa'] > 4 %}
+                        {{ "%.2f"|format(reg_info['accepted_sgpa']|float) }} ({{ reg_info['accepted_sgpa_range'] }}), (n={{ reg_info['n_accepted_sgpa'] }})
+                        {% else %}
+                        <a href="#" data-bs-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">X.XX</a>
+                        {% endif %}
+                        <br />
+                        <strong>Median MCAT (Range): </strong>
+                        {% if reg_info['n_accepted_mcat'] > 4 %}
+                        {{ "%.2f"|format(reg_info['accepted_mcat']|float) }} ({{ reg_info['accepted_mcat_range'] }}), (n={{ reg_info['n_accepted_mcat'] }})
+                        {% else %}
+                        <a href="#" data-bs-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">XXX.X</a>
+                        {% endif %}
+                        <br />
+                        <strong>Days Interview to Acceptance: </strong>
+                        {% if reg_info["interview_to_a_n"] > 4%}
+                        {{reg_info["interview_to_a"]}} ({{reg_info["interview_to_a_range"]}} )
+                        {% else %}
+                        <a href="#" data-bs-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">XX.XX</a>
+                        {% endif %}
+                        <br />
+                        <strong>Days Waitlist to Acceptance: </strong>
+                        {% if reg_info["wl_to_a_n"] > 4 %}
+                        {{reg_info["wl_to_a"]}} ({{reg_info["wl_to_a_range"]}})
+                        {% else %}
+                        <a href="#" data-bs-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">XX.XX</a>
+                        {% endif %}
+                        <br />
                         <strong>Acceptance Offers Over Time: </strong><br />
                         {% if reg_info['acceptance_graph'] %}
                         <div id="reg_acceptance_graph"></div>
@@ -483,13 +480,15 @@
                 </div>
                 <div class="col-12 col-lg-6 md_info">
                     <div class="px-2 py-1 mx-1 my-1">
-                        <h5 class="text-center mt-3">Stats and Outcomes <i class="bi bi-info-circle-fill" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-html="true" title="<strong>Note:</strong> Not all applicants who enter an application in CycleTrack finish tracking the entire
-                            cycle. Some applicants who are shown as 'Applied' may have received an interview or acceptance,
-                            but did not track it. Therefore, this graph is better used as a representation of ranges of
-                            stats interviewed or accepted."></i></h5> 
+                        <h5 class="text-center mt-3">Stats and Outcomes</h5>
                         {% if reg_info['map'] %}
                         <div id="reg_mcat_gpa"></div>
-
+                        <p>
+                            <strong>Note:</strong> Not all applicants who enter an application in CycleTrack finish tracking the entire
+                            cycle. Some applicants who are shown as 'Applied' may have received an interview or acceptance,
+                            but did not track it. Therefore, this graph is better used as a representation of ranges of
+                            stats interviewed or accepted.
+                        </p>
                         <script>
                             fetch('{{ url_for('static', filename='explorer_graphs/mcat_gpa_'+ school_id|string + '_reg.JSON') }}')
                                 .then(response => response.json())
