@@ -173,6 +173,8 @@
                 <div class="col-12 col-lg-6 md_info">
                     <div class="px-2 py-1 mx-1">
                         <h5 class="text-center">{{ school_info.md_or_do }} Interviews</h5>
+                        <h6><a class="btn" data-bs-toggle="collapse" href="#schoolInfoInterview" role="button" aria-expanded="false" aria-controls="schoolInfoInterview"><i class="bi bi-chevron-right"></i>Detailed Stats</a></h6>
+                        <div class="collapse" id="schoolInfoInterview">
                         <strong>Total Interviews Tracked: </strong>{{ reg_info['interview_count'] }}<br />
                         <strong>Percent Applicants Interviewed: </strong>
                         {% if reg_info['n_percent_interviewed'] > 4 %}
@@ -223,6 +225,7 @@
                         <a href="#" data-bs-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">XX.XX</a>
                         {% endif %}
                         <br />
+                        </div>
                         <strong>Interview Invites Over Time: </strong><br />
                         {% if reg_info['interview_graph'] %}
                         <div id="reg_interviews_graph"></div>
@@ -243,6 +246,8 @@
                 <div class="col-12 col-lg-6 md_info">
                     <div class="px-2 py-1 mx-1">
                         <h5 class="text-center">{{ school_info.md_or_do }} Acceptances</h5>
+                        <h6><a class="btn" data-bs-toggle="collapse" href="#schoolInfoAcceptance" role="button" aria-expanded="false" aria-controls="schoolInfoAcceptance"><i class="bi bi-chevron-right"></i>Detailed Stats</a></h6>
+                        <div class="collapse" id="schoolInfoAcceptance">
                         <strong>Total Acceptances Tracked: </strong>{{ reg_info['acceptance_count'] }}<br />
                         <strong>Percent Accepted Post-Interview: </strong>
                         {% if reg_info['n_percent_interview_accepted'] > 4 %}
@@ -293,6 +298,7 @@
                         <a href="#" data-bs-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">XX.XX</a>
                         {% endif %}
                         <br />
+                        </div>
                         <strong>Acceptance Offers Over Time: </strong><br />
                         {% if reg_info['acceptance_graph'] %}
                         <div id="reg_acceptance_graph"></div>
@@ -315,6 +321,8 @@
                 <div class="col-12 col-lg-6 phd_info">
                     <div class="px-2 py-1 mx-1">
                         <h5 class="text-center">{{ school_info.md_or_do }}-PhD Interviews</h5>
+                        <h6><a class="btn" data-bs-toggle="collapse" href="#schoolPhDInfoInterview" role="button" aria-expanded="false" aria-controls="schoolPhDInfoInterview"><i class="bi bi-chevron-right"></i>Detailed Stats</a></h6>
+                        <div class="collapse" id="schoolPhDInfoInterview">
                         <strong>Total Interviews Tracked: </strong>{{ phd_info['interview_count'] }}<br />
                         <strong>Percent Applicants Interviewed: </strong>
                         {% if phd_info['n_percent_interviewed'] > 4 %}
@@ -365,6 +373,7 @@
                         <a href="#" data-bs-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">XX.XX</a>
                         {% endif %}
                         <br />
+                        </div>
                         <strong>Interview Invites Over Time: </strong><br />
                         {% if phd_info['interview_graph'] %}
                         <div id="phd_interviews_graph"></div>
@@ -386,6 +395,8 @@
                 <div class="col-12 col-lg-6 phd_info">
                     <div class="px-2 py-1 mx-1">
                         <h5 class="text-center">{{ school_info.md_or_do }}-PhD Acceptances</h5>
+                        <h6><a class="btn" data-bs-toggle="collapse" href="#schoolPhDInfoAcceptance" role="button" aria-expanded="false" aria-controls="schoolPhDInfoAcceptance"><i class="bi bi-chevron-right"></i>Detailed Stats</a></h6>
+                        <div class="collapse" id="schoolPhDInfoAcceptance">
                         <strong>Total Acceptances Tracked: </strong>{{ phd_info['acceptance_count'] }}<br />
                         <strong>Percent Accepted Post-Interview: </strong>
                         {% if phd_info['n_percent_interview_accepted'] > 4 %}
@@ -436,6 +447,7 @@
                         <a href="#" data-bs-toggle="tooltip" title="Less than 5 data points available." style="text-decoration-style: dotted; color:gray">XX.XX</a>
                         {% endif %}
                         <br />
+                        </div>
                         <strong>Acceptance Offers Over Time: </strong><br />
                         {% if phd_info['acceptance_graph'] %}
                         <div id="phd_acceptance_graph"></div>
@@ -480,7 +492,7 @@
                 </div>
                 <div class="col-12 col-lg-6 md_info">
                     <div class="px-2 py-1 mx-1 my-1">
-                        <h5 class="text-center mt-3">Stats and Outcomes <i class="bi bi-info-circle" data-bs-toggle="tooltip" data-bs-html="true" title="<strong>Note:</strong> Not all applicants who enter an application in CycleTrack finish tracking the entire
+                        <h5 class="text-center mt-3">Stats and Outcomes <i class="bi bi-info-circle" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-html="true" title="<strong>Note:</strong> Not all applicants who enter an application in CycleTrack finish tracking the entire
                             cycle. Some applicants who are shown as 'Applied' may have received an interview or acceptance,
                             but did not track it. Therefore, this graph is better used as a representation of ranges of
                             stats interviewed or accepted."></i></h5>
