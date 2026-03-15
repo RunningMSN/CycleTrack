@@ -82,7 +82,7 @@ def register():
             try:
                 recaptcha_secret = site_settings.RECAPTCHA_SECRET
                 response = requests.post(f'https://www.google.com/recaptcha/api/siteverify?secret={recaptcha_secret}&response={recaptcha_response}').json()
-                recaptcha_passed = response.get('success')
+                recaptcha_passed = response.get('score') > 0.3
             except Exception as e:
                 print(f"failed to get reCaptcha: {e}")
             
@@ -90,7 +90,7 @@ def register():
                 email = is_email_valid.normalized
                 # add user to database
                 now = datetime.now()
-                new_user = User(email=email, password=generate_password_hash(password1, method='sha256'),create_date=now,
+                new_user = User(email=email, password=generate_password_hash(password1, method='scrypt'),create_date=now,
                                 privacy_announce=True)
                 db.session.add(new_user)
                 db.session.commit()
