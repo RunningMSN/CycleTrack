@@ -148,7 +148,7 @@ def reset_password(token):
             try:
                 email = s.loads(token, salt='reset-password', max_age=900)
                 user = User.query.filter_by(email=email).first()
-                user.password = generate_password_hash(password, method='sha256')
+                user.password = generate_password_hash(password, method='scrypt')
                 db.session.commit()
                 login_user(user, remember=True)
                 return redirect(url_for('dashboard.cycles'))
@@ -220,7 +220,7 @@ def settings():
                     flash_updates_messages.append("Email")
         if new_password and confirm_password:
             if new_password == confirm_password:
-                current_user.password = generate_password_hash(new_password, method='sha256')
+                current_user.password = generate_password_hash(new_password, method='scrypt')
                 flash_updates_messages.append("Password")
         db.session.commit()
         flash(f'{(", ").join(flash_updates_messages)} updated successfully!', category='success')
