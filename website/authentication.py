@@ -33,6 +33,9 @@ def login():
         user = User.query.filter_by(email=email).first()
         if user:
             if check_password_hash(user.password, password):
+                if user.password.startswith("sha256$"):
+                    user.password = generate_password_hash(password, method='scrypt')
+                    db.session.commit()
                 login_user(user, remember=True)
                 return redirect(url_for('dashboard.cycles'))
             else:
