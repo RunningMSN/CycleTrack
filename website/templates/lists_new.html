@@ -7,7 +7,7 @@ $(document).ready(function(){
     var current = new Date(val);
     var current_utc = new Date(current.getUTCFullYear(), current.getUTCMonth(), current.getUTCDate());
     var timestamp = Date.parse(val);
-    var cycle_year = $(this).data("cycle");
+    var cycle_year = {{ cycle.cycle_year }};
     var cycle_min = new Date(cycle_year - 1, 4, 1);
     var cycle_max = new Date(cycle_year, 7, 31);
 
