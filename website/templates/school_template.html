@@ -87,17 +87,74 @@
                 <h6>Our graphs are interactive! Click and drag your mouse across the graph to zoom in. Double click to zoom out. Click on a status
                 in the legend to hide it, or double-click to highlight only that status.</h6>
 
+                <!-- LINK CONTROLS (displayed only if both current & previous exist) -->
+                <div class="col-12 my-2">
+                    <div class="d-flex flex-wrap">
+                        {% if (reg_info['cycle_status_json'] and reg_info['cycle_status_json_prev']) or (phd_info['cycle_status_json'] and phd_info['cycle_status_json_prev']) %}
+                        <div class="me-3">
+                            <label class="form-check-label"><input class="form-check-input me-1" type="checkbox" id="reg_link_x">Link X axes</label>
+                        </div>
+                        <div class="me-3">
+                            <label class="form-check-label"><input class="form-check-input me-1" type="checkbox" id="reg_link_y">Link Y axes</label>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
                 <!-- MD GRAPHS -->
                 <div class="col-12 col-lg-6 md_info">
                     <h5 class="text-center">Current Cycle Status ({{ valid_cycles[0]-1 }}-{{ valid_cycles[0] }})</h5>
                     {% if reg_info['cycle_status_json'] %}
                         <div id="reg_status"></div>
                         <script>
+                            /* Flags to know when each reg/phd plot has been drawn */
+                            window._cyclePlotReady = window._cyclePlotReady || { reg_curr: false, reg_prev: false, phd_curr: false, phd_prev: false };
+                            window._cyclePlotGuard = window._cyclePlotGuard || { reg: false, phd: false };
+
+                            function _tryRegisterRegSync() {
+                                try {
+                                    if (!(window._cyclePlotReady.reg_curr && window._cyclePlotReady.reg_prev)) return;
+                                    // avoid re-registering
+                                    if (window._cyclePlotReady.reg_sync_registered) return;
+                                    window._cyclePlotReady.reg_sync_registered = true;
+
+                                    const source = document.getElementById('reg_status');
+                                    const target = document.getElementById('reg_status_prev');
+                                    function handleRelayout(ev, dest) {
+                                        // if neither checkbox checked, do nothing
+                                        if (!document.getElementById('reg_link_x').checked && !document.getElementById('reg_link_y').checked) return;
+                                        if (window._cyclePlotGuard.reg) return;
+                                        let update = {};
+                                        // Plotly relayout event keys can be 'xaxis.range' or 'xaxis.range[0]'/'[1]'
+                                        if (document.getElementById('reg_link_x').checked) {
+                                            if (ev['xaxis.range']) update['xaxis.range'] = ev['xaxis.range'];
+                                            else if (ev['xaxis.range[0]'] !== undefined && ev['xaxis.range[1]'] !== undefined) update['xaxis.range'] = [ev['xaxis.range[0]'], ev['xaxis.range[1]']];
+                                        }
+                                        if (document.getElementById('reg_link_y').checked) {
+                                            if (ev['yaxis.range']) update['yaxis.range'] = ev['yaxis.range'];
+                                            else if (ev['yaxis.range[0]'] !== undefined && ev['yaxis.range[1]'] !== undefined) update['yaxis.range'] = [ev['yaxis.range[0]'], ev['yaxis.range[1]']];
+                                        }
+                                        if (Object.keys(update).length > 0) {
+                                            window._cyclePlotGuard.reg = true;
+                                            Plotly.relayout(dest, update).finally(() => { window._cyclePlotGuard.reg = false; });
+                                        }
+                                    }
+
+                                    source.on('plotly_relayout', function(ev) { handleRelayout(ev, target); });
+                                    target.on('plotly_relayout', function(ev) { handleRelayout(ev, source); });
+                                } catch (e) {
+                                    console.log('Error registering MD sync:', e);
+                                }
+                            }
+
                             fetch('{{ url_for('static', filename='explorer_graphs/status_'+ school_id|string + '_reg_curr.JSON') }}')
                                 .then(response => response.json())
                                 .then(data => {
                                     data.config = {'responsive': true, 'displaylogo': false, 'displayModeBar': false};
-                                    Plotly.newPlot('reg_status', data);
+                                    Plotly.newPlot('reg_status', data).then(() => {
+                                        window._cyclePlotReady.reg_curr = true;
+                                        _tryRegisterRegSync();
+                                    });
                                 })
                                 .catch(error => console.log(error));
                         </script>
@@ -116,7 +173,10 @@
                                 .then(response => response.json())
                                 .then(data => {
                                     data.config = {'responsive': true, 'displaylogo': false, 'displayModeBar': false};
-                                    Plotly.newPlot('reg_status_prev', data);
+                                    Plotly.newPlot('reg_status_prev', data).then(() => {
+                                        window._cyclePlotReady.reg_prev = true;
+                                        _tryRegisterRegSync();
+                                    });
                                 })
                                 .catch(error => console.log(error));
                         </script>
@@ -131,11 +191,48 @@
                     {% if phd_info['cycle_status_json'] %}
                     <div id="phd_status"></div>
                     <script>
+                        function _tryRegisterPhdSync() {
+                            try {
+                                if (!(window._cyclePlotReady.phd_curr && window._cyclePlotReady.phd_prev)) return;
+                                if (window._cyclePlotReady.phd_sync_registered) return;
+                                window._cyclePlotReady.phd_sync_registered = true;
+
+                                const src = document.getElementById('phd_status');
+                                const tgt = document.getElementById('phd_status_prev');
+                                function handleRelayoutPhd(ev, dest) {
+                                    if (!document.getElementById('reg_link_x').checked && !document.getElementById('reg_link_y').checked) return;
+                                    if (window._cyclePlotGuard.phd) return;
+                                    let update = {};
+                                    if (document.getElementById('reg_link_x').checked) {
+                                        if (ev['xaxis.range']) update['xaxis.range'] = ev['xaxis.range'];
+                                        else if (ev['xaxis.range[0]'] !== undefined && ev['xaxis.range[1]'] !== undefined) update['xaxis.range'] = [ev['xaxis.range[0]'], ev['xaxis.range[1]']];
+                                    }
+                                    if (document.getElementById('reg_link_y').checked) {
+                                        if (ev['yaxis.range']) update['yaxis.range'] = ev['yaxis.range'];
+                                        else if (ev['yaxis.range[0]'] !== undefined && ev['yaxis.range[1]'] !== undefined) update['yaxis.range'] = [ev['yaxis.range[0]'], ev['yaxis.range[1]']];
+                                    }
+                                    if (Object.keys(update).length > 0) {
+                                        window._cyclePlotGuard.phd = true;
+                                        Plotly.relayout(dest, update).finally(() => { window._cyclePlotGuard.phd = false; });
+                                    }
+                                }
+
+                                src.on('plotly_relayout', function(ev) { handleRelayoutPhd(ev, tgt); });
+                                tgt.on('plotly_relayout', function(ev) { handleRelayoutPhd(ev, src); });
+
+                            } catch (e) {
+                                console.log('Error registering PhD sync:', e);
+                            }
+                        }
+
                         fetch('{{ url_for('static', filename='explorer_graphs/status_'+ school_id|string + '_phd_curr.JSON') }}')
                             .then(response => response.json())
                             .then(data => {
                                 data.config = {'responsive': true, 'displaylogo': false, 'displayModeBar': false};
-                                Plotly.newPlot('phd_status', data);
+                                Plotly.newPlot('phd_status', data).then(() => {
+                                    window._cyclePlotReady.phd_curr = true;
+                                    _tryRegisterPhdSync();
+                                });
                             })
                             .catch(error => console.log(error));
                     </script>
@@ -153,7 +250,10 @@
                             .then(response => response.json())
                             .then(data => {
                                 data.config = {'responsive': true, 'displaylogo': false, 'displayModeBar': false};
-                                Plotly.newPlot('phd_status_prev', data);
+                                Plotly.newPlot('phd_status_prev', data).then(() => {
+                                    window._cyclePlotReady.phd_prev = true;
+                                    _tryRegisterPhdSync();
+                                });
                             })
                             .catch(error => console.log(error));
                     </script>
@@ -600,4 +700,3 @@
 
 <script src="{{ url_for('static', filename='js/explorer_school.js') }}"></script>
 {% endblock %}
-
