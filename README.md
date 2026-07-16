@@ -68,6 +68,12 @@ information about applicants interviewed/accepted to that particular school. We 
 additional information about schools that you may like displayed. If so, please contact us and if feasible, we will work
 to add this in.
 
+## Citation
+If you would like to learn more about the outcomes of this project or cite our work, please refer to the following [article](https://pmc.ncbi.nlm.nih.gov/articles/PMC13197106/).
+```
+Amusin DB, Hua I, Kozhumam AS. Crowdsourcing Medical School Admissions Data: Development and Analysis of the CycleTrack Platform. J Med Internet Res. 2026 May 22;28:e83087. doi: 10.2196/83087. PMID: 42172634; PMCID: PMC13197106.
+```
+
 ## License
 
 This project is licensed under the CycleTrack License Agreement. By accessing, viewing, or contributing to this code, 
