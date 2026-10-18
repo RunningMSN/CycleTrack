@@ -1,5 +1,17 @@
 # CycleTrack
 
+## Future of CycleTrack Updates
+
+We are excited to share that CycleTrack and the Student Doctor Network (SDN) have merged. Together, we share a 
+commitment to making the medical school application process more transparent and accessible. As part of this 
+transition, CycleTrack and SDN tools will be integrated over time. Future updates to CycleTrack made after 
+October 8, 2026, will no longer be tracked in this GitHub repository, and this repository will be archived.
+CycleTrack's application tracker and explorer will remain free to use, and we are committed to preserving the
+core CycleTrack experience while continuing to improve the platform. Thank you for being part of the CycleTrack
+community and we're excited for what CycleTrack and SDN will build together!
+
+
+## Introduction
 CycleTrack is a medical school application tracking system available publicly and for free
 [here](https://cycletrack.org). We aim to fulfill the following objectives:
 1. Provide an organizational tool for keeping track of the status of each application.
